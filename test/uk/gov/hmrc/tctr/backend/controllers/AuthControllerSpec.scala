@@ -16,35 +16,35 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
+import org.mockito.ArgumentMatchers.anyString
+import play.api.test.Helpers.stubControllerComponents
+import org.mockito.Mockito.when
+import org.mockito.MockitoSugar.mock
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Application
 import play.api.http.Status
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status}
+import uk.gov.hmrc.tctr.backend.connectors.DynamicsConnector
+
 
 class AuthControllerSpec  extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
-  override def fakeApplication(): Application =
-    new GuiceApplicationBuilder()
-      .configure(
-        "metrics.jvm"     -> false,
-        "metrics.enabled" -> false
-      )
-      .build()
+
+  val mockDynamicsConnector = mock[DynamicsConnector]
+  when (mockDynamicsConnector.testConnection(anyString, anyString)) thenReturn "TestString"
 
   private val fakeRequest = FakeRequest("GET", "/")
 
-  private val controller = app.injector.instanceOf[AuthController]
-
   "GET /" should {
     "return 200" in {
+      val controller = new AuthController(mockDynamicsConnector, stubControllerComponents())
       val result = controller.verifyCredentials("refNum", "postcode")(fakeRequest)
       status(result) shouldBe Status.OK
     }
 
-    "return HTML" in {
+    "return json" in {
+      val controller = new AuthController(mockDynamicsConnector, stubControllerComponents())
       val result = controller.verifyCredentials("refNum", "postcode")(fakeRequest)
       contentType(result) shouldBe Some("application/json")
     }
