@@ -1,0 +1,2 @@
+
+GET           /:refNum/:postcode/verify          uk.gov.hmrc.tctr.backend.controllers.AuthController.verifyCredentials(refNum, postcode)
