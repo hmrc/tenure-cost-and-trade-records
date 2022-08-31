@@ -1,9 +1,11 @@
+import sbt.Keys.scalacOptions
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSettings, scalaSettings}
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
-
 val plugins: Seq[Plugins] = Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
+
+val silencerVersion = "1.7.9"
 
 val defaultPort = 9527
 val appName = "tenure-cost-and-trade-records"
@@ -22,7 +24,15 @@ val root = (project in file("."))
     routesGenerator := InjectedRoutesGenerator,
     scalaVersion := "2.13.8",
     DefaultBuildSettings.targetJvm := "jvm-11",
-    maintainer := "voa.service.optimisation@digital.hmrc.gov.uk"
+    maintainer := "voa.service.optimisation@digital.hmrc.gov.uk",
+    // ***************
+    // Use the silencer plugin to suppress warnings
+    scalacOptions += "-P:silencer:pathFilters=views;routes",
+    libraryDependencies ++= Seq(
+      compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
+      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
+    )
+    // ***************
   )
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
