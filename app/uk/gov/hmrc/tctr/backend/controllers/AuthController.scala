@@ -16,23 +16,66 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import play.api.Logging
-import play.api.libs.json.Json
+import play.api.libs.json.{Format, Json}
 import play.api.mvc.ControllerComponents
+import uk.gov.hmrc.http.HeaderNames.trueClientIp
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.tctr.backend.connectors.DynamicsConnector
+import uk.gov.hmrc.tctr.backend.config.AppConfig
+import uk.gov.hmrc.tctr.backend.infrastructure.Clock
+import uk.gov.hmrc.tctr.backend.repository.{CredentialsMongoRepo, SubmittedMongoRepo}
+import uk.gov.hmrc.tctr.backend.schema.Address
+import uk.gov.hmrc.tctr.backend.security._
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 @Singleton
-class AuthController @Inject() (
-                                 connector: DynamicsConnector,
-                                 cc: ControllerComponents
-                               ) extends BackendController(cc) with Logging
+class AuthController @Inject() (tctrConfig: AppConfig,
+                                credentialsMongoRepo: CredentialsMongoRepo,
+                                submittedMongoRepo: SubmittedMongoRepo,
+                                failedLoginsMongoRepo: FailedLoginsMongoRepo,
+                                clock: Clock,
+                                cc: ControllerComponents
+                               )(implicit ec: ExecutionContext) extends BackendController(cc)
 {
 
-  def verifyCredentials(refNum: String, postcode: String) = Action { implicit request =>
-    val msg = connector.testConnection(refNum, postcode)
-    Ok(Json.toJson(msg))
+  val credsRepo = credentialsMongoRepo
+  val submittedRepo = submittedMongoRepo
+  val loginsRepo = failedLoginsMongoRepo
+  lazy val enableDuplicates = tctrConfig.enableDuplicate
+
+  lazy val verifier = {
+    // hack required for override parameters on MDTP - it parses them all as strings
+    val authReq = tctrConfig.authenticationRequired
+    val loginAttempts = tctrConfig.authMaxFailedLogin
+    val lockoutWindow = tctrConfig.lockoutWindow
+    val sessionWindow = tctrConfig.sessionWindow
+    val ipLockoutEnabled = tctrConfig.ipLockoutEnabled
+    val voaIPAddress = tctrConfig.voaIPAddress
+    val config = VerifierConfig(loginAttempts, lockoutWindow hours, sessionWindow hours, ipLockoutEnabled, voaIPAddress)
+    new IPBlockingCredentialsVerifier(credsRepo, submittedRepo, loginsRepo, authReq, config, clock, enableDuplicates)
+  }
+
+  def verifyCredentials(referenceNum: String, postcode: String) = Action.async { implicit request =>
+    val ip = request.headers.get(trueClientIp)
+    verifier.verify(referenceNum, postcode, ip) flatMap {
+      case ValidCredentials(creds) => Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.forType, creds.address)))
+      case InvalidCredentials(remainingAttempts) => Unauthorized(Json.toJson(FailedLoginResponse(remainingAttempts)))
+      case IPLockout => Unauthorized(Json.toJson(FailedLoginResponse(0)))
+      case AlreadySubmitted(items) => Conflict(error(s"Duplicate submission. $items"))
+      case MissingIPAddress => BadRequest(error(s"Missing header: $trueClientIp"))
+    }
   }
 }
+
+object ValidLoginResponse {
+  implicit val f: Format[ValidLoginResponse] = Json.format[ValidLoginResponse]
+}
+case class ValidLoginResponse(forAuthToken: String, forType: String, address: Address)
+
+object FailedLoginResponse {
+  implicit val f: Format[FailedLoginResponse] = Json.format[FailedLoginResponse]
+}
+case class FailedLoginResponse(numberOfRemainingTriesUntilIPLockout: Int)
