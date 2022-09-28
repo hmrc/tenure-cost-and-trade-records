@@ -61,7 +61,7 @@ class AuthController @Inject() (tctrConfig: AppConfig,
   def verifyCredentials(referenceNum: String, postcode: String) = Action.async { implicit request =>
     val ip = request.headers.get(trueClientIp)
     verifier.verify(referenceNum, postcode, ip) flatMap {
-      case ValidCredentials(creds) => Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.address)))
+      case ValidCredentials(creds) => Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.forType, creds.address)))
       case InvalidCredentials(remainingAttempts) => Unauthorized(Json.toJson(FailedLoginResponse(remainingAttempts)))
       case IPLockout => Unauthorized(Json.toJson(FailedLoginResponse(0)))
       case AlreadySubmitted(items) => Conflict(error(s"Duplicate submission. $items"))
@@ -73,7 +73,7 @@ class AuthController @Inject() (tctrConfig: AppConfig,
 object ValidLoginResponse {
   implicit val f: Format[ValidLoginResponse] = Json.format[ValidLoginResponse]
 }
-case class ValidLoginResponse(forAuthToken: String, address: Address)
+case class ValidLoginResponse(forAuthToken: String, forType: String, address: Address)
 
 object FailedLoginResponse {
   implicit val f: Format[FailedLoginResponse] = Json.format[FailedLoginResponse]

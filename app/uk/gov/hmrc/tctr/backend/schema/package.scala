@@ -16,32 +16,33 @@
 
 package uk.gov.hmrc.tctr.backend
 
-import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue, Json, OFormat, Reads, Writes}
+import play.api.libs.json.{Json, OFormat}
+//import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue, Json, OFormat, Reads, Writes}
 
 package object schema {
 
-  object JavaEnumUtils {
-    def enumReads[T <: Enum[T]](c: Class[T]): Reads[T] = new Reads[T] {
-      def reads(json: JsValue): JsResult[T] = json match {
-        case JsString(s) => {
-          try {
-            JsSuccess(Enum.valueOf[T](c, s))
-          } catch {
-            case _: NoSuchElementException => JsError(s"Enumeration expected of type: ${c.getName}, but it does not appear to contain the value: '$s'")
-          }
-        }
-        case _ => JsError("String value expected")
-      }
-    }
-
-    implicit def enumWrites[T <: Enum[T]]: Writes[T] = new Writes[T] {
-      def writes(v: T): JsValue = JsString(v.toString)
-    }
-
-    implicit def format[T <: Enum[T]](c: Class[T]): Format[T] = {
-      Format(JavaEnumUtils.enumReads[T](c), JavaEnumUtils.enumWrites[T])
-    }
-  }
+//  object JavaEnumUtils {
+//    def enumReads[T <: Enum[T]](c: Class[T]): Reads[T] = new Reads[T] {
+//      def reads(json: JsValue): JsResult[T] = json match {
+//        case JsString(s) => {
+//          try {
+//            JsSuccess(Enum.valueOf[T](c, s))
+//          } catch {
+//            case _: NoSuchElementException => JsError(s"Enumeration expected of type: ${c.getName}, but it does not appear to contain the value: '$s'")
+//          }
+//        }
+//        case _ => JsError("String value expected")
+//      }
+//    }
+//
+//    implicit def enumWrites[T <: Enum[T]]: Writes[T] = new Writes[T] {
+//      def writes(v: T): JsValue = JsString(v.toString)
+//    }
+//
+//    implicit def format[T <: Enum[T]](c: Class[T]): Format[T] = {
+//      Format(JavaEnumUtils.enumReads[T](c), JavaEnumUtils.enumWrites[T])
+//    }
+//  }
 
   implicit val addressFormat: OFormat[Address] = Json.format[Address]
 }

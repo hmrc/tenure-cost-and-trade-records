@@ -16,37 +16,33 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-//import org.mockito.ArgumentMatchers.anyString
-//import play.api.test.Helpers.stubControllerComponents
-//import org.mockito.Mockito.when
-//import org.mockito.MockitoSugar.mock
+import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}
+
+import scala.concurrent.ExecutionContext
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-//import play.api.http.Status
-//import play.api.test.FakeRequest
-//import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status}
-//import uk.gov.hmrc.tctr.backend.connectors.DynamicsConnector
-
+import play.api.http.Status
+import play.api.test.FakeRequest
 
 class AuthControllerSpec  extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
-//  val mockDynamicsConnector = mock[DynamicsConnector]
-//  when (mockDynamicsConnector.testConnection(anyString, anyString)) thenReturn "TestString"
-//
-//  private val fakeRequest = FakeRequest("GET", "/")
-//
-//  "GET /" should {
-//    "return 200" in {
-//      val controller = new AuthController(mockDynamicsConnector, stubControllerComponents())
-//      val result = controller.verifyCredentials("refNum", "postcode")(fakeRequest)
-//      status(result) shouldBe Status.OK
-//    }
-//
-//    "return json" in {
-//      val controller = new AuthController(mockDynamicsConnector, stubControllerComponents())
-//      val result = controller.verifyCredentials("refNum", "postcode")(fakeRequest)
-//      contentType(result) shouldBe Some("application/json")
-//    }
-//  }
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
+
+  def controller: AuthController = app.injector.instanceOf[AuthController]
+
+  private val fakeRequest = FakeRequest("GET", "/")
+
+  "GET invalid credentials" should {
+    "return 401" in {
+      val result = controller.verifyCredentials("refNum", "postcode")(fakeRequest)
+      status(result) shouldBe Status.UNAUTHORIZED
+    }
+
+    "return json" in {
+      val result = controller.verifyCredentials("refNum", "postcode")(fakeRequest)
+      contentType(result) shouldBe Some("application/json")
+      contentAsString(result) shouldBe """{"numberOfRemainingTriesUntilIPLockout":4}"""
+    }
+  }
 }
