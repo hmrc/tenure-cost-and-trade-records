@@ -43,5 +43,3 @@ val root = (project in file("."))
     resolvers += Resolver.jcenterRepo
   )
   .disablePlugins(JUnitXmlReportPlugin)
-
-addCommandAlias("precommit", ";scalafmt;test:scalafmt;it:scalafmt;coverage;test;it:test;coverageReport")

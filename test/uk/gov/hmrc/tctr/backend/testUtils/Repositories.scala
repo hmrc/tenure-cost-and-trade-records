@@ -55,7 +55,7 @@ class StubCredentialsRepository extends CredentialsRepo {
   def removeAll(): Future[DeleteResult] = ???
 }
 
-class StubSubmittedRepository @Inject() (mongo: MongoComponent) extends SubmittedMongoRepo(mongo) {
+class StubSubmittedRepository @Inject()(mongo: MongoComponent) extends SubmittedMongoRepo(mongo) {
   override def insertIfUnique(refNum: String): Future[InsertOneResult] = ???
 
   override def hasBeenSubmitted(refNum: String): Future[Boolean] = Future.successful(false)
