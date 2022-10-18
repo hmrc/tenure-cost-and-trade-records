@@ -29,21 +29,21 @@ import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import uk.gov.hmrc.tctr.backend.models.RefNum
 
 @Singleton
-class SubmittedMongoRepo @Inject()(mongo: MongoComponent)
-  extends PlayMongoRepository[RefNum](
-    collectionName = "submitted",
-    mongoComponent = mongo,
-    domainFormat = RefNum.format,
-    indexes = Seq(
-      IndexModel(
-        Indexes.hashed("referenceNumber"),
-        IndexOptions().name("referenceNumberIdx")
+class SubmittedMongoRepo @Inject() (mongo: MongoComponent)
+    extends PlayMongoRepository[RefNum](
+      collectionName = "submitted",
+      mongoComponent = mongo,
+      domainFormat = RefNum.format,
+      indexes = Seq(
+        IndexModel(
+          Indexes.hashed("referenceNumber"),
+          IndexOptions().name("referenceNumberIdx")
+        )
+      ),
+      extraCodecs = Seq(
+        new ObjectIdCodec
       )
-    ),
-    extraCodecs = Seq(
-      new ObjectIdCodec
-    )
-  ) {
+    ) {
 
   def insertIfUnique(refNum: String): Future[InsertOneResult] =
     collection.find(equal("referenceNumber", refNum)).toFuture().flatMap {
@@ -52,7 +52,9 @@ class SubmittedMongoRepo @Inject()(mongo: MongoComponent)
     }
 
   def hasBeenSubmitted(refNum: String): Future[Boolean] =
-    collection.find(equal("referenceNumber", refNum)).toFuture()
+    collection
+      .find(equal("referenceNumber", refNum))
+      .toFuture()
       .map(_.nonEmpty)
 
 }
