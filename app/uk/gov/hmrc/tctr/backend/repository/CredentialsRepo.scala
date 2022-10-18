@@ -42,29 +42,23 @@ trait CredentialsRepo {
 }
 
 @Singleton
-class CredentialsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
-    extends PlayMongoRepository[FORCredentials](
-      collectionName = "credentials",
-      mongoComponent = mongo,
-      domainFormat = FORCredentials.format,
-      indexes = Seq.empty
-    )
-    with CredentialsRepo
-    with Logging {
+class CredentialsMongoRepo @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
+  extends PlayMongoRepository[FORCredentials](
+    collectionName = "credentials",
+    mongoComponent = mongo,
+    domainFormat = FORCredentials.format,
+    indexes = Seq.empty
+  ) with CredentialsRepo with Logging {
 
   def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] = {
     val postcode1 = postcode.replace('+', ' ')
-    collection
-      .find(equal("forNumber", refNum))
-      .toFuture()
+    collection.find(equal("forNumber", refNum)).toFuture()
       .map(_.find(x => normalizePostcode(x.address.postcode) == normalizePostcode(postcode1)))
       .recoverWith {
         case ex: RuntimeException if ex.getMessage.contains("JsError") =>
           logger.error(s"Error on converting credentials from json for referenceNumber: $refNum", ex)
-          collection
-            .deleteMany(equal("referenceNumber", refNum))
-            .toFuture()
-            .map(_ => None)
+          collection.deleteMany(equal("referenceNumber", refNum))
+            .toFuture().map(_ => None)
       }
   }
 
@@ -72,10 +66,8 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Execut
     collection.insertMany(credentialsSeq).toFuture()
 
   def findById(refNum: String): Future[Option[FORCredentials]] =
-    collection
-      .find(equal("_id", refNum))
-      .toSingle()
-      .toFutureOption()
+    collection.find(equal("_id", refNum))
+      .toSingle().toFutureOption()
 
   def count: Future[Long] =
     collection.countDocuments().toFuture()

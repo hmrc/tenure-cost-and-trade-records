@@ -17,7 +17,8 @@
 package uk.gov.hmrc.tctr.backend.schema
 
 case class Address(buildingNameNumber: String, street1: Option[String], street2: Option[String], postcode: String) {
-  def singleLine: String =
+  def singleLine: String = {
     List(Some(buildingNameNumber), street1, street2, Some(postcode)).flatten.mkString(", ")
+  }
 
 }

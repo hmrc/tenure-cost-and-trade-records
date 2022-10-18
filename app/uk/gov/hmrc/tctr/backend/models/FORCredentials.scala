@@ -21,16 +21,12 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.schema.Address
 import uk.gov.hmrc.tctr.backend.schema._
 
-case class FORCredentials(
-  forNumber: String,
-  billingAuthorityCode: String,
-  forType: String,
-  address: Address,
-  _id: String
-) {
+
+case class FORCredentials(forNumber: String, billingAuthorityCode: String, forType: String, address: Address,
+                      _id: String) {
   def basicAuthString: String = "Basic " + encodedAuth
 
-  def encodedAuth: String = Base64.getEncoder.encodeToString(s"$forNumber:${address.postcode}".getBytes)
+  def encodedAuth: String = Base64.getEncoder.encodeToString(s"${forNumber}:${address.postcode}".getBytes)
 }
 
 object FORCredentials {

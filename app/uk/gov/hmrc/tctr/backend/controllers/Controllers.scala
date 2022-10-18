@@ -22,7 +22,7 @@ import scala.concurrent.Future
 
 package object controllers {
   implicit def toFuture[A](a: A): Future[A] = Future.successful(a)
-  implicit def toOpt[A](a: A): Option[A]    = Some(a)
+  implicit def toOpt[A](a: A): Option[A] = Some(a)
 
   def error(msg: String) = Json.toJson("error" -> msg)
 

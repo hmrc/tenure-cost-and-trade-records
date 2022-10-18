@@ -22,13 +22,11 @@ import uk.gov.hmrc.tctr.backend.schema.Address
 
 class ForCredentialsSpec extends AnyFlatSpec with Matchers {
 
-  val credentials: FORCredentials = FORCredentials(
-    "9999601001",
+  val credentials: FORCredentials = FORCredentials("9999601001",
     "BA3615",
     "FOR6010",
     Address("001", Some("GORING ROAD"), Some("GORING-BY-SEA, WORTHING"), "BN12 4AX"),
-    "9999601001"
-  )
+    "9999601001")
 
   "FORCredentials" should "return encoded string" in {
     val result = credentials.basicAuthString

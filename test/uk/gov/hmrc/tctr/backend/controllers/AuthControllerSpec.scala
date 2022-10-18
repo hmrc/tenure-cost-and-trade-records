@@ -25,7 +25,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
 import play.api.test.FakeRequest
 
-class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
+class AuthControllerSpec  extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
   implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
@@ -41,7 +41,7 @@ class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
 
     "return json" in {
       val result = controller.verifyCredentials("refNum", "postcode")(fakeRequest)
-      contentType(result)     shouldBe Some("application/json")
+      contentType(result) shouldBe Some("application/json")
       contentAsString(result) shouldBe """{"numberOfRemainingTriesUntilIPLockout":4}"""
     }
   }
