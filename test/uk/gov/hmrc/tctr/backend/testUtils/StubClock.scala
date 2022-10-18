@@ -18,20 +18,19 @@ package uk.gov.hmrc.tctr.backend.testUtils
 
 import org.joda.time.DateTime
 
-object StubClock{
-	def withNow(d: DateTime) = {
-		val c = new StubClock()
-		c.setNow(d)
-		c
-	}
+object StubClock {
+  def withNow(d: DateTime) = {
+    val c = new StubClock()
+    c.setNow(d)
+    c
+  }
 }
 
 class StubClock extends uk.gov.hmrc.tctr.backend.infrastructure.Clock {
-	private var _now: DateTime	= DateTime.now
+  private var _now: DateTime = DateTime.now
 
-	def setNow(d: DateTime): Unit = {
-		_now = d
-	}
+  def setNow(d: DateTime): Unit =
+    _now = d
 
-	def now(): DateTime = _now
+  def now(): DateTime = _now
 }
