@@ -32,40 +32,42 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 
 @Singleton
-class AuthController @Inject() (tctrConfig: AppConfig,
-                                credentialsMongoRepo: CredentialsMongoRepo,
-                                submittedMongoRepo: SubmittedMongoRepo,
-                                failedLoginsMongoRepo: FailedLoginsMongoRepo,
-                                clock: Clock,
-                                cc: ControllerComponents
-                               )(implicit ec: ExecutionContext) extends BackendController(cc)
-{
+class AuthController @Inject() (
+  tctrConfig: AppConfig,
+  credentialsMongoRepo: CredentialsMongoRepo,
+  submittedMongoRepo: SubmittedMongoRepo,
+  failedLoginsMongoRepo: FailedLoginsMongoRepo,
+  clock: Clock,
+  cc: ControllerComponents
+)(implicit ec: ExecutionContext)
+    extends BackendController(cc) {
 
-  val credsRepo = credentialsMongoRepo
-  val submittedRepo = submittedMongoRepo
-  val loginsRepo = failedLoginsMongoRepo
+  val credsRepo             = credentialsMongoRepo
+  val submittedRepo         = submittedMongoRepo
+  val loginsRepo            = failedLoginsMongoRepo
   lazy val enableDuplicates = tctrConfig.enableDuplicate
 
   lazy val verifier = {
     // hack required for override parameters on MDTP - it parses them all as strings
-    val authReq = tctrConfig.authenticationRequired
-    val loginAttempts = tctrConfig.authMaxFailedLogin
-    val lockoutWindow = tctrConfig.lockoutWindow
-    val sessionWindow = tctrConfig.sessionWindow
+    val authReq          = tctrConfig.authenticationRequired
+    val loginAttempts    = tctrConfig.authMaxFailedLogin
+    val lockoutWindow    = tctrConfig.lockoutWindow
+    val sessionWindow    = tctrConfig.sessionWindow
     val ipLockoutEnabled = tctrConfig.ipLockoutEnabled
-    val voaIPAddress = tctrConfig.voaIPAddress
-    val config = VerifierConfig(loginAttempts, lockoutWindow hours, sessionWindow hours, ipLockoutEnabled, voaIPAddress)
+    val voaIPAddress     = tctrConfig.voaIPAddress
+    val config           = VerifierConfig(loginAttempts, lockoutWindow hours, sessionWindow hours, ipLockoutEnabled, voaIPAddress)
     new IPBlockingCredentialsVerifier(credsRepo, submittedRepo, loginsRepo, authReq, config, clock, enableDuplicates)
   }
 
   def verifyCredentials(referenceNum: String, postcode: String) = Action.async { implicit request =>
     val ip = request.headers.get(trueClientIp)
     verifier.verify(referenceNum, postcode, ip) flatMap {
-      case ValidCredentials(creds) => Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.forType, creds.address)))
+      case ValidCredentials(creds)               =>
+        Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.forType, creds.address)))
       case InvalidCredentials(remainingAttempts) => Unauthorized(Json.toJson(FailedLoginResponse(remainingAttempts)))
-      case IPLockout => Unauthorized(Json.toJson(FailedLoginResponse(0)))
-      case AlreadySubmitted(items) => Conflict(error(s"Duplicate submission. $items"))
-      case MissingIPAddress => BadRequest(error(s"Missing header: $trueClientIp"))
+      case IPLockout                             => Unauthorized(Json.toJson(FailedLoginResponse(0)))
+      case AlreadySubmitted(items)               => Conflict(error(s"Duplicate submission. $items"))
+      case MissingIPAddress                      => BadRequest(error(s"Missing header: $trueClientIp"))
     }
   }
 }

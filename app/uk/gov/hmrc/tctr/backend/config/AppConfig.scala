@@ -23,7 +23,7 @@ import javax.inject.{Inject, Singleton}
 //import scala.language.postfixOps
 
 @Singleton
-class AppConfig @Inject()(runModeConfiguration: Configuration) {
+class AppConfig @Inject() (runModeConfiguration: Configuration) {
 
   lazy val authenticationRequired = runModeConfiguration.get[Boolean]("authenticationRequired")
 //  lazy val submissionExportEnabled = runModeConfiguration.get[Boolean]("submissionExport.enabled")
@@ -45,10 +45,10 @@ class AppConfig @Inject()(runModeConfiguration: Configuration) {
   lazy val enableDuplicate = runModeConfiguration.get[Boolean]("submissionExport.enableDuplicateSubmissions")
 
   lazy val authMaxFailedLogin = runModeConfiguration.get[Int]("authentication.maxFailedLogins")
-  lazy val lockoutWindow = runModeConfiguration.get[Int]("authentication.lockoutDurationHours")
-  lazy val sessionWindow = runModeConfiguration.get[Int]("authentication.loginSessionDurationHours")
-  lazy val ipLockoutEnabled = runModeConfiguration.get[Boolean]("authentication.ipLockoutEnabled")
-  lazy val voaIPAddress = runModeConfiguration.get[String]("authentication.voaIPAddress")
+  lazy val lockoutWindow      = runModeConfiguration.get[Int]("authentication.lockoutDurationHours")
+  lazy val sessionWindow      = runModeConfiguration.get[Int]("authentication.loginSessionDurationHours")
+  lazy val ipLockoutEnabled   = runModeConfiguration.get[Boolean]("authentication.ipLockoutEnabled")
+  lazy val voaIPAddress       = runModeConfiguration.get[String]("authentication.voaIPAddress")
 
 //  lazy val enablePublishing = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
 //  lazy val getFullLog = runModeConfiguration.get[Boolean]("submissionExport.logFull")
