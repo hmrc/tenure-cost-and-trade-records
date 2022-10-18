@@ -43,24 +43,26 @@ object FailedLoginsMongoRepo {
 }
 
 @Singleton
-class FailedLoginsMongoRepo @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
-  extends PlayMongoRepository[FailedLoginsMongoSchema](
-    collectionName = "failedLogins",
-    mongoComponent = mongo,
-    domainFormat = FailedLoginsMongoSchema.format,
-    indexes = Seq(
-      IndexModel(
-        Indexes.ascending("attempts"),
-        IndexOptions().name("failedLoginsTTL").expireAfter(expireAfterDays.toLong, TimeUnit.DAYS)
+class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+    extends PlayMongoRepository[FailedLoginsMongoSchema](
+      collectionName = "failedLogins",
+      mongoComponent = mongo,
+      domainFormat = FailedLoginsMongoSchema.format,
+      indexes = Seq(
+        IndexModel(
+          Indexes.ascending("attempts"),
+          IndexOptions().name("failedLoginsTTL").expireAfter(expireAfterDays.toLong, TimeUnit.DAYS)
+        )
+      ),
+      extraCodecs = Seq(
+        Codecs.playFormatCodec(MongoJodaFormats.dateTimeFormat)
       )
-    ),
-    extraCodecs = Seq(
-      Codecs.playFormatCodec(MongoJodaFormats.dateTimeFormat)
     )
-  ) with FailedLoginsRepo {
+    with FailedLoginsRepo {
 
   def mostRecent(ipAddress: String, amount: Int, since: DateTime): Future[Seq[FailedLogin]] =
-    collection.find(equal("_id", ipAddress))
+    collection
+      .find(equal("_id", ipAddress))
       .headOption()
       .map {
         case Some(failedLoginsMongo) =>
@@ -69,18 +71,21 @@ class FailedLoginsMongoRepo @Inject()(mongo: MongoComponent)(implicit ec: Execut
             .sortBy(_.getMillis)(Ordering.Long.reverse)
             .take(amount)
             .map(FailedLogin(_, ipAddress))
-        case None => Seq.empty
+        case None                    => Seq.empty
       }
 
   def record(login: FailedLogin): Future[Unit] =
-    collection.findOneAndUpdate(
-      equal("_id", login.ipAddress),
-      Updates.combine(
-        setOnInsert("_id", login.ipAddress),
-        push("attempts", Codecs.toBson(login.timestamp))
-      ),
-      FindOneAndUpdateOptions().upsert(true)
-    ).toFuture().map(_ => ())
+    collection
+      .findOneAndUpdate(
+        equal("_id", login.ipAddress),
+        Updates.combine(
+          setOnInsert("_id", login.ipAddress),
+          push("attempts", Codecs.toBson(login.timestamp))
+        ),
+        FindOneAndUpdateOptions().upsert(true)
+      )
+      .toFuture()
+      .map(_ => ())
 
 }
 

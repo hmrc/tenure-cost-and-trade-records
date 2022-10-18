@@ -30,9 +30,15 @@ import uk.gov.hmrc.tctr.backend.controllers.toFuture
 import scala.language.postfixOps
 
 @Singleton
-class IPBlockingCredentialsVerifier @Inject()(credsRepo: CredentialsRepo, submittedRepo: SubmittedMongoRepo,
-                                    loginsRepo: FailedLoginsRepo, authenticationRequired: Boolean, config: VerifierConfig,
-                                    clock: Clock, duplicatesEnabled: Boolean)(implicit ec: ExecutionContext) {
+class IPBlockingCredentialsVerifier @Inject() (
+  credsRepo: CredentialsRepo,
+  submittedRepo: SubmittedMongoRepo,
+  loginsRepo: FailedLoginsRepo,
+  authenticationRequired: Boolean,
+  config: VerifierConfig,
+  clock: Clock,
+  duplicatesEnabled: Boolean
+)(implicit ec: ExecutionContext) {
 
   implicit def toDuration(d: DateTime): Duration = d.getMillis millis
 
@@ -42,27 +48,26 @@ class IPBlockingCredentialsVerifier @Inject()(credsRepo: CredentialsRepo, submit
 
   def verify(referenceNum: String, postcode: String, ipAddress: Option[String]): Future[VerificationResult] =
     (config.ipLockoutEnabled, ipAddress) match {
-      case (true, None) => MissingIPAddress
+      case (true, None)               => MissingIPAddress
       case (true, Some(config.voaIP)) => verifyCredentials(referenceNum, postcode, 0)
-      case (true, Some(ip)) => verifyIPAndCredentials(ip, referenceNum, postcode)
-      case (false, _) => verifyCredentials(referenceNum, postcode, 0)
+      case (true, Some(ip))           => verifyIPAndCredentials(ip, referenceNum, postcode)
+      case (false, _)                 => verifyCredentials(referenceNum, postcode, 0)
     }
 
-  private def verifyIPAndCredentials(ip: String, referenceNum: String, postcode: String): Future[VerificationResult] = {
+  private def verifyIPAndCredentials(ip: String, referenceNum: String, postcode: String): Future[VerificationResult] =
     isLockedOut(ip) flatMap {
-      case (true, _) => IPLockout
+      case (true, _)             => IPLockout
       case (false, attemptsMade) => verifyCredentials(referenceNum, postcode, attemptsMade, Some(ip))
     }
-  }
 
   private def isLockedOut(ip: String) =
     loginsRepo.mostRecent(ip, config.maxFailedLoginAttempts, lockoutWindow) map { recentAttempts =>
       lazy val hasExceededLoginAttempts = recentAttempts.length >= config.maxFailedLoginAttempts
-      lazy val sorted = recentAttempts.sortBy(_.timestamp)
-      lazy val lastFailedAttempt = sorted.last
-      lazy val firstFailedAttempt = sorted.head
-      lazy val lockoutInProgress = (lastFailedAttempt.timestamp - firstFailedAttempt.timestamp) <= config.sessionWindow
-      lazy val inSession = recentAttempts filter {
+      lazy val sorted                   = recentAttempts.sortBy(_.timestamp)
+      lazy val lastFailedAttempt        = sorted.last
+      lazy val firstFailedAttempt       = sorted.head
+      lazy val lockoutInProgress        = (lastFailedAttempt.timestamp - firstFailedAttempt.timestamp) <= config.sessionWindow
+      lazy val inSession                = recentAttempts filter {
         _.timestamp isAfter startOfLoginSession
       }
 
@@ -73,24 +78,27 @@ class IPBlockingCredentialsVerifier @Inject()(credsRepo: CredentialsRepo, submit
 
   private def lockoutWindow = clock.now().minusMinutes(config.lockoutWindow.toMinutes.toInt)
 
-  private def verifyCredentials(referenceNum: String, postcode: String, attemptsMade: Int, ip: Option[String] = None) = {
+  private def verifyCredentials(referenceNum: String, postcode: String, attemptsMade: Int, ip: Option[String] = None) =
     submittedRepo.hasBeenSubmitted(referenceNum) flatMap {
-      case false => {
+      case false =>
         findMatchingCredentials(referenceNum, postcode, attemptsMade, ip)
 
-      }
       case true if duplicatesEnabled => findMatchingCredentials(referenceNum, postcode, attemptsMade, ip)
-      case true => AlreadySubmitted(referenceNum)
+      case true                      => AlreadySubmitted(referenceNum)
     }
-  }
 
   def testAddress(postcode: String) = Address("1 Test House", Some("Test Street"), Some("Test City"), postcode)
 
-  private def findMatchingCredentials(referenceNum: String, postcode: String, attemptsMade: Int, ip: Option[String]): Future[VerificationResult] =
+  private def findMatchingCredentials(
+    referenceNum: String,
+    postcode: String,
+    attemptsMade: Int,
+    ip: Option[String]
+  ): Future[VerificationResult] =
     if (authenticationRequired) {
       credsRepo.validate(referenceNum, postcode).map {
         case Some(credentials) => ValidCredentials(credentials)
-        case None =>
+        case None              =>
           ip map { i => loginsRepo.record(FailedLogin(clock.now(), i)) }
           InvalidCredentials(config.maxFailedLoginAttempts - (attemptsMade + 1))
       }
@@ -100,7 +108,13 @@ class IPBlockingCredentialsVerifier @Inject()(credsRepo: CredentialsRepo, submit
 
 }
 
-case class VerifierConfig(maxFailedLoginAttempts: Int, lockoutWindow: Duration, sessionWindow: Duration, ipLockoutEnabled: Boolean, voaIP: String)
+case class VerifierConfig(
+  maxFailedLoginAttempts: Int,
+  lockoutWindow: Duration,
+  sessionWindow: Duration,
+  ipLockoutEnabled: Boolean,
+  voaIP: String
+)
 
 sealed trait VerificationResult
 
