@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models
+package uk.gov.hmrc.tctr.backend.infrastructure
 
-import java.util.Base64
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
+import org.slf4j.MDC
+import play.api.Logging
 
-case class FORCredentials(
-  forNumber: String,
-  billingAuthorityCode: String,
-  forType: String,
-  address: SensitiveAddress,
-  _id: String
-) {
-  def basicAuthString: String = "Basic " + encodedAuth
+import scala.jdk.CollectionConverters._
 
-  def encodedAuth: String = Base64.getEncoder.encodeToString(s"$forNumber:${address.postcode}".getBytes)
-}
+object MultiFieldLogger extends Logging {
 
-object FORCredentials {
+  def debug(message: String, fields: (String, String)*): Unit = {
+    MDC.setContextMap(fields.toMap.asJava)
+    logger.debug(message)
+    MDC.clear()
+  }
 
-  implicit def format(implicit crypto: MongoCrypto): OFormat[FORCredentials] = Json.format[FORCredentials]
+  def info(message: String, fields: (String, String)*): Unit = {
+    MDC.setContextMap(fields.toMap.asJava)
+    logger.info(message)
+    MDC.clear()
+  }
+
 }

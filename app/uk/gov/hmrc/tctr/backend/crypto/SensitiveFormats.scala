@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models
+package uk.gov.hmrc.tctr.backend.crypto
 
-import java.util.Base64
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
+import play.api.libs.json.Format
+import uk.gov.hmrc.crypto.Sensitive.SensitiveString
+import uk.gov.hmrc.crypto.json.JsonEncryption
 
-case class FORCredentials(
-  forNumber: String,
-  billingAuthorityCode: String,
-  forType: String,
-  address: SensitiveAddress,
-  _id: String
-) {
-  def basicAuthString: String = "Basic " + encodedAuth
+/**
+  * @author Yuriy Tumakha
+  */
+object SensitiveFormats {
 
-  def encodedAuth: String = Base64.getEncoder.encodeToString(s"$forNumber:${address.postcode}".getBytes)
-}
+  implicit def sensitiveStringFormat(implicit crypto: MongoCrypto): Format[SensitiveString] =
+    JsonEncryption.sensitiveEncrypterDecrypter(SensitiveString.apply)
 
-object FORCredentials {
-
-  implicit def format(implicit crypto: MongoCrypto): OFormat[FORCredentials] = Json.format[FORCredentials]
 }

@@ -19,12 +19,15 @@ package uk.gov.hmrc.tctr.backend.repository
 import com.google.inject.ImplementedBy
 import org.mongodb.scala.bson.Document
 import org.mongodb.scala.model.Filters.equal
+import org.mongodb.scala.model.{IndexModel, IndexOptions, Indexes}
 import org.mongodb.scala.result.{DeleteResult, InsertManyResult}
-import play.api.Logging
+import play.api.{Configuration, Logging}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.FORCredentials
 
+import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,8 +44,26 @@ trait CredentialsRepo {
   def removeAll(): Future[DeleteResult]
 }
 
+object CredentialsMongoRepo {
+
+  val defaultExpireAfterDays = 365
+
+  def credentialsTtlIndex(configuration: Configuration): Seq[IndexModel] = Seq(
+    IndexModel(
+      Indexes.ascending("createdAt"),
+      IndexOptions()
+        .name("credentialsTTL")
+        .expireAfter(
+          configuration.getOptional[Int]("validationImport.expireAfterDays").getOrElse(defaultExpireAfterDays).toLong,
+          TimeUnit.DAYS
+        )
+    )
+  )
+
+}
+
 @Singleton
-class CredentialsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+class CredentialsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext, crypto: MongoCrypto)
     extends PlayMongoRepository[FORCredentials](
       collectionName = "credentials",
       mongoComponent = mongo,
@@ -57,7 +78,7 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Execut
     collection
       .find(equal("forNumber", refNum))
       .toFuture()
-      .map(_.find(x => normalizePostcode(x.address.postcode) == normalizePostcode(postcode1)))
+      .map(_.find(x => normalizePostcode(x.address.decryptedValue.postcode) == normalizePostcode(postcode1)))
       .recoverWith {
         case ex: RuntimeException if ex.getMessage.contains("JsError") =>
           logger.error(s"Error on converting credentials from json for referenceNumber: $refNum", ex)

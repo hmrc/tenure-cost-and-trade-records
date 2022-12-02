@@ -63,7 +63,7 @@ class AuthController @Inject() (
     val ip = request.headers.get(trueClientIp)
     verifier.verify(referenceNum, postcode, ip) flatMap {
       case ValidCredentials(creds)               =>
-        Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.forType, creds.address)))
+        Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.forType, creds.address.decryptedValue)))
       case InvalidCredentials(remainingAttempts) => Unauthorized(Json.toJson(FailedLoginResponse(remainingAttempts)))
       case IPLockout                             => Unauthorized(Json.toJson(FailedLoginResponse(0)))
       case AlreadySubmitted(items)               => Conflict(error(s"Duplicate submission. $items"))
