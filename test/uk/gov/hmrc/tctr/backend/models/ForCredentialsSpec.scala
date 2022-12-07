@@ -18,7 +18,9 @@ package uk.gov.hmrc.tctr.backend.models
 
 import org.scalatest.matchers.should._
 import org.scalatest.flatspec._
+import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.tctr.backend.schema.Address
+import uk.gov.hmrc.tctr.backend.models.SensitiveAddress
 
 class ForCredentialsSpec extends AnyFlatSpec with Matchers {
 
@@ -26,13 +28,18 @@ class ForCredentialsSpec extends AnyFlatSpec with Matchers {
     "9999601001",
     "BA3615",
     "FOR6010",
-    Address("001", Some("GORING ROAD"), Some("GORING-BY-SEA, WORTHING"), "BN12 4AX"),
+    new SensitiveAddress(
+      SensitiveString("001"),
+      Some(SensitiveString("GORING ROAD")),
+      Some(SensitiveString("GORING-BY-SEA, WORTHING")),
+      SensitiveString("BN12 4AX")
+    ),
     "9999601001"
   )
 
   "FORCredentials" should "return encoded string" in {
     val result = credentials.basicAuthString
-    result shouldBe "Basic OTk5OTYwMTAwMTpCTjEyIDRBWA=="
+    result shouldBe "Basic OTk5OTYwMTAwMTpTZW5zaXRpdmUoLi4uKQ=="
   }
 
 }

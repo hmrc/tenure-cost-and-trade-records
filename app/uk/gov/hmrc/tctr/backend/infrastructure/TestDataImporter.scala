@@ -62,7 +62,7 @@ class TestDataImporter @Inject() (mongoLockRepository: MongoLockRepository, acto
   }
 
   def buildTestCredentials(): Seq[FORCredentials] = {
-    val forTypes = Seq("6010", "6011", "6020")
+    val forTypes = Seq("6010","6011","6015","6016","6020","6030","6045","6046","6048","6076")
 
     forTypes
       .map(f =>

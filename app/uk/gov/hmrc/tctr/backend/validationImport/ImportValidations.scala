@@ -47,7 +47,7 @@ class ImportValidationsWithFutures @Inject() (
   }
 
   private def storeBatch(r: ValidationResponse)(implicit ec: ExecutionContext): Future[Unit] = {
-    val fs  = r.records.map(toFORCredentials).filter(_.forType == "VO 6003")
+    val fs  = r.records.map(toFORCredentials)
     val fs2 = if (r.footer.endRecord > importLimit) fs.take((importLimit - r.footer.startRecord + 1).toInt) else fs
     logger.info(s"Inserting ${fs2.length} validation records")
     metrics.importedCredentials.mark(fs2.length)
@@ -76,8 +76,6 @@ class ImportValidationsWithFutures @Inject() (
 
   private def reimportTestAccounts(implicit ec: ExecutionContext) = {
     logger.info(s"Loading test data")
-    // Remove 9999000596 from test data as it has already been loaded from the CDB. Do not remove
-    val testDataRemoveDuplicate = prod.filter(_._id != "9999000596") // Loaded from CDB
-    repo.bulkInsert(testDataRemoveDuplicate) map { _ => () }
+    repo.bulkInsert(prod) map { _ => () }
   }
 }
