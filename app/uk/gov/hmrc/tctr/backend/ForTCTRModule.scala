@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.tctr.backend
 
-import akka.actor.ActorSystem
+//import akka.actor.ActorSystem
 import com.google.inject.Provider
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment, Logging}
-import uk.gov.hmrc.mongo.lock.MongoLockRepository
+//import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.infrastructure.{DailySchedule, DefaultDailySchedule, TCTRHttpClient, TCTRHttpClientImpl}
 
 import java.time.Clock
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import javax.inject.Singleton
+//import scala.concurrent.ExecutionContext
 
 @Singleton
 class ForTCTRModule extends Module with Logging {

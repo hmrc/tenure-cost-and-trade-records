@@ -19,8 +19,6 @@ package uk.gov.hmrc.tctr.backend.models
 import org.scalatest.matchers.should._
 import org.scalatest.flatspec._
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
-import uk.gov.hmrc.tctr.backend.schema.Address
-import uk.gov.hmrc.tctr.backend.models.SensitiveAddress
 
 class ForCredentialsSpec extends AnyFlatSpec with Matchers {
 

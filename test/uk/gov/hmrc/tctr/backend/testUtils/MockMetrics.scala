@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-import com.codahale.metrics.{Counter, Meter}
+import com.codahale.metrics.Meter
+//import com.codahale.metrics.{Counter, Meter}
 import com.kenshoo.play.metrics.Metrics
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 

@@ -103,14 +103,10 @@ class WSFORXmlValidationsRetriever(
     ValidationRecord(id, pa)
   }
 
-  private def auditValidationsRetrieved(start: String, end: String, total: String) = {
-    println(s"Start: $start")
-    println(s"End: $end")
-    println(s"Total: $total")
+  private def auditValidationsRetrieved(start: String, end: String, total: String) =
     audit("ValidationsRetrieved", Json.obj("start" -> start.toInt, "end" -> end.toInt, "total" -> total.toInt))
-  }
 
-  private def auditValidationsImportFailed(status: Int, body: String) =
+  private def auditValidationsImportFailed(status: Int, body: String)              =
     audit("ValidationsImportFailed", Json.obj("status" -> status, "body" -> body))
 
 }
