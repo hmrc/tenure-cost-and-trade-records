@@ -6,6 +6,7 @@ private object AppDependencies {
   val bootstrapVersion = "7.1.0"
   val playLanguageVersion = "5.3.0-play-28"
   val hmrcMongoVersion = "0.68.0"
+  val cryptoJsonVersion = "7.2.0"
 
   // Test dependencies
   val scalatestPlusPlayVersion = "5.1.0"
@@ -20,6 +21,7 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "bootstrap-backend-play-28" % bootstrapVersion,
     "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % hmrcMongoVersion,
+    "uk.gov.hmrc" %% "crypto-json-play-28" % cryptoJsonVersion,
 //    temp as quick fix
     "com.softwaremill.sttp.client3" %% "core" % "3.7.5"
   )

@@ -39,7 +39,6 @@ val root = (project in file("."))
   .settings(IntegrationTest / fork := true) //must be true for Service Provider Interface
   .settings(CodeCoverageSettings.settings: _*)
   .settings(
-    resolvers += Resolver.bintrayRepo("hmrc", "releases"),
     resolvers += Resolver.jcenterRepo
   )
   .disablePlugins(JUnitXmlReportPlugin)

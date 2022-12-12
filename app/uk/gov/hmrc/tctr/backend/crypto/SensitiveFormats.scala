@@ -14,30 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models
+package uk.gov.hmrc.tctr.backend.crypto
 
-import org.scalatest.matchers.should._
-import org.scalatest.flatspec._
+import play.api.libs.json.Format
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
+import uk.gov.hmrc.crypto.json.JsonEncryption
 
-class ForCredentialsSpec extends AnyFlatSpec with Matchers {
+/**
+  * @author Yuriy Tumakha
+  */
+object SensitiveFormats {
 
-  val credentials: FORCredentials = FORCredentials(
-    "9999601001",
-    "BA3615",
-    "FOR6010",
-    new SensitiveAddress(
-      SensitiveString("001"),
-      Some(SensitiveString("GORING ROAD")),
-      Some(SensitiveString("GORING-BY-SEA, WORTHING")),
-      SensitiveString("BN12 4AX")
-    ),
-    "9999601001"
-  )
-
-  "FORCredentials" should "return encoded string" in {
-    val result = credentials.basicAuthString
-    result shouldBe "Basic OTk5OTYwMTAwMTpTZW5zaXRpdmUoLi4uKQ=="
-  }
+  implicit def sensitiveStringFormat(implicit crypto: MongoCrypto): Format[SensitiveString] =
+    JsonEncryption.sensitiveEncrypterDecrypter(SensitiveString.apply)
 
 }

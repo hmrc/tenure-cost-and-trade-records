@@ -34,15 +34,19 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
 //  lazy val testAccountPrefix = runModeConfiguration.get[String]("submissionExport.testAccountPrefix")
 //  lazy val retryWindow = runModeConfiguration.get[Int]("submissionExport.retryWindowHours")
 //  lazy val logErrorInHours = runModeConfiguration.get[Int]("submissionExport.logErrorInHours")
+  lazy val enableDuplicate        = runModeConfiguration.get[Boolean]("submissionExport.enableDuplicateSubmissions")
+  lazy val exportFrequency        = runModeConfiguration.get[Int]("submissionExport.frequencySeconds")
+  lazy val enablePublishing       = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
 
-//  lazy val validationImportEnabled = runModeConfiguration.get[Boolean]("validationImport.enabled")
-//  lazy val importUrl = runModeConfiguration.get[String]("validationImport.url")
-//  lazy val importUsername = runModeConfiguration.get[String]("validationImport.username")
-//  lazy val importPassword = runModeConfiguration.get[String]("validationImport.password")
-//  lazy val importBatchSize = runModeConfiguration.get[Int]("validationImport.batchSize")
-//  lazy val importTestData = runModeConfiguration.get[Boolean]("validationImport.importTestData")
-//  lazy val importLimit = runModeConfiguration.get[Int]("validationImport.importLimit")
-  lazy val enableDuplicate = runModeConfiguration.get[Boolean]("submissionExport.enableDuplicateSubmissions")
+  lazy val validationImportEnabled = runModeConfiguration.get[Boolean]("validationImport.enabled")
+  lazy val importUrl               = runModeConfiguration.get[String]("validationImport.url")
+  lazy val importUsername          = runModeConfiguration.get[String]("validationImport.username")
+  lazy val importPassword          = runModeConfiguration.get[String]("validationImport.password")
+  lazy val importBatchSize         = runModeConfiguration.get[Int]("validationImport.batchSize")
+  lazy val importTestData          = runModeConfiguration.get[Boolean]("validationImport.importTestData")
+  lazy val importLimit             = runModeConfiguration.get[Int]("validationImport.importLimit")
+  lazy val importScheduleHour      = runModeConfiguration.get[Int]("validationImport.hourToRunAt")
+  lazy val importScheduleMinute    = runModeConfiguration.get[Int]("validationImport.minuteToRunAt")
 
   lazy val authMaxFailedLogin = runModeConfiguration.get[Int]("authentication.maxFailedLogins")
   lazy val lockoutWindow      = runModeConfiguration.get[Int]("authentication.lockoutDurationHours")
@@ -52,10 +56,6 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
 
 //  lazy val enablePublishing = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
 //  lazy val getFullLog = runModeConfiguration.get[Boolean]("submissionExport.logFull")
-//  lazy val exportFrequency = runModeConfiguration.get[Int]("submissionExport.frequencySeconds")
-
-//  lazy val importScheduleHour = runModeConfiguration.get[Int]("validationImport.hourToRunAt")
-//  lazy val importScheduleMinute = runModeConfiguration.get[Int]("validationImport.minuteToRunAt")
 
   lazy val isTesting = !authenticationRequired
 

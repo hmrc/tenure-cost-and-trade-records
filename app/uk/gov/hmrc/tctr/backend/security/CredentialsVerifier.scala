@@ -23,8 +23,7 @@ import org.joda.time.DateTime
 import uk.gov.hmrc.tctr.backend.infrastructure.Clock
 import uk.gov.hmrc.tctr.backend.repository.{CredentialsRepo, SubmittedMongoRepo}
 import uk.gov.hmrc.tctr.backend.schema.Address
-import uk.gov.hmrc.tctr.backend.models.FORCredentials
-//import uk.gov.voa.efor.backend._
+import uk.gov.hmrc.tctr.backend.models.{FORCredentials, SensitiveAddress}
 import uk.gov.hmrc.tctr.backend.controllers.toFuture
 
 import scala.language.postfixOps
@@ -103,7 +102,9 @@ class IPBlockingCredentialsVerifier @Inject() (
           InvalidCredentials(config.maxFailedLoginAttempts - (attemptsMade + 1))
       }
     } else {
-      ValidCredentials(FORCredentials(referenceNum, "", "", testAddress(postcode.replace("+", "")), ""))
+      ValidCredentials(
+        FORCredentials(referenceNum, "", "", SensitiveAddress(testAddress(postcode.replace("+", ""))), "")
+      )
     }
 
 }

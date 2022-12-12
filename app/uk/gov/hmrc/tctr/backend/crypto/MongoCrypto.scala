@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models
+package uk.gov.hmrc.tctr.backend.crypto
 
-import java.util.Base64
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
+import play.api.Configuration
+import uk.gov.hmrc.crypto.AesGCMCrypto
 
-case class FORCredentials(
-  forNumber: String,
-  billingAuthorityCode: String,
-  forType: String,
-  address: SensitiveAddress,
-  _id: String
-) {
-  def basicAuthString: String = "Basic " + encodedAuth
+import javax.inject.{Inject, Singleton}
 
-  def encodedAuth: String = Base64.getEncoder.encodeToString(s"$forNumber:${address.postcode}".getBytes)
-}
+/**
+  * @author Yuriy Tumakha
+  */
+@Singleton
+class MongoCrypto @Inject() (configuration: Configuration) extends AesGCMCrypto {
 
-object FORCredentials {
+  override protected val encryptionKey: String = configuration.underlying.getString("crypto.key")
 
-  implicit def format(implicit crypto: MongoCrypto): OFormat[FORCredentials] = Json.format[FORCredentials]
 }

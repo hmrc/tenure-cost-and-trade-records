@@ -46,10 +46,11 @@ class CredentialsVerifierSpec
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure("mongodb.uri" -> "mongodb://localhost:27017/tenure-cost-and-trade-records")
     .overrides(new AbstractModule with ScalaModule {
-      override def configure(): Unit =
+      override def configure(): Unit = {
         bind[Metrics].toInstance(mock[Metrics])
-//        bind[DailySchedule].to[DefaultDailySchedule]
+        bind[DailySchedule].to[DefaultDailySchedule]
 //        bind[RegularSchedule].to[DefaultRegularSchedule]
+      }
     })
     .build()
 
