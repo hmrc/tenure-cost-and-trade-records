@@ -3,14 +3,13 @@ import sbt._
 
 private object AppDependencies {
 
-  val bootstrapVersion = "7.1.0"
-  val playLanguageVersion = "5.3.0-play-28"
-  val hmrcMongoVersion = "0.68.0"
-  val cryptoJsonVersion = "7.2.0"
+  val bootstrapVersion = "7.12.0"
+  val hmrcMongoVersion = "0.74.0"
+  val cryptoJsonVersion = "7.3.0"
 
   // Test dependencies
   val scalatestPlusPlayVersion = "5.1.0"
-  val scalatestVersion = "3.2.12"
+  val scalatestVersion = "3.2.15"
   val mockitoScalaVersion = "1.17.12"
   val scalaGuiceVersion = "5.1.0"
   val flexMarkVersion = "0.64.0"
@@ -19,7 +18,6 @@ private object AppDependencies {
 
   private val compile = Seq(
     "uk.gov.hmrc" %% "bootstrap-backend-play-28" % bootstrapVersion,
-    "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % hmrcMongoVersion,
     "uk.gov.hmrc" %% "crypto-json-play-28" % cryptoJsonVersion,
 //    temp as quick fix
