@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend
+package uk.gov.hmrc.tctr.backend.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
-import scala.concurrent.Future
+import java.time.Instant
 
-package object controllers {
-  implicit def toFuture[A](a: A): Future[A] = Future.successful(a)
-  implicit def toOpt[A](a: A): Option[A]    = Some(a)
+/**
+ * @author Yuriy Tumakha
+ */
+case class SubmissionDraftWrapper(
+                            _id: String,
+                            submissionDraft: SubmissionDraft,
+                            createdAt: Instant = Instant.now
+                          )
 
-  def error(msg: String) = Json.toJson("error" -> msg)
+object SubmissionDraftWrapper {
+
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
+
+  implicit val format: OFormat[SubmissionDraftWrapper] = Json.format[SubmissionDraftWrapper]
 
 }

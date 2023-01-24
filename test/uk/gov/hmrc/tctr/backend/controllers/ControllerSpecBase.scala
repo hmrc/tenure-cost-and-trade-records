@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend
+package uk.gov.hmrc.tctr.backend.controllers
 
-import play.api.libs.json.Json
+import akka.util.Timeout
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should
 
-import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
+import scala.language.postfixOps
 
-package object controllers {
-  implicit def toFuture[A](a: A): Future[A] = Future.successful(a)
-  implicit def toOpt[A](a: A): Option[A]    = Some(a)
+/**
+ * @author Yuriy Tumakha
+ */
+abstract class ControllerSpecBase extends AsyncFlatSpec with should.Matchers {
 
-  def error(msg: String) = Json.toJson("error" -> msg)
+  implicit val timeout: Timeout = 9 seconds
 
 }

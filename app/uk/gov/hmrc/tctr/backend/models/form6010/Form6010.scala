@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend
+package uk.gov.hmrc.tctr.backend.models.form6010
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
-import scala.concurrent.Future
+/**
+ * @author Yuriy Tumakha
+ */
+case class Form6010 (aboutYou: Option[String])
 
-package object controllers {
-  implicit def toFuture[A](a: A): Future[A] = Future.successful(a)
-  implicit def toOpt[A](a: A): Option[A]    = Some(a)
+object Form6010 {
 
-  def error(msg: String) = Json.toJson("error" -> msg)
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
+
+  implicit val format: OFormat[Form6010] = Json.format[Form6010]
 
 }

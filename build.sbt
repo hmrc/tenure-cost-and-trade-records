@@ -1,7 +1,6 @@
 import sbt.Keys.scalacOptions
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSettings, scalaSettings}
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val plugins: Seq[Plugins] = Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
 
@@ -15,7 +14,6 @@ val root = (project in file("."))
   .enablePlugins(plugins: _*)
   .settings(scalaSettings: _*)
   .settings(defaultSettings(): _*)
-  .settings(publishingSettings: _*)
   .settings(PlayKeys.playDefaultPort := defaultPort)
   .settings(majorVersion := 0)
   .settings(

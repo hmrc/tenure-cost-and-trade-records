@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend
+package uk.gov.hmrc.tctr.backend.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.form6010.Form6010
+import uk.gov.hmrc.tctr.backend.models.form6011.Form6011
 
-import scala.concurrent.Future
+/**
+ * @author Yuriy Tumakha
+ */
+case class SubmissionDraft(
+                            form6010: Option[Form6010] = None,
+                            form6011: Option[Form6011] = None
+                          )
 
-package object controllers {
-  implicit def toFuture[A](a: A): Future[A] = Future.successful(a)
-  implicit def toOpt[A](a: A): Option[A]    = Some(a)
+object SubmissionDraft {
 
-  def error(msg: String) = Json.toJson("error" -> msg)
+  implicit val format: OFormat[SubmissionDraft] = Json.format[SubmissionDraft]
 
 }
