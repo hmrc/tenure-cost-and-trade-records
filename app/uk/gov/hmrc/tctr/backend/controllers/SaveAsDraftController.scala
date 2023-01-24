@@ -45,7 +45,7 @@ class SaveAsDraftController @Inject()(repo: SubmissionDraftRepo,
   }
 
   def delete(referenceNumber: String) = Action.async {
-    repo.delete(referenceNumber) map { _ => Ok }
+    repo.delete(referenceNumber) map { res => Ok(Json.obj("deletedCount" -> res.getDeletedCount)) }
   }
 
 }

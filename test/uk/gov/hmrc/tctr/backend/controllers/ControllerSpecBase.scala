@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models
+package uk.gov.hmrc.tctr.backend.controllers
 
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.form6010.Form6010
-import uk.gov.hmrc.tctr.backend.models.form6011.Form6011
+import akka.util.Timeout
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should
+
+import scala.concurrent.duration.DurationInt
+import scala.language.postfixOps
 
 /**
  * @author Yuriy Tumakha
  */
-case class SubmissionDraft(
-                            form6010: Option[Form6010] = None,
-                            form6011: Option[Form6011] = None
-                          )
+abstract class ControllerSpecBase extends AsyncFlatSpec with should.Matchers {
 
-object SubmissionDraft {
-
-  implicit val format: OFormat[SubmissionDraft] = Json.format[SubmissionDraft]
+  implicit val timeout: Timeout = 9 seconds
 
 }
