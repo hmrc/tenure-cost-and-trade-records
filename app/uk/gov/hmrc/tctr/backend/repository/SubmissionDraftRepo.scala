@@ -31,24 +31,25 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
- * @author Yuriy Tumakha
- */
+  * @author Yuriy Tumakha
+  */
 @Singleton
-class MongoSubmissionDraftRepo @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
-  extends PlayMongoRepository[SubmissionDraftWrapper] (
-    collectionName = "submissionDraft",
-    mongoComponent = mongo,
-    domainFormat = SubmissionDraftWrapper.format,
-    indexes = Seq(
-      IndexModel(
-        Indexes.descending("createdAt"),
-        IndexOptions().name("submissionDraftTTL").expireAfter(saveForDays, TimeUnit.DAYS)
+class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+    extends PlayMongoRepository[SubmissionDraftWrapper](
+      collectionName = "submissionDraft",
+      mongoComponent = mongo,
+      domainFormat = SubmissionDraftWrapper.format,
+      indexes = Seq(
+        IndexModel(
+          Indexes.descending("createdAt"),
+          IndexOptions().name("submissionDraftTTL").expireAfter(saveForDays, TimeUnit.DAYS)
+        )
+      ),
+      extraCodecs = Seq(
+        Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
       )
-    ),
-    extraCodecs = Seq(
-      Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
     )
-  ) with SubmissionDraftRepo {
+    with SubmissionDraftRepo {
 
   private val _id = "_id"
 

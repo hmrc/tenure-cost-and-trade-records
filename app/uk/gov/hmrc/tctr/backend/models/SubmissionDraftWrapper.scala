@@ -21,13 +21,13 @@ import play.api.libs.json.{Json, OFormat}
 import java.time.Instant
 
 /**
- * @author Yuriy Tumakha
- */
+  * @author Yuriy Tumakha
+  */
 case class SubmissionDraftWrapper(
-                            _id: String,
-                            submissionDraft: SubmissionDraft,
-                            createdAt: Instant = Instant.now
-                          )
+  _id: String,
+  submissionDraft: SubmissionDraft,
+  createdAt: Instant = Instant.now
+)
 
 object SubmissionDraftWrapper {
 

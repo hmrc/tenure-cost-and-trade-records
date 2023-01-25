@@ -26,17 +26,17 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 /**
- * @author Yuriy Tumakha
- */
+  * @author Yuriy Tumakha
+  */
 @Singleton
-class SaveAsDraftController @Inject()(repo: SubmissionDraftRepo,
-                                      cc: ControllerComponents)(implicit ec: ExecutionContext)
-  extends BackendController(cc) {
+class SaveAsDraftController @Inject() (repo: SubmissionDraftRepo, cc: ControllerComponents)(implicit
+  ec: ExecutionContext
+) extends BackendController(cc) {
 
   def get(referenceNumber: String) = Action.async {
     repo.find(referenceNumber) map {
       case Some(submissionDraft) => Ok(Json.toJson(submissionDraft))
-      case None => NotFound(Json.obj("status" -> "NotFound"))
+      case None                  => NotFound(Json.obj("status" -> "NotFound"))
     }
   }
 

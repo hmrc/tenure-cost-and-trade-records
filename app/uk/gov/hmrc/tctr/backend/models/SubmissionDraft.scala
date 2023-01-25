@@ -21,12 +21,12 @@ import uk.gov.hmrc.tctr.backend.models.form6010.Form6010
 import uk.gov.hmrc.tctr.backend.models.form6011.Form6011
 
 /**
- * @author Yuriy Tumakha
- */
+  * @author Yuriy Tumakha
+  */
 case class SubmissionDraft(
-                            form6010: Option[Form6010] = None,
-                            form6011: Option[Form6011] = None
-                          )
+  form6010: Option[Form6010] = None,
+  form6011: Option[Form6011] = None
+)
 
 object SubmissionDraft {
 
