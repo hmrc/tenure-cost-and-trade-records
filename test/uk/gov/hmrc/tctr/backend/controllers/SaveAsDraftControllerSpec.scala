@@ -28,8 +28,8 @@ import scala.concurrent.Future
 import scala.language.postfixOps
 
 /**
- * @author Yuriy Tumakha
- */
+  * @author Yuriy Tumakha
+  */
 class SaveAsDraftControllerSpec extends ControllerSpecBase {
 
   def controller = new SaveAsDraftController(StubSubmissionDraftRepo, stubControllerComponents())
@@ -40,34 +40,34 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
     }
   }
 
-  it should "return 404 for get by unknown SubmissionDraft.id" in {
+  it                      should "return 404 for get by unknown SubmissionDraft.id" in {
     controller.get("UNKNOWN_ID")(FakeRequest()).map {
       _.header.status shouldBe NOT_FOUND
     }
   }
 
-  it should "save SubmissionDraft" in {
+  it                      should "save SubmissionDraft" in {
     controller.put(StubSubmissionDraftRepo.correctDbId)(FakeRequest().withBody(SubmissionDraft(None))).map {
       _.header.status shouldBe CREATED
     }
   }
 
-  it should "fail on save with wrong id" in {
+  it                      should "fail on save with wrong id" in {
     recoverToSucceededIf[RuntimeException] {
       controller.put("WRONG_ID")(FakeRequest().withBody(SubmissionDraft(None)))
     }
   }
 
-  it should "delete SubmissionDraft and return deletedCount = 1" in {
+  it                      should "delete SubmissionDraft and return deletedCount = 1" in {
     controller.delete(StubSubmissionDraftRepo.correctDbId)(FakeRequest()).map { result =>
-      result.header.status shouldBe OK
+      result.header.status  shouldBe OK
       contentAsJson(result) shouldBe Json.obj("deletedCount" -> 1)
     }
   }
 
-  it should "on delete return deletedCount = 0 for unknown id" in {
+  it                      should "on delete return deletedCount = 0 for unknown id" in {
     controller.delete("UNKNOWN_ID")(FakeRequest()).map { result =>
-      result.header.status shouldBe OK
+      result.header.status  shouldBe OK
       contentAsJson(result) shouldBe Json.obj("deletedCount" -> 0)
     }
   }
@@ -95,7 +95,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
     override def delete(id: String): Future[DeleteResult] = {
       val deletedCount = id match {
         case `correctDbId` => 1
-        case _ => 0
+        case _             => 0
       }
       Future.successful(DeleteResult.acknowledged(deletedCount))
     }

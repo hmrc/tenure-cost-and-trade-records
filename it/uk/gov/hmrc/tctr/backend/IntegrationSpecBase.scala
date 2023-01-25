@@ -36,7 +36,9 @@ abstract class IntegrationSpecBase
 
   override def fakeApplication(): Application =
     GuiceApplicationBuilder()
-      .configure("metrics.enabled" -> false)
+      .configure(
+        "metrics.enabled" -> false
+      )
       .build()
 
   protected val wsClient: WSClient = app.injector.instanceOf[WSClient]

@@ -19,9 +19,9 @@ package uk.gov.hmrc.tctr.backend.models.form6010
 import play.api.libs.json.{Json, OFormat}
 
 /**
- * @author Yuriy Tumakha
- */
-case class Form6010 (aboutYou: Option[String])
+  * @author Yuriy Tumakha
+  */
+case class Form6010(aboutYou: Option[String])
 
 object Form6010 {
 

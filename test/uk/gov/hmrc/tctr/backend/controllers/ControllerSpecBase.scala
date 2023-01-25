@@ -24,8 +24,8 @@ import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
 /**
- * @author Yuriy Tumakha
- */
+  * @author Yuriy Tumakha
+  */
 abstract class ControllerSpecBase extends AsyncFlatSpec with should.Matchers {
 
   implicit val timeout: Timeout = 9 seconds
