@@ -19,7 +19,6 @@ package uk.gov.hmrc.tctr.backend.controllers
 import play.api.libs.json.Json
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.tctr.backend.models.SubmissionDraft
 import uk.gov.hmrc.tctr.backend.repository.SubmissionDraftRepo
 
 import javax.inject.{Inject, Singleton}
@@ -35,13 +34,16 @@ class SaveAsDraftController @Inject() (repo: SubmissionDraftRepo, cc: Controller
 
   def get(referenceNumber: String) = Action.async {
     repo.find(referenceNumber) map {
-      case Some(submissionDraft) => Ok(Json.toJson(submissionDraft))
-      case None                  => NotFound(Json.obj("status" -> "NotFound"))
+      case Some(submissionDraftJson) => Ok(submissionDraftJson)
+      case None                      => NotFound(Json.obj("status" -> "NotFound"))
     }
   }
 
-  def put(referenceNumber: String) = Action(parse.json[SubmissionDraft]).async { request =>
-    repo.save(referenceNumber, request.body) map { _ => Created }
+  def put(referenceNumber: String) = Action.async { request =>
+    request.body.asJson match {
+      case Some(submissionDraftJson) => repo.save(referenceNumber, submissionDraftJson) map { _ => Created }
+      case _ => BadRequest(Json.obj("statusCode" -> BAD_REQUEST, "message" -> "JSON body is expected in request"))
+    }
   }
 
   def delete(referenceNumber: String) = Action.async {
