@@ -20,8 +20,7 @@ import org.bson.codecs.ObjectIdCodec
 import org.mongodb.scala.model.Filters.equal
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 import org.mongodb.scala.model._
 import org.mongodb.scala.result.InsertOneResult
 import uk.gov.hmrc.mongo.MongoComponent
@@ -29,7 +28,7 @@ import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import uk.gov.hmrc.tctr.backend.models.RefNum
 
 @Singleton
-class SubmittedMongoRepo @Inject() (mongo: MongoComponent)
+class SubmittedMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
     extends PlayMongoRepository[RefNum](
       collectionName = "submitted",
       mongoComponent = mongo,
