@@ -52,9 +52,9 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
     }
   }
 
-  it should "return 400 for empty body" in {
+  it                      should "return 400 for empty body" in {
     val res = controller.put("WRONG_ID")(FakeRequest().withHeaders("Content-Type" -> "application/json"))
-    status(res) shouldBe BAD_REQUEST
+    status(res)        shouldBe BAD_REQUEST
     contentAsJson(res) shouldBe Json.obj("statusCode" -> BAD_REQUEST, "message" -> "JSON body is expected in request")
   }
 

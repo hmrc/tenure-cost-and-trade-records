@@ -42,7 +42,7 @@ class SaveAsDraftController @Inject() (repo: SubmissionDraftRepo, cc: Controller
   def put(referenceNumber: String) = Action.async { request =>
     request.body.asJson match {
       case Some(submissionDraftJson) => repo.save(referenceNumber, submissionDraftJson) map { _ => Created }
-      case _ => BadRequest(Json.obj("statusCode" -> BAD_REQUEST, "message" -> "JSON body is expected in request"))
+      case _                         => BadRequest(Json.obj("statusCode" -> BAD_REQUEST, "message" -> "JSON body is expected in request"))
     }
   }
 
