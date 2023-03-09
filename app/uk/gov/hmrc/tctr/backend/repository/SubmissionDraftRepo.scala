@@ -20,10 +20,11 @@ import com.google.inject.ImplementedBy
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.{Filters, FindOneAndReplaceOptions, IndexModel, IndexOptions, Indexes, ReturnDocument}
 import org.mongodb.scala.result.DeleteResult
+import play.api.libs.json.JsValue
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
-import uk.gov.hmrc.tctr.backend.models.{SubmissionDraft, SubmissionDraftWrapper}
+import uk.gov.hmrc.tctr.backend.models.SubmissionDraftWrapper
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo.saveForDays
 
 import java.util.concurrent.TimeUnit
@@ -55,13 +56,13 @@ class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent)(implicit ec: Ex
 
   private def byId(id: String): Bson = Filters.equal(_id, id)
 
-  override def find(id: String): Future[Option[SubmissionDraft]] =
+  override def find(id: String): Future[Option[JsValue]] =
     collection
       .find(byId(id))
       .headOption()
       .map(_.map(_.submissionDraft))
 
-  override def save(id: String, submissionDraft: SubmissionDraft): Future[SubmissionDraft] =
+  override def save(id: String, submissionDraft: JsValue): Future[JsValue] =
     collection
       .findOneAndReplace(
         byId(id),
@@ -85,9 +86,9 @@ object MongoSubmissionDraftRepo {
 @ImplementedBy(classOf[MongoSubmissionDraftRepo])
 trait SubmissionDraftRepo {
 
-  def find(id: String): Future[Option[SubmissionDraft]]
+  def find(id: String): Future[Option[JsValue]]
 
-  def save(id: String, submissionDraft: SubmissionDraft): Future[SubmissionDraft]
+  def save(id: String, submissionDraft: JsValue): Future[JsValue]
 
   def delete(id: String): Future[DeleteResult]
 

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsValue, Json, OFormat}
 
 import java.time.Instant
 
@@ -25,7 +25,7 @@ import java.time.Instant
   */
 case class SubmissionDraftWrapper(
   _id: String,
-  submissionDraft: SubmissionDraft,
+  submissionDraft: JsValue,
   createdAt: Instant = Instant.now
 )
 

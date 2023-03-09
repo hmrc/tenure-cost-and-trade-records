@@ -17,9 +17,8 @@
 package uk.gov.hmrc.tctr.backend
 
 import org.scalatest.BeforeAndAfterAll
-import play.api.http.Status.{BAD_REQUEST, CREATED, NOT_FOUND, OK, UNSUPPORTED_MEDIA_TYPE}
+import play.api.http.Status.{BAD_REQUEST, CREATED, NOT_FOUND, OK}
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.SubmissionDraft
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo
 
 class SaveAsDraftIntegrationSpec
@@ -32,8 +31,8 @@ class SaveAsDraftIntegrationSpec
   private val repo = app.injector.instanceOf[MongoSubmissionDraftRepo]
 
   override def beforeAll(): Unit = {
-    repo.save(submissionDraftFindId, SubmissionDraft(None))
-    repo.save(submissionDraftDeleteId, SubmissionDraft(None))
+    repo.save(submissionDraftFindId, Json.obj())
+    repo.save(submissionDraftDeleteId, Json.obj("a" -> "b"))
   }
 
   "SaveAsDraft GET endpoint" should {
@@ -63,7 +62,7 @@ class SaveAsDraftIntegrationSpec
       val response =
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/$submissionDraftSaveId")
-          .put(Json.toJson(SubmissionDraft()))
+          .put(Json.toJson(Json.obj("a" -> 1)))
           .futureValue
 
       response.status shouldBe CREATED
@@ -80,14 +79,14 @@ class SaveAsDraftIntegrationSpec
       response.status shouldBe BAD_REQUEST
     }
 
-    "return 415 if content type is not JSON" in {
+    "return 400 if content type is not JSON" in {
       val response =
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/$submissionDraftBadRequestId")
           .put("some text")
           .futureValue
 
-      response.status shouldBe UNSUPPORTED_MEDIA_TYPE
+      response.status shouldBe BAD_REQUEST
     }
   }
 

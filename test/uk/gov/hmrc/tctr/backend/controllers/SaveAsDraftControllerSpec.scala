@@ -17,11 +17,11 @@
 package uk.gov.hmrc.tctr.backend.controllers
 
 import com.mongodb.client.result.DeleteResult
-import play.api.http.Status.{CREATED, NOT_FOUND, OK}
-import play.api.libs.json.Json
+import play.api.http.Status.{BAD_REQUEST, CREATED, NOT_FOUND, OK}
+import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsJson, stubControllerComponents}
-import uk.gov.hmrc.tctr.backend.models.{SubmissionDraft, SubmissionDraftWrapper}
+import play.api.test.Helpers.{contentAsJson, status, stubControllerComponents}
+import uk.gov.hmrc.tctr.backend.models.SubmissionDraftWrapper
 import uk.gov.hmrc.tctr.backend.repository.SubmissionDraftRepo
 
 import scala.concurrent.Future
@@ -47,15 +47,15 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
   }
 
   it                      should "save SubmissionDraft" in {
-    controller.put(StubSubmissionDraftRepo.correctDbId)(FakeRequest().withBody(SubmissionDraft(None))).map {
+    controller.put(StubSubmissionDraftRepo.correctDbId)(FakeRequest().withJsonBody(Json.obj("a" -> "b"))).map {
       _.header.status shouldBe CREATED
     }
   }
 
-  it                      should "fail on save with wrong id" in {
-    recoverToSucceededIf[RuntimeException] {
-      controller.put("WRONG_ID")(FakeRequest().withBody(SubmissionDraft(None)))
-    }
+  it                      should "return 400 for empty body" in {
+    val res = controller.put("WRONG_ID")(FakeRequest().withHeaders("Content-Type" -> "application/json"))
+    status(res)        shouldBe BAD_REQUEST
+    contentAsJson(res) shouldBe Json.obj("statusCode" -> BAD_REQUEST, "message" -> "JSON body is expected in request")
   }
 
   it                      should "delete SubmissionDraft and return deletedCount = 1" in {
@@ -76,16 +76,16 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
 
     val correctDbId = "12345"
 
-    private val dbRecord = Some(SubmissionDraftWrapper(correctDbId, SubmissionDraft()))
+    private val dbRecord = Some(SubmissionDraftWrapper(correctDbId, Json.obj("a" -> "b")))
 
-    override def find(id: String): Future[Option[SubmissionDraft]] =
+    override def find(id: String): Future[Option[JsValue]] =
       Future {
         dbRecord
           .filter(_._id == id)
           .map(_.submissionDraft)
       }
 
-    override def save(id: String, submissionDraft: SubmissionDraft): Future[SubmissionDraft] =
+    override def save(id: String, submissionDraft: JsValue): Future[JsValue] =
       if (id == correctDbId) {
         Future.successful(submissionDraft)
       } else {

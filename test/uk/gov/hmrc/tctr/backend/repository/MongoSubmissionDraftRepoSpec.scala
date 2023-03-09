@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.repository
 
-import uk.gov.hmrc.tctr.backend.models.SubmissionDraft
+import play.api.libs.json.Json
 
 /**
   * @author Yuriy Tumakha
@@ -26,7 +26,7 @@ class MongoSubmissionDraftRepoSpec extends MongoSpecBase {
   private val submissionDraftFindId   = "SaveAsDraftITestFind"
   private val submissionDraftSaveId   = "SaveAsDraftITestSave"
   private val submissionDraftDeleteId = "SaveAsDraftITestDelete"
-  private val testSubmissionDraft     = SubmissionDraft(None)
+  private val testSubmissionDraft     = Json.obj()
 
   private val repo = inject[MongoSubmissionDraftRepo]
 
