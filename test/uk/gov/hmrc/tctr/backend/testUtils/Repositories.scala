@@ -24,7 +24,7 @@ import uk.gov.hmrc.tctr.backend.repository._
 import uk.gov.hmrc.tctr.backend.security._
 
 import javax.inject.Inject
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class InMemoryFailedLoginsRepo extends FailedLoginsRepo {
   private var failedLogins: Map[String, Seq[FailedLogin]] = Map.empty
@@ -55,7 +55,8 @@ class StubCredentialsRepository extends CredentialsRepo {
   def removeAll(): Future[DeleteResult] = ???
 }
 
-class StubSubmittedRepository @Inject() (mongo: MongoComponent) extends SubmittedMongoRepo(mongo) {
+class StubSubmittedRepository @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+    extends SubmittedMongoRepo(mongo) {
   override def insertIfUnique(refNum: String): Future[InsertOneResult] = ???
 
   override def hasBeenSubmitted(refNum: String): Future[Boolean] = Future.successful(false)
