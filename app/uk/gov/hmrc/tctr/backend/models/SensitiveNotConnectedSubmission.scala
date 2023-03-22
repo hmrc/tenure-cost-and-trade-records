@@ -25,16 +25,17 @@ import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import java.time.Instant
 import scala.annotation.nowarn
 
-case class SensitiveNotConnectedSubmission(id: String,
-                                           address: SensitiveAddress,
-                                           fullName: SensitiveString,
-                                           emailAddress: Option[SensitiveString],
-                                           phoneNumber: Option[SensitiveString],
-                                           additionalInformation: Option[String],
-                                           createdAt: Instant,
-                                           previouslyConnected: Option[Boolean],
-                                           lang: Option[String] = None
-                                          ) extends Sensitive[NotConnectedSubmission] {
+case class SensitiveNotConnectedSubmission(
+  id: String,
+  address: SensitiveAddress,
+  fullName: SensitiveString,
+  emailAddress: Option[SensitiveString],
+  phoneNumber: Option[SensitiveString],
+  additionalInformation: Option[String],
+  createdAt: Instant,
+  previouslyConnected: Option[Boolean],
+  lang: Option[String] = None
+) extends Sensitive[NotConnectedSubmission] {
 
   override def decryptedValue: NotConnectedSubmission =
     NotConnectedSubmission(
@@ -75,5 +76,3 @@ object SensitiveNotConnectedSubmission {
     )
 
 }
-
-
