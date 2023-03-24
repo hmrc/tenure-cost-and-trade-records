@@ -24,6 +24,7 @@ import play.api.libs.json.JsValue
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
+import uk.gov.hmrc.tctr.backend.crypto.EncryptionJsonTransformer
 import uk.gov.hmrc.tctr.backend.models.SubmissionDraftWrapper
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo.saveForDays
 
@@ -35,8 +36,9 @@ import scala.concurrent.{ExecutionContext, Future}
   * @author Yuriy Tumakha
   */
 @Singleton
-class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
-    extends PlayMongoRepository[SubmissionDraftWrapper](
+class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent, encryptionJsonTransformer: EncryptionJsonTransformer)(
+  implicit ec: ExecutionContext
+) extends PlayMongoRepository[SubmissionDraftWrapper](
       collectionName = "submissionDraft",
       mongoComponent = mongo,
       domainFormat = SubmissionDraftWrapper.format,
@@ -60,13 +62,13 @@ class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent)(implicit ec: Ex
     collection
       .find(byId(id))
       .headOption()
-      .map(_.map(_.submissionDraft))
+      .map(_.map(wrapper => encryptionJsonTransformer.decrypt(wrapper.submissionDraft)))
 
   override def save(id: String, submissionDraft: JsValue): Future[JsValue] =
     collection
       .findOneAndReplace(
         byId(id),
-        SubmissionDraftWrapper(id, submissionDraft),
+        SubmissionDraftWrapper(id, encryptionJsonTransformer.encrypt(submissionDraft)),
         FindOneAndReplaceOptions().upsert(true).returnDocument(ReturnDocument.AFTER)
       )
       .toFuture()
