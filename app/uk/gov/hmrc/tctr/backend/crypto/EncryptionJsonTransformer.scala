@@ -35,8 +35,22 @@ class EncryptionJsonTransformer @Inject() ()(implicit crypto: MongoCrypto) {
   private val sensitiveWords =
     Set("name", "email", "phone", "address", "building", "street", "town", "postcode", "password", "token")
 
+  private val exclusions = Set("type")
+
+  private def isSensitiveKey(key: String): Boolean =
+    sensitiveWords.exists(w => key.toLowerCase.contains(w)) && !exclusions.exists(w => key.toLowerCase.contains(w))
+
+  private def cryptSensitiveFields(jsObject: JsObject, crypter: String => String): JsObject =
+    JsObject(
+      jsObject.fields.map {
+        case (key, jsObject: JsObject)                     => (key, cryptSensitiveFields(jsObject, crypter))
+        case (key, JsString(value)) if isSensitiveKey(key) => (key, JsString(crypter(value)))
+        case field                                         => field
+      }
+    )
+
   private def jsonTransformer(crypter: String => String): Reads[JsObject] = __.json.update(
-    __.read[JsObject].map(root => root)
+    __.read[JsObject].map(cryptSensitiveFields(_, crypter))
   )
 
   private val encryptTransformer = jsonTransformer(encrypter)

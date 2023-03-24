@@ -26,7 +26,8 @@ trait BeEncryptedMatchers {
 
   class BeEncryptedMatcher extends BeMatcher[JsLookupResult] {
 
-    private val base64RegExp =
+    private val encryptedMinLength = 40
+    private val base64RegExp       =
       """^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}={2})$"""
 
     def apply(jsLookupResult: JsLookupResult): MatchResult = {
@@ -39,7 +40,7 @@ trait BeEncryptedMatchers {
     }
 
     private def checkValueIsEncrypted(str: String): Boolean =
-      str.length > 50 && str.matches(base64RegExp)
+      str.length > encryptedMinLength && str.matches(base64RegExp)
 
   }
 
