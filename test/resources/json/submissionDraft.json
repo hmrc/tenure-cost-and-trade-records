@@ -1,0 +1,44 @@
+{
+  "forType": "FOR6010",
+  "session": {
+    "userLoginDetails": {
+      "token": "Basic S0ME1TOKEN1Tk5OTYwMTA3N=",
+      "forType": "FOR6010",
+      "referenceNumber": "99996010777",
+      "address": {
+        "buildingNameNumber": "777",
+        "street1": "GORING ROAD",
+        "street2": "GORING-BY-SEA, WORTHING",
+        "postcode": "BN12 4AX"
+      }
+    },
+    "stillConnectedDetails": {
+      "addressConnectionType": "yes",
+      "connectionToProperty": "occupierTrustee"
+    },
+    "aboutYou": {
+      "customerDetails": {
+        "fullName": "Yuriy",
+        "contactDetails": {
+          "phone": "1234567890123",
+          "email": "my@gmail.com"
+        }
+      }
+    },
+    "other": {
+      "sensitivePII": {
+        "previousAddress": "123 High Street, London",
+        "newAddress": {
+          "buildingNameNumber": "64",
+          "street1": "Avenue Road",
+          "town": "London",
+          "county": "Greater London",
+          "country": "England",
+          "postcode": "WC1 2XX"
+        }
+      }
+    },
+    "saveAsDraftPassword": "P@$$w0rd"
+  },
+  "exitPath": "/send-trade-and-cost-information/about-you"
+}
