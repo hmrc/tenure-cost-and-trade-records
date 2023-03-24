@@ -29,12 +29,12 @@ import scala.annotation.nowarn
  * @author Yuriy Tumakha
  */
 case class SensitiveNotConnectedSubmission(id: String,
-                                           address: SensitiveAddress,
+//                                           address: SensitiveAddress,
                                            fullName: SensitiveString,
                                            emailAddress: Option[SensitiveString],
                                            phoneNumber: Option[SensitiveString],
                                            additionalInformation: Option[String],
-                                           createdAt: Instant,
+//                                           createdAt: Instant,
                                            previouslyConnected: Option[Boolean],
                                            lang: Option[String] = None
                                           ) extends Sensitive[NotConnectedSubmission] {
@@ -42,12 +42,12 @@ case class SensitiveNotConnectedSubmission(id: String,
   override def decryptedValue: NotConnectedSubmission =
     NotConnectedSubmission(
       id,
-      address.decryptedValue,
+//      address.decryptedValue,
       fullName.decryptedValue,
       emailAddress.map(_.decryptedValue),
       phoneNumber.map(_.decryptedValue),
       additionalInformation,
-      createdAt,
+//      createdAt,
       previouslyConnected,
       lang
     )
@@ -67,12 +67,12 @@ object SensitiveNotConnectedSubmission {
   def apply(submission: NotConnectedSubmission): SensitiveNotConnectedSubmission =
     SensitiveNotConnectedSubmission(
       submission.id,
-      SensitiveAddress(submission.address),
+//      SensitiveAddress(submission.address),
       SensitiveString(submission.fullName),
       submission.emailAddress.map(SensitiveString),
       submission.phoneNumber.map(SensitiveString),
       submission.additionalInformation,
-      submission.createdAt,
+//      submission.createdAt,
       submission.previouslyConnected,
       submission.lang
     )

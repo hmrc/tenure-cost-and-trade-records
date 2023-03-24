@@ -22,12 +22,12 @@ import uk.gov.hmrc.tctr.backend.schema.Address
 
 case class NotConnectedSubmissionForm(
                                        id: String, // submissionId
-                                       address: Address,
+//                                       address: Address,
                                        fullName: String,
                                        emailAddress: Option[String],
                                        phoneNumber: Option[String],
                                        additionalInformation: Option[String],
-                                       createdAt: Instant,
+//                                       createdAt: Instant,
                                        previouslyConnected: Boolean,
                                        lang: Option[String] = None
                                      )

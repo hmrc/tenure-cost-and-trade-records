@@ -34,22 +34,25 @@ class NotConnectedSubmissionController @Inject()(repository: NotConnectedReposit
 
   def submit(submissionReference: String) = Action.async(parse.json[NotConnectedSubmissionForm]) { request =>
 
-    submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
-      case true => {
-        metric.failedSubmissions.mark()
-        log.warn(s"Error saving submission $submissionReference. Possible duplicate")
-        Conflict(s"Error saving submission $submissionReference. Possible duplicate")
-      }
-      case false => {
-        repository.insert(convertFormToEntity(request.body))
-        metric.okSubmissions.mark()
-        Created
-      }
+//    submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
+//      case true => {
+//        metric.failedSubmissions.mark()
+//        log.warn(s"Error saving submission $submissionReference. Possible duplicate")
+//        Conflict(s"Error saving submission $submissionReference. Possible duplicate")
+//      }
+//      case false => {
+//        repository.insert(convertFormToEntity(request.body))
+//        metric.okSubmissions.mark()
+//        Created
+//      }
+    log.warn("{\n        \"id\": \"23456789\",\n        \"fullName\": \"John Smith\",\n        \"emailAddress\": \"test@test.com\",\n        \"phoneNumber\": \"0123456789\",\n        \"additionalInformation\": null,\n        \"previouslyConnected\": false,\n        \"lang\": \"EN\"}")
+    Created
     }
-  }
+
 
   private def convertFormToEntity(form: NotConnectedSubmissionForm) = NotConnectedSubmission(
-    form.id, form.address, form.fullName, form.emailAddress,
-    form.phoneNumber, form.additionalInformation, form.createdAt, form.previouslyConnected, form.lang)
+    form.id, form.fullName, form.emailAddress, form.phoneNumber, form.additionalInformation, form.previouslyConnected, form.lang)
 
 }
+
+
