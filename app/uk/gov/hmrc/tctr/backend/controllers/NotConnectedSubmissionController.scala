@@ -61,6 +61,7 @@ class NotConnectedSubmissionController @Inject() (
     form.emailAddress,
     form.phoneNumber,
     form.additionalInformation,
+//    form.createdAt,
     form.previouslyConnected,
     form.lang
   )
