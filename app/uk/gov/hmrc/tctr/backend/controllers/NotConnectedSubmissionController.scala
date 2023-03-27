@@ -26,14 +26,17 @@ import uk.gov.hmrc.tctr.backend.repository.{NotConnectedRepository, SubmittedMon
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class NotConnectedSubmissionController @Inject()(repository: NotConnectedRepository,
-                                                 submittedMongoRepo: SubmittedMongoRepo,
-                                                 metric: MetricsHandler, cc: ControllerComponents)(implicit ec: ExecutionContext) extends BackendController(cc) {
+class NotConnectedSubmissionController @Inject() (
+  repository: NotConnectedRepository,
+  submittedMongoRepo: SubmittedMongoRepo,
+  metric: MetricsHandler,
+  cc: ControllerComponents
+)(implicit ec: ExecutionContext)
+    extends BackendController(cc) {
 
   val log = Logger(classOf[NotConnectedSubmissionController])
 
   def submit(submissionReference: String) = Action.async(parse.json[NotConnectedSubmissionForm]) { request =>
-
 //    submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
 //      case true => {
 //        metric.failedSubmissions.mark()
@@ -45,14 +48,21 @@ class NotConnectedSubmissionController @Inject()(repository: NotConnectedReposit
 //        metric.okSubmissions.mark()
 //        Created
 //      }
-    log.warn("{\n        \"id\": \"23456789\",\n        \"fullName\": \"John Smith\",\n        \"emailAddress\": \"test@test.com\",\n        \"phoneNumber\": \"0123456789\",\n        \"additionalInformation\": null,\n        \"previouslyConnected\": false,\n        \"lang\": \"EN\"}")
+    log.warn(
+      "{\n        \"id\": \"23456789\",\n                \"address\" : {\n                    \"buildingNameNumber\" : \"001\",\n                    \"street1\" : \"GORING ROAD\",\n                    \"street2\" : \"GORING-BY-SEA, WORTHING\",\n                    \"postcode\" : \"BN12 4AX\"\n                    },\"fullName\": \"John Smith\",\n        \"emailAddress\": \"test@test.com\",\n        \"phoneNumber\": \"0123456789\",\n        \"additionalInformation\": null,\n        \"previouslyConnected\": false,\n        \"lang\": \"EN\"}"
+    )
     Created
-    }
-
+  }
 
   private def convertFormToEntity(form: NotConnectedSubmissionForm) = NotConnectedSubmission(
-    form.id, form.fullName, form.emailAddress, form.phoneNumber, form.additionalInformation, form.previouslyConnected, form.lang)
+    form.id,
+    form.address,
+    form.fullName,
+    form.emailAddress,
+    form.phoneNumber,
+    form.additionalInformation,
+    form.previouslyConnected,
+    form.lang
+  )
 
 }
-
-

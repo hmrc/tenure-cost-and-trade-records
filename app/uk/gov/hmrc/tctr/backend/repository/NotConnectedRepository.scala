@@ -54,20 +54,24 @@ object NotConnectedMongoRepository {
 }
 
 @Singleton
-class NotConnectedMongoRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: ExecutionContext, crypto: MongoCrypto)
-  extends PlayMongoRepository[SensitiveNotConnectedSubmission](collectionName = "notConnectedSubmission",
-    mongoComponent = mongoComponent,
-    domainFormat = SensitiveNotConnectedSubmission.format,
-    indexes = Seq(
-      IndexModel(
-        Indexes.ascending("createdAt"),
-        IndexOptions().name("notConnectedSubmissionTTL").expireAfter(expireAfterDays, TimeUnit.DAYS)
+class NotConnectedMongoRepository @Inject() (mongoComponent: MongoComponent)(implicit
+  ec: ExecutionContext,
+  crypto: MongoCrypto
+) extends PlayMongoRepository[SensitiveNotConnectedSubmission](
+      collectionName = "notConnectedSubmission",
+      mongoComponent = mongoComponent,
+      domainFormat = SensitiveNotConnectedSubmission.format,
+      indexes = Seq(
+        IndexModel(
+          Indexes.ascending("createdAt"),
+          IndexOptions().name("notConnectedSubmissionTTL").expireAfter(expireAfterDays, TimeUnit.DAYS)
+        )
+      ),
+      extraCodecs = Seq(
+        Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
       )
-    ),
-    extraCodecs = Seq(
-      Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
     )
-  ) with NotConnectedRepository {
+    with NotConnectedRepository {
 
   def insert(notConnectedSubmission: NotConnectedSubmission): Future[InsertOneResult] =
     collection.insertOne(SensitiveNotConnectedSubmission(notConnectedSubmission)).toFuture()
@@ -82,7 +86,8 @@ class NotConnectedMongoRepository @Inject()(mongoComponent: MongoComponent)(impl
       .headOption()
 
   override def getSubmissions(batchSize: Int = defaultBatchSize): Future[Seq[NotConnectedSubmission]] =
-    collection.find()
+    collection
+      .find()
       .sort(ascending("createdAt"))
       .limit(batchSize)
       .map(_.decryptedValue)
@@ -92,4 +97,3 @@ class NotConnectedMongoRepository @Inject()(mongoComponent: MongoComponent)(impl
     collection.countDocuments().toFuture()
 
 }
-

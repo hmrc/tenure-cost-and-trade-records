@@ -24,8 +24,8 @@ import javax.inject.{Inject, Singleton}
 class MetricsHandler @Inject() (metric: Metrics) {
   val registry = metric.defaultRegistry
 
-  lazy val failedSubmissions = registry.meter("failedforsubmissions")
-  lazy val okSubmissions = registry.meter("okforsubmissions")
+  lazy val failedSubmissions   = registry.meter("failedforsubmissions")
+  lazy val okSubmissions       = registry.meter("okforsubmissions")
 //  lazy val exportedSubmissions = registry.meter("exportedsubmissions")
 //  lazy val rejectedExports = registry.meter("rejectedexports")
 //  lazy val queuedSubmissions = registry.counter("queuedsubmissions")
