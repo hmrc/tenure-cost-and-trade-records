@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import java.time.Instant
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult
 import com.mongodb.client.result.InsertOneResult.acknowledged
@@ -43,6 +42,7 @@ class NotConnectedSubmissionControllerSpec extends AsyncFlatSpec with should.Mat
     Option("john@example.com"),
     Option("01234567890"),
     Option("some other information"),
+    Instant.now(),
     false
   )
 
