@@ -35,7 +35,7 @@ case class SensitiveNotConnectedSubmission(
   emailAddress: Option[SensitiveString],
   phoneNumber: Option[SensitiveString],
   additionalInformation: Option[String],
-//                                           createdAt: Instant,
+  createdAt: Instant,
   previouslyConnected: Option[Boolean],
   lang: Option[String] = None
 ) extends Sensitive[NotConnectedSubmission] {
@@ -48,7 +48,7 @@ case class SensitiveNotConnectedSubmission(
       emailAddress.map(_.decryptedValue),
       phoneNumber.map(_.decryptedValue),
       additionalInformation,
-//      createdAt,
+      createdAt,
       previouslyConnected,
       lang
     )
@@ -73,7 +73,7 @@ object SensitiveNotConnectedSubmission {
       submission.emailAddress.map(SensitiveString),
       submission.phoneNumber.map(SensitiveString),
       submission.additionalInformation,
-//      submission.createdAt,
+      submission.createdAt,
       submission.previouslyConnected,
       submission.lang
     )

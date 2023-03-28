@@ -27,7 +27,7 @@ case class NotConnectedSubmissionForm(
   emailAddress: Option[String],
   phoneNumber: Option[String],
   additionalInformation: Option[String],
-//                                       createdAt: Instant,
+  createdAt: Instant,
   previouslyConnected: Boolean,
   lang: Option[String] = None
 )

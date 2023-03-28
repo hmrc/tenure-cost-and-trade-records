@@ -30,7 +30,7 @@ case class NotConnectedSubmission(
   emailAddress: Option[String],
   phoneNumber: Option[String],
   additionalInformation: Option[String],
-//                                  createdAt: Instant,
+  createdAt: Instant,
   previouslyConnected: Option[Boolean],
   lang: Option[String] = None
 )

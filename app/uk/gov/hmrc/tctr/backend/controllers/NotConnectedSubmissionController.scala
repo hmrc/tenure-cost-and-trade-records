@@ -49,7 +49,7 @@ class NotConnectedSubmissionController @Inject() (
 //        Created
 //      }
     log.warn(
-      "{\n        \"id\": \"23456789\",\n                \"address\" : {\n                    \"buildingNameNumber\" : \"001\",\n                    \"street1\" : \"GORING ROAD\",\n                    \"street2\" : \"GORING-BY-SEA, WORTHING\",\n                    \"postcode\" : \"BN12 4AX\"\n                    },\"fullName\": \"John Smith\",\n        \"emailAddress\": \"test@test.com\",\n        \"phoneNumber\": \"0123456789\",\n        \"additionalInformation\": null,\n        \"previouslyConnected\": false,\n        \"lang\": \"EN\"}"
+      convertFormToEntity(request.body).toString
     )
     Created
   }
@@ -61,7 +61,7 @@ class NotConnectedSubmissionController @Inject() (
     form.emailAddress,
     form.phoneNumber,
     form.additionalInformation,
-//    form.createdAt,
+    form.createdAt,
     form.previouslyConnected,
     form.lang
   )
