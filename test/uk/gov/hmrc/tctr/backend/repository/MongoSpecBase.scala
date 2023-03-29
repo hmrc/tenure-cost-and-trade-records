@@ -46,10 +46,9 @@ abstract class MongoSpecBase
 
   implicit val ec: ExecutionContext = inject[ExecutionContext]
 
-  override protected def afterAll(): Unit = {
-    mongo.database.drop().toFutureOption().futureValue
+  override protected def afterAll(): Unit =
+//    mongo.database.drop().toFutureOption().futureValue
     mongo.client.close()
-  }
 
   override final def fakeApplication(): Application = new GuiceApplicationBuilder()
     .configure(
