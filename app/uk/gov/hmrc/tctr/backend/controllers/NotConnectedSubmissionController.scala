@@ -37,21 +37,20 @@ class NotConnectedSubmissionController @Inject() (
   val log = Logger(classOf[NotConnectedSubmissionController])
 
   def submit(submissionReference: String) = Action.async(parse.json[NotConnectedSubmissionForm]) { request =>
-//    submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
-//      case true => {
-//        metric.failedSubmissions.mark()
-//        log.warn(s"Error saving submission $submissionReference. Possible duplicate")
-//        Conflict(s"Error saving submission $submissionReference. Possible duplicate")
-//      }
-//      case false => {
-//        repository.insert(convertFormToEntity(request.body))
-//        metric.okSubmissions.mark()
-//        Created
-//      }
-    log.warn(
-      convertFormToEntity(request.body).toString
-    )
-    Created
+    submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
+      case true =>
+        metric.failedSubmissions.mark()
+        log.warn(s"Error saving submission $submissionReference. Possible duplicate")
+        Conflict(s"Error saving submission $submissionReference. Possible duplicate")
+      case false =>
+        repository.insert(convertFormToEntity(request.body))
+        metric.okSubmissions.mark()
+        Created
+      //    log.warn(
+      //      convertFormToEntity(request.body).toString
+      //    )
+      //    Created
+    }
   }
 
   private def convertFormToEntity(form: NotConnectedSubmissionForm) = NotConnectedSubmission(
