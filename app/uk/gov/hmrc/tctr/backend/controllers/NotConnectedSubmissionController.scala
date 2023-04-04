@@ -38,7 +38,7 @@ class NotConnectedSubmissionController @Inject() (
 
   def submit(submissionReference: String) = Action.async(parse.json[NotConnectedSubmissionForm]) { request =>
     submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
-      case true =>
+      case true  =>
         metric.failedSubmissions.mark()
         log.warn(s"Error saving submission $submissionReference. Possible duplicate")
         Conflict(s"Error saving submission $submissionReference. Possible duplicate")
@@ -46,10 +46,6 @@ class NotConnectedSubmissionController @Inject() (
         repository.insert(convertFormToEntity(request.body))
         metric.okSubmissions.mark()
         Created
-      //    log.warn(
-      //      convertFormToEntity(request.body).toString
-      //    )
-      //    Created
     }
   }
 
