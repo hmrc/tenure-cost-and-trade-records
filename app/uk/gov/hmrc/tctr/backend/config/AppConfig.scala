@@ -32,7 +32,7 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
 //  lazy val exportPassword = runModeConfiguration.get[String]("submissionExport.password")
 //  lazy val exportBatchSize = runModeConfiguration.get[Int]("submissionExport.batchSize")
 //  lazy val testAccountPrefix = runModeConfiguration.get[String]("submissionExport.testAccountPrefix")
-//  lazy val retryWindow = runModeConfiguration.get[Int]("submissionExport.retryWindowHours")
+  lazy val retryWindow            = runModeConfiguration.get[Int]("submissionExport.retryWindowHours")
 //  lazy val logErrorInHours = runModeConfiguration.get[Int]("submissionExport.logErrorInHours")
   lazy val enableDuplicate        = runModeConfiguration.get[Boolean]("submissionExport.enableDuplicateSubmissions")
   lazy val exportFrequency        = runModeConfiguration.get[Int]("submissionExport.frequencySeconds")
