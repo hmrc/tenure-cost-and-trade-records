@@ -70,6 +70,17 @@ class AuthController @Inject() (
       case MissingIPAddress                      => BadRequest(error(s"Missing header: $trueClientIp"))
     }
   }
+
+  def retrieveFORType(referenceNum: String) = Action.async { implicit request =>
+    println("*************")
+   val retrieveFOR =  credsRepo.findById(referenceNum)
+    retrieveFOR.map {
+      case Some(credentials) => println(credentials)
+//        Ok(Json.toJson(credentials.forType))  // return json forType
+      case None => NotFound
+    }
+    Ok(Json.toJson("FOR6010"))
+  }
 }
 
 object ValidLoginResponse {
