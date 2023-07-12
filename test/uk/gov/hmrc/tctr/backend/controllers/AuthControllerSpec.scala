@@ -45,7 +45,7 @@ class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
       contentAsString(result) shouldBe """{"numberOfRemainingTriesUntilIPLockout":4}"""
     }
   }
-  
+
   "GET invalid credentials for FOR type" should {
     "return 404" in {
       val result = controller.retrieveFORType("refNum")(fakeRequest)
