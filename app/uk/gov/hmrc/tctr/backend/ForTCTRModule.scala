@@ -61,9 +61,7 @@ class ForTCTRModule extends Module with Logging {
   def notConnectedSubmissionExporter(configuration: Configuration): Seq[Binding[_]] = {
     val enableNotConnectedExport = configuration.get[Boolean]("notConnectedSubmissionExport.enabled")
     if (enableNotConnectedExport) {
-      logger.warn("Test!")
       Seq(bind[NotConnectedSubmissionExporter].toProvider(classOf[NotConnectedSubmissionExporterProvider]).eagerly())
-
     } else {
       logger.warn(s"NotConnectedSubmissionExporter disabled! Testing only.")
       Seq.empty
