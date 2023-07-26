@@ -64,6 +64,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject()(
       logger.error(s"Unable to export not connected journey, ref: ${submission.id}. MANUAL INTERVENTION REQUIRED")
       logBrokenSubmissionToSplunk(submission)
       repository.removeById(submission.id).map(_ => ())
+      logger.warn(s"${createDeskproTicket(submission)}")
       Future.unit
     } else {
       deskproConnector.createTicket(createDeskproTicket(submission)).flatMap { deskproTicketId =>
@@ -141,13 +142,13 @@ class ExportNotConnectedSubmissionsDeskpro @Inject()(
          |Additional information:
          |${submission.additionalInformation.getOrElse("")}${submission.lang.fold("")(lang => s"\n\nLanguage: $lang")}
          |
-         |Ticket created by TCTR service : https://www.tax.service.gov.uk/send-trade-and-cost-information/login
+         |Ticket created by STaCI service : https://www.tax.service.gov.uk/send-trade-and-cost-information/login
        """.stripMargin
 
     // Replacing by dots all chars not matched NameValidator regexp """^[A-Za-z\-.,()'"\s]+$"""
     DeskproTicket(submission.fullName.replaceAll("""[^A-Za-z\-.,()'"\s]""", "."),
       submission.emailAddress.getOrElse("noreply@voa.gov.uk"),
-      "Not connected property",
+      s"${submission.forType} - Not connected property",
       message,
       "https://www.tax.service.gov.uk/send-trade-and-cost-information/not-connected",
       "false",

@@ -30,6 +30,7 @@ import scala.annotation.nowarn
   */
 case class SensitiveNotConnectedSubmission(
   id: String,
+  forType: String,
   address: SensitiveAddress,
   fullName: SensitiveString,
   emailAddress: Option[SensitiveString],
@@ -43,6 +44,7 @@ case class SensitiveNotConnectedSubmission(
   override def decryptedValue: NotConnectedSubmission =
     NotConnectedSubmission(
       id,
+      forType,
       address.decryptedValue,
       fullName.decryptedValue,
       emailAddress.map(_.decryptedValue),
@@ -68,6 +70,7 @@ object SensitiveNotConnectedSubmission {
   def apply(submission: NotConnectedSubmission): SensitiveNotConnectedSubmission =
     SensitiveNotConnectedSubmission(
       submission.id,
+      submission.forType,
       SensitiveAddress(submission.address),
       SensitiveString(submission.fullName),
       submission.emailAddress.map(SensitiveString),
