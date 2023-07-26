@@ -51,6 +51,7 @@ class NotConnectedSubmissionController @Inject() (
 
   private def convertFormToEntity(form: NotConnectedSubmissionForm) = NotConnectedSubmission(
     form.id,
+    form.forType,
     form.address,
     form.fullName,
     form.emailAddress,

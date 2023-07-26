@@ -25,6 +25,7 @@ import scala.annotation.nowarn
 
 case class NotConnectedSubmission(
   id: String,
+  forType: String,
   address: Address,
   fullName: String,
   emailAddress: Option[String],
