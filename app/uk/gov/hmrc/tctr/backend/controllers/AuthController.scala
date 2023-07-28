@@ -70,6 +70,13 @@ class AuthController @Inject() (
       case MissingIPAddress                      => BadRequest(error(s"Missing header: $trueClientIp"))
     }
   }
+
+  def retrieveFORType(referenceNum: String) = Action.async { implicit request =>
+    credsRepo.findById(referenceNum).map {
+      case Some(credentials) => Ok(Json.toJson(ValidForTypeResponse(credentials.forType)))
+      case None              => NotFound
+    }
+  }
 }
 
 object ValidLoginResponse {
@@ -81,3 +88,8 @@ object FailedLoginResponse {
   implicit val f: Format[FailedLoginResponse] = Json.format[FailedLoginResponse]
 }
 case class FailedLoginResponse(numberOfRemainingTriesUntilIPLockout: Int)
+
+object ValidForTypeResponse {
+  implicit val f: Format[ValidForTypeResponse] = Json.format[ValidForTypeResponse]
+}
+case class ValidForTypeResponse(FORType: String)
