@@ -86,6 +86,7 @@ class NotConnectedRepositorySpec extends PlaySpec with BeforeAndAfterAll with Gu
 
   def aSubmission(): NotConnectedSubmission = NotConnectedSubmission(
     "9999000111",
+    "FOR6010",
     Address("10", Some("BarringtonRoad road"), None, "BN12 4AX"),
     "Full Name",
     Option("john@example.com"),
