@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy
 import play.api.Logging
 import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
-import uk.gov.hmrc.tctr.backend.connectors.{DeskproConnector, DeskproTicket, EmailConnector}
+import uk.gov.hmrc.tctr.backend.connectors.{DeskproConnector, DeskproTicket}
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.repository.NotConnectedRepository
 
@@ -39,7 +39,7 @@ trait ExportNotConnectedSubmissions {
 class ExportNotConnectedSubmissionsDeskpro @Inject()(
                                                       repository: NotConnectedRepository,
                                                       deskproConnector: DeskproConnector,
-                                                      emailConnector: EmailConnector,
+                                                      ////TODO Add email connector here
                                                       audit: ForTCTRAudit,
                                                       clock: Clock,
                                                       forConfig: AppConfig
@@ -70,7 +70,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject()(
       deskproConnector.createTicket(createDeskproTicket(submission)).flatMap { deskproTicketId =>
         logger.info(s"Not connected submission exported to deskpro, deskproID: ${deskproTicketId}, submissionID: ${submission.id}")
         auditAccepted(submission.id, deskproTicketId)
-//        emailConnector.sendConnectionRemoved(submission)
+        ///TODO Add email connector here - not added as not required for this PR
         repository.removeById(submission.id).map(_ => ())
       }.recover {
         case upstreamErrorResponse: UpstreamErrorResponse if upstreamErrorResponse.statusCode == 400 =>
