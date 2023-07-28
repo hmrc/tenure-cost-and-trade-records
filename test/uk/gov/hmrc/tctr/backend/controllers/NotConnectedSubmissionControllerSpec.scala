@@ -37,6 +37,7 @@ class NotConnectedSubmissionControllerSpec extends AsyncFlatSpec with should.Mat
 
   val submission = NotConnectedSubmissionForm(
     "2222",
+    "FOR6010",
     Address("10", Some("BarringtonRoad road"), None, "BN12 4AX"),
     "fullName",
     Option("john@example.com"),
