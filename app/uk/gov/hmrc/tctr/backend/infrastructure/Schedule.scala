@@ -28,18 +28,18 @@ trait Schedule {
   def timeUntilNextRun(): FiniteDuration
 }
 
-  trait RegularSchedule extends Schedule {
-    def timeUntilNextRun(): FiniteDuration
-  }
+trait RegularSchedule extends Schedule {
+  def timeUntilNextRun(): FiniteDuration
+}
 
 trait DailySchedule extends Schedule {
   def timeUntilNextRun(): FiniteDuration
 }
 
-  @Singleton
-  class DefaultRegularSchedule @Inject()(tctrConfig: AppConfig) extends RegularSchedule {
-    override def timeUntilNextRun(): FiniteDuration = tctrConfig.exportFrequency seconds
-  }
+@Singleton
+class DefaultRegularSchedule @Inject() (tctrConfig: AppConfig) extends RegularSchedule {
+  override def timeUntilNextRun(): FiniteDuration = tctrConfig.exportFrequency seconds
+}
 
 @Singleton
 class DefaultDailySchedule @Inject() (tctrConfig: AppConfig, clock: Clock) extends DailySchedule {

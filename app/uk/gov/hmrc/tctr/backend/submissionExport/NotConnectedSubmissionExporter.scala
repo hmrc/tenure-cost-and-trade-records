@@ -26,22 +26,22 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 
 class NotConnectedSubmissionExporter(
-                                      mongoLockRepository: MongoLockRepository,
-                                      exporter: ExportNotConnectedSubmissions,
-                                      exportBatchSize: Int,
-                                      scheduler: Scheduler,
-                                      eventStream: EventStream,
-                                      val schedule: Schedule
-                                    )
-  extends LockedJobScheduler[SubmissionExportComplete](
-    LockService(mongoLockRepository, "NotConnectedSubmissionExporterLock", 1 hour), scheduler, eventStream
-  ) {
+  mongoLockRepository: MongoLockRepository,
+  exporter: ExportNotConnectedSubmissions,
+  exportBatchSize: Int,
+  scheduler: Scheduler,
+  eventStream: EventStream,
+  val schedule: Schedule
+) extends LockedJobScheduler[SubmissionExportComplete](
+      LockService(mongoLockRepository, "NotConnectedSubmissionExporterLock", 1 hour),
+      scheduler,
+      eventStream
+    ) {
 
   override val name: String = "NotConnectedPropertyScheduler"
 
-  override def runJob()(implicit ec: ExecutionContext): Future[SubmissionExportComplete] = {
+  override def runJob()(implicit ec: ExecutionContext): Future[SubmissionExportComplete] =
     exporter.exportNow(exportBatchSize).map(_ => SubmissionExportComplete("NotConnectedPropertyScheduler finished"))
-  }
 
 }
 

@@ -35,9 +35,12 @@ trait DeskproConnector {
 }
 
 @Singleton
-class HmrcDeskproConnector @Inject()(serviceConfig: ServicesConfig,
-                                     environment: Environment,
-                                     httpClient: MdtpHttpClient)(implicit executionContext: ExecutionContext) extends DeskproConnector {
+class HmrcDeskproConnector @Inject() (
+  serviceConfig: ServicesConfig,
+  environment: Environment,
+  httpClient: MdtpHttpClient
+)(implicit executionContext: ExecutionContext)
+    extends DeskproConnector {
 
   val logger = Logger(this.getClass)
 
@@ -45,14 +48,13 @@ class HmrcDeskproConnector @Inject()(serviceConfig: ServicesConfig,
 
   val deskproUrl = serviceConfig.baseUrl("hmrc-deskpro")
 
-
   override def createTicket(ticket: DeskproTicket): Future[Long] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     httpClient.POST[DeskproTicket, JsObject](deskproUrl + "/deskpro/ticket", ticket, Seq.empty).map { response =>
       val ticketNumber = response.value("ticket_id").as[JsNumber].as[Long]
-      logger.info(s"Created deskpro ticket with number : ${ticketNumber}")
+      logger.info(s"Created deskpro ticket with number : $ticketNumber")
       ticketNumber
     }
 
@@ -60,14 +62,15 @@ class HmrcDeskproConnector @Inject()(serviceConfig: ServicesConfig,
 
 }
 
-case class DeskproTicket(name: String,
-                         email: String,
-                         subject: String,
-                         message: String,
-                         referrer: String,
-                         javascriptEnabled: String,
-                         userAgent: String,
-                         authId: String,
-                         areaOfTax: String,
-                         sessionId: String
-                        )
+case class DeskproTicket(
+  name: String,
+  email: String,
+  subject: String,
+  message: String,
+  referrer: String,
+  javascriptEnabled: String,
+  userAgent: String,
+  authId: String,
+  areaOfTax: String,
+  sessionId: String
+)

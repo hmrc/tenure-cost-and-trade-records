@@ -71,19 +71,28 @@ class ForTCTRModule extends Module with Logging {
 }
 
 ////TODO - Move closer to NotConnectedSubmissionExporter or maybe move to special module
-class NotConnectedSubmissionExporterProvider @Inject()(mongoLockRepository: MongoLockRepository,
-                                                       exportNotConnectedSubmissions: ExportNotConnectedSubmissions,
-                                                       actorSystem: ActorSystem,
-                                                       regularSchedule: RegularSchedule,
-                                                       configuration: Configuration,
-                                                       implicit val ec: ExecutionContext) extends Provider[NotConnectedSubmissionExporter] {
+class NotConnectedSubmissionExporterProvider @Inject() (
+  mongoLockRepository: MongoLockRepository,
+  exportNotConnectedSubmissions: ExportNotConnectedSubmissions,
+  actorSystem: ActorSystem,
+  regularSchedule: RegularSchedule,
+  configuration: Configuration,
+  implicit val ec: ExecutionContext
+) extends Provider[NotConnectedSubmissionExporter] {
 
-  val batchSize = configuration.getOptional[Int]("notConnectedSubmissionExport.batchSize")
+  val batchSize = configuration
+    .getOptional[Int]("notConnectedSubmissionExport.batchSize")
     .getOrElse(throw new RuntimeException("Missing configuration for notConnectedSubmissionExport.batchSize"))
 
   override def get(): NotConnectedSubmissionExporter = {
-    val exporter = new NotConnectedSubmissionExporter(mongoLockRepository, exportNotConnectedSubmissions, batchSize, actorSystem.scheduler,
-      actorSystem.eventStream, regularSchedule)
+    val exporter = new NotConnectedSubmissionExporter(
+      mongoLockRepository,
+      exportNotConnectedSubmissions,
+      batchSize,
+      actorSystem.scheduler,
+      actorSystem.eventStream,
+      regularSchedule
+    )
     exporter.start()
     exporter
   }

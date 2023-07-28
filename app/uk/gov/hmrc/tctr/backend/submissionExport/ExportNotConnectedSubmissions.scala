@@ -36,21 +36,21 @@ trait ExportNotConnectedSubmissions {
 }
 
 @Singleton
-class ExportNotConnectedSubmissionsDeskpro @Inject()(
-                                                      repository: NotConnectedRepository,
-                                                      deskproConnector: DeskproConnector,
-                                                      ////TODO Add email connector here
-                                                      audit: ForTCTRAudit,
-                                                      clock: Clock,
-                                                      forConfig: AppConfig
-                                                    ) extends ExportNotConnectedSubmissions with Logging {
+class ExportNotConnectedSubmissionsDeskpro @Inject() (
+  repository: NotConnectedRepository,
+  deskproConnector: DeskproConnector,
+  ////TODO Add email connector here
+  audit: ForTCTRAudit,
+  clock: Clock,
+  forConfig: AppConfig
+) extends ExportNotConnectedSubmissions
+    with Logging {
 
-  override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] = {
+  override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
     repository.getSubmissions(size).flatMap { submissions =>
       logger.info(s"Found ${submissions.length} not connected submissions to export")
       processSequentially(submissions)
     }
-  }
 
   def processSequentially(submission: Seq[NotConnectedSubmission])(implicit ec: ExecutionContext): Future[Unit] =
     if (submission.isEmpty) {
@@ -59,7 +59,9 @@ class ExportNotConnectedSubmissionsDeskpro @Inject()(
       processNext(submission.head).flatMap(_ => processSequentially(submission.tail))
     }
 
-  private def processNext(submission: NotConnectedSubmission)(implicit executionContext: ExecutionContext): Future[Unit] =
+  private def processNext(
+    submission: NotConnectedSubmission
+  )(implicit executionContext: ExecutionContext): Future[Unit] =
     if (isTooLongInQueue(submission)) {
       logger.error(s"Unable to export not connected journey, ref: ${submission.id}. MANUAL INTERVENTION REQUIRED")
       logBrokenSubmissionToSplunk(submission)
@@ -67,26 +69,31 @@ class ExportNotConnectedSubmissionsDeskpro @Inject()(
       logger.warn(s"${createDeskproTicket(submission)}")
       Future.unit
     } else {
-      deskproConnector.createTicket(createDeskproTicket(submission)).flatMap { deskproTicketId =>
-        logger.info(s"Not connected submission exported to deskpro, deskproID: ${deskproTicketId}, submissionID: ${submission.id}")
-        auditAccepted(submission.id, deskproTicketId)
-        ///TODO Add email connector here - not added as not required for this PR
-        repository.removeById(submission.id).map(_ => ())
-      }.recover {
-        case upstreamErrorResponse: UpstreamErrorResponse if upstreamErrorResponse.statusCode == 400 =>
-          handle400BadRequest(upstreamErrorResponse, submission)
-        case exception: Exception =>
-          auditRejected(submission.id)
-          logger.warn(s"can't export not connected property submission id: ${submission.id}", exception)
-      }
+      deskproConnector
+        .createTicket(createDeskproTicket(submission))
+        .flatMap { deskproTicketId =>
+          logger.info(
+            s"Not connected submission exported to deskpro, deskproID: $deskproTicketId, submissionID: ${submission.id}"
+          )
+          auditAccepted(submission.id, deskproTicketId)
+          ///TODO Add email connector here - not added as not required for this PR
+          repository.removeById(submission.id).map(_ => ())
+        }
+        .recover {
+          case upstreamErrorResponse: UpstreamErrorResponse if upstreamErrorResponse.statusCode == 400 =>
+            handle400BadRequest(upstreamErrorResponse, submission)
+          case exception: Exception                                                                    =>
+            auditRejected(submission.id)
+            logger.warn(s"can't export not connected property submission id: ${submission.id}", exception)
+        }
       Future.unit
     }
 
   private def handle400BadRequest(exception: UpstreamErrorResponse, submission: NotConnectedSubmission): Unit = {
     val invalidField = exception.message match {
       case msg if msg.contains("Invalid email") => "email"
-      case msg if msg.contains("Invalid name") => "name"
-      case _ => "data"
+      case msg if msg.contains("Invalid name")  => "name"
+      case _                                    => "data"
     }
     logBrokenSubmissionToSplunk(submission)
     repository.removeById(submission.id)
@@ -99,9 +106,10 @@ class ExportNotConnectedSubmissionsDeskpro @Inject()(
       NotConnectedSubmission.format.writes(submission).toString()
     }.getOrElse("unable to serialise")
 
-    audit("SubmissionRemovedByForHodAdapter",
+    audit(
+      "SubmissionRemovedByForHodAdapter",
       Map(
-        "submission" -> submission.toString,
+        "submission"     -> submission.toString,
         "submissionJson" -> submissionJson
       )
     )
@@ -111,7 +119,8 @@ class ExportNotConnectedSubmissionsDeskpro @Inject()(
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.retryWindow, ChronoUnit.HOURS))
 
   def auditAccepted(referenceNumber: String, deskproTicketId: Long): Unit =
-    audit("SubmissionAcceptedByHmrcDeskpro",
+    audit(
+      "SubmissionAcceptedByHmrcDeskpro",
       Map(
         "referenceNumber" -> referenceNumber,
         "deskproTicketId" -> deskproTicketId.toString
@@ -119,7 +128,8 @@ class ExportNotConnectedSubmissionsDeskpro @Inject()(
     )
 
   def auditRejected(referenceNumber: String): Unit =
-    audit("SubmissionRejectedByHmrcDeskpro",
+    audit(
+      "SubmissionRejectedByHmrcDeskpro",
       Map(
         "referenceNumber" -> referenceNumber
       )
@@ -146,7 +156,8 @@ class ExportNotConnectedSubmissionsDeskpro @Inject()(
        """.stripMargin
 
     // Replacing by dots all chars not matched NameValidator regexp """^[A-Za-z\-.,()'"\s]+$"""
-    DeskproTicket(submission.fullName.replaceAll("""[^A-Za-z\-.,()'"\s]""", "."),
+    DeskproTicket(
+      submission.fullName.replaceAll("""[^A-Za-z\-.,()'"\s]""", "."),
       submission.emailAddress.getOrElse("noreply@voa.gov.uk"),
       s"${submission.forType} - Not connected property",
       message,

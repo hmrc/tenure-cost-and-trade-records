@@ -26,16 +26,16 @@ import java.util.{Date, Locale}
 import javax.inject.{Inject, Singleton}
 
 /**
- * @author Yuriy Tumakha
- */
+  * @author Yuriy Tumakha
+  */
 object DateUtil {
 
   val ukTimezone: ZoneId = ZoneId.of("Europe/London")
-  val en: Lang = Lang(Locale.UK)
-  val cy: Lang = Lang(new Locale("cy"))
+  val en: Lang           = Lang(Locale.UK)
+  val cy: Lang           = Lang(new Locale("cy"))
 
   val shortDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.UK)
-  val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm", Locale.UK)
+  val timeFormatter: DateTimeFormatter      = DateTimeFormatter.ofPattern("HH:mm", Locale.UK)
 
   implicit class dateOps(date: Date) {
     def asZonedDateTime: ZonedDateTime = date.toInstant.atZone(ukTimezone)
@@ -45,14 +45,13 @@ object DateUtil {
 
   def langByCode(langCode: String): Lang = langCode match {
     case "cy" => cy
-    case _ => en
+    case _    => en
   }
 
 }
 
 @Singleton
-class DateUtil @Inject()(langUtil: LanguageUtils,
-                         messagesApi: MessagesApi) {
+class DateUtil @Inject() (langUtil: LanguageUtils, messagesApi: MessagesApi) {
 
   def formatDate(localDate: LocalDate)(implicit messages: Messages): String =
     langUtil.Dates.formatDate(localDate)
