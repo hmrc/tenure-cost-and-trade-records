@@ -70,7 +70,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject()(
       deskproConnector.createTicket(createDeskproTicket(submission)).flatMap { deskproTicketId =>
         logger.info(s"Not connected submission exported to deskpro, deskproID: ${deskproTicketId}, submissionID: ${submission.id}")
         auditAccepted(submission.id, deskproTicketId)
-        emailConnector.sendConnectionRemoved(submission)
+//        emailConnector.sendConnectionRemoved(submission)
         repository.removeById(submission.id).map(_ => ())
       }.recover {
         case upstreamErrorResponse: UpstreamErrorResponse if upstreamErrorResponse.statusCode == 400 =>
