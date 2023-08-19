@@ -7,3 +7,5 @@ DELETE        /saveAsDraft/:refNum                              uk.gov.hmrc.tctr
 
 PUT           /submissions/notConnected/:referenceNumber        uk.gov.hmrc.tctr.backend.controllers.NotConnectedSubmissionController.submit(referenceNumber: String)
 
++nocsrf
+POST          /upscan/callback                                  uk.gov.hmrc.tctr.backend.controllers.UpscanCallbackController.callback
