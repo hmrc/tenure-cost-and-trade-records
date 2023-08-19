@@ -17,9 +17,17 @@
 package uk.gov.hmrc.tctr.backend
 
 //import akka.actor.ActorSystem
+import akka.actor.ActorSystem
 import com.google.inject.Provider
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment, Logging}
+import uk.gov.hmrc.mongo.lock.MongoLockRepository
+import uk.gov.hmrc.tctr.backend.infrastructure.{DefaultRegularSchedule, RegularSchedule}
+import uk.gov.hmrc.tctr.backend.submissionExport.{ExportNotConnectedSubmissions, NotConnectedSubmissionExporter}
+//import uk.gov.hmrc.tctr.backend.submissionExport.{ExportNotConnectedSubmissions, NotConnectedSubmissionExporter}
+
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 //import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.infrastructure.{DailySchedule, DefaultDailySchedule, TCTRHttpClient, TCTRHttpClientImpl}
 
@@ -33,11 +41,11 @@ class ForTCTRModule extends Module with Logging {
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =
     Seq(
       hodHttpClient(configuration),
-//      bind[RegularSchedule].to[DefaultRegularSchedule],
+      bind[RegularSchedule].to[DefaultRegularSchedule],
       bind[DailySchedule].to[DefaultDailySchedule],
       bind[ForTCTRImpl].toSelf.eagerly(),
       bind[Clock].toProvider[ClockProvider]
-    ) // ++ submissionExporter(configuration)
+    ) ++ notConnectedSubmissionExporter(configuration)
 
   def hodHttpClient(configuration: Configuration): Binding[TCTRHttpClient] = {
     val enablePublishing = configuration.getOptional[Boolean]("submissionExport.publishingEnabled").getOrElse(false)
@@ -50,37 +58,46 @@ class ForTCTRModule extends Module with Logging {
     }
   }
 
-//  def submissionExporter(configuration: Configuration): Seq[Binding[_]] = {
-//    val enableNotConnectedExport = configuration.get[Boolean]("notConnectedSubmissionExport.enabled")
-//    if (enableNotConnectedExport) {
-//      Seq(bind[NotConnectedSubmissionExporter].toProvider(classOf[NotConnectedSubmissionExporterProvider]).eagerly())
-//    } else {
-//      logger.warn(s"NotConnectedSubmissionExporter disabled! Testing only.")
-//      Seq.empty
-//    }
-//  }
+  def notConnectedSubmissionExporter(configuration: Configuration): Seq[Binding[_]] = {
+    val enableNotConnectedExport = configuration.get[Boolean]("notConnectedSubmissionExport.enabled")
+    if (enableNotConnectedExport) {
+      Seq(bind[NotConnectedSubmissionExporter].toProvider(classOf[NotConnectedSubmissionExporterProvider]).eagerly())
+    } else {
+      logger.warn(s"NotConnectedSubmissionExporter disabled! Testing only.")
+      Seq.empty
+    }
+  }
 
 }
 
 ////TODO - Move closer to NotConnectedSubmissionExporter or maybe move to special module
-//class NotConnectedSubmissionExporterProvider @Inject()(mongoLockRepository: MongoLockRepository,
-//                                                       exportNotConnectedSubmissions: ExportNotConnectedSubmissions,
-//                                                       actorSystem: ActorSystem,
-//                                                       regularSchedule: RegularSchedule,
-//                                                       configuration: Configuration,
-//                                                       implicit val ec: ExecutionContext) extends Provider[NotConnectedSubmissionExporter] {
-//
-//  val batchSize = configuration.getOptional[Int]("notConnectedSubmissionExport.batchSize")
-//    .getOrElse(throw new RuntimeException("Missing configuration for notConnectedSubmissionExport.batchSize"))
-//
-//  override def get(): NotConnectedSubmissionExporter = {
-//    val exporter = new NotConnectedSubmissionExporter(mongoLockRepository, exportNotConnectedSubmissions, batchSize, actorSystem.scheduler,
-//      actorSystem.eventStream, regularSchedule)
-//    exporter.start()
-//    exporter
-//  }
-//
-//}
+class NotConnectedSubmissionExporterProvider @Inject() (
+  mongoLockRepository: MongoLockRepository,
+  exportNotConnectedSubmissions: ExportNotConnectedSubmissions,
+  actorSystem: ActorSystem,
+  regularSchedule: RegularSchedule,
+  configuration: Configuration,
+  implicit val ec: ExecutionContext
+) extends Provider[NotConnectedSubmissionExporter] {
+
+  val batchSize = configuration
+    .getOptional[Int]("notConnectedSubmissionExport.batchSize")
+    .getOrElse(throw new RuntimeException("Missing configuration for notConnectedSubmissionExport.batchSize"))
+
+  override def get(): NotConnectedSubmissionExporter = {
+    val exporter = new NotConnectedSubmissionExporter(
+      mongoLockRepository,
+      exportNotConnectedSubmissions,
+      batchSize,
+      actorSystem.scheduler,
+      actorSystem.eventStream,
+      regularSchedule
+    )
+    exporter.start()
+    exporter
+  }
+
+}
 
 class ClockProvider() extends Provider[Clock] {
   override def get(): Clock = Clock.systemUTC()
