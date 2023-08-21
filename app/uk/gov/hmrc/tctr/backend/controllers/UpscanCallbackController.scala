@@ -27,7 +27,7 @@ import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.{FORCredentials, FORCredentialsPlainText}
 import uk.gov.hmrc.tctr.backend.models.UpScanRequests.{UploadConfirmation, UploadConfirmationSuccess}
 import uk.gov.hmrc.tctr.backend.repository.CredentialsRepo
-
+import scala.util.{Failure, Success}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,23 +45,27 @@ class UpscanCallbackController @Inject()(upscanConnector: UpscanConnector,cc: Co
 
         uploadConfirmation match {
           case success: UploadConfirmationSuccess if success.fileStatus == "READY" =>
-            upscanConnector.download(success.downloadUrl).map {
-              case Right(fileContentString) =>
-                Json.parse(fileContentString).validate[Seq[FORCredentialsPlainText]] match {
-                  case JsSuccess(forAuthTokens, _) =>
-                    val forCredentials = forAuthTokens.map(_.toSensitive)
-                    credentialsRepo.bulkUpsert(forCredentials).map{ result =>
-                    }
-                    logger.info(s"Credentials successfully stored.")
-                    Ok
-                  case JsError(errors) =>
-                    logger.error(s"Failed to parse file content to FORCredentials. Errors: ${errors.mkString(",")}")
-                    InternalServerError(s"Failed to parse file content to FORLoginResponse. Errors: $errors")
-                }
-              case Left(error) =>
-                logger.error(s"Unknown error wile processing FORCredentials ${error.detail}")
-                InternalServerError(error.detail)
-            }
+            Future {
+              upscanConnector.download(success.downloadUrl).onComplete {
+                case Success(Right(fileContentString)) =>
+                  Json.parse(fileContentString).validate[Seq[FORCredentialsPlainText]] match {
+                    case JsSuccess(forAuthTokens, _) =>
+                      val forCredentials = forAuthTokens.map(_.toSensitive)
+                      credentialsRepo.bulkUpsert(forCredentials).onComplete {
+                        case Success(_) => logger.info(s"Credentials successfully stored.")
+                        case Failure(e) => logger.error(s"Failed to upsert credentials: ${e.getMessage}")
+                      }
+                    case JsError(errors) =>
+                      logger.error(s"Failed to parse file content to FORCredentials. Errors: ${errors.mkString(",")}")
+                  }
+                case Success(Left(error)) =>
+                  logger.error(s"Unknown error while processing FORCredentials ${error.detail}")
+                case Failure(e) =>
+                  logger.error(s"Error during Upscan file download: ${e.getMessage}")
+              }
+            }(ec)
+
+            Future.successful(Ok(Json.obj("status" -> "Processing started")))
           case _ =>
             logger.error("File not ready or confirmation error on Upscan callback")
             Future.successful(Ok(Json.obj("status" -> "File not ready or confirmation error")))

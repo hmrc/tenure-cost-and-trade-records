@@ -32,14 +32,14 @@ import uk.gov.hmrc.tctr.backend.connectors.UpscanConnector
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.repository.CredentialsRepo
 import org.joda.time.DateTime
+import org.scalatest.Succeeded
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import uk.gov.hmrc.tctr.backend.models.FORCredentials._
+
 
 class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with MockitoSugar {
-
   implicit val timeout: Timeout = 9.seconds
   implicit val ec: ExecutionContext = ExecutionContext.global
   implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -48,8 +48,6 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
   val mockCredentialsRepo: CredentialsRepo = mock[CredentialsRepo]
   val mockMongoCrypto: MongoCrypto = mock[MongoCrypto]
   val mockBulkWriteResult: BulkWriteResult = mock[BulkWriteResult]
-
-
 
   val controller = new UpscanCallbackController(mockUpscanConnector, stubControllerComponents(), mockCredentialsRepo, mockMongoCrypto)
 
@@ -80,20 +78,23 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
                                        |    }
                                        ]""".stripMargin
 
-    import org.mockito.ArgumentMatchers.argThat
-
-
-
     when(mockUpscanConnector.download(any())(any())).thenReturn(Future.successful(Right(forCredentialsJsonResponse)))
-
-
     when(mockCredentialsRepo.bulkUpsert(any[Seq[FORCredentials]])(any[OFormat[FORCredentials]])).thenReturn(Future.successful(mockBulkWriteResult))
-
 
     val request = FakeRequest().withBody(validUploadConfirmation)
     val result = controller.callback()(request)
 
     status(result)(timeout) shouldBe OK
+
+    scala.concurrent.blocking {
+      Thread.sleep(5000)
+    }
+
+    verify(mockUpscanConnector).download(any())(any())
+
+    verify(mockCredentialsRepo).bulkUpsert(any[Seq[FORCredentials]])(any[OFormat[FORCredentials]])
+
+    Future.successful(Succeeded)
   }
 }
 
