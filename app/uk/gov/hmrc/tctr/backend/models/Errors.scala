@@ -16,24 +16,5 @@
 
 package uk.gov.hmrc.tctr.backend.models
 
-import java.util.Base64
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
-
-case class FORCredentials(
-  forNumber: String,
-  billingAuthorityCode: String,
-  forType: String,
-  address: SensitiveAddress,
-  _id: String
-) {
-  def basicAuthString: String = "Basic " + encodedAuth
-
-  def encodedAuth: String = Base64.getEncoder.encodeToString(s"$forNumber:${address.postcode}".getBytes)
-}
-
-object FORCredentials {
-
-  implicit def format(implicit crypto: MongoCrypto): OFormat[FORCredentials] = Json.format[FORCredentials]
-
-}
+sealed trait TctrError
+case class UnknownError(detail: String) extends TctrError
