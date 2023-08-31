@@ -111,22 +111,22 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Execut
   def removeAll(): Future[DeleteResult] =
     collection.deleteMany(Document()).toFuture()
 
-  def bulkUpsert(credentialsSeq: Seq[FORCredentials])(implicit writes: OWrites[FORCredentials]): Future[BulkWriteResult] = {
+  def bulkUpsert(
+    credentialsSeq: Seq[FORCredentials]
+  )(implicit writes: OWrites[FORCredentials]): Future[BulkWriteResult] = {
 
-    def toJson(cred: FORCredentials): JsObject = {
+    def toJson(cred: FORCredentials): JsObject =
       Json.toJson(cred).as[JsObject]
-    }
 
     def toBson(doc: JsObject): BsonDocument = {
       val withLastModified = doc + ("LastModified" -> JsString(Instant.now().toString))
-      val setData = BsonDocument("$set" -> BsonDocument(Json.stringify(withLastModified)))
+      val setData          = BsonDocument("$set" -> BsonDocument(Json.stringify(withLastModified)))
       setData.append("$setOnInsert", BsonDocument("CreatedAt" -> Instant.now().toString))
     }
 
-
     val bulkOps: Seq[WriteModel[_ <: FORCredentials]] = credentialsSeq.map { cred =>
-      val filter = Filters.eq("_id", cred._id)
-      val update = new UpdateOptions().upsert(true)
+      val filter   = Filters.eq("_id", cred._id)
+      val update   = new UpdateOptions().upsert(true)
       val document = toBson(toJson(cred))
 
       new UpdateOneModel[FORCredentials](filter, document, update)
@@ -144,7 +144,6 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Execut
         Future.failed(e)
     }
   }
-
 
   private def normalizePostcode(postcode: String) = postcode.toLowerCase.replace(" ", "").replace("+", "")
 

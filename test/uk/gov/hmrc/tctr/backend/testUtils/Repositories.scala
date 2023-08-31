@@ -56,7 +56,9 @@ class StubCredentialsRepository extends CredentialsRepo {
 
   def removeAll(): Future[DeleteResult] = ???
 
-  override def bulkUpsert(credentialsSeq: Seq[FORCredentials])(implicit writes: OWrites[FORCredentials]): Future[BulkWriteResult] = ???
+  override def bulkUpsert(credentialsSeq: Seq[FORCredentials])(implicit
+    writes: OWrites[FORCredentials]
+  ): Future[BulkWriteResult] = ???
 }
 
 class StubSubmittedRepository @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
