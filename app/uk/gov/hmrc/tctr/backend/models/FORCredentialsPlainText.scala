@@ -21,12 +21,12 @@ import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.schema.Address
 
 case class FORCredentialsPlainText(
-                           forNumber: String,
-                           billingAuthorityCode: String,
-                           forType: String,
-                           address: Address,
-                           _id: String
-                         ) {
+  forNumber: String,
+  billingAuthorityCode: String,
+  forType: String,
+  address: Address,
+  _id: String
+) {
   def toSensitive(implicit crypto: MongoCrypto): FORCredentials =
     FORCredentials(
       forNumber = this.forNumber,
@@ -36,7 +36,6 @@ case class FORCredentialsPlainText(
       _id = this._id
     )
 }
-
 
 object FORCredentialsPlainText {
   implicit val plainFormat: OFormat[FORCredentialsPlainText] = Json.format[FORCredentialsPlainText]

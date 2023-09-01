@@ -25,6 +25,7 @@ import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should
 import play.api.http.Status
 import play.api.test.{FakeRequest, Helpers}
+import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.{NotConnectedSubmission, NotConnectedSubmissionForm}
 import uk.gov.hmrc.tctr.backend.repository.{NotConnectedMongoRepository, SubmittedMongoRepo}
@@ -47,8 +48,9 @@ class NotConnectedSubmissionControllerSpec extends AsyncFlatSpec with should.Mat
     false
   )
 
-  val metrics = mock[MetricsHandler]
-  val meter   = mock[Meter]
+  val emailConnector = mock[EmailConnector]
+  val metrics        = mock[MetricsHandler]
+  val meter          = mock[Meter]
   when(metrics.okSubmissions).thenReturn(meter)
   when(metrics.failedSubmissions).thenReturn(meter)
 
@@ -67,6 +69,7 @@ class NotConnectedSubmissionControllerSpec extends AsyncFlatSpec with should.Mat
       val controller = new NotConnectedSubmissionController(
         repository,
         submittedRepository,
+        emailConnector,
         metrics,
         Helpers.stubControllerComponents()
       )
@@ -88,7 +91,13 @@ class NotConnectedSubmissionControllerSpec extends AsyncFlatSpec with should.Mat
     when(submittedRepository.hasBeenSubmitted(any[String])).thenReturn(Future.successful(true))
 
     val controller =
-      new NotConnectedSubmissionController(repository, submittedRepository, metrics, Helpers.stubControllerComponents())
+      new NotConnectedSubmissionController(
+        repository,
+        submittedRepository,
+        emailConnector,
+        metrics,
+        Helpers.stubControllerComponents()
+      )
     val req        = FakeRequest().withBody(submission)
 
     val response = controller.submit("222222").apply(req)

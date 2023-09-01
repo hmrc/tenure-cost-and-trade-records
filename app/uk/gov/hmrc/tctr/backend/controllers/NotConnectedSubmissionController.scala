@@ -19,6 +19,7 @@ package uk.gov.hmrc.tctr.backend.controllers
 import play.api.Logger
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.{NotConnectedSubmission, NotConnectedSubmissionForm}
 import uk.gov.hmrc.tctr.backend.repository.{NotConnectedRepository, SubmittedMongoRepo}
@@ -29,6 +30,7 @@ import scala.concurrent.ExecutionContext
 class NotConnectedSubmissionController @Inject() (
   repository: NotConnectedRepository,
   submittedMongoRepo: SubmittedMongoRepo,
+  emailConnector: EmailConnector,
   metric: MetricsHandler,
   cc: ControllerComponents
 )(implicit ec: ExecutionContext)
@@ -36,14 +38,17 @@ class NotConnectedSubmissionController @Inject() (
 
   val log = Logger(classOf[NotConnectedSubmissionController])
 
-  def submit(submissionReference: String) = Action.async(parse.json[NotConnectedSubmissionForm]) { request =>
+  def submit(submissionReference: String) = Action.async(parse.json[NotConnectedSubmissionForm]) { implicit request =>
     submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
       case true  =>
         metric.failedSubmissions.mark()
         log.warn(s"Error saving submission $submissionReference. Possible duplicate")
         Conflict(s"Error saving submission $submissionReference. Possible duplicate")
       case false =>
-        repository.insert(convertFormToEntity(request.body))
+        val notConnectedSubmission = convertFormToEntity(request.body)
+        repository.insert(notConnectedSubmission)
+        emailConnector.sendConnectionRemoved(notConnectedSubmission)
+
         metric.okSubmissions.mark()
         Created
     }
