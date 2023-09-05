@@ -34,7 +34,7 @@ import uk.gov.hmrc.tctr.backend.schema.Address
 import java.time.Instant
 import scala.concurrent.Future
 
-class NotConnectedSubmissionControllerSpec extends AsyncFlatSpec with should.Matchers with MockitoSugar {
+class NotConnectedSubmissionControllerSpec extends ControllerSpecBase with should.Matchers with MockitoSugar {
 
   val submission = NotConnectedSubmissionForm(
     "2222",
