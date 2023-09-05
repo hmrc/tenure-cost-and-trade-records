@@ -29,13 +29,19 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.schema.Address
+import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 import uk.gov.hmrc.tctr.backend.util.DateUtil
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class EmailConnectorSpec extends PlaySpec with GuiceOneAppPerSuite with MockitoSugar with ScalaFutures {
+class EmailConnectorSpec
+    extends PlaySpec
+    with GuiceOneAppPerSuite
+    with MockitoSugar
+    with ScalaFutures
+    with FakeObjects {
 
   private val sendEmailEndpoint            = "http://localhost:8300/hmrc/email"
   private val configuration                = Configuration(ConfigFactory.load("application.conf"))
@@ -87,11 +93,11 @@ class EmailConnectorSpec extends PlaySpec with GuiceOneAppPerSuite with MockitoS
       val httpMock  = getHttpMock(OK)
       val connector = new EmailConnector(servicesConfig, httpMock, dateUtil)
 
-      connector.sendSubmissionConfirmation(email, "John Doe")
+      connector.sendSubmissionConfirmation(prefilledConnectedSubmission)
 
       val bodyJson =
         Json.parse(
-          """{"to":["customer@email.com"],"templateId":"tctr_submission_confirmation","parameters":{"customerName":"John Doe"}}"""
+          """{"to":["test@email.com"],"templateId":"tctr_submission_confirmation","parameters":{"customerName":"Full Name"}}"""
         )
       verify(httpMock)
         .POST[JsObject, Unit](eqTo(sendEmailEndpoint), eqTo(bodyJson.as[JsObject]), any[Seq[(String, String)]])(
@@ -158,7 +164,7 @@ class EmailConnectorSpec extends PlaySpec with GuiceOneAppPerSuite with MockitoS
       val httpMock       = getHttpMock(BAD_REQUEST, body)
       val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
 
-      val response = emailConnector.sendSubmissionConfirmation(email, "John Doe").futureValue
+      val response = emailConnector.sendSubmissionConfirmation(prefilledConnectedSubmission).futureValue
       response.status mustBe BAD_REQUEST
       response.body mustBe body
 
