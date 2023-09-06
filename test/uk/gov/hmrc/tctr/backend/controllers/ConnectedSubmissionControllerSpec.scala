@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-
 import akka.util.Timeout
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult
@@ -27,6 +26,7 @@ import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
 import uk.gov.hmrc.tctr.backend.repository.{ConnectedRepository, SubmittedMongoRepo}
@@ -36,46 +36,53 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class ConnectedSubmissionControllerSpec extends AsyncFlatSpec with Matchers with MockitoSugar with ScalaFutures with FakeObjects {
+class ConnectedSubmissionControllerSpec
+    extends AsyncFlatSpec
+    with Matchers
+    with MockitoSugar
+    with ScalaFutures
+    with FakeObjects {
 
-  implicit val timeout: Timeout = 5.seconds
+  implicit val timeout: Timeout     = 5.seconds
   implicit val ec: ExecutionContext = ExecutionContext.global
 
-  val mockRepository: ConnectedRepository = mock[ConnectedRepository]
+  val mockRepository: ConnectedRepository   = mock[ConnectedRepository]
   val mockSubmittedRepo: SubmittedMongoRepo = mock[SubmittedMongoRepo]
-  val mockMetrics: MetricsHandler = mock[MetricsHandler]
-  val meter   = mock[Meter]
-  val fakeControllerComponents = stubControllerComponents()
+  val emailConnector                        = mock[EmailConnector]
+  val mockMetrics: MetricsHandler           = mock[MetricsHandler]
+  val meter                                 = mock[Meter]
+  val fakeControllerComponents              = stubControllerComponents()
 
   val controller = new ConnectedSubmissionController(
     mockRepository,
     mockSubmittedRepo,
+    emailConnector,
     mockMetrics,
     fakeControllerComponents
   )
   when(mockMetrics.okSubmissions).thenReturn(meter)
   when(mockMetrics.failedSubmissions).thenReturn(meter)
 
-
   "ConnectedSubmissionController" should "return Created for a new submission" in {
     val submissionReference = "123456"
-    val submission = prefilledConnectedSubmission
+    val submission          = prefilledConnectedSubmission
     when(mockSubmittedRepo.hasBeenSubmitted(submissionReference)).thenReturn(Future.successful(false))
-    when(mockRepository.insert(any[ConnectedSubmission])).thenReturn(Future.successful(InsertOneResult.unacknowledged()))
+    when(mockRepository.insert(any[ConnectedSubmission]))
+      .thenReturn(Future.successful(InsertOneResult.unacknowledged()))
 
     val request = FakeRequest().withBody(submission)
-    val result = controller.submit(submissionReference).apply(request)
+    val result  = controller.submit(submissionReference).apply(request)
 
     status(result)(timeout) shouldBe CREATED
   }
 
-  it should "return Conflict for a duplicate submission" in {
+  it                              should "return Conflict for a duplicate submission" in {
     val submissionReference = "123456"
-    val submission = prefilledConnectedSubmission
+    val submission          = prefilledConnectedSubmission
     when(mockSubmittedRepo.hasBeenSubmitted(submissionReference)).thenReturn(Future.successful(true))
 
     val request = FakeRequest().withBody(submission)
-    val result = controller.submit(submissionReference).apply(request)
+    val result  = controller.submit(submissionReference).apply(request)
 
     status(result)(timeout) shouldBe CONFLICT
   }

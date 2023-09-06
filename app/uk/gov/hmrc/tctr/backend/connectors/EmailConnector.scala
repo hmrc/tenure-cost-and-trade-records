@@ -22,7 +22,7 @@ import play.api.i18n.Lang
 import play.api.libs.json.{JsObject, JsValue, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
+import uk.gov.hmrc.tctr.backend.models.{ConnectedSubmission, NotConnectedSubmission}
 import uk.gov.hmrc.tctr.backend.util.DateUtil
 
 import java.time.ZonedDateTime
@@ -51,10 +51,17 @@ class EmailConnector @Inject() (servicesConfig: ServicesConfig, http: HttpClient
   private val tctr_connection_removed             = "tctr_connection_removed"
   private val tctr_connection_removed_cy          = "tctr_connection_removed_cy"
 
-  def sendSubmissionConfirmation(email: String, fullName: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    val parameters = Json.obj("customerName" -> fullName)
-    sendEmail(email, tctr_submission_confirmation, parameters)
-  }
+  def sendSubmissionConfirmation(submission: ConnectedSubmission)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+    submission.aboutYouAndTheProperty
+      .flatMap(_.customerDetails)
+      .fold {
+        logger.warn(s"Send email to user canceled: 404 CustomerDetails not found")
+        Future.successful(HttpResponse(404, "CustomerDetails not found"))
+      } { customerDetails =>
+        val parameters = Json.obj("customerName" -> customerDetails.fullName)
+        val email      = customerDetails.contactDetails.email
+        sendEmail(email, tctr_submission_confirmation, parameters)
+      }
 
   def sendVacantSubmissionConfirmation(email: String, fullName: String)(implicit
     hc: HeaderCarrier
