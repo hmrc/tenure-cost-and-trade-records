@@ -48,7 +48,7 @@ class NotConnectedSubmissionController @Inject() (
         val notConnectedSubmission = convertFormToEntity(request.body)
         repository.insert(notConnectedSubmission)
         emailConnector.sendConnectionRemoved(notConnectedSubmission)
-
+        submittedMongoRepo.insertIfUnique(submissionReference)
         metric.okSubmissions.mark()
         Created
     }

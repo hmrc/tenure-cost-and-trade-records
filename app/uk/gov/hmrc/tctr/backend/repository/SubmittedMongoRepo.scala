@@ -22,7 +22,7 @@ import org.mongodb.scala.model.Filters.equal
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import org.mongodb.scala.model._
-import org.mongodb.scala.result.InsertOneResult
+import org.mongodb.scala.result.{DeleteResult, InsertOneResult}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import uk.gov.hmrc.tctr.backend.models.RefNum
@@ -55,5 +55,8 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Executio
       .find(equal("referenceNumber", refNum))
       .toFuture()
       .map(_.nonEmpty)
+
+  def deleteByRefNum(refNum: String): Future[DeleteResult] =
+    collection.deleteOne(equal("referenceNumber", refNum)).toFuture()
 
 }

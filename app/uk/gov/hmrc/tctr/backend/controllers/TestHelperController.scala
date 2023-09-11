@@ -27,31 +27,23 @@ import uk.gov.hmrc.tctr.backend.repository.{ConnectedRepository, SubmittedMongoR
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConnectedSubmissionController @Inject() (
-  repository: ConnectedRepository,
+class TestHelperController @Inject()(
   submittedMongoRepo: SubmittedMongoRepo,
-  emailConnector: EmailConnector,
   metric: MetricsHandler,
   cc: ControllerComponents
 )(implicit ec: ExecutionContext)
     extends BackendController(cc) {
 
-  val log = Logger(classOf[ConnectedSubmissionController])
+  val log = Logger(classOf[TestHelperController])
 
-  def submit(submissionReference: String) = Action.async(parse.json[ConnectedSubmission]) { implicit request =>
-    submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
+  def removeFromSubmittedRepo(submissionReference: String) = Action.async { implicit request =>
+    submittedMongoRepo.hasBeenSubmitted(submissionReference).flatMap {
       case true  =>
-        metric.failedSubmissions.mark()
-        log.warn(s"Error saving submission $submissionReference. Possible duplicate")
-        Future.successful(Conflict(s"Error saving submission $submissionReference. Possible duplicate"))
+        submittedMongoRepo.deleteByRefNum(submissionReference).map { _ =>
+          NoContent
+        }
       case false =>
-        val submission = request.body
-        repository.insert(submission)
-        emailConnector.sendSubmissionConfirmation(submission)
-        /*Remove for submission checking*/
-        submittedMongoRepo.insertIfUnique(submissionReference)
-        metric.okSubmissions.mark()
-        Future.successful(Created)
+        Future.successful(NotFound)
     }
   }
 }
