@@ -49,7 +49,7 @@ class ConnectedSubmissionController @Inject() (
         repository.insert(submission)
         emailConnector.sendSubmissionConfirmation(submission)
         /*Remove for submission checking*/
-        //submittedMongoRepo.insertIfUnique(submissionReference)
+        submittedMongoRepo.insertIfUnique(submissionReference)
         metric.okSubmissions.mark()
         Future.successful(Created)
     }
