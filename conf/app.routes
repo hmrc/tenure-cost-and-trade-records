@@ -11,7 +11,5 @@ PUT           /submissions/notConnected/:referenceNumber        uk.gov.hmrc.tctr
 
 PUT           /submissions/connected/:referenceNumber           uk.gov.hmrc.tctr.backend.controllers.ConnectedSubmissionController.submit(referenceNumber: String)
 
-DELETE        /submitted/remove/:referenceNumber                uk.gov.hmrc.tctr.backend.controllers.TestHelperController.removeFromSubmittedRepo(referenceNumber: String)
-
 +nocsrf
 POST          /upscan/callback                                  uk.gov.hmrc.tctr.backend.controllers.UpscanCallbackController.callback
