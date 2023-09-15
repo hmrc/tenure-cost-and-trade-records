@@ -28,24 +28,24 @@ import uk.gov.hmrc.tctr.backend.models.notconnected.RemoveConnectionDetails
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.RequestReferenceNumberDetails
 import uk.gov.hmrc.tctr.backend.schema.Address
 
-case class ConnectedSubmission (
-                                 referenceNumber: String,
-                                 forType: String,
-                                 address: Address,
-                                 token: String,
-                                 stillConnectedDetails: Option[StillConnectedDetails] = None,
-                                 removeConnectionDetails: Option[RemoveConnectionDetails] = None,
-                                 aboutYouAndTheProperty: Option[AboutYouAndTheProperty] = None,
-                                 additionalInformation: Option[AdditionalInformation] = None,
-                                 aboutTheTradingHistory: Option[AboutTheTradingHistory] = None,
-                                 aboutFranchisesOrLettings: Option[AboutFranchisesOrLettings] = None,
-                                 aboutLeaseOrAgreementPartOne: Option[AboutLeaseOrAgreementPartOne] = None,
-                                 aboutLeaseOrAgreementPartTwo: Option[AboutLeaseOrAgreementPartTwo] = None,
-                                 saveAsDraftPassword: Option[String] = None,
-                                 lastCYAPageUrl: Option[String] = None,
-                                 requestReferenceNumberDetails: Option[RequestReferenceNumberDetails] = None,
-                                 downloadPDFDetails: Option[DownloadPDFDetails] = None
-                               )
+case class ConnectedSubmission(
+  referenceNumber: String,
+  forType: String,
+  address: Address,
+  token: String,
+  stillConnectedDetails: Option[StillConnectedDetails] = None,
+  removeConnectionDetails: Option[RemoveConnectionDetails] = None,
+  aboutYouAndTheProperty: Option[AboutYouAndTheProperty] = None,
+  additionalInformation: Option[AdditionalInformation] = None,
+  aboutTheTradingHistory: Option[AboutTheTradingHistory] = None,
+  aboutFranchisesOrLettings: Option[AboutFranchisesOrLettings] = None,
+  aboutLeaseOrAgreementPartOne: Option[AboutLeaseOrAgreementPartOne] = None,
+  aboutLeaseOrAgreementPartTwo: Option[AboutLeaseOrAgreementPartTwo] = None,
+  saveAsDraftPassword: Option[String] = None,
+  lastCYAPageUrl: Option[String] = None,
+  requestReferenceNumberDetails: Option[RequestReferenceNumberDetails] = None,
+  downloadPDFDetails: Option[DownloadPDFDetails] = None
+)
 object ConnectedSubmission {
   implicit val format = Json.format[ConnectedSubmission]
 }

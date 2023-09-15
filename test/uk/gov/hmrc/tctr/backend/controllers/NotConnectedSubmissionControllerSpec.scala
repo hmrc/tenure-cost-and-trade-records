@@ -21,7 +21,6 @@ import com.mongodb.client.result.InsertOneResult
 import com.mongodb.client.result.InsertOneResult.acknowledged
 import org.bson.BsonBoolean.TRUE
 import org.mockito.scalatest.MockitoSugar
-import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should
 import play.api.http.Status
 import play.api.test.{FakeRequest, Helpers}

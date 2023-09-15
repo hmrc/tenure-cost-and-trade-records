@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.tctr.backend.config.AppConfig
 
 import scala.concurrent.duration._
-import org.joda.time.{DateTime, Minutes}
 
 import scala.language.postfixOps
 
@@ -32,37 +31,7 @@ trait RegularSchedule extends Schedule {
   def timeUntilNextRun(): FiniteDuration
 }
 
-trait DailySchedule extends Schedule {
-  def timeUntilNextRun(): FiniteDuration
-}
-
 @Singleton
 class DefaultRegularSchedule @Inject() (tctrConfig: AppConfig) extends RegularSchedule {
   override def timeUntilNextRun(): FiniteDuration = tctrConfig.exportFrequency seconds
-}
-
-@Singleton
-class DefaultDailySchedule @Inject() (tctrConfig: AppConfig, clock: Clock) extends DailySchedule {
-  val importScheduleHour   = tctrConfig.importScheduleHour
-  val importScheduleMinute = tctrConfig.importScheduleMinute
-
-  def timeUntilNextRun(): FiniteDuration = {
-    val now    = clock.now()
-    val target =
-      if (isLaterThan(now)) tomorrow(now, importScheduleHour, importScheduleMinute)
-      else today(now, importScheduleHour, importScheduleMinute)
-    Minutes.minutesBetween(now, target).getMinutes minutes
-  }
-
-  private def isLaterThan(now: DateTime): Boolean =
-    (now.getHourOfDay > importScheduleHour && now.getMinuteOfHour > 0) ||
-      (now.getHourOfDay == importScheduleHour && now.getMinuteOfHour + 1 > importScheduleMinute)
-
-  private def tomorrow(now: DateTime, hour: Int, minute: Int): DateTime = {
-    val tomorrow = now.plusDays(1)
-    new DateTime(tomorrow.getYear, tomorrow.getMonthOfYear, tomorrow.getDayOfMonth, hour, minute)
-  }
-
-  private def today(now: DateTime, hour: Int, minute: Int): DateTime =
-    new DateTime(now.getYear, now.getMonthOfYear, now.getDayOfMonth, hour, minute)
 }

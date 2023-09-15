@@ -22,7 +22,6 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
-import play.api.http.Status
 import play.api.http.Status.{ACCEPTED, BAD_REQUEST, NOT_FOUND, OK}
 import play.api.libs.json.{JsObject, JsValue, Json, Writes}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}

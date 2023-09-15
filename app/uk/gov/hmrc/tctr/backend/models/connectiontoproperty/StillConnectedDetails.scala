@@ -20,22 +20,22 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class StillConnectedDetails(
-                                  addressConnectionType: Option[AddressConnectionType] = None,
-                                  connectionToProperty: Option[ConnectionToProperty] = None,
-                                  editAddress: Option[EditTheAddress] = None,
-                                  vacantProperties: Option[VacantProperties] = None,
-                                  tradingNameOperatingFromProperty: Option[TradingNameOperatingFromProperty] = None,
-                                  tradingNameOwnTheProperty: Option[AnswersYesNo] = None,
-                                  tradingNamePayingRent: Option[AnswersYesNo] = None,
-                                  areYouThirdParty: Option[AnswersYesNo] = None,
-                                  vacantPropertyStartDate: Option[StartDateOfVacantProperty] = None,
-                                  isAnyRentReceived: Option[AnswersYesNo] = None,
-                                  provideContactDetails: Option[ProvideContactDetails] = None,
-                                  lettingPartOfPropertyDetailsIndex: Int = 0,
-                                  lettingPartOfPropertyDetails: IndexedSeq[LettingPartOfPropertyDetails] = IndexedSeq.empty,
-                                  checkYourAnswersConnectionToProperty: Option[CheckYourAnswersConnectionToProperty] = None,
-                                  checkYourAnswersConnectionToVacantProperty: Option[CheckYourAnswersConnectionToVacantProperty] = None
-                                )
+  addressConnectionType: Option[AddressConnectionType] = None,
+  connectionToProperty: Option[ConnectionToProperty] = None,
+  editAddress: Option[EditTheAddress] = None,
+  vacantProperties: Option[VacantProperties] = None,
+  tradingNameOperatingFromProperty: Option[TradingNameOperatingFromProperty] = None,
+  tradingNameOwnTheProperty: Option[AnswersYesNo] = None,
+  tradingNamePayingRent: Option[AnswersYesNo] = None,
+  areYouThirdParty: Option[AnswersYesNo] = None,
+  vacantPropertyStartDate: Option[StartDateOfVacantProperty] = None,
+  isAnyRentReceived: Option[AnswersYesNo] = None,
+  provideContactDetails: Option[ProvideContactDetails] = None,
+  lettingPartOfPropertyDetailsIndex: Int = 0,
+  lettingPartOfPropertyDetails: IndexedSeq[LettingPartOfPropertyDetails] = IndexedSeq.empty,
+  checkYourAnswersConnectionToProperty: Option[CheckYourAnswersConnectionToProperty] = None,
+  checkYourAnswersConnectionToVacantProperty: Option[CheckYourAnswersConnectionToVacantProperty] = None
+)
 
 object StillConnectedDetails {
   implicit val format = Json.format[StillConnectedDetails]

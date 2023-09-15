@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.repository
 
-import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 
 /**
@@ -24,7 +23,7 @@ import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
   */
 class ConnectedMongoRepositorySpec extends MongoSpecBase with FakeObjects {
 
-  private val submissionDraftFindId   = "99996010004"
+  private val submissionDraftFindId = "99996010004"
 
   private val repo = inject[ConnectedMongoRepository]
 
@@ -35,15 +34,15 @@ class ConnectedMongoRepositorySpec extends MongoSpecBase with FakeObjects {
     repo.findByReference(submissionDraftFindId).futureValue shouldBe Some(prefilledConnectedSubmission)
   }
 
-  it                         should "return None by unknown id" in {
+  it should "return None by unknown id" in {
     repo.findByReference("UNKNOWN_ID").futureValue shouldBe None
   }
 
-  it                         should "return a sequence of ConnectedSubmissions" in {
+  it should "return a sequence of ConnectedSubmissions" in {
     repo.getSubmissions(1).futureValue shouldBe Seq(prefilledConnectedSubmission)
   }
 
-  it                         should "return number of ConnectedSubmissions" in {
+  it should "return number of ConnectedSubmissions" in {
     repo.count.futureValue shouldBe 1
   }
 

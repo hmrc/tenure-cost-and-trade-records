@@ -19,8 +19,6 @@ package uk.gov.hmrc.tctr.backend.config
 import play.api.Configuration
 
 import javax.inject.{Inject, Singleton}
-//import scala.concurrent.duration._
-//import scala.language.postfixOps
 
 @Singleton
 class AppConfig @Inject() (runModeConfiguration: Configuration) {
@@ -38,15 +36,7 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
   lazy val exportFrequency        = runModeConfiguration.get[Int]("submissionExport.frequencySeconds")
   lazy val enablePublishing       = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
 
-  lazy val validationImportEnabled = runModeConfiguration.get[Boolean]("validationImport.enabled")
-  lazy val importUrl               = runModeConfiguration.get[String]("validationImport.url")
-  lazy val importUsername          = runModeConfiguration.get[String]("validationImport.username")
-  lazy val importPassword          = runModeConfiguration.get[String]("validationImport.password")
-  lazy val importBatchSize         = runModeConfiguration.get[Int]("validationImport.batchSize")
-  lazy val importTestData          = runModeConfiguration.get[Boolean]("validationImport.importTestData")
-  lazy val importLimit             = runModeConfiguration.get[Int]("validationImport.importLimit")
-  lazy val importScheduleHour      = runModeConfiguration.get[Int]("validationImport.hourToRunAt")
-  lazy val importScheduleMinute    = runModeConfiguration.get[Int]("validationImport.minuteToRunAt")
+  lazy val importTestData = runModeConfiguration.get[Boolean]("validationImport.importTestData")
 
   lazy val authMaxFailedLogin = runModeConfiguration.get[Int]("authentication.maxFailedLogins")
   lazy val lockoutWindow      = runModeConfiguration.get[Int]("authentication.lockoutDurationHours")
@@ -56,8 +46,6 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
 
 //  lazy val enablePublishing = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
 //  lazy val getFullLog = runModeConfiguration.get[Boolean]("submissionExport.logFull")
-
-  lazy val isTesting = !authenticationRequired
 
 //  lazy val logQueuedSubmissions = runModeConfiguration.get[Boolean]("logSubmissionQueue")
 //  lazy val submissionQueueSizeMonitoringFrequency = runModeConfiguration.get[Int]("submissionQueueLogFrequencyMinutes") minutes
