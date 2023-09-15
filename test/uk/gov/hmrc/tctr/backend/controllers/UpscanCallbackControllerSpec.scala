@@ -38,18 +38,18 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-
 class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with MockitoSugar {
-  implicit val timeout: Timeout = 9.seconds
+  implicit val timeout: Timeout     = 9.seconds
   implicit val ec: ExecutionContext = ExecutionContext.global
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val hc: HeaderCarrier    = HeaderCarrier()
 
   val mockUpscanConnector: UpscanConnector = mock[UpscanConnector]
   val mockCredentialsRepo: CredentialsRepo = mock[CredentialsRepo]
-  val mockMongoCrypto: MongoCrypto = mock[MongoCrypto]
+  val mockMongoCrypto: MongoCrypto         = mock[MongoCrypto]
   val mockBulkWriteResult: BulkWriteResult = mock[BulkWriteResult]
 
-  val controller = new UpscanCallbackController(mockUpscanConnector, stubControllerComponents(), mockCredentialsRepo, mockMongoCrypto)
+  val controller =
+    new UpscanCallbackController(mockUpscanConnector, stubControllerComponents(), mockCredentialsRepo, mockMongoCrypto)
 
   "UpscanCallbackController" should "handle successful callbacks" in {
 
@@ -79,10 +79,11 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
                                        ]""".stripMargin
 
     when(mockUpscanConnector.download(any())(any())).thenReturn(Future.successful(Right(forCredentialsJsonResponse)))
-    when(mockCredentialsRepo.bulkUpsert(any[Seq[FORCredentials]])(any[OFormat[FORCredentials]])).thenReturn(Future.successful(mockBulkWriteResult))
+    when(mockCredentialsRepo.bulkUpsert(any[Seq[FORCredentials]])(any[OFormat[FORCredentials]]))
+      .thenReturn(Future.successful(mockBulkWriteResult))
 
     val request = FakeRequest().withBody(validUploadConfirmation)
-    val result = controller.callback()(request)
+    val result  = controller.callback()(request)
 
     status(result)(timeout) shouldBe OK
 
@@ -97,4 +98,3 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
     Future.successful(Succeeded)
   }
 }
-

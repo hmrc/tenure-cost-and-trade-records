@@ -16,10 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 
-
 import play.api.libs.json.Format
 import uk.gov.hmrc.tctr.backend.models.{EnumFormat, NamedEnum, NamedEnumSupport}
-
 
 sealed trait AddressConnectionType extends NamedEnum {
   override def key: String = "addressConnectionType"

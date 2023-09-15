@@ -29,23 +29,24 @@ import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
 import uk.gov.hmrc.tctr.backend.models.notconnected.SensitiveRemoveConnectionDetails
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.SensitiveRequestReferenceNumber
 
-case class SensitiveConnectedSubmission (referenceNumber: String,
-                                         forType: String,
-                                         address: SensitiveAddress,
-                                         token: String,
-                                         stillConnectedDetails: Option[SensitiveStillConnectedDetails] = None,
-                                         removeConnectionDetails: Option[SensitiveRemoveConnectionDetails] = None,
-                                         aboutYouAndTheProperty: Option[SensitiveAboutYouAndTheProperty] = None,
-                                         additionalInformation: Option[SensitiveAdditionalInformation] = None,
-                                         aboutTheTradingHistory: Option[AboutTheTradingHistory] = None,
-                                         aboutFranchisesOrLettings: Option[AboutFranchisesOrLettings] = None,
-                                         aboutLeaseOrAgreementPartOne: Option[SensitiveAboutLeaseOrAgreementPartOne] = None,
-                                         aboutLeaseOrAgreementPartTwo: Option[AboutLeaseOrAgreementPartTwo] = None,
-                                         saveAsDraftPassword: Option[String] = None,
-                                         lastCYAPageUrl: Option[String] = None,
-                                         requestReferenceNumberDetails: Option[SensitiveRequestReferenceNumber] = None,
-                                         downloadPDFDetails: Option[DownloadPDFDetails] = None
-                                        ) extends Sensitive[ConnectedSubmission]{
+case class SensitiveConnectedSubmission(
+  referenceNumber: String,
+  forType: String,
+  address: SensitiveAddress,
+  token: String,
+  stillConnectedDetails: Option[SensitiveStillConnectedDetails] = None,
+  removeConnectionDetails: Option[SensitiveRemoveConnectionDetails] = None,
+  aboutYouAndTheProperty: Option[SensitiveAboutYouAndTheProperty] = None,
+  additionalInformation: Option[SensitiveAdditionalInformation] = None,
+  aboutTheTradingHistory: Option[AboutTheTradingHistory] = None,
+  aboutFranchisesOrLettings: Option[AboutFranchisesOrLettings] = None,
+  aboutLeaseOrAgreementPartOne: Option[SensitiveAboutLeaseOrAgreementPartOne] = None,
+  aboutLeaseOrAgreementPartTwo: Option[AboutLeaseOrAgreementPartTwo] = None,
+  saveAsDraftPassword: Option[String] = None,
+  lastCYAPageUrl: Option[String] = None,
+  requestReferenceNumberDetails: Option[SensitiveRequestReferenceNumber] = None,
+  downloadPDFDetails: Option[DownloadPDFDetails] = None
+) extends Sensitive[ConnectedSubmission] {
 
   override def decryptedValue: ConnectedSubmission = ConnectedSubmission(
     referenceNumber,
@@ -67,10 +68,11 @@ case class SensitiveConnectedSubmission (referenceNumber: String,
   )
 }
 
-object SensitiveConnectedSubmission{
-  implicit def format(implicit crypto:MongoCrypto): OFormat[SensitiveConnectedSubmission] = Json.format[SensitiveConnectedSubmission]
+object SensitiveConnectedSubmission {
+  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveConnectedSubmission] =
+    Json.format[SensitiveConnectedSubmission]
 
-  def apply(connectedSubmission: ConnectedSubmission):SensitiveConnectedSubmission = SensitiveConnectedSubmission(
+  def apply(connectedSubmission: ConnectedSubmission): SensitiveConnectedSubmission = SensitiveConnectedSubmission(
     connectedSubmission.referenceNumber,
     connectedSubmission.forType,
     SensitiveAddress(connectedSubmission.address),

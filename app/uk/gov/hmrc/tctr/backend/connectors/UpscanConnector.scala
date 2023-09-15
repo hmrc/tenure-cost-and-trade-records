@@ -24,20 +24,22 @@ import javax.inject.Inject
 import uk.gov.hmrc.tctr.backend.models.UnknownError
 
 import scala.concurrent.{ExecutionContext, Future}
-class UpscanConnector @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext) {
+class UpscanConnector @Inject() (wsClient: WSClient)(implicit ec: ExecutionContext) {
   val logger = Logger(this.getClass)
 
-  def download(url: String)(implicit hc:HeaderCarrier): Future[Either[UnknownError, String]] = {
+  def download(url: String)(implicit hc: HeaderCarrier): Future[Either[UnknownError, String]] = {
     import uk.gov.hmrc.http.HeaderNames._
-    wsClient.url(url).withHttpHeaders(hc.headers((Seq(xRequestId,deviceID))): _*)
-      .get().map{ wsResponse =>
-      Right(wsResponse.body)
-    }.recover{
-      case e: Exception => {
-        logger.warn("Unable to download file from upscan",e)
+    wsClient
+      .url(url)
+      .withHttpHeaders(hc.headers((Seq(xRequestId, deviceID))): _*)
+      .get()
+      .map { wsResponse =>
+        Right(wsResponse.body)
+      }
+      .recover { case e: Exception =>
+        logger.warn("Unable to download file from upscan", e)
         Left(UnknownError("Unable to download file, please try again later"))
       }
-    }
   }
 
 }

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.connectors
 
-import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers._
 import org.mockito.MockitoSugar
 import org.scalatest.flatspec.AnyFlatSpec
@@ -29,16 +28,16 @@ import scala.concurrent.Future
 
 class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
 
-  implicit val ec = scala.concurrent.ExecutionContext.global
+  implicit val ec                = scala.concurrent.ExecutionContext.global
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  val mockWsClient: WSClient = mock[WSClient]
-  val mockWsRequest: WSRequest = mock[WSRequest]
+  val mockWsClient: WSClient     = mock[WSClient]
+  val mockWsRequest: WSRequest   = mock[WSRequest]
   val mockWsResponse: WSResponse = mock[WSResponse]
 
   "UpscanConnector" should "download content on a successful request" in {
 
-    val testUrl = "http://test.url"
+    val testUrl  = "http://test.url"
     val testBody = "Test response body"
 
     when(mockWsClient.url(any[String])).thenReturn(mockWsRequest)
@@ -47,11 +46,11 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     when(mockWsResponse.body).thenReturn(testBody)
 
     val connector = new UpscanConnector(mockWsClient)
-    val result = connector.download(testUrl)
+    val result    = connector.download(testUrl)
 
     result.map {
       case Right(body) => body shouldBe testBody
-      case _ => fail("Expected a successful download")
+      case _           => fail("Expected a successful download")
     }
   }
 
@@ -64,11 +63,11 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     when(mockWsRequest.get()).thenReturn(Future.failed(new RuntimeException("Test exception")))
 
     val connector = new UpscanConnector(mockWsClient)
-    val result = connector.download(testUrl)
+    val result    = connector.download(testUrl)
 
     result.map {
       case Left(err) => err shouldBe UnknownError("Unable to download file, please try again later")
-      case _ => fail("Expected an error response")
+      case _         => fail("Expected an error response")
     }
   }
 }

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-import org.joda.time.LocalDate
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.schema.Address
 

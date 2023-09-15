@@ -20,14 +20,12 @@ import akka.actor.ActorSystem
 import play.api.Configuration
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
-import uk.gov.hmrc.tctr.backend.infrastructure.{Clock, DailySchedule, TCTRHttpClient, TestDataImporter}
+import uk.gov.hmrc.tctr.backend.infrastructure.{TCTRHttpClient, TestDataImporter}
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
-import uk.gov.hmrc.tctr.backend.repository.{CredentialsRepo, CredentialsTempStorageRepo}
-import uk.gov.hmrc.tctr.backend.validationImport.{ImportConfiguration, ImportValidationsWithFutures, ValidationImporter, WSFORXmlValidationsRetriever}
+import uk.gov.hmrc.tctr.backend.repository.CredentialsRepo
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
-import scala.language.postfixOps
 
 @Singleton
 class ForTCTRImpl @Inject() (
@@ -36,15 +34,9 @@ class ForTCTRImpl @Inject() (
   tctrConfig: AppConfig,
   metrics: MetricsHandler,
   audit: ForTCTRAudit,
-//                            submissionRepository:SubmissionRepository,
-  credentialsMongoTempStorageRepo: CredentialsTempStorageRepo,
   credentialsMongoRepo: CredentialsRepo,
   testDataImporter: TestDataImporter,
   tctrHttpClient: TCTRHttpClient,
-//                            regularSchedule: RegularSchedule,
-  dailySchedule: DailySchedule,
-//                            systemClock: Clock,
-//                            emailConnector: EmailConnector,
   implicit val ec: ExecutionContext,
   mongoLockRepository: MongoLockRepository
 ) {
@@ -58,25 +50,6 @@ class ForTCTRImpl @Inject() (
 //    val exporter = new ExportSubmissionsToCDBViaFutures(sender, repo, retryWindow hours, actorSystem.eventStream, systemClock, emailConnector)
 //    new SubmissionExporter(mongoLockRepository, exporter, exportBatchSize, actorSystem.scheduler, actorSystem.eventStream, regularSchedule).start()
 //  }
-  if (validationImportEnabled) {
-    val creds     = ImportConfiguration(importUrl, importUsername, importPassword, importBatchSize)
-    val retriever = new WSFORXmlValidationsRetriever(
-      tctrHttpClient,
-      creds,
-      actorSystem,
-      Option(runModeConfiguration.underlying),
-      audit
-    )
-    val importer  = new ImportValidationsWithFutures(
-      credentialsMongoTempStorageRepo,
-      retriever,
-      importLimit,
-      testDataImporter.buildTestCredentials(),
-      metrics
-    )
-    new ValidationImporter(mongoLockRepository, importer, dailySchedule, actorSystem.scheduler, actorSystem.eventStream)
-      .start()
-  }
 
   if (importTestData) {
     testDataImporter.importValidations(credentialsMongoRepo)
