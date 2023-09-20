@@ -24,6 +24,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
 import play.api.test.FakeRequest
+import uk.gov.hmrc.tctr.backend.security.Credentials
 
 class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
@@ -31,18 +32,15 @@ class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
 
   def controller: AuthController = app.injector.instanceOf[AuthController]
 
-  private val fakeRequest = FakeRequest("GET", "/")
+  private val fakeRequest = FakeRequest("POST", "/").withBody(Credentials("refNum", "postcode"))
 
-  "GET invalid credentials" should {
-    "return 401" in {
-      val result = controller.verifyCredentials("refNum", "postcode")(fakeRequest)
-      status(result) shouldBe Status.UNAUTHORIZED
-    }
-
-    "return json" in {
-      val result = controller.verifyCredentials("refNum", "postcode")(fakeRequest)
+  "POST /authenticate" should {
+    "return 401 for invalid credentials" in {
+      val result = controller.authenticate(fakeRequest)
+      status(result)          shouldBe Status.UNAUTHORIZED
       contentType(result)     shouldBe Some("application/json")
       contentAsString(result) shouldBe """{"numberOfRemainingTriesUntilIPLockout":4}"""
     }
   }
+
 }

@@ -3,7 +3,7 @@ import sbt._
 
 private object AppDependencies {
 
-  val bootstrapVersion = "7.21.0"
+  val bootstrapVersion = "7.22.0"
   val hmrcMongoVersion = "1.3.0"
   val cryptoJsonVersion = "7.3.0"
   val jodaVersion = "2.9.4"
