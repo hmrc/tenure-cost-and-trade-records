@@ -47,7 +47,6 @@ class EncryptionJsonTransformerSpec
   it                          should "encrypt sensitive PII fields" in {
     val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
 
-    (encryptedJson \ "session" \ "saveAsDraftPassword")                                          shouldBe encrypted
     (encryptedJson \ "session" \ "userLoginDetails" \ "token")                                   shouldBe encrypted
     (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "buildingNameNumber")          shouldBe encrypted
     (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "street1")                     shouldBe encrypted

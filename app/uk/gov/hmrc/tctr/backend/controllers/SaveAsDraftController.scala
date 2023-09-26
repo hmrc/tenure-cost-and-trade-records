@@ -16,10 +16,12 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
+import org.mongodb.scala.bson.Document
+import play.api.Logging
 import play.api.libs.json.Json
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.tctr.backend.repository.SubmissionDraftRepo
+import uk.gov.hmrc.tctr.backend.repository.{MongoSubmissionDraftRepo, SubmissionDraftRepo, SubmittedMongoRepo}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -28,11 +30,25 @@ import scala.concurrent.ExecutionContext
   * @author Yuriy Tumakha
   */
 @Singleton
-class SaveAsDraftController @Inject() (repo: SubmissionDraftRepo, cc: ControllerComponents)(implicit
+class SaveAsDraftController @Inject() (
+  repo: MongoSubmissionDraftRepo,
+  submittedMongoRepo: SubmittedMongoRepo,
+  cc: ControllerComponents
+)(implicit
   ec: ExecutionContext
-) extends BackendController(cc) {
+) extends BackendController(cc)
+    with Logging {
+
+  // TODO: Remove after deployment to production
+  private def runOnceRemovingSubmissionDrafts(): Unit =
+    for {
+      _ <- submittedMongoRepo.hasBeenSubmitted("111").filter(!_)
+      _ <- repo.collection.deleteMany(Document()).toFuture()
+      _ <- submittedMongoRepo.insertIfUnique("111")
+    } yield logger.warn("Removed all submission drafts")
 
   def get(referenceNumber: String) = Action.async {
+    runOnceRemovingSubmissionDrafts() // TODO: Remove after deployment to production
     repo.find(referenceNumber) map {
       case Some(submissionDraftJson) => Ok(submissionDraftJson)
       case None                      => NotFound(Json.obj("status" -> "NotFound"))
