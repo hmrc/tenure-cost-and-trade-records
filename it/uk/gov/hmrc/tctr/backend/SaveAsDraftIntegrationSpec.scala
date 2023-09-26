@@ -21,8 +21,6 @@ import play.api.http.Status.{BAD_REQUEST, CREATED, NOT_FOUND, OK}
 import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo
 
-import java.util.concurrent.TimeUnit
-
 class SaveAsDraftIntegrationSpec
   extends IntegrationSpecBase with BeforeAndAfterAll {
 
@@ -96,7 +94,6 @@ class SaveAsDraftIntegrationSpec
     "return 200 and deletedCount = 1 on delete SubmissionDraft" in {
       // TODO: Remove after deployment to production SaveAsDraftController.runOnceRemovingSubmissionDrafts()
       repo.save(submissionDraftDeleteId, Json.obj("a" -> "b"))
-      TimeUnit.SECONDS.sleep(1)
 
       val response =
         wsClient
