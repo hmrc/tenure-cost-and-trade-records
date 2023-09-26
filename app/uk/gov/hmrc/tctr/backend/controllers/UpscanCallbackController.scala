@@ -41,8 +41,6 @@ class UpscanCallbackController @Inject() (
     with Logging {
 
   def callback = Action.async(parse.json) { implicit request =>
-    implicit val hc: HeaderCarrier =
-      HeaderCarrier() // This creates an empty HeaderCarrier. Adjust if you need to populate it.
     request.body
       .validate[UploadConfirmation]
       .fold(

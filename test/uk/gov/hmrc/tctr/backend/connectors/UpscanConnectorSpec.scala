@@ -20,8 +20,8 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.MockitoSugar
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.http.Status.OK
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.tctr.backend.models.UnknownError
 
 import scala.concurrent.Future
@@ -31,21 +31,19 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
   implicit val ec                = scala.concurrent.ExecutionContext.global
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  val mockWsClient: WSClient     = mock[WSClient]
-  val mockWsRequest: WSRequest   = mock[WSRequest]
-  val mockWsResponse: WSResponse = mock[WSResponse]
+  private val httpClient = mock[HttpClient]
 
   "UpscanConnector" should "download content on a successful request" in {
 
     val testUrl  = "http://test.url"
     val testBody = "Test response body"
 
-    when(mockWsClient.url(any[String])).thenReturn(mockWsRequest)
-    when(mockWsRequest.withHttpHeaders(any())).thenReturn(mockWsRequest)
-    when(mockWsRequest.get()).thenReturn(Future.successful(mockWsResponse))
-    when(mockWsResponse.body).thenReturn(testBody)
+    when(
+      httpClient
+        .GET[HttpResponse](any[String], any[Seq[(String, String)]], any[Seq[(String, String)]])(any(), any(), any())
+    ).thenReturn(Future.successful(HttpResponse(OK, testBody)))
 
-    val connector = new UpscanConnector(mockWsClient)
+    val connector = new UpscanConnector(httpClient)
     val result    = connector.download(testUrl)
 
     result.map {
@@ -58,11 +56,12 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
 
     val testUrl = "http://test.url"
 
-    when(mockWsClient.url(any[String])).thenReturn(mockWsRequest)
-    when(mockWsRequest.withHttpHeaders(any())).thenReturn(mockWsRequest)
-    when(mockWsRequest.get()).thenReturn(Future.failed(new RuntimeException("Test exception")))
+    when(
+      httpClient
+        .GET[HttpResponse](any[String], any[Seq[(String, String)]], any[Seq[(String, String)]])(any(), any(), any())
+    ).thenReturn(Future.failed(new RuntimeException("Test exception")))
 
-    val connector = new UpscanConnector(mockWsClient)
+    val connector = new UpscanConnector(httpClient)
     val result    = connector.download(testUrl)
 
     result.map {
@@ -70,4 +69,5 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
       case _         => fail("Expected an error response")
     }
   }
+
 }
