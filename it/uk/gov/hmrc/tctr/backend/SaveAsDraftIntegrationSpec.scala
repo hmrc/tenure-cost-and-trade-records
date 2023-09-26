@@ -92,6 +92,8 @@ class SaveAsDraftIntegrationSpec
 
   "SaveAsDraft DELETE endpoint" should {
     "return 200 and deletedCount = 1 on delete SubmissionDraft" in {
+      repo.save(submissionDraftDeleteId, Json.obj("a" -> "b"))
+
       val response =
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/$submissionDraftDeleteId")
