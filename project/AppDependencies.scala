@@ -12,8 +12,8 @@ private object AppDependencies {
 
   // Test dependencies
   val scalatestPlusPlayVersion = "5.1.0"
-  val scalatestVersion = "3.2.15"
-  val mockitoScalaVersion = "1.17.12"
+  val scalatestVersion = "3.2.17"
+  val mockitoScalaVersion = "1.17.27"
   val scalaGuiceVersion = "5.1.1"
   val flexMarkVersion = "0.64.8"
 
@@ -25,8 +25,6 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
     "uk.gov.hmrc" %% "crypto-json-play-28" % cryptoJsonVersion,
     "com.typesafe.play" %% "play-json-joda" % jodaVersion,
-//    temp as quick fix
-    "com.softwaremill.sttp.client3" %% "core" % "3.7.5"
   )
 
   private val commonTests = Seq(
