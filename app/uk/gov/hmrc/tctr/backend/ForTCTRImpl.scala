@@ -20,7 +20,7 @@ import akka.actor.ActorSystem
 import play.api.Configuration
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
-import uk.gov.hmrc.tctr.backend.infrastructure.{TCTRHttpClient, TestDataImporter}
+import uk.gov.hmrc.tctr.backend.infrastructure.TestDataImporter
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.repository.CredentialsRepo
 
@@ -36,7 +36,6 @@ class ForTCTRImpl @Inject() (
   audit: ForTCTRAudit,
   credentialsMongoRepo: CredentialsRepo,
   testDataImporter: TestDataImporter,
-  tctrHttpClient: TCTRHttpClient,
   implicit val ec: ExecutionContext,
   mongoLockRepository: MongoLockRepository
 ) {

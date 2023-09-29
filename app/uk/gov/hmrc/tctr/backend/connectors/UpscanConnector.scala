@@ -16,30 +16,23 @@
 
 package uk.gov.hmrc.tctr.backend.connectors
 
-import play.api.Logger
-import play.api.libs.ws.WSClient
-import uk.gov.hmrc.http.HeaderCarrier
-
-import javax.inject.Inject
+import play.api.Logging
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.tctr.backend.models.UnknownError
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-class UpscanConnector @Inject() (wsClient: WSClient)(implicit ec: ExecutionContext) {
-  val logger = Logger(this.getClass)
 
-  def download(url: String)(implicit hc: HeaderCarrier): Future[Either[UnknownError, String]] = {
-    import uk.gov.hmrc.http.HeaderNames._
-    wsClient
-      .url(url)
-      .withHttpHeaders(hc.headers((Seq(xRequestId, deviceID))): _*)
-      .get()
-      .map { wsResponse =>
-        Right(wsResponse.body)
-      }
+class UpscanConnector @Inject() (http: HttpClient)(implicit ec: ExecutionContext) extends Logging {
+
+  def download(url: String)(implicit hc: HeaderCarrier): Future[Either[UnknownError, String]] =
+    http
+      .GET[HttpResponse](url)
+      .map(response => Right(response.body))
       .recover { case e: Exception =>
         logger.warn("Unable to download file from upscan", e)
         Left(UnknownError("Unable to download file, please try again later"))
       }
-  }
 
 }
