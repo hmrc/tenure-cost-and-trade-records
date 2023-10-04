@@ -1,25 +1,36 @@
 
 # tenure-cost-and-trade-records
 
-This is service provides backend services between the frontend service and sending submitted datat to the VOA.
+This is service provides backend services between the frontend service and sending submitted data to the VOA.
 
-service is still under development and all details are not available at this time.
+This service is still under development but hoping to move to a limited private beta in November 2023. This is a limited private beta as we are not able to integrate with the new VOA systems until late 2024.
 
 ## Nomenclature
 
+TCTR - Tenure Cost and Trade Records.
+
+STaCI - Sent Trade and Cost Information.
+
 FOR - form of return - forms used for users to send details of different types of business property.
 
-## Technical documentation
+## Dependencies
 
-TBC when details are available
+* A local Mongo DB instance needs to run locally
+* You can start the dependencies in service manager by running:
+>sm2 --start VOA_TCTR
+>mongod
 
-### Before running the app (if applicable)
+## Run the service
+>sbt run
 
-TBC when details are available
+Then you can open the frontend in your browser the following url:
+http://localhost:9526/send-trade-and-cost-information/login
 
-### Further documentation
+* Service manager
 
-TBC when details are available
+```
+sm2 --start VOA_TCTR_BACKEND
+```
 
 ### License
 
