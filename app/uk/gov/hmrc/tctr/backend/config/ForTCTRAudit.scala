@@ -34,7 +34,7 @@ class ForTCTRAudit @Inject() (
     extends AuditConnector
     with Logging {
 
-  private val AUDIT_SOURCE = "tenure-cost-and-trade-adapter"
+  private val AUDIT_SOURCE = "tenure-cost-and-trade-records"
 
   def apply(auditType: String, detail: Map[String, String]): Unit = {
     val event = DataEvent(auditSource = AUDIT_SOURCE, auditType = auditType, detail = detail)
