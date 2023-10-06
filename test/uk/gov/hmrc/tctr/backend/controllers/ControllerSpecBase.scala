@@ -18,7 +18,7 @@ package uk.gov.hmrc.tctr.backend.controllers
 
 import akka.util.Timeout
 import org.scalatest.flatspec.AsyncFlatSpec
-import org.scalatest.matchers.should
+import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
@@ -26,7 +26,7 @@ import scala.language.postfixOps
 /**
   * @author Yuriy Tumakha
   */
-abstract class ControllerSpecBase extends AsyncFlatSpec with should.Matchers {
+abstract class ControllerSpecBase extends AsyncFlatSpec with Matchers {
 
   implicit val timeout: Timeout = 9 seconds
 

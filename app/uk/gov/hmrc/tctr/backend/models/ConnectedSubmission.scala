@@ -28,11 +28,14 @@ import uk.gov.hmrc.tctr.backend.models.notconnected.RemoveConnectionDetails
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.RequestReferenceNumberDetails
 import uk.gov.hmrc.tctr.backend.schema.Address
 
+import java.time.Instant
+
 case class ConnectedSubmission(
   referenceNumber: String,
   forType: String,
   address: Address,
   token: String,
+  createdAt: Instant,
   stillConnectedDetails: Option[StillConnectedDetails] = None,
   removeConnectionDetails: Option[RemoveConnectionDetails] = None,
   aboutYouAndTheProperty: Option[AboutYouAndTheProperty] = None,

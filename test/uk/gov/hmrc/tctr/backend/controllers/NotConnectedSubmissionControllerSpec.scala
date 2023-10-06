@@ -16,13 +16,18 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
+import akka.util.Timeout
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult
 import com.mongodb.client.result.InsertOneResult.acknowledged
 import org.bson.BsonBoolean.TRUE
+import org.mockito.Mock.Strictness
+import org.mockito.Mockito
 import org.mockito.scalatest.MockitoSugar
-import org.scalatest.matchers.should
-import play.api.http.Status
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import play.api.test.Helpers.status
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
@@ -31,9 +36,13 @@ import uk.gov.hmrc.tctr.backend.repository.{NotConnectedMongoRepository, Submitt
 import uk.gov.hmrc.tctr.backend.schema.Address
 
 import java.time.Instant
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.DurationInt
 
-class NotConnectedSubmissionControllerSpec extends ControllerSpecBase with should.Matchers with MockitoSugar {
+class NotConnectedSubmissionControllerSpec extends AnyFlatSpec with Matchers with MockitoSugar with ScalaFutures {
+
+  implicit val timeout: Timeout     = 5.seconds
+  implicit val ec: ExecutionContext = ExecutionContext.global
 
   val submission = NotConnectedSubmissionForm(
     "2222",
@@ -48,62 +57,54 @@ class NotConnectedSubmissionControllerSpec extends ControllerSpecBase with shoul
   )
 
   val emailConnector = mock[EmailConnector]
-  val metrics        = mock[MetricsHandler]
-  val meter          = mock[Meter]
+  val metrics = mock[MetricsHandler]
+  val meter = mock[Meter]
   when(metrics.okSubmissions).thenReturn(meter)
   when(metrics.failedSubmissions).thenReturn(meter)
 
-  "NotConnectedSubmissionController" should
-    "return 201 for success response" in {
+  "NotConnectedSubmissionController" should "return 201 for success response" in {
 
-      val repository          = mock[NotConnectedMongoRepository]
-      val submittedRepository = mock[SubmittedMongoRepo]
-
-      when(repository.insert(any[NotConnectedSubmission]))
-        .thenReturn(Future.successful(InsertOneResult.unacknowledged()))
-      when(submittedRepository.insertIfUnique(any[String])).thenReturn(Future.successful(acknowledged(TRUE)))
-
-      when(submittedRepository.hasBeenSubmitted(any[String])).thenReturn(Future.successful(false))
-
-      val controller = new NotConnectedSubmissionController(
-        repository,
-        submittedRepository,
-        emailConnector,
-        metrics,
-        Helpers.stubControllerComponents()
-      )
-      val req        = FakeRequest().withBody(submission)
-
-      val response = controller.submit("222222").apply(req)
-
-      response.map { res =>
-        res.header.status shouldBe Status.CREATED
-      }
-    }
-
-  it                                 should "return 409 Conflict when I try to submit already submitted reference" in {
-
-    val repository          = mock[NotConnectedMongoRepository]
+    val repository = mock[NotConnectedMongoRepository]
     val submittedRepository = mock[SubmittedMongoRepo]
 
-    when(repository.insert(any[NotConnectedSubmission])).thenReturn(Future.successful(InsertOneResult.unacknowledged()))
-    when(submittedRepository.hasBeenSubmitted(any[String])).thenReturn(Future.successful(true))
+    when(repository.insert(any[NotConnectedSubmission]))
+      .thenReturn(Future.successful(InsertOneResult.unacknowledged()))
+    when(submittedRepository.insertIfUnique(any[String])).thenReturn(Future.successful(acknowledged(TRUE)))
 
-    val controller =
-      new NotConnectedSubmissionController(
-        repository,
-        submittedRepository,
-        emailConnector,
-        metrics,
-        Helpers.stubControllerComponents()
-      )
-    val req        = FakeRequest().withBody(submission)
+    when(submittedRepository.hasBeenSubmitted(any[String])).thenReturn(Future.successful(false))
+
+    val controller = new NotConnectedSubmissionController(
+      repository,
+      submittedRepository,
+      emailConnector,
+      metrics,
+      Helpers.stubControllerComponents()
+    )
+    val req = FakeRequest().withBody(submission)
 
     val response = controller.submit("222222").apply(req)
-
-    response.map { res =>
-      res.header.status shouldBe Status.CONFLICT
-    }
+    status(response) shouldBe 201
   }
 
+  it should "return 409 for duplicate submission" in {
+    val nCRepository = mock[NotConnectedMongoRepository]
+    val submittedRepository = mock[SubmittedMongoRepo]
+
+    when(nCRepository.insert(any[NotConnectedSubmission]))
+      .thenReturn(Future.successful(InsertOneResult.unacknowledged()))
+    when(submittedRepository.hasBeenSubmitted(any[String])).thenReturn(Future.successful(true))
+
+    val controller = new NotConnectedSubmissionController(
+      nCRepository,
+      submittedRepository,
+      emailConnector,
+      metrics,
+      Helpers.stubControllerComponents()
+    )
+    val req = FakeRequest().withBody(submission)
+
+    val response = controller.submit("222222").apply(req)
+    status(response) shouldBe 409
+    Mockito.reset(nCRepository)
+  }
 }

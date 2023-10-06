@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
+package uk.gov.hmrc.tctr.backend.models.additionalinformation
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.Form6010.MonthsYearDuration
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class CurrentLeaseOrAgreementBegin(leaseBegin: MonthsYearDuration, grantedFor: String)
+case class ContactDetailsQuestion(contactDetailsQuestion: AnswersYesNo)
 
-object CurrentLeaseOrAgreementBegin {
-  implicit val format = Json.format[CurrentLeaseOrAgreementBegin]
+object ContactDetailsQuestion {
+  implicit val format = Json.format[ContactDetailsQuestion]
 }

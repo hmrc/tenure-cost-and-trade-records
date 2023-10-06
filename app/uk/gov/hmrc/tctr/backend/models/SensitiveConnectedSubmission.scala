@@ -29,11 +29,14 @@ import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
 import uk.gov.hmrc.tctr.backend.models.notconnected.SensitiveRemoveConnectionDetails
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.SensitiveRequestReferenceNumber
 
+import java.time.Instant
+
 case class SensitiveConnectedSubmission(
   referenceNumber: String,
   forType: String,
   address: SensitiveAddress,
   token: String,
+  createdAt: Instant,
   stillConnectedDetails: Option[SensitiveStillConnectedDetails] = None,
   removeConnectionDetails: Option[SensitiveRemoveConnectionDetails] = None,
   aboutYouAndTheProperty: Option[SensitiveAboutYouAndTheProperty] = None,
@@ -53,6 +56,7 @@ case class SensitiveConnectedSubmission(
     forType,
     address.decryptedValue,
     token,
+    createdAt,
     stillConnectedDetails.map(_.decryptedValue),
     removeConnectionDetails.map(_.decryptedValue),
     aboutYouAndTheProperty.map(_.decryptedValue),
@@ -77,6 +81,7 @@ object SensitiveConnectedSubmission {
     connectedSubmission.forType,
     SensitiveAddress(connectedSubmission.address),
     connectedSubmission.token,
+    connectedSubmission.createdAt,
     connectedSubmission.stillConnectedDetails.map(SensitiveStillConnectedDetails(_)),
     connectedSubmission.removeConnectionDetails.map(SensitiveRemoveConnectionDetails(_)),
     connectedSubmission.aboutYouAndTheProperty.map(SensitiveAboutYouAndTheProperty(_)),

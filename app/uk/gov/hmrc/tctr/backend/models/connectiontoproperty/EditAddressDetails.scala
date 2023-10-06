@@ -15,12 +15,17 @@
  */
 
 package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
+
 import play.api.libs.json.Json
 
-case class EditTheAddress(
-  editAddress: EditAddress
+case class EditAddress(
+  buildingNameNumber: String,
+  street1: Option[String],
+  town: String,
+  county: Option[String],
+  postcode: String
 )
-object EditTheAddress {
-  implicit val format = Json.format[EditTheAddress]
 
+object EditAddress {
+  implicit val format = Json.format[EditAddress]
 }

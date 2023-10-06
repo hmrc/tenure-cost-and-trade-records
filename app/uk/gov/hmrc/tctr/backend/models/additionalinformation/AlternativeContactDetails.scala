@@ -20,9 +20,9 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.common.ContactDetails
 
 case class AlternativeContactDetails(
-  alternativeContactFullName: Option[String],
-  alternativeContactDetails: Option[ContactDetails],
-  alternativeContactAddress: Option[AlternativeAddress]
+  alternativeContactFullName: String,
+  alternativeContactDetails: ContactDetails,
+  alternativeContactAddress: AlternativeAddress
 )
 
 object AlternativeContactDetails {

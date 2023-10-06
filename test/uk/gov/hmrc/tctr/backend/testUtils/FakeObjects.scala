@@ -27,7 +27,7 @@ import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.{AddressConnectionTy
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.{RequestReferenceNumberAddress, RequestReferenceNumberContactDetails}
 import uk.gov.hmrc.tctr.backend.schema.Address
 
-import java.time.LocalDate
+import java.time.{Instant, LocalDate}
 
 trait FakeObjects {
   val referenceNumber: String   = "99996010004"
@@ -84,7 +84,7 @@ trait FakeObjects {
     "TRADING NAME"
   )
 
-  val baseFilledConnectedSubmission = ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token)
+  val baseFilledConnectedSubmission = ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token, Instant.now())
 
   val prefilledStillConnectedDetailsYesToAll: StillConnectedDetails = StillConnectedDetails(
     Some(AddressConnectionTypeYes),
