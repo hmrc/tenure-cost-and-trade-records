@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import play.api.Logger
+import play.api.libs.json.{JsError,JsSuccess}
+import play.api.{Logger, Logging}
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
@@ -34,7 +35,8 @@ class ConnectedSubmissionController @Inject() (
   metric: MetricsHandler,
   cc: ControllerComponents
 )(implicit ec: ExecutionContext)
-    extends BackendController(cc) {
+    extends BackendController(cc)
+    with Logging {
 
   val log = Logger(classOf[ConnectedSubmissionController])
 
@@ -54,4 +56,5 @@ class ConnectedSubmissionController @Inject() (
         Future.successful(Created)
     }
   }
+
 }
