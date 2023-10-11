@@ -22,10 +22,10 @@ import java.time.LocalDate
 
 case class CostOfSales(
   financialYearEnd: LocalDate,
-  accommodation: BigDecimal,
-  food: BigDecimal,
-  drinks: BigDecimal,
-  other: BigDecimal
+  accommodation: Option[BigDecimal],
+  food: Option[BigDecimal],
+  drinks: Option[BigDecimal],
+  other: Option[BigDecimal]
 ) {
   def total: BigDecimal = accommodation + food + drinks + other
 }
