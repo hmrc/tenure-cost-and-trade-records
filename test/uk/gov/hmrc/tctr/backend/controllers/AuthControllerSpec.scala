@@ -24,21 +24,22 @@ import scala.concurrent.{ExecutionContext, Future}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Application
 import play.api.http.Status
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import uk.gov.hmrc.tctr.backend.repository.CredentialsMongoRepo
-import uk.gov.hmrc.tctr.backend.security.{Credentials, InvalidCredentials}
+import uk.gov.hmrc.tctr.backend.security.Credentials
 
 class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
-  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
+  implicit val ec: ExecutionContext            = ExecutionContext.Implicits.global
   implicit lazy val materializer: Materializer = app.materializer
 
-  val mockCredentialsRepo = mock[CredentialsMongoRepo]
+  val mockCredentialsRepo: CredentialsMongoRepo = mock[CredentialsMongoRepo]
 
-  override def fakeApplication() = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(bind[CredentialsMongoRepo].toInstance(mockCredentialsRepo))
     .build()
 
@@ -67,7 +68,7 @@ class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
       when(mockCredentialsRepo.findById(referenceNum)).thenReturn(Future.successful(None))
 
       val controller = app.injector.instanceOf[AuthController]
-      val result = controller.retrieveFORType(referenceNum)(fakeRequest)
+      val result     = controller.retrieveFORType(referenceNum)(fakeRequest)
       status(result) shouldBe Status.NOT_FOUND
     }
   }

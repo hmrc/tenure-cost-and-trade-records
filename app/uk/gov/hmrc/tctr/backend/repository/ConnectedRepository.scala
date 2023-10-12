@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.Sorts.ascending
 import org.mongodb.scala.model._
-import org.mongodb.scala.result.InsertOneResult
+import org.mongodb.scala.result.{DeleteResult, InsertOneResult}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
@@ -44,6 +44,8 @@ trait ConnectedRepository {
   def getSubmissions(batchSize: Int = defaultBatchSize): Future[Seq[ConnectedSubmission]]
 
   def count: Future[Long]
+
+  def removeById(id: String): Future[DeleteResult]
 
 }
 
@@ -91,4 +93,6 @@ class ConnectedMongoRepository @Inject() (mongoComponent: MongoComponent)(implic
   def count: Future[Long] =
     collection.countDocuments().toFuture()
 
+  def removeById(refNum: String): Future[DeleteResult] =
+    collection.deleteOne(equal("referenceNumber", refNum)).toFuture()
 }

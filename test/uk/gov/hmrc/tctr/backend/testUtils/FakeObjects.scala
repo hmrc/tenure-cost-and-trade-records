@@ -16,15 +16,16 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
-import uk.gov.hmrc.tctr.backend.models.Form6010.MonthsYearDuration
-import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.LandlordAddress
-import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.{CateringAddress, LettingAddress}
-import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.{AboutYouAndTheProperty, BuildingOperationHaveAWebsiteYes, CurrentPropertyHotel, CustomerDetails, EnforcementActionHasBeenTakenInformationDetails, LicensableActivitiesInformationDetails, PremisesLicenseConditionsDetails, PremisesLicenseGrantedInformationDetails, PropertyDetails, TiedForGoodsInformationDetails, TiedForGoodsInformationDetailsFullTie, WebsiteForPropertyDetails}
-import uk.gov.hmrc.tctr.backend.models.additionalinformation.AlternativeAddress
-import uk.gov.hmrc.tctr.backend.models.common.{AnswerYes, ContactDetails, ContactDetailsAddress}
-import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.{AddressConnectionTypeYes, ConnectionToThePropertyOccupierTrustee, CorrespondenceAddress, EditAddress, EditTheAddress, LettingPartOfPropertyDetails, LettingPartOfPropertyRentDetails, ProvideContactDetails, StartDateOfVacantProperty, StillConnectedDetails, TenantDetails, TradingNameOperatingFromProperty, VacantProperties, VacantPropertiesDetailsYes, YourContactDetails}
-import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.{RequestReferenceNumberAddress, RequestReferenceNumberContactDetails}
+import uk.gov.hmrc.tctr.backend.models.{AnnualRent, ConnectedSubmission}
+import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDuration}
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure._
+import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings._
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory._
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty._
+import uk.gov.hmrc.tctr.backend.models.additionalinformation._
+import uk.gov.hmrc.tctr.backend.models.common._
+import uk.gov.hmrc.tctr.backend.models.connectiontoproperty._
+import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber._
 import uk.gov.hmrc.tctr.backend.schema.Address
 
 import java.time.{Instant, LocalDate}
@@ -84,7 +85,8 @@ trait FakeObjects {
     "TRADING NAME"
   )
 
-  val baseFilledConnectedSubmission = ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token, Instant.now())
+  val baseFilledConnectedSubmission: ConnectedSubmission =
+    ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token, Instant.now())
 
   val prefilledStillConnectedDetailsYesToAll: StillConnectedDetails = StillConnectedDetails(
     Some(AddressConnectionTypeYes),
@@ -98,7 +100,6 @@ trait FakeObjects {
     Some(StartDateOfVacantProperty(prefilledDateInput)),
     Some(AnswerYes),
     Some(ProvideContactDetails(YourContactDetails("fullname", prefilledContactDetails, Some("additional info")))),
-    lettingPartOfPropertyDetailsIndex = 0,
     lettingPartOfPropertyDetails = IndexedSeq(
       LettingPartOfPropertyDetails(
         TenantDetails(
@@ -132,9 +133,97 @@ trait FakeObjects {
     Some(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie))
   )
 
-  val prefilledConnectedSubmission = baseFilledConnectedSubmission.copy(
+  val prefilledConnectedSubmission: ConnectedSubmission = baseFilledConnectedSubmission.copy(
     stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
     aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes)
   )
 
+  // Trading history
+  val prefilledAboutYourTradingHistory: AboutTheTradingHistory = AboutTheTradingHistory(
+    Some(OccupationalAndAccountingInformation(MonthsYearDuration(9, 2017), DayMonthsDuration(27, 9))),
+    Seq(
+      TurnoverSection(
+        LocalDate.now(),
+        123,
+        BigDecimal(234),
+        BigDecimal(345),
+        BigDecimal(456),
+        BigDecimal(567),
+        BigDecimal(678)
+      )
+    )
+  )
+
+  // Franchises or lettings
+  val prefilledCateringOperationSectionYes: CateringOperationSection = CateringOperationSection(
+    CateringOperationDetails("Operator Name", "Type of Business", prefilledCateringAddress),
+    Some(CateringOperationRentDetails(BigDecimal(1500), prefilledDateInput)),
+    Some(AnswerYes)
+  )
+
+  val prefilledLettingSectionYes: LettingSection = LettingSection(
+    LettingOtherPartOfPropertyInformationDetails(
+      "Operator Name",
+      "Type of Business",
+      prefilledLettingAddress
+    ),
+    Some(LettingOtherPartOfPropertyRentDetails(BigDecimal(1500), prefilledDateInput)),
+    Some(AnswerYes)
+  )
+
+  val prefilledAboutFranchiseOrLettings: AboutFranchisesOrLettings = AboutFranchisesOrLettings(
+    Some(AnswerYes),
+    Some(AnswerYes),
+    0,
+    IndexedSeq(prefilledCateringOperationSectionYes),
+    Some(AnswerYes),
+    0,
+    IndexedSeq(prefilledLettingSectionYes)
+  )
+
+  // About the lease or agreement
+  val prefilledAboutLeaseOrAgreementPartOne: AboutLeaseOrAgreementPartOne = AboutLeaseOrAgreementPartOne(
+    Some(AboutTheLandlord(prefilledFakeName, prefilledLandlordAddress)),
+    None,
+    Some(ConnectedToLandlordInformationDetails("This is some test information")),
+    Some(LeaseOrAgreementYearsDetails(TenancyThreeYearsYes, RentThreeYearsYes, UnderReviewYes)),
+    Some(CurrentRentPayableWithin12Months(CurrentRentWithin12MonthsYes, Some(prefilledDateInput))),
+    Some(AnswerYes),
+    Some(AnnualRent(BigDecimal(9999999))),
+    rentIncludeTradeServicesDetails = Some(RentIncludeTradeServicesDetails(AnswerYes)),
+    rentIncludeFixturesAndFittingsDetails = Some(RentIncludeFixturesAndFittingsDetails(AnswerYes)),
+    rentOpenMarketValueDetails = Some(RentOpenMarketValueDetails(AnswerYes))
+  )
+
+  val prefilledAboutLeaseOrAgreementPartTwo: AboutLeaseOrAgreementPartTwo = AboutLeaseOrAgreementPartTwo(
+    rentPayableVaryAccordingToGrossOrNetDetails = Some(RentPayableVaryAccordingToGrossOrNetDetails(AnswerYes)),
+    rentPayableVaryOnQuantityOfBeersDetails = Some(RentPayableVaryOnQuantityOfBeersDetails(AnswerYes)),
+    tenantAdditionsDisregardedDetails = Some(TenantAdditionsDisregardedDetails(AnswerYes)),
+    legalOrPlanningRestrictions = Some(LegalOrPlanningRestrictions(AnswerYes))
+  )
+
+  // Additional information
+  val prefilledAdditionalInformation: AdditionalInformation = AdditionalInformation(
+    Some(FurtherInformationOrRemarksDetails("Further information or remarks details")),
+    Some(ContactDetailsQuestion(AnswerYes)),
+    Some(AlternativeContactDetails("Full name", prefilledContactDetails, prefilledAlternativeAddress)),
+    Some(CheckYourAnswersAdditionalInformation("CYA"))
+  )
+
+  def createConnectedSubmission(n: Int): ConnectedSubmission =
+    ConnectedSubmission(
+      referenceNumber = (n + 1000000).toString.take(7),
+      forType = "6010",
+      address = Address(n.toString, Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", "BN12 4AX"), //  Address,
+      token = "dummyToken",
+      createdAt = Instant.now(),
+      stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
+      aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes),
+      aboutTheTradingHistory = Some(prefilledAboutYourTradingHistory),
+      aboutFranchisesOrLettings = Some(prefilledAboutFranchiseOrLettings),
+      aboutLeaseOrAgreementPartOne = Some(prefilledAboutLeaseOrAgreementPartOne),
+      aboutLeaseOrAgreementPartTwo = Some(prefilledAboutLeaseOrAgreementPartTwo),
+      additionalInformation = Some(prefilledAdditionalInformation),
+      saveAsDraftPassword = "dummyPassword"
+    )
 }

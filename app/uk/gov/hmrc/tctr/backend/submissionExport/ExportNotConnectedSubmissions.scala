@@ -109,8 +109,9 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
     audit(
       "SubmissionRemovedByTCTR",
       Map(
-        "submission"     -> submission.toString,
-        "submissionJson" -> submissionJson
+        "referenceNumber" -> submission.id,
+        "forType"         -> submission.forType,
+        "submissionJson"  -> submissionJson
       )
     )
   }
