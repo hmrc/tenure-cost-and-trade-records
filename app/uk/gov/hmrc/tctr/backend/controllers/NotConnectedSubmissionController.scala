@@ -19,6 +19,7 @@ package uk.gov.hmrc.tctr.backend.controllers
 import play.api.Logger
 import play.api.libs.json.{JsError, JsSuccess}
 import play.api.mvc.ControllerComponents
+import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
@@ -32,14 +33,16 @@ class NotConnectedSubmissionController @Inject() (
   repository: NotConnectedRepository,
   submittedMongoRepo: SubmittedMongoRepo,
   emailConnector: EmailConnector,
+  auth: BackendAuthComponents,
   metric: MetricsHandler,
   cc: ControllerComponents
 )(implicit ec: ExecutionContext)
-    extends BackendController(cc) {
+    extends BackendController(cc)
+    with InternalAuthAccess {
 
   val log = Logger(classOf[NotConnectedSubmissionController])
 
-  def submit(submissionReference: String)                           = Action.async(parse.json) { implicit request =>
+  def submit(submissionReference: String)                           = auth.authorizedAction[Unit](permission).compose(Action).async(parse.json) { implicit request =>
     request.body.validate[NotConnectedSubmissionForm] match {
       case JsSuccess(form, _) =>
         submittedMongoRepo.hasBeenSubmitted(submissionReference).flatMap {
