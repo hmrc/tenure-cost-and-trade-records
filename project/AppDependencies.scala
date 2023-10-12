@@ -16,6 +16,7 @@ private object AppDependencies {
   val mockitoScalaVersion = "1.17.27"
   val scalaGuiceVersion = "5.1.1"
   val flexMarkVersion = "0.64.8"
+  val internalAuthClientVersion = "1.6.0"
 
   private val allTestsScope = "test,it"
 
@@ -24,6 +25,7 @@ private object AppDependencies {
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % hmrcMongoVersion,
     "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
     "uk.gov.hmrc" %% "crypto-json-play-28" % cryptoJsonVersion,
+    "uk.gov.hmrc" %% "internal-auth-client-play-28" % internalAuthClientVersion,
     "com.typesafe.play" %% "play-json-joda" % jodaVersion,
   )
 

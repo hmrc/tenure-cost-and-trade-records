@@ -30,6 +30,8 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{CONFLICT, CREATED}
 import play.api.test.Helpers.{POST, status}
+import uk.gov.hmrc.internalauth.client.Predicate.Permission
+import uk.gov.hmrc.internalauth.client.{BackendAuthComponents, IAAction, Resource, ResourceLocation, ResourceType, Retrieval}
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.{NotConnectedSubmission, NotConnectedSubmissionForm}
@@ -37,11 +39,14 @@ import uk.gov.hmrc.tctr.backend.repository.{NotConnectedRepository, SubmittedMon
 import uk.gov.hmrc.tctr.backend.schema.Address
 import com.mongodb.client.result.InsertOneResult.acknowledged
 import org.bson.BsonBoolean.TRUE
+import org.mockito.IdiomaticMockito.StubbingOps
 import org.mockito.Mockito.when
 import org.mockito.MockitoSugar.mock
+import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
 
 import scala.concurrent.Future
 import java.time.Instant
+import scala.concurrent.ExecutionContext.Implicits
 import scala.concurrent.duration.DurationInt
 
 class NotConnectedSubmissionControllerSpec
@@ -51,6 +56,14 @@ class NotConnectedSubmissionControllerSpec
     with ScalaFutures {
 
   implicit val timeout: Timeout = 5.seconds
+  private val expectedPredicate = {
+    Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
+  }
+  protected val mockStubBehaviour: StubBehaviour = mock[StubBehaviour]
+  mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
+  protected val backendAuthComponentsStub: BackendAuthComponents =
+    BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), Implicits.global)
+
   val mockRepository            = mock[NotConnectedRepository]
   val mockSubmittedMongoRepo    = mock[SubmittedMongoRepo]
   val mockEmailConnector        = mock[EmailConnector]
@@ -74,7 +87,8 @@ class NotConnectedSubmissionControllerSpec
       bind[NotConnectedRepository].toInstance(mockRepository),
       bind[SubmittedMongoRepo].toInstance(mockSubmittedMongoRepo),
       bind[EmailConnector].toInstance(mockEmailConnector),
-      bind[MetricsHandler].toInstance(mockMetricsHandler)
+      bind[MetricsHandler].toInstance(mockMetricsHandler),
+      bind[BackendAuthComponents].toInstance(backendAuthComponentsStub)
     )
     .build()
 
@@ -91,7 +105,7 @@ class NotConnectedSubmissionControllerSpec
       when(mockSubmittedMongoRepo.insertIfUnique(any[String])).thenReturn(Future.successful(acknowledged(TRUE)))
 
       val jsonBody: JsValue      = Json.toJson(submission)
-      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody)
+      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody).withHeaders("Authorization" -> "fake-token")
       val result: Future[Result] = controller.submit("2222").apply(fakeRequest)
 
       status(result) shouldBe CREATED
@@ -103,7 +117,7 @@ class NotConnectedSubmissionControllerSpec
       when(mockSubmittedMongoRepo.hasBeenSubmitted("2222")).thenReturn(Future.successful(true))
 
       val jsonBody: JsValue      = Json.toJson(submission)
-      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody)
+      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody).withHeaders("Authorization" -> "fake-token")
       val result: Future[Result] = controller.submit("2222").apply(fakeRequest)
 
       status(result) shouldBe CONFLICT

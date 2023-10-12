@@ -19,6 +19,7 @@ package uk.gov.hmrc.tctr.backend.controllers
 import play.api.libs.json.{Format, Json}
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.http.HeaderNames.trueClientIp
+import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.infrastructure.Clock
@@ -37,10 +38,11 @@ class AuthController @Inject() (
   credentialsMongoRepo: CredentialsMongoRepo,
   submittedMongoRepo: SubmittedMongoRepo,
   failedLoginsMongoRepo: FailedLoginsMongoRepo,
+  auth: BackendAuthComponents,
   clock: Clock,
   cc: ControllerComponents
 )(implicit ec: ExecutionContext)
-    extends BackendController(cc) {
+    extends BackendController(cc) with InternalAuthAccess {
 
   val credsRepo             = credentialsMongoRepo
   val submittedRepo         = submittedMongoRepo
@@ -59,7 +61,7 @@ class AuthController @Inject() (
     new IPBlockingCredentialsVerifier(credsRepo, submittedRepo, loginsRepo, authReq, config, clock, enableDuplicates)
   }
 
-  def authenticate = Action.async(parse.json[Credentials]) { implicit request =>
+  def authenticate = auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[Credentials]) { implicit request =>
     val credentials = request.body
     val ip          = request.headers.get(trueClientIp)
     verifier.verify(credentials.referenceNumber, credentials.postcode, ip) flatMap {
@@ -72,7 +74,7 @@ class AuthController @Inject() (
     }
   }
 
-  def retrieveFORType(referenceNum: String) = Action.async { implicit request =>
+  def retrieveFORType(referenceNum: String) = auth.authorizedAction[Unit](permission).compose(Action).async { implicit request =>
     credsRepo.findById(referenceNum).map {
       case Some(credentials) => Ok(Json.toJson(ValidForTypeResponse(credentials.forType)))
       case None              => NotFound

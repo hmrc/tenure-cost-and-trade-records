@@ -20,12 +20,16 @@ import akka.util.Timeout
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult
 import org.mockito.ArgumentMatchers._
+import org.mockito.IdiomaticMockito.StubbingOps
 import org.mockito.MockitoSugar
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers._
+import uk.gov.hmrc.internalauth.client.Predicate.Permission
+import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
+import uk.gov.hmrc.internalauth.client.{BackendAuthComponents, IAAction, Resource, ResourceLocation, ResourceType, Retrieval}
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
@@ -45,7 +49,13 @@ class ConnectedSubmissionControllerSpec
 
   implicit val timeout: Timeout     = 5.seconds
   implicit val ec: ExecutionContext = ExecutionContext.global
-
+  private val expectedPredicate = {
+    Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
+  }
+  protected val mockStubBehaviour: StubBehaviour = mock[StubBehaviour]
+  mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
+  protected val backendAuthComponentsStub: BackendAuthComponents =
+    BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), ec)
   val mockRepository: ConnectedRepository   = mock[ConnectedRepository]
   val mockSubmittedRepo: SubmittedMongoRepo = mock[SubmittedMongoRepo]
   val emailConnector                        = mock[EmailConnector]
@@ -57,6 +67,7 @@ class ConnectedSubmissionControllerSpec
     mockRepository,
     mockSubmittedRepo,
     emailConnector,
+    backendAuthComponentsStub,
     mockMetrics,
     fakeControllerComponents
   )
@@ -70,7 +81,7 @@ class ConnectedSubmissionControllerSpec
     when(mockRepository.insert(any[ConnectedSubmission]))
       .thenReturn(Future.successful(InsertOneResult.unacknowledged()))
 
-    val request = FakeRequest().withBody(submission)
+    val request = FakeRequest().withBody(submission).withHeaders("Authorization" -> "fake-token")
     val result  = controller.submit(submissionReference).apply(request)
 
     status(result)(timeout) shouldBe CREATED
@@ -81,7 +92,7 @@ class ConnectedSubmissionControllerSpec
     val submission          = prefilledConnectedSubmission
     when(mockSubmittedRepo.hasBeenSubmitted(submissionReference)).thenReturn(Future.successful(true))
 
-    val request = FakeRequest().withBody(submission)
+    val request = FakeRequest().withBody(submission).withHeaders("Authorization" -> "fake-token")
     val result  = controller.submit(submissionReference).apply(request)
 
     status(result)(timeout) shouldBe CONFLICT
