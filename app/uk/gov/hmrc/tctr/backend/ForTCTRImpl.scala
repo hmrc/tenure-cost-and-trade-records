@@ -17,24 +17,28 @@
 package uk.gov.hmrc.tctr.backend
 
 import akka.actor.ActorSystem
-import play.api.Configuration
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
-import uk.gov.hmrc.tctr.backend.infrastructure.TestDataImporter
+import uk.gov.hmrc.tctr.backend.infrastructure.{RegularSchedule, TestDataImporter}
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
-import uk.gov.hmrc.tctr.backend.repository.CredentialsRepo
+import uk.gov.hmrc.tctr.backend.repository.{ConnectedMongoRepository, CredentialsRepo}
+import uk.gov.hmrc.tctr.backend.submissionExport.{ConnectedSubmissionExporter, ExportConnectedSubmissionsVOA}
 
+import java.time.Clock
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
+import scala.language.postfixOps
 
 @Singleton
 class ForTCTRImpl @Inject() (
-  runModeConfiguration: Configuration,
   actorSystem: ActorSystem,
   tctrConfig: AppConfig,
   metrics: MetricsHandler,
   audit: ForTCTRAudit,
+  systemClock: Clock,
+  regularSchedule: RegularSchedule,
   credentialsMongoRepo: CredentialsRepo,
+  connectedMongoRepository: ConnectedMongoRepository,
   testDataImporter: TestDataImporter,
   implicit val ec: ExecutionContext,
   mongoLockRepository: MongoLockRepository
@@ -42,13 +46,18 @@ class ForTCTRImpl @Inject() (
 
   import tctrConfig._
 
-//  if (submissionExportEnabled) {
-//    val repo = submissionRepository
-//    val sender = new XmlSubmissionSender(hodHttpClient, SendSubmissionConfig(exportUrl, exportUsername, exportPassword, testAccountPrefix),
-//      SubmissionXmlBuilder, systemClock, logErrorInHours hours,metrics,audit)
-//    val exporter = new ExportSubmissionsToCDBViaFutures(sender, repo, retryWindow hours, actorSystem.eventStream, systemClock, emailConnector)
-//    new SubmissionExporter(mongoLockRepository, exporter, exportBatchSize, actorSystem.scheduler, actorSystem.eventStream, regularSchedule).start()
-//  }
+  if (submissionExportEnabled) {
+    val repo     = connectedMongoRepository
+    val exporter = new ExportConnectedSubmissionsVOA(repo, systemClock, audit, tctrConfig)
+    new ConnectedSubmissionExporter(
+      mongoLockRepository,
+      exporter,
+      exportBatchSize,
+      actorSystem.scheduler,
+      actorSystem.eventStream,
+      regularSchedule
+    ).start()
+  }
 
   if (importTestData) {
     testDataImporter.importValidations(credentialsMongoRepo)

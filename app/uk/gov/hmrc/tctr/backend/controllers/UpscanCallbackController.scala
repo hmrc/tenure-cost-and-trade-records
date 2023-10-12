@@ -20,7 +20,6 @@ import play.api.Logging
 import play.api.libs.json.Format.GenericFormat
 import play.api.mvc._
 import play.api.libs.json._
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.tctr.backend.connectors.UpscanConnector
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import play.api.libs.json.{JsError,JsSuccess}
 import play.api.{Logger, Logging}
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+package uk.gov.hmrc.tctr.backend.controllers
+
 import akka.util.Timeout
 import com.codahale.metrics.Meter
 import org.mockito.ArgumentMatchers.any
@@ -29,7 +31,6 @@ import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{CONFLICT, CREATED}
 import play.api.test.Helpers.{POST, status}
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
-import uk.gov.hmrc.tctr.backend.controllers.NotConnectedSubmissionController
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.{NotConnectedSubmission, NotConnectedSubmissionForm}
 import uk.gov.hmrc.tctr.backend.repository.{NotConnectedRepository, SubmittedMongoRepo}
@@ -44,20 +45,19 @@ import java.time.Instant
 import scala.concurrent.duration.DurationInt
 
 class NotConnectedSubmissionControllerSpec
-  extends AnyWordSpec
+    extends AnyWordSpec
     with Matchers
     with GuiceOneAppPerSuite
     with ScalaFutures {
 
-
-  implicit val timeout: Timeout     = 5.seconds
-  val mockRepository = mock[NotConnectedRepository]
-  val mockSubmittedMongoRepo = mock[SubmittedMongoRepo]
-  val mockEmailConnector = mock[EmailConnector]
-  val mockMetricsHandler = mock[MetricsHandler]
-  val meter = mock[Meter]
+  implicit val timeout: Timeout = 5.seconds
+  val mockRepository            = mock[NotConnectedRepository]
+  val mockSubmittedMongoRepo    = mock[SubmittedMongoRepo]
+  val mockEmailConnector        = mock[EmailConnector]
+  val mockMetricsHandler        = mock[MetricsHandler]
+  val meter                     = mock[Meter]
   // Stub a submission
-  val submission = NotConnectedSubmissionForm(
+  val submission                = NotConnectedSubmissionForm(
     "2222",
     "FOR6010",
     Address("10", Some("BarringtonRoad road"), None, "BN12 4AX"),
@@ -78,7 +78,6 @@ class NotConnectedSubmissionControllerSpec
     )
     .build()
 
-
   val controller = app.injector.instanceOf[NotConnectedSubmissionController]
 
   "NotConnectedSubmissionController" should {
@@ -86,13 +85,13 @@ class NotConnectedSubmissionControllerSpec
       when(mockMetricsHandler.okSubmissions).thenReturn(meter)
       when(mockMetricsHandler.failedSubmissions).thenReturn(meter)
       when(mockSubmittedMongoRepo.hasBeenSubmitted("2222")).thenReturn(Future.successful(false))
-      when(mockRepository.insert(any[NotConnectedSubmission])).thenReturn(Future.successful(acknowledged(TRUE)))// Assuming insert returns Future[Option[...]]
+      when(mockRepository.insert(any[NotConnectedSubmission]))
+        .thenReturn(Future.successful(acknowledged(TRUE))) // Assuming insert returns Future[Option[...]]
 
       when(mockSubmittedMongoRepo.insertIfUnique(any[String])).thenReturn(Future.successful(acknowledged(TRUE)))
 
-
-      val jsonBody: JsValue = Json.toJson(submission)
-      val fakeRequest = FakeRequest(POST, "/submit/2222").withBody(jsonBody)
+      val jsonBody: JsValue      = Json.toJson(submission)
+      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody)
       val result: Future[Result] = controller.submit("2222").apply(fakeRequest)
 
       status(result) shouldBe CREATED
@@ -103,8 +102,8 @@ class NotConnectedSubmissionControllerSpec
 
       when(mockSubmittedMongoRepo.hasBeenSubmitted("2222")).thenReturn(Future.successful(true))
 
-      val jsonBody: JsValue = Json.toJson(submission)
-      val fakeRequest = FakeRequest(POST, "/submit/2222").withBody(jsonBody)
+      val jsonBody: JsValue      = Json.toJson(submission)
+      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody)
       val result: Future[Result] = controller.submit("2222").apply(fakeRequest)
 
       status(result) shouldBe CONFLICT
