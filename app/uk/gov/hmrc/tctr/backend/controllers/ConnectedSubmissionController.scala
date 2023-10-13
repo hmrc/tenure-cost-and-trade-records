@@ -22,6 +22,7 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
+import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.VacantPropertiesDetailsYes
 import uk.gov.hmrc.tctr.backend.repository.{ConnectedRepository, SubmittedMongoRepo}
 
 import javax.inject.Inject
@@ -48,12 +49,28 @@ class ConnectedSubmissionController @Inject() (
       case false =>
         val submission = request.body
         repository.insert(submission)
-        emailConnector.sendSubmissionConfirmation(submission)
+        if (isVacantPropertySubmission(submission)) {
+          submission.stillConnectedDetails
+            .flatMap(_.provideContactDetails)
+            .map(_.yourContactDetails)
+            .fold {
+              logger.warn(s"Send email to user canceled. Contact details not found.")
+            } { contact =>
+              emailConnector.sendVacantSubmissionConfirmation(contact.contactDetails.email, contact.fullName)
+            }
+        } else {
+          emailConnector.sendSubmissionConfirmation(submission)
+        }
         /*Remove for submission checking*/
         submittedMongoRepo.insertIfUnique(submissionReference)
         metric.okSubmissions.mark()
         Future.successful(Created)
     }
   }
+
+  private def isVacantPropertySubmission(submission: ConnectedSubmission): Boolean =
+    submission.stillConnectedDetails
+      .flatMap(_.vacantProperties)
+      .exists(_.vacantProperties == VacantPropertiesDetailsYes)
 
 }
