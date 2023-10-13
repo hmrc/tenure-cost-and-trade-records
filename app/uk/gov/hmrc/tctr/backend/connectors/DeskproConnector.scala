@@ -46,7 +46,7 @@ class HmrcDeskproConnector @Inject() (
 
   implicit val format: OFormat[DeskproTicket] = Json.format[DeskproTicket]
 
-  val deskproUrl = serviceConfig.baseUrl("hmrc-deskpro")
+  val deskproUrl = serviceConfig.baseUrl("deskpro-ticket-queue")
 
   override def createTicket(ticket: DeskproTicket): Future[Long] = {
 
