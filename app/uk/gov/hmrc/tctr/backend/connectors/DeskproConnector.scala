@@ -20,10 +20,9 @@ import com.google.inject.ImplementedBy
 
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
-import play.api.{Environment, Logger}
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.Logger
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.tctr.backend.infrastructure.MdtpHttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,8 +36,7 @@ trait DeskproConnector {
 @Singleton
 class HmrcDeskproConnector @Inject() (
   serviceConfig: ServicesConfig,
-  environment: Environment,
-  httpClient: MdtpHttpClient
+  http: HttpClient
 )(implicit executionContext: ExecutionContext)
     extends DeskproConnector {
 
@@ -52,7 +50,7 @@ class HmrcDeskproConnector @Inject() (
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    httpClient.POST[DeskproTicket, JsObject](deskproUrl + "/deskpro/ticket", ticket, Seq.empty).map { response =>
+    http.POST[DeskproTicket, JsObject](deskproUrl + "/deskpro/ticket", ticket, Seq.empty).map { response =>
       val ticketNumber = response.value("ticket_id").as[JsNumber].as[Long]
       logger.info(s"Created deskpro ticket with number : $ticketNumber")
       ticketNumber

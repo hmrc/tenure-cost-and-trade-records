@@ -44,5 +44,3 @@ class NotConnectedSubmissionExporter(
     exporter.exportNow(exportBatchSize).map(_ => SubmissionExportComplete("NotConnectedPropertyScheduler finished"))
 
 }
-
-case class SubmissionExportComplete(msg: String)

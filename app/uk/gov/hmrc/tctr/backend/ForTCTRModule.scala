@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend
 
-//import akka.actor.ActorSystem
 import akka.actor.ActorSystem
 import com.google.inject.Provider
 import play.api.inject.{Binding, Module}
@@ -24,39 +23,22 @@ import play.api.{Configuration, Environment, Logging}
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.infrastructure.{DefaultRegularSchedule, RegularSchedule}
 import uk.gov.hmrc.tctr.backend.submissionExport.{ExportNotConnectedSubmissions, NotConnectedSubmissionExporter}
-//import uk.gov.hmrc.tctr.backend.submissionExport.{ExportNotConnectedSubmissions, NotConnectedSubmissionExporter}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
-//import uk.gov.hmrc.mongo.lock.MongoLockRepository
-import uk.gov.hmrc.tctr.backend.infrastructure.{DailySchedule, DefaultDailySchedule, TCTRHttpClient, TCTRHttpClientImpl}
 
 import java.time.Clock
 import javax.inject.Singleton
-//import scala.concurrent.ExecutionContext
 
 @Singleton
 class ForTCTRModule extends Module with Logging {
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =
     Seq(
-      hodHttpClient(configuration),
       bind[RegularSchedule].to[DefaultRegularSchedule],
-      bind[DailySchedule].to[DefaultDailySchedule],
       bind[ForTCTRImpl].toSelf.eagerly(),
       bind[Clock].toProvider[ClockProvider]
     ) ++ notConnectedSubmissionExporter(configuration)
-
-  def hodHttpClient(configuration: Configuration): Binding[TCTRHttpClient] = {
-    val enablePublishing = configuration.getOptional[Boolean]("submissionExport.publishingEnabled").getOrElse(false)
-    if (enablePublishing) {
-      logger.warn(s"Binding DefaultHttpClient for App")
-      bind[TCTRHttpClient].to[TCTRHttpClientImpl]
-    } else {
-      logger.warn(s"Binding LoggingOnlyHttpClient for App *")
-      bind[TCTRHttpClient].to[LoggingOnlyHttpClient]
-    }
-  }
 
   def notConnectedSubmissionExporter(configuration: Configuration): Seq[Binding[_]] = {
     val enableNotConnectedExport = configuration.get[Boolean]("notConnectedSubmissionExport.enabled")

@@ -33,7 +33,7 @@ class EncryptionJsonTransformer @Inject() ()(implicit crypto: MongoCrypto) {
   private val decrypter: String => String = str => crypto.decrypt(Crypted(str)).value
 
   private val sensitiveWords =
-    Set("name", "email", "phone", "address", "building", "street", "town", "postcode", "password", "token")
+    Set("name", "email", "phone", "address", "building", "street", "town", "postcode", "token")
 
   private val exclusions = Set("type")
 

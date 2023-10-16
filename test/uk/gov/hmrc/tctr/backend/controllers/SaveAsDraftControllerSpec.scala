@@ -25,7 +25,6 @@ import uk.gov.hmrc.tctr.backend.models.SubmissionDraftWrapper
 import uk.gov.hmrc.tctr.backend.repository.SubmissionDraftRepo
 
 import scala.concurrent.Future
-import scala.language.postfixOps
 
 /**
   * @author Yuriy Tumakha

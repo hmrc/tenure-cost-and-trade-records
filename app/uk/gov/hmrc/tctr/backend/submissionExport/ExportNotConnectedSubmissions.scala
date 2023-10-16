@@ -107,10 +107,11 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
     }.getOrElse("unable to serialise")
 
     audit(
-      "SubmissionRemovedByForHodAdapter",
+      "SubmissionRemovedByTCTR",
       Map(
-        "submission"     -> submission.toString,
-        "submissionJson" -> submissionJson
+        "referenceNumber" -> submission.id,
+        "forType"         -> submission.forType,
+        "submissionJson"  -> submissionJson
       )
     )
   }

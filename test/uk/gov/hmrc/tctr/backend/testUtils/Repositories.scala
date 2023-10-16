@@ -17,7 +17,9 @@
 package uk.gov.hmrc.tctr.backend.testUtils
 
 import org.joda.time.DateTime
+import org.mongodb.scala.BulkWriteResult
 import org.mongodb.scala.result.{DeleteResult, InsertManyResult, InsertOneResult}
+import play.api.libs.json.OWrites
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.tctr.backend.models.FORCredentials
 import uk.gov.hmrc.tctr.backend.repository._
@@ -53,6 +55,10 @@ class StubCredentialsRepository extends CredentialsRepo {
   def count: Future[Long] = Future.successful(3)
 
   def removeAll(): Future[DeleteResult] = ???
+
+  override def bulkUpsert(credentialsSeq: Seq[FORCredentials])(implicit
+    writes: OWrites[FORCredentials]
+  ): Future[BulkWriteResult] = ???
 }
 
 class StubSubmittedRepository @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)

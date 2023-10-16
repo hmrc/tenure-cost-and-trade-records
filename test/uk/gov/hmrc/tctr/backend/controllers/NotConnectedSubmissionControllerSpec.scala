@@ -16,26 +16,48 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
+import akka.util.Timeout
 import com.codahale.metrics.Meter
-import com.mongodb.client.result.InsertOneResult
-import com.mongodb.client.result.InsertOneResult.acknowledged
-import org.bson.BsonBoolean.TRUE
-import org.mockito.scalatest.MockitoSugar
-import org.scalatest.flatspec.AsyncFlatSpec
-import org.scalatest.matchers.should
-import play.api.http.Status
-import play.api.test.{FakeRequest, Helpers}
+import org.mockito.ArgumentMatchers.any
+import play.api.mvc._
+import play.api.test._
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.{JsValue, Json}
+import org.scalatestplus.play.guice._
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import play.api.http.Status.{CONFLICT, CREATED}
+import play.api.test.Helpers.{POST, status}
+import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.{NotConnectedSubmission, NotConnectedSubmissionForm}
-import uk.gov.hmrc.tctr.backend.repository.{NotConnectedMongoRepository, SubmittedMongoRepo}
+import uk.gov.hmrc.tctr.backend.repository.{NotConnectedRepository, SubmittedMongoRepo}
 import uk.gov.hmrc.tctr.backend.schema.Address
+import com.mongodb.client.result.InsertOneResult.acknowledged
+import org.bson.BsonBoolean.TRUE
+import org.mockito.Mockito.when
+import org.mockito.MockitoSugar.mock
 
-import java.time.Instant
 import scala.concurrent.Future
+import java.time.Instant
+import scala.concurrent.duration.DurationInt
 
-class NotConnectedSubmissionControllerSpec extends AsyncFlatSpec with should.Matchers with MockitoSugar {
+class NotConnectedSubmissionControllerSpec
+    extends AnyWordSpec
+    with Matchers
+    with GuiceOneAppPerSuite
+    with ScalaFutures {
 
-  val submission = NotConnectedSubmissionForm(
+  implicit val timeout: Timeout = 5.seconds
+  val mockRepository            = mock[NotConnectedRepository]
+  val mockSubmittedMongoRepo    = mock[SubmittedMongoRepo]
+  val mockEmailConnector        = mock[EmailConnector]
+  val mockMetricsHandler        = mock[MetricsHandler]
+  val meter                     = mock[Meter]
+  // Stub a submission
+  val submission                = NotConnectedSubmissionForm(
     "2222",
     "FOR6010",
     Address("10", Some("BarringtonRoad road"), None, "BN12 4AX"),
@@ -47,55 +69,45 @@ class NotConnectedSubmissionControllerSpec extends AsyncFlatSpec with should.Mat
     false
   )
 
-  val metrics = mock[MetricsHandler]
-  val meter   = mock[Meter]
-  when(metrics.okSubmissions).thenReturn(meter)
-  when(metrics.failedSubmissions).thenReturn(meter)
+  override def fakeApplication() = new GuiceApplicationBuilder()
+    .overrides(
+      bind[NotConnectedRepository].toInstance(mockRepository),
+      bind[SubmittedMongoRepo].toInstance(mockSubmittedMongoRepo),
+      bind[EmailConnector].toInstance(mockEmailConnector),
+      bind[MetricsHandler].toInstance(mockMetricsHandler)
+    )
+    .build()
 
-  "NotConnectedSubmissionController" should
-    "return 201 for success response" in {
+  val controller = app.injector.instanceOf[NotConnectedSubmissionController]
 
-      val repository          = mock[NotConnectedMongoRepository]
-      val submittedRepository = mock[SubmittedMongoRepo]
+  "NotConnectedSubmissionController" should {
+    "handle valid submission" in {
+      when(mockMetricsHandler.okSubmissions).thenReturn(meter)
+      when(mockMetricsHandler.failedSubmissions).thenReturn(meter)
+      when(mockSubmittedMongoRepo.hasBeenSubmitted("2222")).thenReturn(Future.successful(false))
+      when(mockRepository.insert(any[NotConnectedSubmission]))
+        .thenReturn(Future.successful(acknowledged(TRUE))) // Assuming insert returns Future[Option[...]]
 
-      when(repository.insert(any[NotConnectedSubmission]))
-        .thenReturn(Future.successful(InsertOneResult.unacknowledged()))
-      when(submittedRepository.insertIfUnique(any[String])).thenReturn(Future.successful(acknowledged(TRUE)))
+      when(mockSubmittedMongoRepo.insertIfUnique(any[String])).thenReturn(Future.successful(acknowledged(TRUE)))
 
-      when(submittedRepository.hasBeenSubmitted(any[String])).thenReturn(Future.successful(false))
+      val jsonBody: JsValue      = Json.toJson(submission)
+      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody)
+      val result: Future[Result] = controller.submit("2222").apply(fakeRequest)
 
-      val controller = new NotConnectedSubmissionController(
-        repository,
-        submittedRepository,
-        metrics,
-        Helpers.stubControllerComponents()
-      )
-      val req        = FakeRequest().withBody(submission)
+      status(result) shouldBe CREATED
 
-      val response = controller.submit("222222").apply(req)
-
-      response.map { res =>
-        res.header.status shouldBe Status.CREATED
-      }
     }
 
-  it                                 should "return 409 Conflict when I try to submit already submitted reference" in {
+    "return Conflict for a duplicate submission" in {
 
-    val repository          = mock[NotConnectedMongoRepository]
-    val submittedRepository = mock[SubmittedMongoRepo]
+      when(mockSubmittedMongoRepo.hasBeenSubmitted("2222")).thenReturn(Future.successful(true))
 
-    when(repository.insert(any[NotConnectedSubmission])).thenReturn(Future.successful(InsertOneResult.unacknowledged()))
-    when(submittedRepository.hasBeenSubmitted(any[String])).thenReturn(Future.successful(true))
+      val jsonBody: JsValue      = Json.toJson(submission)
+      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody)
+      val result: Future[Result] = controller.submit("2222").apply(fakeRequest)
 
-    val controller =
-      new NotConnectedSubmissionController(repository, submittedRepository, metrics, Helpers.stubControllerComponents())
-    val req        = FakeRequest().withBody(submission)
-
-    val response = controller.submit("222222").apply(req)
-
-    response.map { res =>
-      res.header.status shouldBe Status.CONFLICT
+      status(result) shouldBe CONFLICT
     }
+
   }
-
 }

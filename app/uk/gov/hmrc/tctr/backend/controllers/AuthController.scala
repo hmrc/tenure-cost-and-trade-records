@@ -59,9 +59,10 @@ class AuthController @Inject() (
     new IPBlockingCredentialsVerifier(credsRepo, submittedRepo, loginsRepo, authReq, config, clock, enableDuplicates)
   }
 
-  def verifyCredentials(referenceNum: String, postcode: String) = Action.async { implicit request =>
-    val ip = request.headers.get(trueClientIp)
-    verifier.verify(referenceNum, postcode, ip) flatMap {
+  def authenticate = Action.async(parse.json[Credentials]) { implicit request =>
+    val credentials = request.body
+    val ip          = request.headers.get(trueClientIp)
+    verifier.verify(credentials.referenceNumber, credentials.postcode, ip) flatMap {
       case ValidCredentials(creds)               =>
         Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.forType, creds.address.decryptedValue)))
       case InvalidCredentials(remainingAttempts) => Unauthorized(Json.toJson(FailedLoginResponse(remainingAttempts)))

@@ -1,5 +1,5 @@
 
-GET           /:refNum/:postcode/verify                         uk.gov.hmrc.tctr.backend.controllers.AuthController.verifyCredentials(refNum, postcode)
+POST          /authenticate                                     uk.gov.hmrc.tctr.backend.controllers.AuthController.authenticate
 
 GET           /:refNum/forType                                  uk.gov.hmrc.tctr.backend.controllers.AuthController.retrieveFORType(refNum)
 
@@ -9,3 +9,7 @@ DELETE        /saveAsDraft/:refNum                              uk.gov.hmrc.tctr
 
 PUT           /submissions/notConnected/:referenceNumber        uk.gov.hmrc.tctr.backend.controllers.NotConnectedSubmissionController.submit(referenceNumber: String)
 
+PUT           /submissions/connected/:referenceNumber           uk.gov.hmrc.tctr.backend.controllers.ConnectedSubmissionController.submit(referenceNumber: String)
+
++nocsrf
+POST          /upscan/callback                                  uk.gov.hmrc.tctr.backend.controllers.UpscanCallbackController.callback
