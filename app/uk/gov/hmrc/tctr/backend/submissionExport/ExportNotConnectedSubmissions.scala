@@ -18,6 +18,7 @@ package uk.gov.hmrc.tctr.backend.submissionExport
 
 import com.google.inject.ImplementedBy
 import play.api.Logging
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import uk.gov.hmrc.tctr.backend.connectors.{DeskproConnector, DeskproTicket}
@@ -83,8 +84,9 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
           case upstreamErrorResponse: UpstreamErrorResponse if upstreamErrorResponse.statusCode == 400 =>
             handle400BadRequest(upstreamErrorResponse, submission)
           case exception: Exception                                                                    =>
-            auditRejected(submission.id)
-            logger.warn(s"can't export not connected property submission id: ${submission.id}", exception)
+            val failureReason = s"can't export not connected property submission id: ${submission.id}"
+            auditRejected(submission.id, failureReason, exception.getMessage)
+            logger.warn(failureReason, exception)
         }
       Future.unit
     }
@@ -119,22 +121,32 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
   def isTooLongInQueue(submission: NotConnectedSubmission): Boolean =
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.retryWindow, ChronoUnit.HOURS))
 
-  def auditAccepted(referenceNumber: String, deskproTicketId: Long): Unit =
+  def auditAccepted(referenceNumber: String, deskproTicketId: Long): Unit = {
+    val outcome = Json.obj("isSuccessful" -> true)
     audit(
-      "SubmissionAcceptedByHmrcDeskpro",
-      Map(
+      "SubmissionToHmrcDeskpro",
+      Json.obj(
         "referenceNumber" -> referenceNumber,
-        "deskproTicketId" -> deskproTicketId.toString
+        "deskproTicketId" -> deskproTicketId.toString,
+        "outcome"         -> outcome
       )
     )
+  }
 
-  def auditRejected(referenceNumber: String): Unit =
+  def auditRejected(referenceNumber: String, failureCategory: String, failureReason: String): Unit = {
+    val outcome = Json.obj(
+      "isSuccessful"    -> false,
+      "failureCategory" -> failureCategory,
+      "failureReason"   -> failureReason
+    )
     audit(
-      "SubmissionRejectedByHmrcDeskpro",
-      Map(
-        "referenceNumber" -> referenceNumber
+      "SubmissionToHmrcDeskpro",
+      Json.obj(
+        "referenceNumber" -> referenceNumber,
+        "outcome"         -> outcome
       )
     )
+  }
 
   private def createDeskproTicket(submission: NotConnectedSubmission): DeskproTicket = {
     val message =
