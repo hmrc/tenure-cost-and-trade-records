@@ -18,6 +18,7 @@ package uk.gov.hmrc.tctr.backend.controllers
 
 import play.api.{Logger, Logging}
 import play.api.mvc.ControllerComponents
+import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
@@ -32,15 +33,17 @@ class ConnectedSubmissionController @Inject() (
   repository: ConnectedRepository,
   submittedMongoRepo: SubmittedMongoRepo,
   emailConnector: EmailConnector,
+  auth: BackendAuthComponents,
   metric: MetricsHandler,
   cc: ControllerComponents
 )(implicit ec: ExecutionContext)
     extends BackendController(cc)
+    with InternalAuthAccess
     with Logging {
 
   val log = Logger(classOf[ConnectedSubmissionController])
 
-  def submit(submissionReference: String) = Action.async(parse.json[ConnectedSubmission]) { implicit request =>
+  def submit(submissionReference: String) = auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[ConnectedSubmission]) { implicit request =>
     submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
       case true  =>
         metric.failedSubmissions.mark()

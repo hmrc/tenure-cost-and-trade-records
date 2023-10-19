@@ -16,23 +16,32 @@
 
 package uk.gov.hmrc.tctr.backend
 
-import org.scalatest.BeforeAndAfterAll
+import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import play.api.http.Status.{BAD_REQUEST, CREATED, NOT_FOUND, OK}
 import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo
 
+import java.util.UUID
+
 class SaveAsDraftIntegrationSpec
-  extends IntegrationSpecBase with BeforeAndAfterAll {
+  extends IntegrationSpecBase with BeforeAndAfterAll with BeforeAndAfterEach {
 
   private val submissionDraftFindId = "SaveAsDraftITestFind"
   private val submissionDraftSaveId = "SaveAsDraftITestSave"
   private val submissionDraftDeleteId = "SaveAsDraftITestDelete"
   private val submissionDraftBadRequestId = "SaveAsDraftITestBadRequest"
   private val repo = app.injector.instanceOf[MongoSubmissionDraftRepo]
-
+  private val clientAuthToken: String = UUID.randomUUID().toString
+  private val internalAuthBaseUrl: String = "http://localhost:8470"
   override def beforeAll(): Unit = {
     repo.save(submissionDraftFindId, Json.obj())
     repo.save(submissionDraftDeleteId, Json.obj("a" -> "b"))
+  }
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    if (!authTokenIsValid(clientAuthToken)) createClientAuthToken()
   }
 
   "SaveAsDraft GET endpoint" should {
@@ -40,6 +49,7 @@ class SaveAsDraftIntegrationSpec
       val response =
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/$submissionDraftFindId")
+          .withHttpHeaders(("Authorization", clientAuthToken))
           .get()
           .futureValue
 
@@ -50,6 +60,7 @@ class SaveAsDraftIntegrationSpec
       val response =
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/SOME_UNKNOWN_ID")
+          .withHttpHeaders(("Authorization", clientAuthToken))
           .get()
           .futureValue
 
@@ -62,6 +73,7 @@ class SaveAsDraftIntegrationSpec
       val response =
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/$submissionDraftSaveId")
+          .withHttpHeaders(("Authorization", clientAuthToken))
           .put(Json.toJson(Json.obj("a" -> 1)))
           .futureValue
 
@@ -73,6 +85,7 @@ class SaveAsDraftIntegrationSpec
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/$submissionDraftBadRequestId")
           .addHttpHeaders("Content-Type" -> "application/json")
+          .addHttpHeaders(("Authorization", clientAuthToken))
           .put("{bad json}")
           .futureValue
 
@@ -83,6 +96,7 @@ class SaveAsDraftIntegrationSpec
       val response =
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/$submissionDraftBadRequestId")
+          .addHttpHeaders(("Authorization", clientAuthToken))
           .put("some text")
           .futureValue
 
@@ -95,6 +109,7 @@ class SaveAsDraftIntegrationSpec
       val response =
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/$submissionDraftDeleteId")
+          .addHttpHeaders(("Authorization", clientAuthToken))
           .delete()
           .futureValue
 
@@ -106,12 +121,39 @@ class SaveAsDraftIntegrationSpec
       val response =
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/SOME_UNKNOWN_ID")
+          .addHttpHeaders(("Authorization", clientAuthToken))
           .delete()
           .futureValue
 
       response.status shouldBe OK
       response.json shouldBe Json.obj("deletedCount" -> 0)
     }
+  }
+
+  private def authTokenIsValid(token: String): Boolean = {
+    val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
+      .withHttpHeaders("Authorization" -> token)
+      .get()
+      .futureValue
+    response.status == OK
+  }
+
+  private def createClientAuthToken(): Unit = {
+    val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
+      .post(
+        Json.obj(
+          "token" -> clientAuthToken,
+          "principal" -> "test",
+          "permissions" -> Seq(
+            Json.obj(
+              "resourceType" -> "tenure-cost-and-trade-records",
+              "resourceLocation" -> "*",
+              "actions" -> List("*")
+            )
+          )
+        )
+      ).futureValue
+    response.status mustEqual CREATED
   }
 
 }
