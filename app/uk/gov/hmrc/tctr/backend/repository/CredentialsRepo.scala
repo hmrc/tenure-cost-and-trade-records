@@ -53,7 +53,7 @@ trait CredentialsRepo {
 
 object CredentialsMongoRepo {
 
-  val defaultExpireAfterDays = 365
+  val defaultExpireAfterDays = 100
 
   def credentialsTtlIndex(configuration: Configuration): Seq[IndexModel] = Seq(
     IndexModel(
@@ -70,12 +70,12 @@ object CredentialsMongoRepo {
 }
 
 @Singleton
-class CredentialsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext, crypto: MongoCrypto)
+class CredentialsMongoRepo @Inject() (mongo: MongoComponent,configuration: Configuration)(implicit ec: ExecutionContext, crypto: MongoCrypto)
     extends PlayMongoRepository[FORCredentials](
       collectionName = "credentials",
       mongoComponent = mongo,
       domainFormat = FORCredentials.format,
-      indexes = Seq.empty
+      indexes = CredentialsMongoRepo.credentialsTtlIndex(configuration)
     )
     with CredentialsRepo
     with Logging {
