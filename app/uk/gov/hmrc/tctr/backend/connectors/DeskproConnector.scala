@@ -50,16 +50,10 @@ class HmrcDeskproConnector @Inject() (
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    if (ticket.subject.contains("6011")) {
-      val CIPTestEx = new RuntimeException("CIP test only")
-      Future.failed(CIPTestEx)
-    } else {
-
-      http.POST[DeskproTicket, JsObject](deskproUrl + "/deskpro/ticket", ticket, Seq.empty).map { response =>
-        val ticketNumber = response.value("ticket_id").as[JsNumber].as[Long]
-        logger.info(s"Created deskpro ticket with number : $ticketNumber")
-        ticketNumber
-      }
+    http.POST[DeskproTicket, JsObject](deskproUrl + "/deskpro/ticket", ticket, Seq.empty).map { response =>
+      val ticketNumber = response.value("ticket_id").as[JsNumber].as[Long]
+      logger.info(s"Created deskpro ticket with number : $ticketNumber")
+      ticketNumber
     }
   }
 
