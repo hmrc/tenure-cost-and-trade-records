@@ -47,21 +47,20 @@ class ConnectedSubmissionControllerSpec
     with ScalaFutures
     with FakeObjects {
 
-  implicit val timeout: Timeout     = 5.seconds
-  implicit val ec: ExecutionContext = ExecutionContext.global
-  private val expectedPredicate = {
+  implicit val timeout: Timeout                                  = 5.seconds
+  implicit val ec: ExecutionContext                              = ExecutionContext.global
+  private val expectedPredicate                                  =
     Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
-  }
-  protected val mockStubBehaviour: StubBehaviour = mock[StubBehaviour]
+  protected val mockStubBehaviour: StubBehaviour                 = mock[StubBehaviour]
   mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
   protected val backendAuthComponentsStub: BackendAuthComponents =
     BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), ec)
-  val mockRepository: ConnectedRepository   = mock[ConnectedRepository]
-  val mockSubmittedRepo: SubmittedMongoRepo = mock[SubmittedMongoRepo]
-  val emailConnector                        = mock[EmailConnector]
-  val mockMetrics: MetricsHandler           = mock[MetricsHandler]
-  val meter                                 = mock[Meter]
-  val fakeControllerComponents              = stubControllerComponents()
+  val mockRepository: ConnectedRepository                        = mock[ConnectedRepository]
+  val mockSubmittedRepo: SubmittedMongoRepo                      = mock[SubmittedMongoRepo]
+  val emailConnector                                             = mock[EmailConnector]
+  val mockMetrics: MetricsHandler                                = mock[MetricsHandler]
+  val meter                                                      = mock[Meter]
+  val fakeControllerComponents                                   = stubControllerComponents()
 
   val controller = new ConnectedSubmissionController(
     mockRepository,

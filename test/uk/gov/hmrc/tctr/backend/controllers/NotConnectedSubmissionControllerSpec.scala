@@ -55,22 +55,21 @@ class NotConnectedSubmissionControllerSpec
     with GuiceOneAppPerSuite
     with ScalaFutures {
 
-  implicit val timeout: Timeout = 5.seconds
-  private val expectedPredicate = {
+  implicit val timeout: Timeout                                  = 5.seconds
+  private val expectedPredicate                                  =
     Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
-  }
-  protected val mockStubBehaviour: StubBehaviour = mock[StubBehaviour]
+  protected val mockStubBehaviour: StubBehaviour                 = mock[StubBehaviour]
   mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
   protected val backendAuthComponentsStub: BackendAuthComponents =
     BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), Implicits.global)
 
-  val mockRepository            = mock[NotConnectedRepository]
-  val mockSubmittedMongoRepo    = mock[SubmittedMongoRepo]
-  val mockEmailConnector        = mock[EmailConnector]
-  val mockMetricsHandler        = mock[MetricsHandler]
-  val meter                     = mock[Meter]
+  val mockRepository         = mock[NotConnectedRepository]
+  val mockSubmittedMongoRepo = mock[SubmittedMongoRepo]
+  val mockEmailConnector     = mock[EmailConnector]
+  val mockMetricsHandler     = mock[MetricsHandler]
+  val meter                  = mock[Meter]
   // Stub a submission
-  val submission                = NotConnectedSubmissionForm(
+  val submission             = NotConnectedSubmissionForm(
     "2222",
     "FOR6010",
     Address("10", Some("BarringtonRoad road"), None, "BN12 4AX"),
@@ -105,7 +104,8 @@ class NotConnectedSubmissionControllerSpec
       when(mockSubmittedMongoRepo.insertIfUnique(any[String])).thenReturn(Future.successful(acknowledged(TRUE)))
 
       val jsonBody: JsValue      = Json.toJson(submission)
-      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody).withHeaders("Authorization" -> "fake-token")
+      val fakeRequest            =
+        FakeRequest(POST, "/submit/2222").withBody(jsonBody).withHeaders("Authorization" -> "fake-token")
       val result: Future[Result] = controller.submit("2222").apply(fakeRequest)
 
       status(result) shouldBe CREATED
@@ -117,7 +117,8 @@ class NotConnectedSubmissionControllerSpec
       when(mockSubmittedMongoRepo.hasBeenSubmitted("2222")).thenReturn(Future.successful(true))
 
       val jsonBody: JsValue      = Json.toJson(submission)
-      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody).withHeaders("Authorization" -> "fake-token")
+      val fakeRequest            =
+        FakeRequest(POST, "/submit/2222").withBody(jsonBody).withHeaders("Authorization" -> "fake-token")
       val result: Future[Result] = controller.submit("2222").apply(fakeRequest)
 
       status(result) shouldBe CONFLICT

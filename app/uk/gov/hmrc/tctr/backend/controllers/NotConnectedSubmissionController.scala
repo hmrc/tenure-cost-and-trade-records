@@ -42,28 +42,29 @@ class NotConnectedSubmissionController @Inject() (
 
   val log = Logger(classOf[NotConnectedSubmissionController])
 
-  def submit(submissionReference: String)                           = auth.authorizedAction[Unit](permission).compose(Action).async(parse.json) { implicit request =>
-    request.body.validate[NotConnectedSubmissionForm] match {
-      case JsSuccess(form, _) =>
-        submittedMongoRepo.hasBeenSubmitted(submissionReference).flatMap {
-          case true  =>
-            metric.failedSubmissions.mark()
-            log.warn(s"Error saving submission $submissionReference. Possible duplicate")
-            Conflict(s"Error saving submission $submissionReference. Possible duplicate")
-          case false =>
-            val notConnectedSubmission = convertFormToEntity(form)
-            repository.insert(notConnectedSubmission)
-            emailConnector.sendConnectionRemoved(notConnectedSubmission)
-            submittedMongoRepo.insertIfUnique(submissionReference)
-            metric.okSubmissions.mark()
-            Created
-        }
+  def submit(submissionReference: String)                           =
+    auth.authorizedAction[Unit](permission).compose(Action).async(parse.json) { implicit request =>
+      request.body.validate[NotConnectedSubmissionForm] match {
+        case JsSuccess(form, _) =>
+          submittedMongoRepo.hasBeenSubmitted(submissionReference).flatMap {
+            case true  =>
+              metric.failedSubmissions.mark()
+              log.warn(s"Error saving submission $submissionReference. Possible duplicate")
+              Conflict(s"Error saving submission $submissionReference. Possible duplicate")
+            case false =>
+              val notConnectedSubmission = convertFormToEntity(form)
+              repository.insert(notConnectedSubmission)
+              emailConnector.sendConnectionRemoved(notConnectedSubmission)
+              submittedMongoRepo.insertIfUnique(submissionReference)
+              metric.okSubmissions.mark()
+              Created
+          }
 
-      case JsError(errors) =>
-        log.error(errors.mkString(","))
-        BadRequest
+        case JsError(errors) =>
+          log.error(errors.mkString(","))
+          BadRequest
+      }
     }
-  }
   private def convertFormToEntity(form: NotConnectedSubmissionForm) = NotConnectedSubmission(
     form.id,
     form.forType,

@@ -18,6 +18,7 @@ package uk.gov.hmrc.tctr.backend.submissionExport
 
 import com.google.inject.ImplementedBy
 import play.api.Logging
+import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
 import uk.gov.hmrc.tctr.backend.repository.ConnectedMongoRepository
@@ -78,18 +79,13 @@ class ExportConnectedSubmissionsVOA @Inject() (
   def isTooLongInQueue(submission: ConnectedSubmission): Boolean =
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.retryWindow, ChronoUnit.HOURS))
 
-  private def SubmissionToJson(submission: ConnectedSubmission) =
-    Try {
-      ConnectedSubmission.format.writes(submission).toString()
-    }.getOrElse("unable to serialise")
-
   private def auditSubmissionEvent(eventType: String, submission: ConnectedSubmission) =
     audit(
       eventType,
-      Map(
+      Json.obj(
         "referenceNumber" -> submission.referenceNumber,
-        "forType        " -> submission.forType,
-        "submissionJson"  -> SubmissionToJson(submission)
+        "forType"         -> submission.forType,
+        "submission"      -> submission
       )
     )
 

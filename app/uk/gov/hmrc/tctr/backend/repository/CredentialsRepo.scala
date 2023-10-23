@@ -70,8 +70,10 @@ object CredentialsMongoRepo {
 }
 
 @Singleton
-class CredentialsMongoRepo @Inject() (mongo: MongoComponent,configuration: Configuration)(implicit ec: ExecutionContext, crypto: MongoCrypto)
-    extends PlayMongoRepository[FORCredentials](
+class CredentialsMongoRepo @Inject() (mongo: MongoComponent, configuration: Configuration)(implicit
+  ec: ExecutionContext,
+  crypto: MongoCrypto
+) extends PlayMongoRepository[FORCredentials](
       collectionName = "credentials",
       mongoComponent = mongo,
       domainFormat = FORCredentials.format,
