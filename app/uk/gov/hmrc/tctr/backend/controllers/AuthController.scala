@@ -42,7 +42,8 @@ class AuthController @Inject() (
   clock: Clock,
   cc: ControllerComponents
 )(implicit ec: ExecutionContext)
-    extends BackendController(cc) with InternalAuthAccess {
+    extends BackendController(cc)
+    with InternalAuthAccess {
 
   val credsRepo             = credentialsMongoRepo
   val submittedRepo         = submittedMongoRepo
@@ -61,25 +62,27 @@ class AuthController @Inject() (
     new IPBlockingCredentialsVerifier(credsRepo, submittedRepo, loginsRepo, authReq, config, clock, enableDuplicates)
   }
 
-  def authenticate = auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[Credentials]) { implicit request =>
-    val credentials = request.body
-    val ip          = request.headers.get(trueClientIp)
-    verifier.verify(credentials.referenceNumber, credentials.postcode, ip) flatMap {
-      case ValidCredentials(creds)               =>
-        Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.forType, creds.address.decryptedValue)))
-      case InvalidCredentials(remainingAttempts) => Unauthorized(Json.toJson(FailedLoginResponse(remainingAttempts)))
-      case IPLockout                             => Unauthorized(Json.toJson(FailedLoginResponse(0)))
-      case AlreadySubmitted(items)               => Conflict(error(s"Duplicate submission. $items"))
-      case MissingIPAddress                      => BadRequest(error(s"Missing header: $trueClientIp"))
+  def authenticate =
+    auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[Credentials]) { implicit request =>
+      val credentials = request.body
+      val ip          = request.headers.get(trueClientIp)
+      verifier.verify(credentials.referenceNumber, credentials.postcode, ip) flatMap {
+        case ValidCredentials(creds)               =>
+          Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.forType, creds.address.decryptedValue)))
+        case InvalidCredentials(remainingAttempts) => Unauthorized(Json.toJson(FailedLoginResponse(remainingAttempts)))
+        case IPLockout                             => Unauthorized(Json.toJson(FailedLoginResponse(0)))
+        case AlreadySubmitted(items)               => Conflict(error(s"Duplicate submission. $items"))
+        case MissingIPAddress                      => BadRequest(error(s"Missing header: $trueClientIp"))
+      }
     }
-  }
 
-  def retrieveFORType(referenceNum: String) = auth.authorizedAction[Unit](permission).compose(Action).async { implicit request =>
-    credsRepo.findById(referenceNum).map {
-      case Some(credentials) => Ok(Json.toJson(ValidForTypeResponse(credentials.forType)))
-      case None              => NotFound
+  def retrieveFORType(referenceNum: String) =
+    auth.authorizedAction[Unit](permission).compose(Action).async { implicit request =>
+      credsRepo.findById(referenceNum).map {
+        case Some(credentials) => Ok(Json.toJson(ValidForTypeResponse(credentials.forType)))
+        case None              => NotFound
+      }
     }
-  }
 }
 
 object ValidLoginResponse {

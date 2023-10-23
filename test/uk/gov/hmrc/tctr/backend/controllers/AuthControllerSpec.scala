@@ -36,21 +36,19 @@ import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBeha
 import uk.gov.hmrc.tctr.backend.repository.CredentialsMongoRepo
 import uk.gov.hmrc.tctr.backend.security.Credentials
 
-
 class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
   implicit val ec: ExecutionContext            = ExecutionContext.Implicits.global
   implicit lazy val materializer: Materializer = app.materializer
 
-  val mockCredentialsRepo: CredentialsMongoRepo = mock[CredentialsMongoRepo]
-  private val expectedPredicate = {
+  val mockCredentialsRepo: CredentialsMongoRepo                  = mock[CredentialsMongoRepo]
+  private val expectedPredicate                                  =
     Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
-  }
-  protected val mockStubBehaviour: StubBehaviour = mock[StubBehaviour]
+  protected val mockStubBehaviour: StubBehaviour                 = mock[StubBehaviour]
   mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
   protected val backendAuthComponentsStub: BackendAuthComponents =
     BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), ec)
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application                    = new GuiceApplicationBuilder()
     .overrides(
       bind[CredentialsMongoRepo].toInstance(mockCredentialsRepo),
       bind[BackendAuthComponents].toInstance(backendAuthComponentsStub)
@@ -59,7 +57,8 @@ class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
 
   def controller: AuthController = app.injector.instanceOf[AuthController]
 
-  private val fakeRequest = FakeRequest("POST", "/").withBody(Credentials("refNum", "postcode")).withHeaders("Authorization" -> "fake-token")
+  private val fakeRequest =
+    FakeRequest("POST", "/").withBody(Credentials("refNum", "postcode")).withHeaders("Authorization" -> "fake-token")
 
   "POST /authenticate" should {
     "return 401 for invalid credentials" in {

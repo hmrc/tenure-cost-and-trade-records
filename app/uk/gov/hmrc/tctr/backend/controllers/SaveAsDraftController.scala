@@ -29,11 +29,14 @@ import scala.concurrent.ExecutionContext
   * @author Yuriy Tumakha
   */
 @Singleton
-class SaveAsDraftController @Inject() (repo: SubmissionDraftRepo,
-                                       auth: BackendAuthComponents,
-                                       cc: ControllerComponents)(implicit
+class SaveAsDraftController @Inject() (
+  repo: SubmissionDraftRepo,
+  auth: BackendAuthComponents,
+  cc: ControllerComponents
+)(implicit
   ec: ExecutionContext
-) extends BackendController(cc) with InternalAuthAccess {
+) extends BackendController(cc)
+    with InternalAuthAccess {
 
   def get(referenceNumber: String) = auth.authorizedAction[Unit](permission).compose(Action).async {
     repo.find(referenceNumber) map {

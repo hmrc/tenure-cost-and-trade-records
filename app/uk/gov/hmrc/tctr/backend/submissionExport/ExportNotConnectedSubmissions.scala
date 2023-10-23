@@ -102,21 +102,15 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
     logger.warn(s"Removed submission with invalid $invalidField : ${submission.id}", exception)
   }
 
-  private def logBrokenSubmissionToSplunk(submission: NotConnectedSubmission): Unit = {
-
-    val submissionJson = Try {
-      NotConnectedSubmission.format.writes(submission).toString()
-    }.getOrElse("unable to serialise")
-
+  private def logBrokenSubmissionToSplunk(submission: NotConnectedSubmission): Unit =
     audit(
       "SubmissionRemovedByTCTR",
-      Map(
+      Json.obj(
         "referenceNumber" -> submission.id,
         "forType"         -> submission.forType,
-        "submissionJson"  -> submissionJson
+        "submission"      -> submission
       )
     )
-  }
 
   def isTooLongInQueue(submission: NotConnectedSubmission): Boolean =
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.retryWindow, ChronoUnit.HOURS))

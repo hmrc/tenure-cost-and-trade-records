@@ -43,33 +43,34 @@ class ConnectedSubmissionController @Inject() (
 
   val log = Logger(classOf[ConnectedSubmissionController])
 
-  def submit(submissionReference: String) = auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[ConnectedSubmission]) { implicit request =>
-    submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
-      case true  =>
-        metric.failedSubmissions.mark()
-        log.warn(s"Error saving submission $submissionReference. Possible duplicate")
-        Future.successful(Conflict(s"Error saving submission $submissionReference. Possible duplicate"))
-      case false =>
-        val submission = request.body
-        repository.insert(submission)
-        if (isVacantPropertySubmission(submission)) {
-          submission.stillConnectedDetails
-            .flatMap(_.provideContactDetails)
-            .map(_.yourContactDetails)
-            .fold {
-              logger.warn(s"Send email to user canceled. Contact details not found.")
-            } { contact =>
-              emailConnector.sendVacantSubmissionConfirmation(contact.contactDetails.email, contact.fullName)
-            }
-        } else {
-          emailConnector.sendSubmissionConfirmation(submission)
-        }
-        /*Remove for submission checking*/
-        submittedMongoRepo.insertIfUnique(submissionReference)
-        metric.okSubmissions.mark()
-        Future.successful(Created)
+  def submit(submissionReference: String) =
+    auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[ConnectedSubmission]) { implicit request =>
+      submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
+        case true  =>
+          metric.failedSubmissions.mark()
+          log.warn(s"Error saving submission $submissionReference. Possible duplicate")
+          Future.successful(Conflict(s"Error saving submission $submissionReference. Possible duplicate"))
+        case false =>
+          val submission = request.body
+          repository.insert(submission)
+          if (isVacantPropertySubmission(submission)) {
+            submission.stillConnectedDetails
+              .flatMap(_.provideContactDetails)
+              .map(_.yourContactDetails)
+              .fold {
+                logger.warn(s"Send email to user canceled. Contact details not found.")
+              } { contact =>
+                emailConnector.sendVacantSubmissionConfirmation(contact.contactDetails.email, contact.fullName)
+              }
+          } else {
+            emailConnector.sendSubmissionConfirmation(submission)
+          }
+          /*Remove for submission checking*/
+          submittedMongoRepo.insertIfUnique(submissionReference)
+          metric.okSubmissions.mark()
+          Future.successful(Created)
+      }
     }
-  }
 
   private def isVacantPropertySubmission(submission: ConnectedSubmission): Boolean =
     submission.stillConnectedDetails
