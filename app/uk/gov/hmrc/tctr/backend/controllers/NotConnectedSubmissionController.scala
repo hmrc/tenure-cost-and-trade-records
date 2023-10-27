@@ -21,7 +21,6 @@ import play.api.libs.json.{JsError, JsSuccess}
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.{NotConnectedSubmission, NotConnectedSubmissionForm}
@@ -31,7 +30,6 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class NotConnectedSubmissionController @Inject() (
-  tctrConfig: AppConfig,
   repository: NotConnectedRepository,
   submittedMongoRepo: SubmittedMongoRepo,
   emailConnector: EmailConnector,
@@ -57,9 +55,7 @@ class NotConnectedSubmissionController @Inject() (
               val notConnectedSubmission = convertFormToEntity(form)
               repository.insert(notConnectedSubmission)
               emailConnector.sendConnectionRemoved(notConnectedSubmission)
-              if (tctrConfig.enableSubmitted) {
-                submittedMongoRepo.insertIfUnique(submissionReference)
-              }
+              submittedMongoRepo.insertIfUnique(submissionReference)
               metric.okSubmissions.mark()
               Created
           }
