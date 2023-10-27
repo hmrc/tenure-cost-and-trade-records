@@ -20,6 +20,7 @@ import play.api.{Logger, Logging}
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
@@ -30,6 +31,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConnectedSubmissionController @Inject() (
+  tctrConfig: AppConfig,
   repository: ConnectedRepository,
   submittedMongoRepo: SubmittedMongoRepo,
   emailConnector: EmailConnector,
@@ -66,7 +68,9 @@ class ConnectedSubmissionController @Inject() (
             emailConnector.sendSubmissionConfirmation(submission)
           }
           /*Remove for submission checking*/
-          submittedMongoRepo.insertIfUnique(submissionReference)
+          if (tctrConfig.enableSubmitted) {
+            submittedMongoRepo.insertIfUnique(submissionReference)
+          }
           metric.okSubmissions.mark()
           Future.successful(Created)
       }

@@ -22,11 +22,15 @@ import com.mongodb.client.result.InsertOneResult
 import org.mockito.ArgumentMatchers._
 import org.mockito.IdiomaticMockito.StubbingOps
 import org.mockito.MockitoSugar
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.flatspec.AsyncFlatSpec
+import play.api.Application
+import play.api.mvc.ControllerComponents
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers._
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.internalauth.client.Predicate.Permission
 import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
 import uk.gov.hmrc.internalauth.client.{BackendAuthComponents, IAAction, Resource, ResourceLocation, ResourceType, Retrieval}
@@ -41,10 +45,10 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 
 class ConnectedSubmissionControllerSpec
-    extends AsyncFlatSpec
+    extends AnyWordSpec
     with Matchers
+    with GuiceOneAppPerSuite
     with MockitoSugar
-    with ScalaFutures
     with FakeObjects {
 
   implicit val timeout: Timeout                                  = 5.seconds
@@ -57,44 +61,51 @@ class ConnectedSubmissionControllerSpec
     BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), ec)
   val mockRepository: ConnectedRepository                        = mock[ConnectedRepository]
   val mockSubmittedRepo: SubmittedMongoRepo                      = mock[SubmittedMongoRepo]
-  val emailConnector                                             = mock[EmailConnector]
+  val mockEmailConnector: EmailConnector                         = mock[EmailConnector]
   val mockMetrics: MetricsHandler                                = mock[MetricsHandler]
-  val meter                                                      = mock[Meter]
-  val fakeControllerComponents                                   = stubControllerComponents()
+  val meter: Meter                                               = mock[Meter]
+  val fakeControllerComponents: ControllerComponents             = stubControllerComponents()
 
-  val controller = new ConnectedSubmissionController(
-    mockRepository,
-    mockSubmittedRepo,
-    emailConnector,
-    backendAuthComponentsStub,
-    mockMetrics,
-    fakeControllerComponents
-  )
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+    .overrides(
+      bind[ConnectedRepository].toInstance(mockRepository),
+      bind[SubmittedMongoRepo].toInstance(mockSubmittedRepo),
+      bind[EmailConnector].toInstance(mockEmailConnector),
+      bind[BackendAuthComponents].toInstance(backendAuthComponentsStub)
+    )
+    .build()
+
+  val controller: ConnectedSubmissionController = app.injector.instanceOf[ConnectedSubmissionController]
+
   when(mockMetrics.okSubmissions).thenReturn(meter)
   when(mockMetrics.failedSubmissions).thenReturn(meter)
 
-  "ConnectedSubmissionController" should "return Created for a new submission" in {
-    val submissionReference = "123456"
-    val submission          = prefilledConnectedSubmission
-    when(mockSubmittedRepo.hasBeenSubmitted(submissionReference)).thenReturn(Future.successful(false))
-    when(mockRepository.insert(any[ConnectedSubmission]))
-      .thenReturn(Future.successful(InsertOneResult.unacknowledged()))
+  "ConnectedSubmissionController" should {
+    "return Created for a new submission" in {
+      val submissionReference = "123456"
+      val submission          = prefilledConnectedSubmission
+      when(mockSubmittedRepo.hasBeenSubmitted(submissionReference)).thenReturn(Future.successful(false))
+      when(mockRepository.insert(any[ConnectedSubmission]))
+        .thenReturn(Future.successful(InsertOneResult.unacknowledged()))
 
-    val request = FakeRequest().withBody(submission).withHeaders("Authorization" -> "fake-token")
-    val result  = controller.submit(submissionReference).apply(request)
+      val request = FakeRequest().withBody(submission).withHeaders("Authorization" -> "fake-token")
+      val result  = controller.submit(submissionReference).apply(request)
 
-    status(result)(timeout) shouldBe CREATED
+      status(result)(timeout) shouldBe CREATED
+    }
   }
 
-  it                              should "return Conflict for a duplicate submission" in {
-    val submissionReference = "123456"
-    val submission          = prefilledConnectedSubmission
-    when(mockSubmittedRepo.hasBeenSubmitted(submissionReference)).thenReturn(Future.successful(true))
+  it should {
+    "return Conflict for a duplicate submission" in {
+      val submissionReference = "123456"
+      val submission          = prefilledConnectedSubmission
+      when(mockSubmittedRepo.hasBeenSubmitted(submissionReference)).thenReturn(Future.successful(true))
 
-    val request = FakeRequest().withBody(submission).withHeaders("Authorization" -> "fake-token")
-    val result  = controller.submit(submissionReference).apply(request)
+      val request = FakeRequest().withBody(submission).withHeaders("Authorization" -> "fake-token")
+      val result  = controller.submit(submissionReference).apply(request)
 
-    status(result)(timeout) shouldBe CONFLICT
+      status(result)(timeout) shouldBe CONFLICT
+    }
   }
 
 }
