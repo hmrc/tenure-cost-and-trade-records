@@ -33,6 +33,7 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
   lazy val retryWindow             = runModeConfiguration.get[Int]("submissionExport.retryWindowHours")
 //  lazy val logErrorInHours = runModeConfiguration.get[Int]("submissionExport.logErrorInHours")
   lazy val enableDuplicate         = runModeConfiguration.get[Boolean]("submissionExport.enableDuplicateSubmissions")
+  lazy val enableSubmitted         = runModeConfiguration.get[Boolean]("submissionExport.enableSubmittedSave")
   lazy val exportFrequency         = runModeConfiguration.get[Int]("submissionExport.frequencySeconds")
   lazy val enablePublishing        = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
 
