@@ -21,7 +21,8 @@ import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDu
 
 case class OccupationalAndAccountingInformation(
   firstOccupy: MonthsYearDuration,
-  financialYear: DayMonthsDuration
+  financialYear: Option[DayMonthsDuration] = None,
+  yearEndChanged: Option[Boolean] = Some(false)
 )
 object OccupationalAndAccountingInformation {
   implicit val format = Json.format[OccupationalAndAccountingInformation]
