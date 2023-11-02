@@ -27,7 +27,6 @@ import java.time.temporal.ChronoUnit
 import java.time.{Clock, Instant}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 @ImplementedBy(classOf[ExportConnectedSubmissionsVOA])
 trait ExportConnectedSubmissions {

@@ -19,7 +19,7 @@ package uk.gov.hmrc.tctr.backend.controllers
 import com.mongodb.client.result.DeleteResult
 import org.mockito.IdiomaticMockito.StubbingOps
 import org.mockito.MockitoSugar.mock
-import play.api.http.Status.{BAD_REQUEST, CREATED, NOT_FOUND, OK, UNAUTHORIZED}
+import play.api.http.Status.{BAD_REQUEST, CREATED, NOT_FOUND, OK}
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsJson, status, stubControllerComponents}
