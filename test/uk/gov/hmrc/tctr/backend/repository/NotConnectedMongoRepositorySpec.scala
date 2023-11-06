@@ -16,38 +16,37 @@
 
 package uk.gov.hmrc.tctr.backend.repository
 
-
-import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.tctr.backend.testUtils.{CustomMatchers, FakeObjects}
 
 /**
   * @author Yuriy Tumakha
   */
-class ConnectedMongoRepositorySpec extends MongoSpecBase with FakeObjects {
+class NotConnectedMongoRepositorySpec extends MongoSpecBase with FakeObjects with CustomMatchers {
 
-  private val submissionDraftFindId = "99996010004"
+  private val submissionDraftFindId = referenceNumberNotConnected
 
-  private val repo = inject[ConnectedMongoRepository]
+  private val repo = inject[NotConnectedMongoRepository]
 
-  repo.insert(prefilledConnectedSubmission).futureValue
+  repo.insert(notConnectedSubmission).futureValue
 
-  "ConnectedMongoRepository" should "find ConnectedSubmission by correct id" in {
+  "NotConnectedMongoRepository" should "find NotConnectedSubmission by correct id" in {
 
-    repo.findByReference(submissionDraftFindId).futureValue shouldBe Some(prefilledConnectedSubmission)
+    repo.findById(submissionDraftFindId).futureValue should beEqualToIgnoringMillis(Some(notConnectedSubmission))
   }
 
   it should "return None by unknown id" in {
-    repo.findByReference("UNKNOWN_ID").futureValue shouldBe None
+    repo.findById("UNKNOWN_ID").futureValue shouldBe None
   }
 
-  it should "return a sequence of ConnectedSubmissions" in {
-    repo.getSubmissions(1).futureValue shouldBe Seq(prefilledConnectedSubmission)
+  it should "return a sequence of NotConnectedSubmissions" in {
+    repo.getSubmissions(1).futureValue should beSeqEqualToIgnoringMillisSeq(notConnectedSubmission)
   }
 
-  it should "return number of ConnectedSubmissions" in {
+  it should "return number of NotConnectedSubmissions" in {
     repo.count.futureValue shouldBe 1
   }
 
-  "ConnectedMongoRepository" should "remove all ConnectedSubmissions" in {
+  "ConnectedMongoRepository" should "remove all NotConnectedSubmissions" in {
     repo.count.futureValue should be > 0L
 
     repo.removeAll.futureValue

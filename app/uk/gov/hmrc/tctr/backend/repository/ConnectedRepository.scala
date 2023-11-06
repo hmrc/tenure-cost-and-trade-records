@@ -47,6 +47,8 @@ trait ConnectedRepository {
 
   def removeById(id: String): Future[DeleteResult]
 
+  def removeAll(): Future[DeleteResult]
+
 }
 
 object ConnectedMongoRepository {
@@ -95,4 +97,7 @@ class ConnectedMongoRepository @Inject() (mongoComponent: MongoComponent)(implic
 
   def removeById(refNum: String): Future[DeleteResult] =
     collection.deleteOne(equal("referenceNumber", refNum)).toFuture()
+
+  def removeAll(): Future[DeleteResult] = collection.deleteMany(Filters.empty()).toFuture()
+
 }

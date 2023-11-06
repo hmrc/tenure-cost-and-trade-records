@@ -1,4 +1,3 @@
-
 POST          /authenticate                                     uk.gov.hmrc.tctr.backend.controllers.AuthController.authenticate
 
 GET           /:refNum/forType                                  uk.gov.hmrc.tctr.backend.controllers.AuthController.retrieveFORType(refNum)
@@ -13,3 +12,6 @@ PUT           /submissions/connected/:referenceNumber           uk.gov.hmrc.tctr
 
 +nocsrf
 POST          /upscan/callback                                  uk.gov.hmrc.tctr.backend.controllers.UpscanCallbackController.callback
+
++nocsrf
+POST           /admin/submissions/delete-all                    uk.gov.hmrc.tctr.backend.controllers.SubmissionAdminController.deleteAll

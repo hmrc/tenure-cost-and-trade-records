@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-import uk.gov.hmrc.tctr.backend.models.{AnnualRent, ConnectedSubmission}
+import net.bytebuddy.description.method.ParameterList.Explicit.ForTypes
+import uk.gov.hmrc.tctr.backend.models.{AnnualRent, ConnectedSubmission, NotConnectedSubmission}
 import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDuration}
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure._
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings._
@@ -32,6 +33,7 @@ import java.time.{Instant, LocalDate}
 
 trait FakeObjects {
   val referenceNumber: String   = "99996010004"
+  val referenceNumberNotConnected: String   = "99996010005"
   val forType6010: String       = "FOR6010"
   val forType6011: String       = "FOR6011"
   val forType6015: String       = "FOR6015"
@@ -226,4 +228,16 @@ trait FakeObjects {
       additionalInformation = Some(prefilledAdditionalInformation),
       saveAsDraftPassword = "dummyPassword"
     )
+
+  val notConnectedSubmission = NotConnectedSubmission(
+    referenceNumberNotConnected,
+    forType6010,
+    prefilledAddress,
+    "John Smith",
+    Some("test@test.com"),
+    Some("12312312312"),
+    Some("additional info"),
+    Instant.now(),
+    false
+  )
 }
