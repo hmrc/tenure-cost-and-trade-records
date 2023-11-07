@@ -28,6 +28,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.infrastructure._
 import uk.gov.hmrc.tctr.backend.testUtils._
 
@@ -53,6 +54,7 @@ class CredentialsVerifierSpec
     .build()
 
   def mongo: MongoComponent = app.injector.instanceOf[MongoComponent]
+  def appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   behavior of "Credentials Verifier"
 
@@ -139,7 +141,7 @@ class CredentialsVerifierSpec
     def verifierWith(config: VerifierConfig, clock: Clock) = {
       import scala.concurrent.ExecutionContext.Implicits.global
       val emptyCreds     = new StubCredentialsRepository()
-      val emptySubmitted = new StubSubmittedRepository(mongo)
+      val emptySubmitted = new StubSubmittedRepository(mongo,appConfig)
       val loginsRepo     = new InMemoryFailedLoginsRepo()
       new IPBlockingCredentialsVerifier(emptyCreds, emptySubmitted, loginsRepo, true, config, clock, false)
     }

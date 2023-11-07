@@ -25,10 +25,14 @@ import org.mongodb.scala.model._
 import org.mongodb.scala.result.{DeleteResult, InsertOneResult}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.models.RefNum
 
+import java.time.Instant
+import java.util.concurrent.TimeUnit
+
 @Singleton
-class SubmittedMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)(implicit ec: ExecutionContext)
     extends PlayMongoRepository[RefNum](
       collectionName = "submitted",
       mongoComponent = mongo,
@@ -37,6 +41,12 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Executio
         IndexModel(
           Indexes.hashed("referenceNumber"),
           IndexOptions().name("referenceNumberIdx")
+        ),
+        IndexModel(
+          Indexes.ascending("createdAt"),
+          IndexOptions()
+            .name("createdAtTTL")
+            .expireAfter(appConfig.submittedTTL, TimeUnit.DAYS) // Set the TTL
         )
       ),
       extraCodecs = Seq(
@@ -46,7 +56,7 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Executio
 
   def insertIfUnique(refNum: String): Future[InsertOneResult] =
     collection.find(equal("referenceNumber", refNum)).toFuture().flatMap {
-      case Nil => collection.insertOne(RefNum(refNum)).toFuture()
+      case Nil => collection.insertOne(RefNum(refNum,Instant.now())).toFuture()
       case seq => Future.failed(new Exception(s"Duplicate reference number: $seq"))
     }
 

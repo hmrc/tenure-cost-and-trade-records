@@ -44,6 +44,10 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
   lazy val ipLockoutEnabled   = runModeConfiguration.get[Boolean]("authentication.ipLockoutEnabled")
   lazy val voaIPAddress       = runModeConfiguration.get[String]("authentication.voaIPAddress")
 
+  lazy val notConnectedSubmissionTTL = runModeConfiguration.get[Int]("notConnectedSubmissionTTL")
+  lazy val connectedSubmissionTTL = runModeConfiguration.get[Int]("connectedSubmissionTTL")
+  lazy val submittedTTL = runModeConfiguration.get[Int]("submittedTTL")
+
 //  lazy val enablePublishing = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
 //  lazy val getFullLog = runModeConfiguration.get[Boolean]("submissionExport.logFull")
 
