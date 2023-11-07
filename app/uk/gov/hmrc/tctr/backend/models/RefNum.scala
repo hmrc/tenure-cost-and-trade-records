@@ -19,7 +19,9 @@ package uk.gov.hmrc.tctr.backend.models
 import org.mongodb.scala.bson.ObjectId
 import play.api.libs.json.{Json, OFormat}
 
-case class RefNum(referenceNumber: String, _id: Option[ObjectId] = None)
+import java.time.Instant
+
+case class RefNum(referenceNumber: String, createdAt:Instant, _id: Option[ObjectId] = None)
 
 object RefNum {
   import uk.gov.hmrc.mongo.play.json.formats.MongoFormats.Implicits._

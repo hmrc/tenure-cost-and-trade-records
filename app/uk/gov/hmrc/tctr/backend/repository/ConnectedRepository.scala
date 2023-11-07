@@ -24,9 +24,9 @@ import org.mongodb.scala.result.{DeleteResult, InsertOneResult}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
+import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.{ConnectedSubmission, SensitiveConnectedSubmission}
-import uk.gov.hmrc.tctr.backend.repository.NotConnectedMongoRepository.expireAfterDays
 
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
@@ -51,12 +51,8 @@ trait ConnectedRepository {
 
 }
 
-object ConnectedMongoRepository {
-  val expireAfterDays = 33
-}
-
 @Singleton
-class ConnectedMongoRepository @Inject() (mongoComponent: MongoComponent)(implicit
+class ConnectedMongoRepository @Inject() (mongoComponent: MongoComponent, appConfig: AppConfig)(implicit
   ec: ExecutionContext,
   crypto: MongoCrypto
 ) extends PlayMongoRepository[SensitiveConnectedSubmission](
@@ -66,7 +62,7 @@ class ConnectedMongoRepository @Inject() (mongoComponent: MongoComponent)(implic
       indexes = Seq(
         IndexModel(
           Indexes.ascending("createdAt"),
-          IndexOptions().name("connectedSubmissionTTL").expireAfter(expireAfterDays, TimeUnit.DAYS)
+          IndexOptions().name("connectedSubmissionTTL").expireAfter(appConfig.connectedSubmissionTTL, TimeUnit.DAYS)
         )
       ),
       extraCodecs = Seq(

@@ -21,6 +21,7 @@ import org.mongodb.scala.BulkWriteResult
 import org.mongodb.scala.result.{DeleteResult, InsertManyResult, InsertOneResult}
 import play.api.libs.json.OWrites
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.models.FORCredentials
 import uk.gov.hmrc.tctr.backend.repository._
 import uk.gov.hmrc.tctr.backend.security._
@@ -61,8 +62,8 @@ class StubCredentialsRepository extends CredentialsRepo {
   ): Future[BulkWriteResult] = ???
 }
 
-class StubSubmittedRepository @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
-    extends SubmittedMongoRepo(mongo) {
+class StubSubmittedRepository @Inject() (mongo: MongoComponent, appConfig: AppConfig)(implicit ec: ExecutionContext)
+    extends SubmittedMongoRepo(mongo,appConfig) {
   override def insertIfUnique(refNum: String): Future[InsertOneResult] = ???
 
   override def hasBeenSubmitted(refNum: String): Future[Boolean] = Future.successful(false)
