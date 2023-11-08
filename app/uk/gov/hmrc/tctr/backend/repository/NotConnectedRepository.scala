@@ -61,7 +61,9 @@ class NotConnectedMongoRepository @Inject() (mongoComponent: MongoComponent, app
       indexes = Seq(
         IndexModel(
           Indexes.ascending("createdAt"),
-          IndexOptions().name("notConnectedSubmissionTTL").expireAfter(appConfig.notConnectedSubmissionTTL, TimeUnit.DAYS)
+          IndexOptions()
+            .name("notConnectedSubmissionTTL")
+            .expireAfter(appConfig.notConnectedSubmissionTTL, TimeUnit.DAYS)
         )
       ),
       extraCodecs = Seq(

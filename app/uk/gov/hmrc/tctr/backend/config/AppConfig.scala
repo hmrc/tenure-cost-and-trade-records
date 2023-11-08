@@ -25,13 +25,9 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
 
   lazy val authenticationRequired  = runModeConfiguration.get[Boolean]("authenticationRequired")
   lazy val submissionExportEnabled = runModeConfiguration.get[Boolean]("submissionExport.enabled")
-//  lazy val exportUrl = runModeConfiguration.get[String]("submissionExport.url")
-//  lazy val exportUsername = runModeConfiguration.get[String]("submissionExport.username")
-//  lazy val exportPassword = runModeConfiguration.get[String]("submissionExport.password")
   lazy val exportBatchSize         = runModeConfiguration.get[Int]("submissionExport.batchSize")
-//  lazy val testAccountPrefix = runModeConfiguration.get[String]("submissionExport.testAccountPrefix")
+  lazy val testAccountPrefix       = runModeConfiguration.get[String]("submissionExport.testAccountPrefix")
   lazy val retryWindow             = runModeConfiguration.get[Int]("submissionExport.retryWindowHours")
-//  lazy val logErrorInHours = runModeConfiguration.get[Int]("submissionExport.logErrorInHours")
   lazy val enableDuplicate         = runModeConfiguration.get[Boolean]("submissionExport.enableDuplicateSubmissions")
   lazy val exportFrequency         = runModeConfiguration.get[Int]("submissionExport.frequencySeconds")
   lazy val enablePublishing        = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
@@ -47,13 +43,5 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
   lazy val notConnectedSubmissionTTL = runModeConfiguration.get[Int]("notConnectedSubmissionTTL")
   lazy val connectedSubmissionTTL = runModeConfiguration.get[Int]("connectedSubmissionTTL")
   lazy val submittedTTL = runModeConfiguration.get[Int]("submittedTTL")
-
-//  lazy val enablePublishing = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
-//  lazy val getFullLog = runModeConfiguration.get[Boolean]("submissionExport.logFull")
-
-//  lazy val logQueuedSubmissions = runModeConfiguration.get[Boolean]("logSubmissionQueue")
-//  lazy val submissionQueueSizeMonitoringFrequency = runModeConfiguration.get[Int]("submissionQueueLogFrequencyMinutes") minutes
-//
-//  lazy val jsonValidationEnabled = runModeConfiguration.get[Boolean]("jsonValidationEnabled")
 
 }

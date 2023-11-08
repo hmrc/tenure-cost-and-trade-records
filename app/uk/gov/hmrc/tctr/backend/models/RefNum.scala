@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, OFormat}
 
 import java.time.Instant
 
-case class RefNum(referenceNumber: String, createdAt:Instant, _id: Option[ObjectId] = None)
+case class RefNum(referenceNumber: String, createdAt: Instant, _id: Option[ObjectId] = None)
 
 object RefNum {
   import uk.gov.hmrc.mongo.play.json.formats.MongoFormats.Implicits._

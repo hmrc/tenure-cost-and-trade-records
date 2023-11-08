@@ -32,15 +32,15 @@ import uk.gov.hmrc.tctr.backend.schema.Address
 import java.time.{Instant, LocalDate}
 
 trait FakeObjects {
-  val referenceNumber: String   = "99996010004"
-  val referenceNumberNotConnected: String   = "99996010005"
-  val forType6010: String       = "FOR6010"
-  val forType6011: String       = "FOR6011"
-  val forType6015: String       = "FOR6015"
-  val forType6016: String       = "FOR6016"
-  val prefilledAddress: Address =
+  val referenceNumber: String             = "99996010004"
+  val referenceNumberNotConnected: String = "99996010005"
+  val forType6010: String                 = "FOR6010"
+  val forType6011: String                 = "FOR6011"
+  val forType6015: String                 = "FOR6015"
+  val forType6016: String                 = "FOR6016"
+  val prefilledAddress: Address           =
     Address("001", Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", "BN12 4AX")
-  val token: String             = "Basic OTk5OTYwMTAwMDQ6U2Vuc2l0aXZlKC4uLik="
+  val token: String                       = "Basic OTk5OTYwMTAwMDQ6U2Vuc2l0aXZlKC4uLik="
 
   val prefilledContactDetails: ContactDetails                            = ContactDetails("1234567890", "TestEmail@gmail.com")
   val prefilledContactAddress: ContactDetailsAddress                     = ContactDetailsAddress(

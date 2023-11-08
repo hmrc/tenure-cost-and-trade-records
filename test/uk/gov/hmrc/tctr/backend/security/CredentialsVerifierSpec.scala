@@ -54,7 +54,7 @@ class CredentialsVerifierSpec
     .build()
 
   def mongo: MongoComponent = app.injector.instanceOf[MongoComponent]
-  def appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+  def appConfig: AppConfig  = app.injector.instanceOf[AppConfig]
 
   behavior of "Credentials Verifier"
 
@@ -141,7 +141,7 @@ class CredentialsVerifierSpec
     def verifierWith(config: VerifierConfig, clock: Clock) = {
       import scala.concurrent.ExecutionContext.Implicits.global
       val emptyCreds     = new StubCredentialsRepository()
-      val emptySubmitted = new StubSubmittedRepository(mongo,appConfig)
+      val emptySubmitted = new StubSubmittedRepository(mongo, appConfig)
       val loginsRepo     = new InMemoryFailedLoginsRepo()
       new IPBlockingCredentialsVerifier(emptyCreds, emptySubmitted, loginsRepo, true, config, clock, false)
     }
