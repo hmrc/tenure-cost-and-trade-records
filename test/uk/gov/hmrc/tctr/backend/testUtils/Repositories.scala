@@ -63,7 +63,7 @@ class StubCredentialsRepository extends CredentialsRepo {
 }
 
 class StubSubmittedRepository @Inject() (mongo: MongoComponent, appConfig: AppConfig)(implicit ec: ExecutionContext)
-    extends SubmittedMongoRepo(mongo,appConfig) {
+    extends SubmittedMongoRepo(mongo, appConfig) {
   override def insertIfUnique(refNum: String): Future[InsertOneResult] = ???
 
   override def hasBeenSubmitted(refNum: String): Future[Boolean] = Future.successful(false)

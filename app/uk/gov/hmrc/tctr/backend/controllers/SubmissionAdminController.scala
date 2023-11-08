@@ -26,7 +26,7 @@ import uk.gov.hmrc.tctr.backend.repository.{ConnectedRepository, NotConnectedRep
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext}
 
-class SubmissionAdminController @Inject()(
+class SubmissionAdminController @Inject() (
   connectedRepository: ConnectedRepository,
   notConnectedRepo: NotConnectedRepository,
   submittedMongoRepo: SubmittedMongoRepo,
@@ -43,8 +43,8 @@ class SubmissionAdminController @Inject()(
   def deleteAll =
     auth.authorizedAction[Unit](permission).compose(Action).async { implicit request =>
       for {
-       _ <-  connectedRepository.removeAll
-       _ <-  notConnectedRepo.removeAll
+        _ <- connectedRepository.removeAll
+        _ <- notConnectedRepo.removeAll
         _ <- submittedMongoRepo.removeAll
       } yield Ok
     }

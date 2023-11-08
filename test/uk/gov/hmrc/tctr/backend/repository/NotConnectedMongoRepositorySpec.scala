@@ -34,15 +34,15 @@ class NotConnectedMongoRepositorySpec extends MongoSpecBase with FakeObjects wit
     repo.findById(submissionDraftFindId).futureValue should beEqualToIgnoringMillis(Some(notConnectedSubmission))
   }
 
-  it should "return None by unknown id" in {
+  it                         should "return None by unknown id" in {
     repo.findById("UNKNOWN_ID").futureValue shouldBe None
   }
 
-  it should "return a sequence of NotConnectedSubmissions" in {
+  it                         should "return a sequence of NotConnectedSubmissions" in {
     repo.getSubmissions(1).futureValue should beSeqEqualToIgnoringMillisSeq(notConnectedSubmission)
   }
 
-  it should "return number of NotConnectedSubmissions" in {
+  it                         should "return number of NotConnectedSubmissions" in {
     repo.count.futureValue shouldBe 1
   }
 

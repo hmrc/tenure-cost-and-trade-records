@@ -38,26 +38,22 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class SubmissionAdminControllerSpec
-  extends AnyWordSpec
-    with Matchers
-    with GuiceOneAppPerSuite
-    with MockitoSugar {
+class SubmissionAdminControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite with MockitoSugar {
 
-  implicit val timeout: Timeout = 5.seconds
-  implicit val ec: ExecutionContext = ExecutionContext.global
-  private val mockConnectedRepo: ConnectedRepository = mock[ConnectedRepository]
-  private val mockNotConnectedRepo: NotConnectedRepository = mock[NotConnectedRepository]
-  private val mockSubmittedRepo: SubmittedMongoRepo = mock[SubmittedMongoRepo]
-  private val mockMetrics: MetricsHandler = mock[MetricsHandler]
-  private val fakeControllerComponents: ControllerComponents = Helpers.stubControllerComponents()
-  private val expectedPredicate =
+  implicit val timeout: Timeout                                  = 5.seconds
+  implicit val ec: ExecutionContext                              = ExecutionContext.global
+  private val mockConnectedRepo: ConnectedRepository             = mock[ConnectedRepository]
+  private val mockNotConnectedRepo: NotConnectedRepository       = mock[NotConnectedRepository]
+  private val mockSubmittedRepo: SubmittedMongoRepo              = mock[SubmittedMongoRepo]
+  private val mockMetrics: MetricsHandler                        = mock[MetricsHandler]
+  private val fakeControllerComponents: ControllerComponents     = Helpers.stubControllerComponents()
+  private val expectedPredicate                                  =
     Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
-  protected val mockStubBehaviour: StubBehaviour = mock[StubBehaviour]
+  protected val mockStubBehaviour: StubBehaviour                 = mock[StubBehaviour]
   mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
   protected val backendAuthComponentsStub: BackendAuthComponents =
     BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), ec)
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application                    = new GuiceApplicationBuilder()
     .overrides(
       bind[ConnectedRepository].toInstance(mockConnectedRepo),
       bind[NotConnectedRepository].toInstance(mockNotConnectedRepo),
@@ -78,7 +74,7 @@ class SubmissionAdminControllerSpec
       when(mockSubmittedRepo.removeAll).thenReturn(Future.successful(deleteResult))
 
       val request = FakeRequest().withHeaders("Authorization" -> "fake-token")
-      val result = controller.deleteAll.apply(request)
+      val result  = controller.deleteAll.apply(request)
 
       status(result)(timeout) shouldBe OK
     }

@@ -24,18 +24,19 @@ import java.time.temporal.ChronoUnit
 
 trait CustomMatchers {
 
-  class BeOptionEqualToIgnoringMillis(expected: Option[NotConnectedSubmission]) extends Matcher[Option[NotConnectedSubmission]] {
+  class BeOptionEqualToIgnoringMillis(expected: Option[NotConnectedSubmission])
+      extends Matcher[Option[NotConnectedSubmission]] {
 
     override def apply(left: Option[NotConnectedSubmission]): MatchResult = {
 
       val matches = (left, expected) match {
         case (Some(l), Some(e)) =>
-          val timeEqual = truncateMillis(l.createdAt) == truncateMillis(e.createdAt)
-          val lCopy = l.copy(createdAt = e.createdAt)
+          val timeEqual        = truncateMillis(l.createdAt) == truncateMillis(e.createdAt)
+          val lCopy            = l.copy(createdAt = e.createdAt)
           val otherFieldsEqual = lCopy == e
           timeEqual && otherFieldsEqual
-        case (None, None) => true
-        case _ => false
+        case (None, None)       => true
+        case _                  => false
       }
 
       MatchResult(
@@ -45,16 +46,15 @@ trait CustomMatchers {
       )
     }
 
-    private def truncateMillis(instant: Instant): Instant = {
+    private def truncateMillis(instant: Instant): Instant =
       instant.truncatedTo(ChronoUnit.SECONDS)
-    }
   }
 
-  def beEqualToIgnoringMillis(expected: Option[NotConnectedSubmission]): BeOptionEqualToIgnoringMillis = new BeOptionEqualToIgnoringMillis(expected)
+  def beEqualToIgnoringMillis(expected: Option[NotConnectedSubmission]): BeOptionEqualToIgnoringMillis =
+    new BeOptionEqualToIgnoringMillis(expected)
 
   class BeSeqEqualToIgnoringMillisInSeq(expected: NotConnectedSubmission) extends Matcher[Seq[NotConnectedSubmission]] {
-    def apply(left: Seq[NotConnectedSubmission]): MatchResult = {
-
+    def apply(left: Seq[NotConnectedSubmission]): MatchResult =
       if (left.isEmpty) {
         MatchResult(
           matches = false,
@@ -62,7 +62,7 @@ trait CustomMatchers {
           "The submission sequence was not empty"
         )
       } else {
-        val leftFirst = left.head
+        val leftFirst              = left.head
         val equalsWithoutTimestamp = leftFirst.copy(createdAt = expected.createdAt) == expected
         MatchResult(
           equalsWithoutTimestamp,
@@ -70,7 +70,6 @@ trait CustomMatchers {
           s"The first submission $leftFirst was equal to $expected ignoring milliseconds"
         )
       }
-    }
   }
 
   def beSeqEqualToIgnoringMillisSeq(expected: NotConnectedSubmission) = new BeSeqEqualToIgnoringMillisInSeq(expected)

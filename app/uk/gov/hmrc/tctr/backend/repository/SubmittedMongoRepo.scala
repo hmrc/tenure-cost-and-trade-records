@@ -56,7 +56,7 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)
 
   def insertIfUnique(refNum: String): Future[InsertOneResult] =
     collection.find(equal("referenceNumber", refNum)).toFuture().flatMap {
-      case Nil => collection.insertOne(RefNum(refNum,Instant.now())).toFuture()
+      case Nil => collection.insertOne(RefNum(refNum, Instant.now())).toFuture()
       case seq => Future.failed(new Exception(s"Duplicate reference number: $seq"))
     }
 
