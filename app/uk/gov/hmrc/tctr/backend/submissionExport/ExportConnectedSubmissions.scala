@@ -85,7 +85,8 @@ class ExportConnectedSubmissionsVOA @Inject() (
         "referenceNumber" -> submission.referenceNumber,
         "forType"         -> submission.forType,
         "submission"      -> submission
-      )
+      ),
+      Map.empty[String,String]
     )
 
 }
