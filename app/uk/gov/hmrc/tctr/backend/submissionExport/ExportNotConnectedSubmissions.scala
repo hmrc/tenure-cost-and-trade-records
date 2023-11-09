@@ -27,6 +27,7 @@ import uk.gov.hmrc.tctr.backend.repository.NotConnectedRepository
 
 import java.time.temporal.ChronoUnit
 import java.time.{Clock, Instant}
+import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,6 +46,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
   forConfig: AppConfig
 ) extends ExportNotConnectedSubmissions
     with Logging {
+  val requestId = "X-Request-ID"
 
   override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
     repository.getSubmissions(size).flatMap { submissions =>
@@ -69,13 +71,14 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
       logger.warn(s"${createDeskproTicket(submission)}")
       Future.unit
     } else {
+      val deskproTicket = createDeskproTicket(submission)
       deskproConnector
-        .createTicket(createDeskproTicket(submission))
+        .createTicket(deskproTicket)
         .flatMap { deskproTicketId =>
           logger.info(
             s"Not connected submission exported to deskpro, deskproID: $deskproTicketId, submissionID: ${submission.id}"
           )
-          auditAccepted(submission.id, deskproTicketId)
+          auditAccepted(submission.id, deskproTicketId, Map(requestId-> deskproTicket.sessionId))
           ///TODO Add email connector here - not added as not required for this PR
           repository.removeById(submission.id).map(_ => ())
         }
@@ -84,7 +87,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
             handle400BadRequest(upstreamErrorResponse, submission)
           case exception: Exception                                                                    =>
             val failureReason = s"can't export not connected property submission id: ${submission.id}"
-            auditRejected(submission.id, failureReason, exception.getMessage)
+            auditRejected(submission.id, failureReason, exception.getMessage, Map(requestId-> deskproTicket.sessionId))
             logger.warn(failureReason, exception)
         }
       Future.unit
@@ -108,13 +111,14 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
         "referenceNumber" -> submission.id,
         "forType"         -> submission.forType,
         "submission"      -> submission
-      )
+      ),
+        Map.empty[String,String]
     )
 
   def isTooLongInQueue(submission: NotConnectedSubmission): Boolean =
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.retryWindow, ChronoUnit.HOURS))
 
-  def auditAccepted(referenceNumber: String, deskproTicketId: Long): Unit = {
+  def auditAccepted(referenceNumber: String, deskproTicketId: Long, tags:Map[String,String]): Unit = {
     val outcome = Json.obj("isSuccessful" -> true)
     audit(
       "SubmissionToHmrcDeskpro",
@@ -122,11 +126,13 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
         "referenceNumber" -> referenceNumber,
         "deskproTicketId" -> deskproTicketId.toString,
         "outcome"         -> outcome
-      )
+      ),
+      tags
     )
+
   }
 
-  def auditRejected(referenceNumber: String, failureCategory: String, failureReason: String): Unit = {
+  def auditRejected(referenceNumber: String, failureCategory: String, failureReason: String, tags:Map[String,String]): Unit = {
     val outcome = Json.obj(
       "isSuccessful"    -> false,
       "failureCategory" -> failureCategory,
@@ -137,7 +143,8 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
       Json.obj(
         "referenceNumber" -> referenceNumber,
         "outcome"         -> outcome
-      )
+      ),
+      tags
     )
   }
 
@@ -172,7 +179,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
       "-",
       "-",
       "VOA",
-      "N/A"
+      s"govuk-tax-${UUID.randomUUID().toString}"
     )
   }
 

@@ -21,7 +21,7 @@ import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
 import play.api.Logger
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient,RequestId}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,7 +48,7 @@ class HmrcDeskproConnector @Inject() (
 
   override def createTicket(ticket: DeskproTicket): Future[Long] = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc = HeaderCarrier(requestId = Some(RequestId(ticket.sessionId)))
 
     http.POST[DeskproTicket, JsObject](deskproUrl + "/deskpro/ticket", ticket, Seq.empty).map { response =>
       val ticketNumber = response.value("ticket_id").as[JsNumber].as[Long]
