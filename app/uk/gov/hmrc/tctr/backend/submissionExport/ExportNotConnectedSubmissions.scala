@@ -78,7 +78,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
           logger.info(
             s"Not connected submission exported to deskpro, deskproID: $deskproTicketId, submissionID: ${submission.id}"
           )
-          auditAccepted(submission.id, deskproTicketId, Map(requestId-> deskproTicket.sessionId))
+          auditAccepted(submission.id, deskproTicketId, Map(requestId -> deskproTicket.sessionId))
           ///TODO Add email connector here - not added as not required for this PR
           repository.removeById(submission.id).map(_ => ())
         }
@@ -87,7 +87,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
             handle400BadRequest(upstreamErrorResponse, submission)
           case exception: Exception                                                                    =>
             val failureReason = s"can't export not connected property submission id: ${submission.id}"
-            auditRejected(submission.id, failureReason, exception.getMessage, Map(requestId-> deskproTicket.sessionId))
+            auditRejected(submission.id, failureReason, exception.getMessage, Map(requestId -> deskproTicket.sessionId))
             logger.warn(failureReason, exception)
         }
       Future.unit
@@ -112,13 +112,13 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
         "forType"         -> submission.forType,
         "submission"      -> submission
       ),
-        Map.empty[String,String]
+      Map.empty[String, String]
     )
 
   def isTooLongInQueue(submission: NotConnectedSubmission): Boolean =
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.retryWindow, ChronoUnit.HOURS))
 
-  def auditAccepted(referenceNumber: String, deskproTicketId: Long, tags:Map[String,String]): Unit = {
+  def auditAccepted(referenceNumber: String, deskproTicketId: Long, tags: Map[String, String]): Unit = {
     val outcome = Json.obj("isSuccessful" -> true)
     audit(
       "SubmissionToHmrcDeskpro",
@@ -132,7 +132,12 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
 
   }
 
-  def auditRejected(referenceNumber: String, failureCategory: String, failureReason: String, tags:Map[String,String]): Unit = {
+  def auditRejected(
+    referenceNumber: String,
+    failureCategory: String,
+    failureReason: String,
+    tags: Map[String, String]
+  ): Unit = {
     val outcome = Json.obj(
       "isSuccessful"    -> false,
       "failureCategory" -> failureCategory,

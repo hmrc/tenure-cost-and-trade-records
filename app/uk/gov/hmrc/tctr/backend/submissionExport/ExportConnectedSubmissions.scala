@@ -86,7 +86,7 @@ class ExportConnectedSubmissionsVOA @Inject() (
         "forType"         -> submission.forType,
         "submission"      -> submission
       ),
-      Map.empty[String,String]
+      Map.empty[String, String]
     )
 
 }
