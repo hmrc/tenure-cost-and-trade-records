@@ -36,13 +36,13 @@ class ForTCTRAudit @Inject() (
 
   private val AUDIT_SOURCE = "tenure-cost-and-trade-records"
 
-  def apply(auditType: String, detail: Map[String, String],tags:Map[String,String]): Unit = {
+  def apply(auditType: String, detail: Map[String, String], tags: Map[String, String]): Unit = {
     val event = DataEvent(auditSource = AUDIT_SOURCE, auditType = auditType, detail = detail, tags = tags)
     logger.debug(event.toString)
     sendEvent(event)
   }
 
-  def apply(auditType: String, json: JsObject, tags:Map[String,String]): Unit = {
+  def apply(auditType: String, json: JsObject, tags: Map[String, String]): Unit = {
     val extendedEvent = ExtendedDataEvent(auditSource = AUDIT_SOURCE, auditType = auditType, detail = json, tags = tags)
     logger.debug(extendedEvent.toString)
     sendExtendedEvent(extendedEvent)
