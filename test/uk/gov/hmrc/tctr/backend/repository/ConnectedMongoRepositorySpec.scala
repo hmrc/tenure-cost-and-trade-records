@@ -34,24 +34,16 @@ class ConnectedMongoRepositorySpec extends MongoSpecBase with FakeObjects {
     repo.findByReference(submissionDraftFindId).futureValue shouldBe Some(prefilledConnectedSubmission)
   }
 
-  it                         should "return None by unknown id" in {
+  it should "return None by unknown id" in {
     repo.findByReference("UNKNOWN_ID").futureValue shouldBe None
   }
 
-  it                         should "return a sequence of ConnectedSubmissions" in {
+  it should "return a sequence of ConnectedSubmissions" in {
     repo.getSubmissions(1).futureValue shouldBe Seq(prefilledConnectedSubmission)
   }
 
-  it                         should "return number of ConnectedSubmissions" in {
+  it should "return number of ConnectedSubmissions" in {
     repo.count.futureValue shouldBe 1
-  }
-
-  "ConnectedMongoRepository" should "remove all ConnectedSubmissions" in {
-    repo.count.futureValue should be > 0L
-
-    repo.removeAll.futureValue
-
-    repo.count.futureValue shouldBe 0L
   }
 
 }

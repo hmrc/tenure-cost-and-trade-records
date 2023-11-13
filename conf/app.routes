@@ -12,6 +12,3 @@ PUT           /submissions/connected/:referenceNumber           uk.gov.hmrc.tctr
 
 +nocsrf
 POST          /upscan/callback                                  uk.gov.hmrc.tctr.backend.controllers.UpscanCallbackController.callback
-
-+nocsrf
-POST           /admin/submissions/delete-all                    uk.gov.hmrc.tctr.backend.controllers.SubmissionAdminController.deleteAll

@@ -47,7 +47,6 @@ trait NotConnectedRepository {
 
   def count: Future[Long]
 
-  def removeAll: Future[DeleteResult]
 }
 
 @Singleton
@@ -95,5 +94,4 @@ class NotConnectedMongoRepository @Inject() (mongoComponent: MongoComponent, app
   def count: Future[Long] =
     collection.countDocuments().toFuture()
 
-  def removeAll = collection.deleteMany(Filters.empty()).toFuture()
 }
