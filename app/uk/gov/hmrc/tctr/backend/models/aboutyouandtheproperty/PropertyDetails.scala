@@ -19,7 +19,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 import play.api.libs.json.Json
 
 case class PropertyDetails(
-  propertyCurrentlyUsed: List[CurrentPropertyUsed],
+  propertyCurrentlyUsed: CurrentPropertyUsed,
   currentlyUsedOtherField: Option[String]
 )
 
