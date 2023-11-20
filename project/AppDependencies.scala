@@ -3,11 +3,12 @@ import sbt._
 
 private object AppDependencies {
 
-  val bootstrapVersion = "7.22.0"
-  val hmrcMongoVersion = "1.3.0"
-  val cryptoJsonVersion = "7.3.0"
+  val bootstrapVersion = "7.23.0"
+  val hmrcMongoVersion = "1.4.0"
+  val cryptoJsonVersion = "7.6.0"
   val jodaVersion = "2.9.4"
   val playLanguageVersion = "6.2.0-play-28"
+  val internalAuthClientVersion = "1.8.0"
 
 
   // Test dependencies
@@ -16,7 +17,6 @@ private object AppDependencies {
   val mockitoScalaVersion = "1.17.27"
   val scalaGuiceVersion = "5.1.1"
   val flexMarkVersion = "0.64.8"
-  val internalAuthClientVersion = "1.6.0"
 
   private val allTestsScope = "test,it"
 

@@ -27,7 +27,6 @@ import uk.gov.hmrc.tctr.backend.submissionExport.{ConnectedSubmissionExporter, E
 import java.time.Clock
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
-import scala.language.postfixOps
 
 @Singleton
 class ForTCTRImpl @Inject() (
