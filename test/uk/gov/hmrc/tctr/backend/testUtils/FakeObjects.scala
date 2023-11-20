@@ -121,7 +121,7 @@ trait FakeObjects {
   // About you and the property sessions
   val prefilledAboutYouAndThePropertyYes: AboutYouAndTheProperty = AboutYouAndTheProperty(
     Some(CustomerDetails("Full Name", ContactDetails(prefilledFakePhoneNo, prefilledFakeEmail))),
-    Some(PropertyDetails(List(CurrentPropertyHotel), None)),
+    Some(PropertyDetails(CurrentPropertyHotel, None)),
     Some(WebsiteForPropertyDetails(BuildingOperationHaveAWebsiteYes, Some("webAddress"))),
     Some(AnswerYes),
     Some(PremisesLicenseGrantedInformationDetails("Premises licence granted details")),
