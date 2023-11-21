@@ -40,7 +40,7 @@ abstract class MongoSpecBase
     with ScalaFutures
     with GuiceOneAppPerSuite {
 
-  private val testDbName = s"${getClass.getSimpleName}${System.currentTimeMillis}"
+  private val testDbName = s"TCTR-${getClass.getSimpleName}"
   private val testDbUri  = s"mongodb://localhost:27017/$testDbName"
   private val mongo      = inject[MongoComponent]
 
