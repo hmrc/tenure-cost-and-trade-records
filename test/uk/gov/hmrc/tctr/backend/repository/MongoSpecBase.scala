@@ -47,7 +47,7 @@ abstract class MongoSpecBase
   implicit val ec: ExecutionContext = inject[ExecutionContext]
 
   override protected def afterAll(): Unit = {
-    mongo.database.drop() // !!! Temporary database MUST be deleted after each test
+    mongo.database.drop().toFutureOption().futureValue // !!! Temporary database MUST be deleted after each test
     mongo.client.close()
   }
 
