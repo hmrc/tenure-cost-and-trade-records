@@ -53,7 +53,9 @@ abstract class MongoSpecBase
 
   override final def fakeApplication(): Application = new GuiceApplicationBuilder()
     .configure(
-      "mongodb.uri" -> testDbUri
+      "mongodb.uri" -> testDbUri,
+      "auditing.enabled" -> false,
+      "metrics.enabled" -> false
     )
     .bindings(new PlayMongoModule)
     .build()

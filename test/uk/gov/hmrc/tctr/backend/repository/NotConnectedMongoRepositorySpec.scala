@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.repository
 
+import org.mongodb.scala.model.{Filters, FindOneAndReplaceOptions}
+import uk.gov.hmrc.tctr.backend.models.SensitiveNotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.testUtils.{CustomMatchers, FakeObjects}
 
 /**
@@ -27,7 +29,13 @@ class NotConnectedMongoRepositorySpec extends MongoSpecBase with FakeObjects wit
 
   private val repo = inject[NotConnectedMongoRepository]
 
-  repo.insert(notConnectedSubmission).futureValue
+  repo.collection
+    .findOneAndReplace(
+      Filters.equal("_id", submissionDraftFindId),
+      SensitiveNotConnectedSubmission(notConnectedSubmission),
+      FindOneAndReplaceOptions().upsert(true)
+    )
+    .toFuture()
 
   "NotConnectedMongoRepository" should "find NotConnectedSubmission by correct id" in {
 
