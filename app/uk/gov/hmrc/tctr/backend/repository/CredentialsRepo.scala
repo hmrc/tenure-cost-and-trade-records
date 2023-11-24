@@ -85,14 +85,14 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent, configuration: Conf
   def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] = {
     val postcode1 = postcode.replace('+', ' ')
     collection
-      .find(equal("forNumber", refNum))
+      .find(equal("_id", refNum))
       .toFuture()
       .map(_.find(x => normalizePostcode(x.address.decryptedValue.postcode) == normalizePostcode(postcode1)))
       .recoverWith {
         case ex: RuntimeException if ex.getMessage.contains("JsError") =>
           logger.error(s"Error on converting credentials from json for referenceNumber: $refNum", ex)
           collection
-            .deleteMany(equal("referenceNumber", refNum))
+            .deleteMany(equal("_id", refNum))
             .toFuture()
             .map(_ => None)
       }
