@@ -50,7 +50,8 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
 
   override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
     repository.getSubmissions(size).flatMap { submissions =>
-      logger.info(s"Found ${submissions.length} not connected submissions to export")
+      if (submissions.length > 0)
+        logger.warn(s"Found ${submissions.length} not connected submissions to export")
       processSequentially(submissions)
     }
 
