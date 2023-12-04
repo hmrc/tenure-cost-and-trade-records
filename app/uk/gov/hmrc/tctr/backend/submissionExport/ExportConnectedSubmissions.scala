@@ -45,7 +45,7 @@ class ExportConnectedSubmissionsVOA @Inject() (
 
   override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
     connectedMongoRepository.getSubmissions(size).flatMap { submissions =>
-      logger.info(s"Found ${submissions.length} connected submissions to export")
+      if (submissions.length > 0) logger.warn(s"Found ${submissions.length} connected submissions to export")
       processSequentially(submissions)
       Future.unit
     }
@@ -61,9 +61,9 @@ class ExportConnectedSubmissionsVOA @Inject() (
     submission: ConnectedSubmission
   )(implicit executionContext: ExecutionContext): Future[Unit] =
     if (isTooLongInQueue(submission)) {
-      logger.error(
-        s"Unable to export not connected journey, ref: ${submission.referenceNumber}. MANUAL INTERVENTION REQUIRED"
-      )
+      logger.warn(
+        s"Unable to export connected journey, ref: ${submission.referenceNumber}. MANUAL INTERVENTION REQUIRED"
+      ) // Restore to error when the data is sent to BST
       auditSubmissionEvent("ConnectedSubmissionRemovedByTCTR", submission)
       connectedMongoRepository.removeById(submission.referenceNumber).map(_ => ())
       Future.unit
