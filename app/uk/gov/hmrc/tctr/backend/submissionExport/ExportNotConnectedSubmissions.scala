@@ -96,8 +96,8 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
               auditRejected(submission.id, failureReason, exception.getMessage, Map(requestId -> deskproTicket.sessionId))
               logger.warn(failureReason, exception)
           }
-        Future.unit
       }
+      Future.unit
     }
 
   private def handle400BadRequest(exception: UpstreamErrorResponse, submission: NotConnectedSubmission): Unit = {
