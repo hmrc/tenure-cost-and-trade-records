@@ -20,6 +20,9 @@ import org.mongodb.scala.model.{Filters, FindOneAndReplaceOptions}
 import uk.gov.hmrc.tctr.backend.models.SensitiveNotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.testUtils.{CustomMatchers, FakeObjects}
 
+import scala.concurrent.Await
+import scala.concurrent.duration.DurationInt
+
 /**
   * @author Yuriy Tumakha
   */
@@ -29,13 +32,18 @@ class NotConnectedMongoRepositorySpec extends MongoSpecBase with FakeObjects wit
 
   private val repo = inject[NotConnectedMongoRepository]
 
-  repo.collection
-    .findOneAndReplace(
-      Filters.equal("_id", submissionDraftFindId),
-      SensitiveNotConnectedSubmission(notConnectedSubmission),
-      FindOneAndReplaceOptions().upsert(true)
+  override def beforeAll(): Unit = {
+    super.beforeAll()
+    Await.result(
+      repo.collection
+        .findOneAndReplace(
+          Filters.equal("_id", submissionDraftFindId),
+          SensitiveNotConnectedSubmission(notConnectedSubmission),
+          FindOneAndReplaceOptions().upsert(true)
+        ).toFuture(),
+      2.seconds
     )
-    .toFuture()
+  }
 
   "NotConnectedMongoRepository" should "find NotConnectedSubmission by correct id" in {
 
