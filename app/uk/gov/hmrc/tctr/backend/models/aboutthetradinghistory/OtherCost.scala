@@ -15,13 +15,21 @@
  */
 
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
+
 import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.CostOfSales.zeroBigDecimal
 
-case class OtherCosts(
-                       otherCosts: Seq[OtherCost] = Seq.empty,
-                       otherCostDetails: Option[String] = None
-                     )
-object OtherCosts {
-  implicit val format = Json.format[OtherCosts]
+import java.time.LocalDate
 
+case class OtherCost(
+                      financialYearEnd: LocalDate,
+                      contributionsToHeadOffice: Option[BigDecimal],
+                      otherCosts: Option[BigDecimal]
+                    ) {
+  def total: BigDecimal =contributionsToHeadOffice.getOrElse(zeroBigDecimal) + otherCosts.getOrElse(zeroBigDecimal)
+}
+
+
+object OtherCost {
+  implicit val format = Json.format[OtherCost]
 }
