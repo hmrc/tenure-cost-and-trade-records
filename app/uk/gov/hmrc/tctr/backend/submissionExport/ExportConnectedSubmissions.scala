@@ -45,7 +45,7 @@ class ExportConnectedSubmissionsVOA @Inject() (
 
   override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
     connectedMongoRepository.getSubmissions(size).flatMap { submissions =>
-      if (submissions.length > 0) logger.warn(s"Found ${submissions.length} connected submissions to export")
+      if (submissions.nonEmpty) logger.warn(s"Found ${submissions.length} connected submissions to export")
       processSequentially(submissions)
       Future.unit
     }

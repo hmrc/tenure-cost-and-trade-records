@@ -50,7 +50,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
 
   override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
     repository.getSubmissions(size).flatMap { submissions =>
-      if (submissions.length > 0)
+      if (submissions.nonEmpty)
         logger.warn(s"Found ${submissions.length} not connected submissions to export")
       processSequentially(submissions)
     }
@@ -73,10 +73,8 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
       Future.unit
     } else {
       //if ref number matches the prefix
-      if (submission.id.take(6) == "999960") {
-        //logger debug details of ref number createDeskproTicket(submission)
-        logger.debug(s"This is a test account, ref: ${submission.id}")
-        //add repository.removeById(submission.id).map(_ => ()),
+      if (submission.id.startsWith(forConfig.testAccountPrefix)) {
+        auditAccepted(submission.id, 999960, Map(requestId -> deskproTicket.sessionId))
         repository.removeById(submission.id).map(_ => ())
       } else {
         val deskproTicket = createDeskproTicket(submission)
