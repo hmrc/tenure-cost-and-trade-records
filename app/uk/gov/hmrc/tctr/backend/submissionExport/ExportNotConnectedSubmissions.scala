@@ -50,7 +50,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
 
   override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
     repository.getSubmissions(size).flatMap { submissions =>
-      if (submissions.length > 0)
+      if (submissions.nonEmpty)
         logger.warn(s"Found ${submissions.length} not connected submissions to export")
       processSequentially(submissions)
     }
@@ -72,25 +72,33 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
       logger.warn(s"${createDeskproTicket(submission)}")
       Future.unit
     } else {
+      //if ref number matches the prefix
       val deskproTicket = createDeskproTicket(submission)
-      deskproConnector
-        .createTicket(deskproTicket)
-        .flatMap { deskproTicketId =>
-          logger.info(
-            s"Not connected submission exported to deskpro, deskproID: $deskproTicketId, submissionID: ${submission.id}"
-          )
-          auditAccepted(submission.id, deskproTicketId, Map(requestId -> deskproTicket.sessionId))
-          ///TODO Add email connector here - not added as not required for this PR
-          repository.removeById(submission.id).map(_ => ())
-        }
-        .recover {
-          case upstreamErrorResponse: UpstreamErrorResponse if upstreamErrorResponse.statusCode == 400 =>
-            handle400BadRequest(upstreamErrorResponse, submission)
-          case exception: Exception                                                                    =>
-            val failureReason = s"can't export not connected property submission id: ${submission.id}"
-            auditRejected(submission.id, failureReason, exception.getMessage, Map(requestId -> deskproTicket.sessionId))
-            logger.warn(failureReason, exception)
-        }
+      if (submission.id.startsWith(forConfig.testAccountPrefix)) {
+        auditAccepted(submission.id, 999960, Map(requestId -> deskproTicket.sessionId))
+        repository.removeById(submission.id).map(_ => ())
+      } else {
+        val deskproTicket = createDeskproTicket(submission)
+        deskproConnector
+          .createTicket(deskproTicket)
+          .flatMap { deskproTicketId =>
+            logger.info(
+              s"Not connected submission exported to deskpro, deskproID: $deskproTicketId, submissionID: ${submission.id}"
+            )
+            auditAccepted(submission.id, deskproTicketId, Map(requestId -> deskproTicket.sessionId))
+            ///TODO Add email connector here - not added as not required for this PR
+            repository.removeById(submission.id).map(_ => ())
+          }
+          .recover {
+            case upstreamErrorResponse: UpstreamErrorResponse if upstreamErrorResponse.statusCode == 400 =>
+              handle400BadRequest(upstreamErrorResponse, submission)
+            case exception: Exception =>
+              val failureReason = s"can't export not connected property submission id: ${submission.id}"
+              auditRejected(submission.id, failureReason, exception.getMessage, Map(requestId -> deskproTicket.sessionId))
+              logger.warn(failureReason, exception)
+          }
+
+      }
       Future.unit
     }
 
