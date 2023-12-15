@@ -73,6 +73,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
       Future.unit
     } else {
       //if ref number matches the prefix
+      val deskproTicket = createDeskproTicket(submission)
       if (submission.id.startsWith(forConfig.testAccountPrefix)) {
         auditAccepted(submission.id, 999960, Map(requestId -> deskproTicket.sessionId))
         repository.removeById(submission.id).map(_ => ())
@@ -96,6 +97,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
               auditRejected(submission.id, failureReason, exception.getMessage, Map(requestId -> deskproTicket.sessionId))
               logger.warn(failureReason, exception)
           }
+
       }
       Future.unit
     }
