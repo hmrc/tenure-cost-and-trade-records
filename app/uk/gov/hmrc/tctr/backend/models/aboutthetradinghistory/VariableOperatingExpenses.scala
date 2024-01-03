@@ -17,22 +17,26 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
 
 import java.time.LocalDate
 
 case class VariableOperatingExpenses(
   financialYearEnd: LocalDate,
-  energyAndUtilities: BigDecimal,
-  cleaningAndLaundry: BigDecimal,
-  buildingMaintenanceAndRepairs: BigDecimal,
-  fixturesFittingsAndEquipment: BigDecimal,
-  advertisingAndPromotions: BigDecimal,
-  administrationAndSundries: BigDecimal,
-  entertainment: BigDecimal,
-  totalVariableOperatingExpenses: BigDecimal
-)
+  energyAndUtilities: BigDecimal = zeroBigDecimal,
+  cleaningAndLaundry: BigDecimal = zeroBigDecimal,
+  buildingMaintenanceAndRepairs: BigDecimal = zeroBigDecimal,
+  fixturesFittingsAndEquipment: BigDecimal = zeroBigDecimal,
+  advertisingAndPromotions: BigDecimal = zeroBigDecimal,
+  administrationAndSundries: BigDecimal = zeroBigDecimal,
+  entertainment: BigDecimal = zeroBigDecimal,
+  other: BigDecimal = zeroBigDecimal
+) {
+  def total: BigDecimal =
+    Seq(energyAndUtilities, cleaningAndLaundry, buildingMaintenanceAndRepairs, fixturesFittingsAndEquipment,
+      advertisingAndPromotions, administrationAndSundries, entertainment, other).sum
+}
 
 object VariableOperatingExpenses {
   implicit val format = Json.format[VariableOperatingExpenses]
-
 }

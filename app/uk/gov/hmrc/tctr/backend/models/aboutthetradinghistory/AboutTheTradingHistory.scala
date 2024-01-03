@@ -17,6 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.models.VariableOperatingExpensesSections
 
 case class AboutTheTradingHistory(
   occupationAndAccountingInformation: Option[OccupationalAndAccountingInformation] = None,
@@ -28,7 +29,7 @@ case class AboutTheTradingHistory(
   netProfit: Option[NetProfit] = None,
   otherCosts: Option[OtherCosts] = None,
   totalPayrollCostSections: Seq[TotalPayrollCost] = Seq.empty,
-  variableOperatingExpensesSections: Seq[VariableOperatingExpenses] = Seq.empty,
+  variableOperatingExpensesSections: Option[VariableOperatingExpensesSections] = None,
   incomeExpenditureSummary: Option[IncomeExpenditureSummary] = None,
   unusualCircumstances: Option[UnusualCircumstances] = None,
   checkYourAnswersAboutTheTradingHistory: Option[CheckYourAnswersAboutTheTradingHistory] = None

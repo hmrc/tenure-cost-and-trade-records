@@ -17,7 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.CostOfSales.zeroBigDecimal
+import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
 
 import java.time.LocalDate
 
