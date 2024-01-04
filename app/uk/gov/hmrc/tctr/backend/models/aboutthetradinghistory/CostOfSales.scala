@@ -18,7 +18,6 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.Json
 
-
 import java.time.LocalDate
 
 case class CostOfSales(

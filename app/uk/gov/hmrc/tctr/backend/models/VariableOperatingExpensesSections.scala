@@ -20,8 +20,8 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.VariableOperatingExpenses
 
 /**
- * @author Yuriy Tumakha
- */
+  * @author Yuriy Tumakha
+  */
 case class VariableOperatingExpensesSections(
   variableOperatingExpenses: Seq[VariableOperatingExpenses] = Seq.empty,
   otherExpensesDetails: Option[String] = None
