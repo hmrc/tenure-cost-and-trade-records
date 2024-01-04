@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
+package uk.gov.hmrc.tctr.backend.models
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.VariableOperatingExpenses
 
-import java.time.LocalDate
+/**
+  * @author Yuriy Tumakha
+  */
+case class VariableOperatingExpensesSections(
+  variableOperatingExpenses: Seq[VariableOperatingExpenses] = Seq.empty,
+  otherExpensesDetails: Option[String] = None
+)
 
-case class OtherCost(
-  financialYearEnd: LocalDate,
-  contributionsToHeadOffice: Option[BigDecimal],
-  otherCosts: Option[BigDecimal]
-) {
-  def total: BigDecimal = contributionsToHeadOffice.getOrElse(zeroBigDecimal) + otherCosts.getOrElse(zeroBigDecimal)
-}
-
-object OtherCost {
-  implicit val format = Json.format[OtherCost]
+object VariableOperatingExpensesSections {
+  implicit val format = Json.format[VariableOperatingExpensesSections]
 }
