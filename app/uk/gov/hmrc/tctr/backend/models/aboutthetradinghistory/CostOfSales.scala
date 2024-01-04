@@ -17,7 +17,6 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.CostOfSales.zeroBigDecimal
 
 import java.time.LocalDate
 
@@ -28,16 +27,9 @@ case class CostOfSales(
   drinks: Option[BigDecimal],
   other: Option[BigDecimal]
 ) {
-  def total: BigDecimal =
-    accommodation.getOrElse(zeroBigDecimal) + food.getOrElse(zeroBigDecimal) +
-      drinks.getOrElse(zeroBigDecimal) + other.getOrElse(zeroBigDecimal)
-
+  def total: BigDecimal = Seq(accommodation, food, drinks, other).flatten.sum
 }
 
 object CostOfSales {
-
-  val zeroBigDecimal: BigDecimal = BigDecimal(0)
-
   implicit val format = Json.format[CostOfSales]
-
 }

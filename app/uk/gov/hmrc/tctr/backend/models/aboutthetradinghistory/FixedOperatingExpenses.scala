@@ -17,17 +17,20 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
 
 import java.time.LocalDate
 
 case class FixedOperatingExpenses(
   financialYearEnd: LocalDate,
-  rent: BigDecimal,
-  businessRates: BigDecimal,
-  insurance: BigDecimal,
-  loanInterest: BigDecimal,
-  depreciation: BigDecimal
-)
+  rent: BigDecimal = zeroBigDecimal,
+  businessRates: BigDecimal = zeroBigDecimal,
+  insurance: BigDecimal = zeroBigDecimal,
+  loanInterest: BigDecimal = zeroBigDecimal,
+  depreciation: BigDecimal = zeroBigDecimal
+) {
+  def total: BigDecimal = Seq(rent, businessRates, insurance, loanInterest, depreciation).sum
+}
 
 object FixedOperatingExpenses {
   implicit val format = Json.format[FixedOperatingExpenses]
