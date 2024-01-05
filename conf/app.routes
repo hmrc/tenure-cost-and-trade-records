@@ -10,5 +10,7 @@ PUT           /submissions/notConnected/:referenceNumber        uk.gov.hmrc.tctr
 
 PUT           /submissions/connected/:referenceNumber           uk.gov.hmrc.tctr.backend.controllers.ConnectedSubmissionController.submit(referenceNumber: String)
 
+PUT           /submissions/requestRefNum                        uk.gov.hmrc.tctr.backend.controllers.RequestRefNumSubmissionController.submit
+
 +nocsrf
 POST          /upscan/callback                                  uk.gov.hmrc.tctr.backend.controllers.UpscanCallbackController.callback

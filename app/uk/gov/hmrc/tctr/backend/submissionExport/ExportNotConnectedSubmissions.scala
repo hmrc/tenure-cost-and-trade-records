@@ -92,9 +92,14 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
           .recover {
             case upstreamErrorResponse: UpstreamErrorResponse if upstreamErrorResponse.statusCode == 400 =>
               handle400BadRequest(upstreamErrorResponse, submission)
-            case exception: Exception =>
+            case exception: Exception                                                                    =>
               val failureReason = s"can't export not connected property submission id: ${submission.id}"
-              auditRejected(submission.id, failureReason, exception.getMessage, Map(requestId -> deskproTicket.sessionId))
+              auditRejected(
+                submission.id,
+                failureReason,
+                exception.getMessage,
+                Map(requestId -> deskproTicket.sessionId)
+              )
               logger.warn(failureReason, exception)
           }
 

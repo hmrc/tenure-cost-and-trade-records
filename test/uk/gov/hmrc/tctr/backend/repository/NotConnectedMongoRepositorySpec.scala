@@ -40,7 +40,8 @@ class NotConnectedMongoRepositorySpec extends MongoSpecBase with FakeObjects wit
           Filters.equal("_id", submissionDraftFindId),
           SensitiveNotConnectedSubmission(notConnectedSubmission),
           FindOneAndReplaceOptions().upsert(true)
-        ).toFuture(),
+        )
+        .toFuture(),
       2.seconds
     )
   }
