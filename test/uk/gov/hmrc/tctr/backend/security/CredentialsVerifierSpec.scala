@@ -17,9 +17,7 @@
 package uk.gov.hmrc.tctr.backend.security
 
 import com.google.inject.AbstractModule
-import com.kenshoo.play.metrics.Metrics
 import net.codingwell.scalaguice.ScalaModule
-import org.joda.time.DateTime
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.flatspec.AnyFlatSpec
@@ -28,9 +26,11 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.infrastructure._
 import uk.gov.hmrc.tctr.backend.testUtils._
+import uk.gov.hmrc.tctr.backend.util.DateUtil.nowInUK
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -72,29 +72,29 @@ class CredentialsVerifierSpec
   it should "allow further login attempts after the lockout timeframe has elapsed" in {
     val config   =
       VerifierConfig(maxFailedLoginAttempts = 1, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voaIP)
-    val clock    = StubClock.withNow(DateTime.now)
+    val clock    = StubClock()
     val verifier = verifierWith(config, clock)
 
     assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(0))
     assert(await(verifier.verify(refNum, postcode, ip)) === IPLockout)
 
-    clock.setNow(DateTime.now.plusHours(23).plusMinutes(59))
+    clock.setNow(nowInUK.plusHours(23).plusMinutes(59))
     assert(await(verifier.verify(refNum, postcode, ip)) === IPLockout)
 
-    clock.setNow(DateTime.now.plusHours(24).plusSeconds(1))
+    clock.setNow(nowInUK.plusHours(24).plusSeconds(1))
     assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(0))
   }
 
   it should "not lockout an IP address if the login attempts do not occur within a single session" in {
     val config   =
       VerifierConfig(maxFailedLoginAttempts = 3, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voaIP)
-    val clock    = StubClock.withNow(DateTime.now)
+    val clock    = StubClock()
     val verifier = verifierWith(config, clock)
 
     await(verifier.verify(refNum, postcode, ip))
     await(verifier.verify(refNum, postcode, ip))
 
-    clock.setNow(DateTime.now.plusHours(1).plusSeconds(1))
+    clock.setNow(nowInUK.plusHours(1).plusSeconds(1))
     assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(2))
     assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(1))
   }
@@ -102,7 +102,7 @@ class CredentialsVerifierSpec
   it should "fail when the IP address is missing" in {
     val config   =
       VerifierConfig(maxFailedLoginAttempts = 3, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voaIP)
-    val clock    = StubClock.withNow(DateTime.now)
+    val clock    = StubClock()
     val verifier = verifierWith(config, clock)
 
     assert(await(verifier.verify(refNum, postcode, None)) === MissingIPAddress)
@@ -111,7 +111,7 @@ class CredentialsVerifierSpec
   it should "not verify IP addresses when account lockout is disabled" in {
     val config   =
       VerifierConfig(maxFailedLoginAttempts = 2, lockoutWindow = 24 hours, sessionWindow = 1 hour, false, voaIP)
-    val clock    = StubClock.withNow(DateTime.now)
+    val clock    = StubClock()
     val verifier = verifierWith(config, clock)
 
     assert(await(verifier.verify(refNum, postcode, None)) === InvalidCredentials(1))
@@ -122,7 +122,7 @@ class CredentialsVerifierSpec
   it should "not apply account lockout to the VOA IP address" in {
     val config   =
       VerifierConfig(maxFailedLoginAttempts = 2, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voaIP)
-    val clock    = StubClock.withNow(DateTime.now)
+    val clock    = StubClock()
     val verifier = verifierWith(config, clock)
 
     assert(await(verifier.verify(refNum, postcode, voaIP)) === InvalidCredentials(1))

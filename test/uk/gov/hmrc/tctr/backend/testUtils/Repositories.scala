@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-import org.joda.time.DateTime
 import org.mongodb.scala.BulkWriteResult
 import org.mongodb.scala.result.{DeleteResult, InsertManyResult, InsertOneResult}
 import play.api.libs.json.OWrites
@@ -26,13 +25,14 @@ import uk.gov.hmrc.tctr.backend.models.FORCredentials
 import uk.gov.hmrc.tctr.backend.repository._
 import uk.gov.hmrc.tctr.backend.security._
 
+import java.time.Instant
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class InMemoryFailedLoginsRepo extends FailedLoginsRepo {
   private var failedLogins: Map[String, Seq[FailedLogin]] = Map.empty
 
-  override def mostRecent(ip: String, amount: Int, since: DateTime): Future[Seq[FailedLogin]] = Future.successful {
+  override def mostRecent(ip: String, amount: Int, since: Instant): Future[Seq[FailedLogin]] = Future.successful {
     failedLogins.getOrElse(ip, Seq.empty).filter(_.timestamp.isAfter(since.minusSeconds(1)))
   }
 

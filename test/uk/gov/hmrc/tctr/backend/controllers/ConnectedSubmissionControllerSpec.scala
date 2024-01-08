@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import akka.util.Timeout
+
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult
+import org.apache.pekko.util.Timeout
 import org.mockito.ArgumentMatchers._
 import org.mockito.IdiomaticMockito.StubbingOps
 import org.mockito.MockitoSugar

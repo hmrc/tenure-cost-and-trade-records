@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-import com.codahale.metrics.Meter
+import com.codahale.metrics.{Meter, MetricRegistry}
 //import com.codahale.metrics.{Counter, Meter}
-import com.kenshoo.play.metrics.Metrics
+
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 
 import javax.inject.Inject
 
-class MockMetrics @Inject() (metric: Metrics) extends MetricsHandler(metric) {
+class MockMetrics @Inject() (metric: MetricRegistry) extends MetricsHandler(metric) {
   val meter                             = new Meter
 //  override lazy val failedSubmissions = meter
 //  override lazy val okSubmissions = meter
@@ -31,5 +31,4 @@ class MockMetrics @Inject() (metric: Metrics) extends MetricsHandler(metric) {
 //  override lazy val rejectedExports = meter
 //  override lazy val queuedSubmissions = new Counter()
   override lazy val importedCredentials = meter
-
 }
