@@ -36,7 +36,7 @@ case class FORCredentials(
 }
 
 object FORCredentials {
-
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
   implicit def format(implicit crypto: MongoCrypto): OFormat[FORCredentials] = Json.format[FORCredentials]
 
 }

@@ -34,6 +34,6 @@ case class NotConnectedSubmissionForm(
 )
 
 object NotConnectedSubmissionForm {
-
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
   implicit val format: OFormat[NotConnectedSubmissionForm] = Json.format[NotConnectedSubmissionForm]
 }
