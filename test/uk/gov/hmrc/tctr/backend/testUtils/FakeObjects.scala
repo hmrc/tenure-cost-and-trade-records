@@ -29,7 +29,7 @@ import uk.gov.hmrc.tctr.backend.models.connectiontoproperty._
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber._
 import uk.gov.hmrc.tctr.backend.schema.Address
 
-import java.time.{Instant, LocalDate}
+import java.time.{Instant, LocalDate, ZoneId}
 
 trait FakeObjects {
   val referenceNumber: String             = "99996010004"
@@ -88,7 +88,7 @@ trait FakeObjects {
   )
 
   val baseFilledConnectedSubmission: ConnectedSubmission =
-    ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token, Instant.now())
+    ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token, truncateToMillis(Instant.now()))
 
   val prefilledStillConnectedDetailsYesToAll: StillConnectedDetails = StillConnectedDetails(
     Some(AddressConnectionTypeYes),
@@ -240,4 +240,13 @@ trait FakeObjects {
     Instant.now(),
     false
   )
+
+  def truncateToMillis(instant: Instant): Instant = {
+    val truncatedLocalDateTime = instant
+      .atZone(ZoneId.systemDefault())
+      .toLocalDateTime
+      .withNano(instant.getNano / 1000000 * 1000000)
+
+    truncatedLocalDateTime.atZone(ZoneId.systemDefault()).toInstant
+  }
 }

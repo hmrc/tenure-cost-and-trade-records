@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import org.mockito.IdiomaticMockito.StubbingOps
 import org.mockito.MockitoSugar.{mock, when}
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}

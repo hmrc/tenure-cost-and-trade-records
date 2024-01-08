@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.tctr.backend
 
-import akka.actor.ActorSystem
+
 import com.google.inject.Provider
+import org.apache.pekko.actor.ActorSystem
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment, Logging}
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
@@ -26,7 +27,6 @@ import uk.gov.hmrc.tctr.backend.submissionExport.{ExportNotConnectedSubmissions,
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
-
 import java.time.Clock
 import javax.inject.Singleton
 
