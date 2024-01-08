@@ -27,6 +27,7 @@ import uk.gov.hmrc.tctr.backend.security.FailedLoginsMongoRepo.expireAfterDays
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
 
 import java.time.Instant
