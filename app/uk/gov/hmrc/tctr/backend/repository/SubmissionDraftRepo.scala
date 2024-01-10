@@ -24,6 +24,7 @@ import play.api.libs.json.JsValue
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
+import uk.gov.hmrc.tctr.backend.BuildInfo
 import uk.gov.hmrc.tctr.backend.crypto.EncryptionJsonTransformer
 import uk.gov.hmrc.tctr.backend.models.SubmissionDraftWrapper
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo.saveForDays
@@ -68,7 +69,7 @@ class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent, encryptionJsonT
     collection
       .findOneAndReplace(
         byId(id),
-        SubmissionDraftWrapper(id, encryptionJsonTransformer.encrypt(submissionDraft)),
+        SubmissionDraftWrapper(id, encryptionJsonTransformer.encrypt(submissionDraft), Some(BuildInfo.version)),
         FindOneAndReplaceOptions().upsert(true).returnDocument(ReturnDocument.AFTER)
       )
       .toFuture()

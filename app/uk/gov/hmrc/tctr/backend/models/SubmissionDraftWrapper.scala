@@ -26,6 +26,7 @@ import java.time.Instant
 case class SubmissionDraftWrapper(
   _id: String,
   submissionDraft: JsValue,
+  appVersion: Option[String],
   createdAt: Instant = Instant.now
 )
 

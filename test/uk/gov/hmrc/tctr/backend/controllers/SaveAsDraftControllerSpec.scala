@@ -97,7 +97,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
 
     val correctDbId = "12345"
 
-    private val dbRecord = Some(SubmissionDraftWrapper(correctDbId, Json.obj("a" -> "b")))
+    private val dbRecord = Some(SubmissionDraftWrapper(correctDbId, Json.obj("a" -> "b"), Some("v0.0.1")))
 
     override def find(id: String): Future[Option[JsValue]] =
       Future {
