@@ -52,8 +52,6 @@ object UpScanRequests {
   }
 
   object UploadConfirmation {
-    import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
-
     implicit val format: OFormat[UploadConfirmation] = new OFormat[UploadConfirmation] {
       override def writes(o: UploadConfirmation): JsObject = o match {
         case x: UploadConfirmationError   => uploadConfirmationError.writes(x)
