@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.tctr.backend.submissionExport
 
-
+import akka.actor.ActorSystem
+import akka.testkit.{ImplicitSender, TestKit}
 import com.mongodb.client.result.DeleteResult
 import com.typesafe.config.ConfigFactory
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.testkit.{ImplicitSender, TestKit}
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should

@@ -22,8 +22,8 @@ import java.time.LocalDate
 
 case class TotalPayrollCost(
   financialYearEnd: LocalDate,
-  managersAndStaff: Option[BigDecimal],
-  directorsRemuneration: Option[BigDecimal]
+  managersAndStaff: BigDecimal,
+  directorsRemuneration: BigDecimal
 )
 
 object TotalPayrollCost {

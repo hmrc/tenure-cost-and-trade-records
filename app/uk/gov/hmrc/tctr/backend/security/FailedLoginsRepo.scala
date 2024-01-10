@@ -16,11 +16,13 @@
 
 package uk.gov.hmrc.tctr.backend.security
 
+import org.joda.time.DateTime
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.Updates.{push, setOnInsert}
 import org.mongodb.scala.model._
 import play.api.libs.json._
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.mongo.play.json.formats.MongoJodaFormats
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.tctr.backend.security.FailedLoginsMongoRepo.expireAfterDays
 
@@ -28,11 +30,10 @@ import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-
-import java.time.Instant
+import uk.gov.hmrc.mongo.play.json.formats.MongoJodaFormats.Implicits._
 
 trait FailedLoginsRepo {
-  def mostRecent(ipAddress: String, amount: Int, since: Instant): Future[Seq[FailedLogin]]
+  def mostRecent(ipAddress: String, amount: Int, since: DateTime): Future[Seq[FailedLogin]]
 
   def record(login: FailedLogin): Future[Unit]
 }
@@ -54,12 +55,12 @@ class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Execu
         )
       ),
       extraCodecs = Seq(
-        Codecs.playFormatCodec(implicitly[Format[Instant]])
+        Codecs.playFormatCodec(MongoJodaFormats.dateTimeFormat)
       )
     )
     with FailedLoginsRepo {
 
-  def mostRecent(ipAddress: String, amount: Int, since: Instant): Future[Seq[FailedLogin]] =
+  def mostRecent(ipAddress: String, amount: Int, since: DateTime): Future[Seq[FailedLogin]] =
     collection
       .find(equal("_id", ipAddress))
       .headOption()
@@ -67,7 +68,7 @@ class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Execu
         case Some(failedLoginsMongo) =>
           failedLoginsMongo.attempts
             .filter(_.isAfter(since.minusSeconds(1)))
-            .sortBy(_.toEpochMilli)(Ordering.Long.reverse)
+            .sortBy(_.getMillis)(Ordering.Long.reverse)
             .take(amount)
             .map(FailedLogin(_, ipAddress))
         case None                    => Seq.empty
@@ -88,9 +89,9 @@ class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Execu
 
 }
 
-case class FailedLogin(timestamp: Instant, ipAddress: String)
+case class FailedLogin(timestamp: DateTime, ipAddress: String)
 
-case class FailedLoginsMongoSchema(_id: String, attempts: Seq[Instant])
+case class FailedLoginsMongoSchema(_id: String, attempts: Seq[DateTime])
 
 object FailedLoginsMongoSchema {
   implicit val format: Format[FailedLoginsMongoSchema] = Json.format[FailedLoginsMongoSchema]
