@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.tctr.backend.models
 
+import org.joda.time.DateTime
 import play.api.libs.json.{JsObject, JsResult, JsValue, Json, OFormat}
 
-import java.time.Instant
-
+import play.api.libs.json.JodaReads._
+import play.api.libs.json.JodaWrites._
 
 object UpScanRequests {
 
@@ -52,8 +53,6 @@ object UpScanRequests {
   }
 
   object UploadConfirmation {
-    import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
-
     implicit val format: OFormat[UploadConfirmation] = new OFormat[UploadConfirmation] {
       override def writes(o: UploadConfirmation): JsObject = o match {
         case x: UploadConfirmationError   => uploadConfirmationError.writes(x)
@@ -84,7 +83,7 @@ object UpScanRequests {
   )
 
   case class UploadDetails(
-    uploadTimestamp: Instant,
+    uploadTimestamp: DateTime,
     checksum: String,
     fileMimeType: String,
     fileName: String

@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.submissionExport
 
-
-import org.apache.pekko.actor.Scheduler
-import org.apache.pekko.event.EventStream
+import akka.actor.Scheduler
+import akka.event.EventStream
 import uk.gov.hmrc.mongo.lock.{LockService, MongoLockRepository}
 import uk.gov.hmrc.tctr.backend.infrastructure.{LockedJobScheduler, Schedule}
 

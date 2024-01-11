@@ -16,16 +16,10 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-
-import uk.gov.hmrc.tctr.backend.util.DateUtil.nowInUK
-
-import java.time.ZonedDateTime
+import org.joda.time.DateTime
 
 object StubClock {
-
-  def apply(): StubClock = new StubClock()
-
-  def withNow(d: ZonedDateTime): StubClock = {
+  def withNow(d: DateTime) = {
     val c = new StubClock()
     c.setNow(d)
     c
@@ -33,11 +27,10 @@ object StubClock {
 }
 
 class StubClock extends uk.gov.hmrc.tctr.backend.infrastructure.Clock {
+  private var _now: DateTime = DateTime.now
 
-  private var _now: ZonedDateTime = nowInUK
-
-  def setNow(d: ZonedDateTime): Unit =
+  def setNow(d: DateTime): Unit =
     _now = d
 
-  def now(): ZonedDateTime = _now
+  def now(): DateTime = _now
 }

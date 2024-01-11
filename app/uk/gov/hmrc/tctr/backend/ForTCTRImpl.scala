@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend
 
-
-import org.apache.pekko.actor.ActorSystem
+import akka.actor.ActorSystem
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import uk.gov.hmrc.tctr.backend.infrastructure.{RegularSchedule, TestDataImporter}

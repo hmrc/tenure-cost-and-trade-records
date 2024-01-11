@@ -16,17 +16,18 @@
 
 package uk.gov.hmrc.tctr.backend.metrics
 
+import com.kenshoo.play.metrics.Metrics
+
 import javax.inject.{Inject, Singleton}
-import com.codahale.metrics.MetricRegistry
-import com.codahale.metrics.Meter
 
 @Singleton
-class MetricsHandler @Inject() (registry: MetricRegistry) {
+class MetricsHandler @Inject() (metric: Metrics) {
+  val registry = metric.defaultRegistry
 
-  lazy val failedSubmissions: Meter   = registry.meter("failedforsubmissions")
-  lazy val okSubmissions: Meter       = registry.meter("okforsubmissions")
-  //lazy val exportedSubmissions: Meter = registry.meter("exportedsubmissions")
-  //lazy val rejectedExports: Meter     = registry.meter("rejectedexports")
-  //lazy val queuedSubmissions: Counter = registry.counter("queuedsubmissions")
-  lazy val importedCredentials: Meter = registry.meter("importedcredentials")
+  lazy val failedSubmissions   = registry.meter("failedforsubmissions")
+  lazy val okSubmissions       = registry.meter("okforsubmissions")
+//  lazy val exportedSubmissions = registry.meter("exportedsubmissions")
+//  lazy val rejectedExports = registry.meter("rejectedexports")
+//  lazy val queuedSubmissions = registry.counter("queuedsubmissions")
+  lazy val importedCredentials = registry.meter("importedcredentials")
 }
