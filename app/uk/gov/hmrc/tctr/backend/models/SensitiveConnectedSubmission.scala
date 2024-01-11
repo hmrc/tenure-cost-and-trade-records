@@ -73,7 +73,6 @@ case class SensitiveConnectedSubmission(
 }
 
 object SensitiveConnectedSubmission {
-  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
   implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveConnectedSubmission] =
     Json.format[SensitiveConnectedSubmission]
 

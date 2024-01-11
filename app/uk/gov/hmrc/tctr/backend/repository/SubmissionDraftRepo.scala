@@ -28,7 +28,7 @@ import uk.gov.hmrc.tctr.backend.BuildInfo
 import uk.gov.hmrc.tctr.backend.crypto.EncryptionJsonTransformer
 import uk.gov.hmrc.tctr.backend.models.SubmissionDraftWrapper
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo.saveForDays
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
+
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

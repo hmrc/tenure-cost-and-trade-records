@@ -16,19 +16,20 @@
 
 package uk.gov.hmrc.tctr.backend.infrastructure
 
+import java.util.TimeZone
+
 import com.google.inject.ImplementedBy
-import uk.gov.hmrc.tctr.backend.util.DateUtil.nowInUK
-
-import java.time.ZonedDateTime
 import javax.inject.{Inject, Singleton}
-
+import org.joda.time.{DateTime, DateTimeZone, LocalDate, LocalTime}
 
 @ImplementedBy(classOf[SystemClock])
 trait Clock {
-  def now(): ZonedDateTime
+  def now(): DateTime
 }
 
 @Singleton
 class SystemClock @Inject() extends Clock {
-  def now(): ZonedDateTime = nowInUK
+  val gmt = DateTimeZone.forTimeZone(TimeZone.getTimeZone("GMT"))
+
+  def now(): DateTime = LocalDate.now(gmt).toDateTime(new LocalTime(gmt))
 }

@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-
-import org.apache.pekko.util.Timeout
+import akka.util.Timeout
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 

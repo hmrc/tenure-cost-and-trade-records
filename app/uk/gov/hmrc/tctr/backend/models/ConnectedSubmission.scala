@@ -50,7 +50,5 @@ case class ConnectedSubmission(
   downloadPDFDetails: Option[DownloadPDFDetails] = None
 )
 object ConnectedSubmission {
-  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
-
   implicit val format = Json.format[ConnectedSubmission]
 }

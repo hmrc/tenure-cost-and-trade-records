@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-
+import akka.util.Timeout
 import com.codahale.metrics.Meter
 import org.mockito.ArgumentMatchers.any
 import play.api.mvc._
@@ -38,7 +38,6 @@ import uk.gov.hmrc.tctr.backend.models.{NotConnectedSubmission, NotConnectedSubm
 import uk.gov.hmrc.tctr.backend.repository.{NotConnectedRepository, SubmittedMongoRepo}
 import uk.gov.hmrc.tctr.backend.schema.Address
 import com.mongodb.client.result.InsertOneResult.acknowledged
-import org.apache.pekko.util.Timeout
 import org.bson.BsonBoolean.TRUE
 import org.mockito.IdiomaticMockito.StubbingOps
 import org.mockito.Mockito.when
