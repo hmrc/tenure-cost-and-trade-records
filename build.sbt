@@ -2,7 +2,7 @@ import sbt.Keys.scalacOptions
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSettings, scalaSettings}
 
-val plugins: Seq[Plugins] = Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
+val plugins: Seq[Plugins] = Seq(PlayScala, SbtDistributablesPlugin, BuildInfoPlugin)
 
 val silencerVersion = "1.7.9"
 
@@ -22,6 +22,7 @@ val root = (project in file("."))
     routesGenerator := InjectedRoutesGenerator,
     scalaVersion := "2.13.8",
     DefaultBuildSettings.targetJvm := "jvm-11",
+    buildInfoPackage := "uk.gov.hmrc.tctr.backend",
     maintainer := "voa.service.optimisation@digital.hmrc.gov.uk",
     // ***************
     // Use the silencer plugin to suppress warnings
