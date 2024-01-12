@@ -29,7 +29,7 @@ case class AboutTheTradingHistory(
   netProfit: Option[NetProfit] = None,
   otherCosts: Option[OtherCosts] = None,
   totalPayrollCostSections: Seq[TotalPayrollCost] = Seq.empty,
-  variableOperatingExpensesSections: Option[VariableOperatingExpensesSections] = None,
+  variableOperatingExpenses: Option[VariableOperatingExpensesSections] = None,
   incomeExpenditureSummary: Option[IncomeExpenditureSummary] = None,
   unusualCircumstances: Option[UnusualCircumstances] = None,
   checkYourAnswersAboutTheTradingHistory: Option[CheckYourAnswersAboutTheTradingHistory] = None
