@@ -20,9 +20,9 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.common.{BuildingInsurance, InsideRepairs, OutsideRepairs}
 
 case class UltimatelyResponsibleOutsideRepairs(
-                                                outsideRepairs: OutsideRepairs,
-                                                sharedResponsibilitiesOR: Option[String]
-                                              )
+  outsideRepairs: OutsideRepairs,
+  sharedResponsibilitiesOR: Option[String]
+)
 
 object UltimatelyResponsibleOutsideRepairs {
   implicit val format = Json.format[UltimatelyResponsibleOutsideRepairs]

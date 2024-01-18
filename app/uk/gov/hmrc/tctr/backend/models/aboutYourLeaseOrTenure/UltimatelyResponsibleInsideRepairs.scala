@@ -19,9 +19,9 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.common.InsideRepairs
 case class UltimatelyResponsibleInsideRepairs(
-                                               insideRepairs: InsideRepairs,
-                                               sharedResponsibilitiesIR: Option[String]
-                                             )
+  insideRepairs: InsideRepairs,
+  sharedResponsibilitiesIR: Option[String]
+)
 
 object UltimatelyResponsibleInsideRepairs {
   implicit val format = Json.format[UltimatelyResponsibleInsideRepairs]
