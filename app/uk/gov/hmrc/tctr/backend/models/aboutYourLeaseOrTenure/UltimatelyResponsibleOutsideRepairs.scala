@@ -19,13 +19,11 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.common.{BuildingInsurance, InsideRepairs, OutsideRepairs}
 
-case class UltimatelyResponsible(
+case class UltimatelyResponsibleOutsideRepairs(
   outsideRepairs: OutsideRepairs,
-  insideRepairs: InsideRepairs,
-  buildingInsurance: BuildingInsurance,
-  sharedResponsibilities: Option[String]
+  sharedResponsibilitiesOR: Option[String]
 )
 
-object UltimatelyResponsible {
-  implicit val format = Json.format[UltimatelyResponsible]
+object UltimatelyResponsibleOutsideRepairs {
+  implicit val format = Json.format[UltimatelyResponsibleOutsideRepairs]
 }
