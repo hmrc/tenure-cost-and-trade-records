@@ -42,6 +42,7 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
 
   lazy val notConnectedSubmissionTTL = runModeConfiguration.get[Int]("notConnectedSubmissionTTL")
   lazy val connectedSubmissionTTL    = runModeConfiguration.get[Int]("connectedSubmissionTTL")
+  lazy val requestReferenceNumberTTL = runModeConfiguration.get[Int]("requestReferenceNumberTTL")
   lazy val submittedTTL              = runModeConfiguration.get[Int]("submittedTTL")
 
 }

@@ -16,27 +16,48 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import play.api.mvc.ControllerComponents
+import play.api.libs.json.{JsError, JsSuccess, JsValue}
+import play.api.mvc.{Action, ControllerComponents}
 import play.api.{Logger, Logging}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
+import uk.gov.hmrc.tctr.backend.models.RequestReferenceNumberSubmission
+import uk.gov.hmrc.tctr.backend.repository.RequestReferenceNumberRepository
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class RequestRefNumSubmissionController @Inject() (
+  repository: RequestReferenceNumberRepository,
   auth: BackendAuthComponents,
+  metric: MetricsHandler,
   cc: ControllerComponents
 )(implicit ec: ExecutionContext)
     extends BackendController(cc)
     with InternalAuthAccess
     with Logging {
 
-  val log = Logger(classOf[RequestRefNumSubmissionController])
+  val log: Logger = Logger(classOf[RequestRefNumSubmissionController])
 
-  def submit() =
-    auth.authorizedAction[Unit](permission).compose(Action) { implicit request =>
-      log.warn("Request reference number submitted")
-      Created
+  def submit(): Action[JsValue] =
+    auth.authorizedAction[Unit](permission).compose(Action).async(parse.json) { implicit request =>
+      request.body.validate[RequestReferenceNumberSubmission] match {
+        case JsSuccess(form, _) =>
+          saveRequestReferenceNumberSubmission(form)
+          Created
+        case JsError(errors)    =>
+          log.error(errors.mkString(","))
+          BadRequest
+      }
     }
+
+  private def saveRequestReferenceNumberSubmission(requestReferenceNumberSubmission: RequestReferenceNumberSubmission)(
+    implicit hc: HeaderCarrier
+  ): Unit = {
+//    repository.insert(requestReferenceNumberSubmission)
+//    emailConnector.sendConnectionRemoved(requestReferenceNumberSubmission)
+    metric.requestRefNumSubmissions.mark()
+  }
 }

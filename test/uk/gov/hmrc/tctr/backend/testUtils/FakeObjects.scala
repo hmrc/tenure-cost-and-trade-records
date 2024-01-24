@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-import net.bytebuddy.description.method.ParameterList.Explicit.ForTypes
-import uk.gov.hmrc.tctr.backend.models.{AnnualRent, ConnectedSubmission, NotConnectedSubmission}
+import uk.gov.hmrc.tctr.backend.models._
 import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDuration}
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure._
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings._
@@ -239,5 +238,16 @@ trait FakeObjects {
     Some("additional info"),
     Instant.now(),
     false
+  )
+
+  val requestRefNumSubmission: RequestReferenceNumberSubmission = RequestReferenceNumberSubmission(
+    "submissionId",
+    "Business Name",
+    RequestReferenceNumberAddress("10", None, "BarringtonRoad road", None, "BN12 4AX"),
+    "fullName",
+    ContactDetails("john@example.com", "01234567890"),
+    Option("some other information"),
+    Instant.now(),
+    "en"
   )
 }
