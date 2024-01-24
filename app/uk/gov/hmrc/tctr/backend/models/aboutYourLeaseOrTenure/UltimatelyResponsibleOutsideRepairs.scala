@@ -17,7 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.common.{BuildingInsurance, InsideRepairs, OutsideRepairs}
+import uk.gov.hmrc.tctr.backend.models.common.OutsideRepairs
 
 case class UltimatelyResponsibleOutsideRepairs(
   outsideRepairs: OutsideRepairs,

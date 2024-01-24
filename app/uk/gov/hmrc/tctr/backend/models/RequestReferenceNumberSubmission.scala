@@ -14,15 +14,27 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.requestReferenceNumber
+package uk.gov.hmrc.tctr.backend.models
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.models.common.ContactDetails
+import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.RequestReferenceNumberAddress
 
-case class CheckYourAnswersRequestReferenceNumber(
-  checkYourAnswersRequestReferenceNumber: String
+import java.time.Instant
+
+case class RequestReferenceNumberSubmission(
+  id: String,
+  businessTradingName: String,
+  address: RequestReferenceNumberAddress,
+  fullName: String,
+  contactDetails: ContactDetails,
+  additionalInformation: Option[String],
+  createdAt: Instant,
+  lang: Option[String] = None
 )
 
-object CheckYourAnswersRequestReferenceNumber {
-  implicit val format = Json.format[CheckYourAnswersRequestReferenceNumber]
+object RequestReferenceNumberSubmission {
+
+  implicit val format = Json.format[RequestReferenceNumberSubmission]
 
 }
