@@ -56,8 +56,9 @@ class RequestRefNumSubmissionController @Inject() (
   private def saveRequestReferenceNumberSubmission(requestReferenceNumberSubmission: RequestReferenceNumberSubmission)(
     implicit hc: HeaderCarrier
   ): Unit = {
-//    repository.insert(requestReferenceNumberSubmission)
-//    emailConnector.sendConnectionRemoved(requestReferenceNumberSubmission)
+    repository.insert(requestReferenceNumberSubmission)
+
+    //    emailConnector.sendConnectionRemoved(requestReferenceNumberSubmission)
     metric.requestRefNumSubmissions.mark()
   }
 }

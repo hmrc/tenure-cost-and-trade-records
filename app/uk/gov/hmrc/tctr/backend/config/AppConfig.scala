@@ -32,6 +32,13 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
   lazy val exportFrequency         = runModeConfiguration.get[Int]("submissionExport.frequencySeconds")
   lazy val enablePublishing        = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
 
+  lazy val requestRefNumExportEnabled     =
+    runModeConfiguration.get[Boolean]("RequestReferenceNumberSubmissionExport.enabled")
+  lazy val requestRefNumExportBatchSize   =
+    runModeConfiguration.get[Int]("RequestReferenceNumberSubmissionExport.batchSize")
+  lazy val requestRefNumExportRetryWindow =
+    runModeConfiguration.get[Int]("RequestReferenceNumberSubmissionExport.retryWindowHours")
+
   lazy val importTestData = runModeConfiguration.get[Boolean]("validationImport.importTestData")
 
   lazy val authMaxFailedLogin = runModeConfiguration.get[Int]("authentication.maxFailedLogins")

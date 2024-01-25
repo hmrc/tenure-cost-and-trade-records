@@ -250,4 +250,17 @@ trait FakeObjects {
     Instant.now(),
     "en"
   )
+
+  def createRequestRefNumSubmission(n: Int): RequestReferenceNumberSubmission =
+    RequestReferenceNumberSubmission(
+      id = (n + 1000000).toString.take(7),
+      businessTradingName = "Business Name",
+      address =
+        RequestReferenceNumberAddress(n.toString, Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", None, "BN12 4AX"),
+      fullName = "Full Name",
+      contactDetails = prefilledContactDetails,
+      additionalInformation = Some("Additional information"),
+      createdAt = Instant.now(),
+      lang = Some("en")
+    )
 }
