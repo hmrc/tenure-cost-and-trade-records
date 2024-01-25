@@ -21,8 +21,8 @@ import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import uk.gov.hmrc.tctr.backend.infrastructure.{RegularSchedule, TestDataImporter}
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
-import uk.gov.hmrc.tctr.backend.repository.{ConnectedMongoRepository, CredentialsRepo}
-import uk.gov.hmrc.tctr.backend.submissionExport.{ConnectedSubmissionExporter, ExportConnectedSubmissionsVOA}
+import uk.gov.hmrc.tctr.backend.repository._
+import uk.gov.hmrc.tctr.backend.submissionExport._
 
 import java.time.Clock
 import javax.inject.{Inject, Singleton}
@@ -38,12 +38,26 @@ class ForTCTRImpl @Inject() (
   regularSchedule: RegularSchedule,
   credentialsMongoRepo: CredentialsRepo,
   connectedMongoRepository: ConnectedMongoRepository,
+  requestReferenceNumberMongoRepository: RequestReferenceNumberMongoRepository,
   testDataImporter: TestDataImporter,
   implicit val ec: ExecutionContext,
   mongoLockRepository: MongoLockRepository
 ) {
 
   import tctrConfig._
+
+  if (requestRefNumExportEnabled) {
+    val repo     = requestReferenceNumberMongoRepository
+    val exporter = new ExportRequestReferenceNumberSubmissionsVOA(repo, systemClock, audit, tctrConfig)
+    new RequestReferenceNumberSubmissionExporter(
+      mongoLockRepository,
+      exporter,
+      requestRefNumExportBatchSize,
+      actorSystem.scheduler,
+      actorSystem.eventStream,
+      regularSchedule
+    ).start()
+  }
 
   if (submissionExportEnabled) {
     val repo     = connectedMongoRepository
