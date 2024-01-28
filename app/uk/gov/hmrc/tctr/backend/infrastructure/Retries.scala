@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.infrastructure
 
-import akka.actor.ActorSystem
-import akka.pattern.after
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.pattern.after
 import com.typesafe.config.Config
 import org.slf4j.LoggerFactory
 import uk.gov.hmrc.play.http.logging.Mdc

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import akka.util.Timeout
+import org.apache.pekko.util.Timeout
 import com.codahale.metrics.Meter
 import org.mockito.ArgumentMatchers.any
 import play.api.mvc._

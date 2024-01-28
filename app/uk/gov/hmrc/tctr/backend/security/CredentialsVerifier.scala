@@ -19,14 +19,14 @@ package uk.gov.hmrc.tctr.backend.security
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-import org.joda.time.DateTime
 import uk.gov.hmrc.tctr.backend.infrastructure.Clock
 import uk.gov.hmrc.tctr.backend.repository.{CredentialsRepo, SubmittedMongoRepo}
 import uk.gov.hmrc.tctr.backend.schema.Address
 import uk.gov.hmrc.tctr.backend.models.{FORCredentials, SensitiveAddress}
 import uk.gov.hmrc.tctr.backend.controllers.toFuture
 
-import scala.language.postfixOps
+import java.time.Instant
+import scala.language.{implicitConversions,postfixOps}
 
 @Singleton
 class IPBlockingCredentialsVerifier @Inject() (
@@ -39,10 +39,10 @@ class IPBlockingCredentialsVerifier @Inject() (
   duplicatesEnabled: Boolean
 )(implicit ec: ExecutionContext) {
 
-  implicit def toDuration(d: DateTime): Duration = d.getMillis millis
+  implicit def toDuration(d: Instant): Duration = d.toEpochMilli millis
 
-  implicit object DateOrdering extends Ordering[DateTime] {
-    def compare(a: DateTime, b: DateTime) = if (a.isBefore(b)) -1 else if (b.isBefore(a)) 1 else 0
+  implicit object DateOrdering extends Ordering[Instant] {
+    def compare(a: Instant, b: Instant) = if (a.isBefore(b)) -1 else if (b.isBefore(a)) 1 else 0
   }
 
   def verify(referenceNum: String, postcode: String, ipAddress: Option[String]): Future[VerificationResult] =
@@ -73,9 +73,9 @@ class IPBlockingCredentialsVerifier @Inject() (
       (hasExceededLoginAttempts && lockoutInProgress, inSession.length)
     }
 
-  private def startOfLoginSession = clock.now().minusMinutes(config.sessionWindow.toMinutes.toInt)
+  private def startOfLoginSession = clock.now().minusMinutes(config.sessionWindow.toMinutes.toInt).toInstant
 
-  private def lockoutWindow = clock.now().minusMinutes(config.lockoutWindow.toMinutes.toInt)
+  private def lockoutWindow = clock.now().minusMinutes(config.lockoutWindow.toMinutes.toInt).toInstant
 
   private def verifyCredentials(referenceNum: String, postcode: String, attemptsMade: Int, ip: Option[String] = None) =
     submittedRepo.hasBeenSubmitted(referenceNum) flatMap {
@@ -98,7 +98,7 @@ class IPBlockingCredentialsVerifier @Inject() (
       credsRepo.validate(referenceNum, postcode).map {
         case Some(credentials) => ValidCredentials(credentials)
         case None              =>
-          ip map { i => loginsRepo.record(FailedLogin(clock.now(), i)) }
+          ip map { i => loginsRepo.record(FailedLogin(clock.now().toInstant, i)) }
           InvalidCredentials(config.maxFailedLoginAttempts - (attemptsMade + 1))
       }
     } else {

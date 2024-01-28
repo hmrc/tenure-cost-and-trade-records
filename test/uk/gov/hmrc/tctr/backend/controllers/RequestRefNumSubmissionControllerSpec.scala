@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import akka.util.Timeout
+import org.apache.pekko.util.Timeout
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult.acknowledged
 import org.bson.BsonBoolean.TRUE

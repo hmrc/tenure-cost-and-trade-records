@@ -71,7 +71,7 @@ class NotConnectedSubmissionController @Inject() (
   def saveNotConnectedSubmission(notConnectedSubmission: NotConnectedSubmission, submissionReference: String)(implicit
     hc: HeaderCarrier
   ): Unit = {
-    repository.insert(notConnectedSubmission)
+    repository.insert(notConnectedSubmission).onComplete(r => println(s" ********** ${r.get}"))
     emailConnector.sendConnectionRemoved(notConnectedSubmission)
     submittedMongoRepo.insertIfUnique(submissionReference)
     metric.okSubmissions.mark()

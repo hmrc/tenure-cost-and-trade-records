@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-import org.joda.time.DateTime
+import java.time.Instant
 import org.mongodb.scala.BulkWriteResult
 import org.mongodb.scala.result.{DeleteResult, InsertManyResult, InsertOneResult}
 import play.api.libs.json.OWrites
@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class InMemoryFailedLoginsRepo extends FailedLoginsRepo {
   private var failedLogins: Map[String, Seq[FailedLogin]] = Map.empty
 
-  override def mostRecent(ip: String, amount: Int, since: DateTime): Future[Seq[FailedLogin]] = Future.successful {
+  override def mostRecent(ip: String, amount: Int, since: Instant): Future[Seq[FailedLogin]] = Future.successful {
     failedLogins.getOrElse(ip, Seq.empty).filter(_.timestamp.isAfter(since.minusSeconds(1)))
   }
 
@@ -45,6 +45,7 @@ class InMemoryFailedLoginsRepo extends FailedLoginsRepo {
 }
 
 class StubCredentialsRepository extends CredentialsRepo {
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
   override def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] =
     Future.successful(None)
@@ -64,6 +65,7 @@ class StubCredentialsRepository extends CredentialsRepo {
 
 class StubSubmittedRepository @Inject() (mongo: MongoComponent, appConfig: AppConfig)(implicit ec: ExecutionContext)
     extends SubmittedMongoRepo(mongo, appConfig) {
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
   override def insertIfUnique(refNum: String): Future[InsertOneResult] = ???
 
   override def hasBeenSubmitted(refNum: String): Future[Boolean] = Future.successful(false)
