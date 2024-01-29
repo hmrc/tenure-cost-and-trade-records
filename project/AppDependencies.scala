@@ -29,6 +29,7 @@ private object AppDependencies {
   )
 
   private val commonTests = Seq(
+    "uk.gov.hmrc" %% "bootstrap-test-play-30" % bootstrapVersion % allTestsScope,
     "org.playframework" %% "play-test" % PlayVersion.current % allTestsScope,
     "org.apache.pekko"       %% "pekko-testkit"      % pekkoTestkitVersion % allTestsScope,
     "org.scalatest" %% "scalatest" % scalatestVersion % allTestsScope,
