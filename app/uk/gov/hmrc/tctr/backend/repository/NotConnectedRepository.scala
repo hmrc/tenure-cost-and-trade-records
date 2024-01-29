@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-
 @ImplementedBy(classOf[NotConnectedMongoRepository])
 trait NotConnectedRepository {
 

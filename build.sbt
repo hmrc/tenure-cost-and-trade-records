@@ -24,3 +24,5 @@ lazy val it = (project in file("it"))
   .dependsOn(microservice)
   .settings(libraryDependencies ++= AppDependencies.itDependencies)
   .settings(itSettings(forkJvmPerTest = true))
+
+addCommandAlias("precommit", ";scalafmt;test:scalafmt;it/test:scalafmt;coverage;test;it/test;coverageReport")

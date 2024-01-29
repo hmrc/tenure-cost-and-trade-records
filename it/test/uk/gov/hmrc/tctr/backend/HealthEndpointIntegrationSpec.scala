@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend
 
-class HealthEndpointIntegrationSpec
-  extends IntegrationSpecBase {
+class HealthEndpointIntegrationSpec extends IntegrationSpecBase {
 
   "service health endpoint" should {
     "respond with 200 status" in {

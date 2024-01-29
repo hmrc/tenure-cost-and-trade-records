@@ -29,7 +29,6 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
-
 trait FailedLoginsRepo {
   def mostRecent(ipAddress: String, amount: Int, since: Instant): Future[Seq[FailedLogin]]
 

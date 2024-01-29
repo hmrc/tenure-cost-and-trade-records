@@ -87,7 +87,6 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent, configuration: Conf
     with CredentialsRepo
     with Logging {
 
-
   def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] = {
     val postcode1 = postcode.replace('+', ' ')
     collection

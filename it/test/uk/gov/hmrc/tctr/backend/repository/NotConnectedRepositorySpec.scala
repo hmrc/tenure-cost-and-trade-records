@@ -30,11 +30,14 @@ import uk.gov.hmrc.tctr.backend.schema.Address
 import java.time.Instant
 import java.util.UUID
 
+class NotConnectedRepositorySpec
+    extends PlaySpec
+    with BeforeAndAfterAll
+    with GuiceOneAppPerSuite
+    with FutureAwaits
+    with DefaultAwaitTimeout {
 
-class NotConnectedRepositorySpec extends PlaySpec with BeforeAndAfterAll with GuiceOneAppPerSuite with FutureAwaits
-  with DefaultAwaitTimeout{
-
-  val dbName = s"notConnectedRepositorySpec${UUID.randomUUID().toString.replaceAll("-","")}"
+  val dbName = s"notConnectedRepositorySpec${UUID.randomUUID().toString.replaceAll("-", "")}"
 
   val testDbUri = s"mongodb://localhost:27017/$dbName"
 
@@ -46,7 +49,6 @@ class NotConnectedRepositorySpec extends PlaySpec with BeforeAndAfterAll with Gu
 
   def repository = app.injector.instanceOf[NotConnectedMongoRepository]
 
-
   "NotConnectedRepository" should {
     "save NotConnectedSubmission to mongo" in {
       val insertOneResult = await(repository.insert(aSubmission()))
@@ -55,8 +57,8 @@ class NotConnectedRepositorySpec extends PlaySpec with BeforeAndAfterAll with Gu
     }
 
     "save NotConnectedSubmission to mongo and get it back" in {
-      val id = "9999000321"
-      val insertOneResult = await(repository.insert(aSubmission().copy(id=id)))
+      val id              = "9999000321"
+      val insertOneResult = await(repository.insert(aSubmission().copy(id = id)))
       insertOneResult.wasAcknowledged() mustBe true
 
       val result = await(repository.findById(id))
@@ -68,7 +70,7 @@ class NotConnectedRepositorySpec extends PlaySpec with BeforeAndAfterAll with Gu
 
     "get some submission from repository" in {
       val submissions = await(repository.getSubmissions())
-      submissions must have size(2)
+      submissions must have size 2
     }
 
     "Save createdAt as BSONDateTime in database" in {
@@ -90,7 +92,8 @@ class NotConnectedRepositorySpec extends PlaySpec with BeforeAndAfterAll with Gu
     Address("10", Some("BarringtonRoad road"), None, "BN12 4AX"),
     "Full Name",
     Option("john@example.com"),
-    Option("233222123"), Option("Some additional information. I how we will not break limit of mongo"),
+    Option("233222123"),
+    Option("Some additional information. I how we will not break limit of mongo"),
     testingDate,
     Option(true)
   )

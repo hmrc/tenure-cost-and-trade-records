@@ -16,13 +16,11 @@
 
 package uk.gov.hmrc.tctr.backend.infrastructure
 
-
 import java.time.ZonedDateTime
 import com.google.inject.ImplementedBy
 import uk.gov.hmrc.tctr.backend.util.DateUtil.nowInUK
 
 import javax.inject.{Inject, Singleton}
-
 
 @ImplementedBy(classOf[SystemClock])
 trait Clock {

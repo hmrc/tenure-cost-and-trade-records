@@ -26,7 +26,7 @@ import uk.gov.hmrc.tctr.backend.models.{FORCredentials, SensitiveAddress}
 import uk.gov.hmrc.tctr.backend.controllers.toFuture
 
 import java.time.Instant
-import scala.language.{implicitConversions,postfixOps}
+import scala.language.{implicitConversions, postfixOps}
 
 @Singleton
 class IPBlockingCredentialsVerifier @Inject() (

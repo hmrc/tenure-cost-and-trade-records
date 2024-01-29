@@ -16,10 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.models
 
-
 import play.api.libs.json.{JsObject, JsResult, JsValue, Json, OFormat}
 import java.time.Instant
-
 
 object UpScanRequests {
 
