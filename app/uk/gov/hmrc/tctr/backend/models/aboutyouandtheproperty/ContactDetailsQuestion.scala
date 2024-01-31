@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.additionalinformation
+package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class AlternativeAddress(
-  buildingNameNumber: String,
-  street1: Option[String],
-  town: String,
-  county: Option[String],
-  postcode: String
-)
+case class ContactDetailsQuestion(contactDetailsQuestion: AnswersYesNo)
 
-object AlternativeAddress {
-  implicit val format = Json.format[AlternativeAddress]
+object ContactDetailsQuestion {
+  implicit val format = Json.format[ContactDetailsQuestion]
 }
