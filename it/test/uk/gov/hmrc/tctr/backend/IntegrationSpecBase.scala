@@ -25,10 +25,10 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
 
 /**
- * @author Yuriy Tumakha
- */
+  * @author Yuriy Tumakha
+  */
 abstract class IntegrationSpecBase
-  extends AnyWordSpec
+    extends AnyWordSpec
     with Matchers
     with ScalaFutures
     with IntegrationPatience
@@ -41,10 +41,10 @@ abstract class IntegrationSpecBase
       )
       .build()
 
-  protected val wsClient: WSClient = app.injector.instanceOf[WSClient]
+  protected val wsClient: WSClient           = app.injector.instanceOf[WSClient]
   protected val configuration: Configuration = app.injector.instanceOf[Configuration]
 
-  protected val baseUrl = s"http://localhost:$port"
+  protected val baseUrl    = s"http://localhost:$port"
   protected val appBaseUrl = s"$baseUrl/${configuration.get[String]("appName")}"
 
 }

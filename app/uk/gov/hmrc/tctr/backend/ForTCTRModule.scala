@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.google.inject.Provider
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment, Logging}

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import akka.util.Timeout
+import org.apache.pekko.util.Timeout
 import com.mongodb.bulk.BulkWriteResult
 import org.mockito.ArgumentMatchers._
 import org.mockito.MockitoSugar
@@ -31,7 +31,7 @@ import uk.gov.hmrc.tctr.backend.models.UpScanRequests._
 import uk.gov.hmrc.tctr.backend.connectors.UpscanConnector
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.repository.CredentialsRepo
-import org.joda.time.DateTime
+import java.time.Instant
 import org.scalatest.Succeeded
 
 import scala.concurrent.ExecutionContext
@@ -58,7 +58,7 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
         "some-reference",
         "http://example.com",
         "READY",
-        UploadDetails(DateTime.now(), "checksum", "some-contentType", "some-fileName")
+        UploadDetails(Instant.now(), "checksum", "some-contentType", "some-fileName")
       )
     )
 

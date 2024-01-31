@@ -30,6 +30,7 @@ import uk.gov.hmrc.tctr.backend.models.RefNum
 
 import java.time.Instant
 import java.util.concurrent.TimeUnit
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
 @Singleton
 class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)(implicit ec: ExecutionContext)

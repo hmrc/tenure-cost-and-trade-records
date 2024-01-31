@@ -25,7 +25,7 @@ import org.mongodb.scala.result.{DeleteResult, InsertManyResult}
 import play.api.libs.json.OWrites
 import play.api.{Configuration, Logging}
 import uk.gov.hmrc.mongo.MongoComponent
-import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.FORCredentials
 
@@ -35,6 +35,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json._
 import org.mongodb.scala.bson.BsonDocument
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
 @ImplementedBy(classOf[CredentialsMongoRepo])
 trait CredentialsRepo {
@@ -77,7 +79,10 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent, configuration: Conf
       collectionName = "credentials",
       mongoComponent = mongo,
       domainFormat = FORCredentials.format,
-      indexes = CredentialsMongoRepo.credentialsTtlIndex(configuration)
+      indexes = CredentialsMongoRepo.credentialsTtlIndex(configuration),
+      extraCodecs = Seq(
+        Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
+      )
     )
     with CredentialsRepo
     with Logging {

@@ -24,15 +24,14 @@ import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo
 
 import java.util.UUID
 
-class SaveAsDraftIntegrationSpec
-  extends IntegrationSpecBase with BeforeAndAfterAll with BeforeAndAfterEach {
+class SaveAsDraftIntegrationSpec extends IntegrationSpecBase with BeforeAndAfterAll with BeforeAndAfterEach {
 
-  private val submissionDraftFindId = "SaveAsDraftITestFind"
-  private val submissionDraftSaveId = "SaveAsDraftITestSave"
-  private val submissionDraftDeleteId = "SaveAsDraftITestDelete"
+  private val submissionDraftFindId       = "SaveAsDraftITestFind"
+  private val submissionDraftSaveId       = "SaveAsDraftITestSave"
+  private val submissionDraftDeleteId     = "SaveAsDraftITestDelete"
   private val submissionDraftBadRequestId = "SaveAsDraftITestBadRequest"
-  private val repo = app.injector.instanceOf[MongoSubmissionDraftRepo]
-  private val clientAuthToken: String = UUID.randomUUID().toString
+  private val repo                        = app.injector.instanceOf[MongoSubmissionDraftRepo]
+  private val clientAuthToken: String     = UUID.randomUUID().toString
   private val internalAuthBaseUrl: String = "http://localhost:8470"
   override def beforeAll(): Unit = {
     repo.save(submissionDraftFindId, Json.obj())
@@ -114,7 +113,7 @@ class SaveAsDraftIntegrationSpec
           .futureValue
 
       response.status shouldBe OK
-      response.json shouldBe Json.obj("deletedCount" -> 1)
+      response.json   shouldBe Json.obj("deletedCount" -> 1)
     }
 
     "on delete return deletedCount = 0 for unknown id" in {
@@ -126,12 +125,13 @@ class SaveAsDraftIntegrationSpec
           .futureValue
 
       response.status shouldBe OK
-      response.json shouldBe Json.obj("deletedCount" -> 0)
+      response.json   shouldBe Json.obj("deletedCount" -> 0)
     }
   }
 
   private def authTokenIsValid(token: String): Boolean = {
-    val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
+    val response = wsClient
+      .url(s"$internalAuthBaseUrl/test-only/token")
       .withHttpHeaders("Authorization" -> token)
       .get()
       .futureValue
@@ -139,20 +139,22 @@ class SaveAsDraftIntegrationSpec
   }
 
   private def createClientAuthToken(): Unit = {
-    val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
+    val response = wsClient
+      .url(s"$internalAuthBaseUrl/test-only/token")
       .post(
         Json.obj(
-          "token" -> clientAuthToken,
-          "principal" -> "test",
+          "token"       -> clientAuthToken,
+          "principal"   -> "test",
           "permissions" -> Seq(
             Json.obj(
-              "resourceType" -> "tenure-cost-and-trade-records",
+              "resourceType"     -> "tenure-cost-and-trade-records",
               "resourceLocation" -> "*",
-              "actions" -> List("*")
+              "actions"          -> List("*")
             )
           )
         )
-      ).futureValue
+      )
+      .futureValue
     response.status mustEqual CREATED
   }
 
