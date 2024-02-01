@@ -5,6 +5,18 @@ This is service provides backend services between the frontend service and sendi
 
 This service is still under development but hoping to move to a limited private beta in November 2023. This is a limited private beta as we are not able to integrate with the new VOA systems until late 2024.
 
+## Rules to update SubmissionDraft DB model
+
+1. Use Save as draft functionality to save several drafts in local Mongo DB before making any changes to SubmissionDraft DB model
+2. Don’t rename or remove any existing property. Only add new properties.
+3. On read model operations add extra code to read value from new property and from previous property. If new property value is empty read value from previous property.
+4. On save model operations write value only to new property.
+5. Test restoring draft saved by step 1 above.
+6. Write down tenure-cost-and-trade-records app version in which extra code was added.
+7. Check all production drafts that have previous property are expired on https://admin.tax.service.gov.uk/tctr-admin/drafts-per-version
+8. Then remove extra code added by step 3 above.
+9. Remove previous property from model. 
+
 ## Nomenclature
 
 TCTR - Tenure Cost and Trade Records.
