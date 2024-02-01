@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.additionalinformation
+package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive

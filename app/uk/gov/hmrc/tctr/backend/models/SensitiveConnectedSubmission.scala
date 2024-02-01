@@ -23,7 +23,7 @@ import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgree
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.AboutTheTradingHistory
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.SensitiveAboutYouAndTheProperty
-import uk.gov.hmrc.tctr.backend.models.additionalinformation.SensitiveAdditionalInformation
+import uk.gov.hmrc.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.SensitiveStillConnectedDetails
 import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
 import uk.gov.hmrc.tctr.backend.models.notconnected.SensitiveRemoveConnectionDetails
@@ -40,7 +40,7 @@ case class SensitiveConnectedSubmission(
   stillConnectedDetails: Option[SensitiveStillConnectedDetails] = None,
   removeConnectionDetails: Option[SensitiveRemoveConnectionDetails] = None,
   aboutYouAndTheProperty: Option[SensitiveAboutYouAndTheProperty] = None,
-  additionalInformation: Option[SensitiveAdditionalInformation] = None,
+  additionalInformation: Option[AdditionalInformation] = None,
   aboutTheTradingHistory: Option[AboutTheTradingHistory] = None,
   aboutFranchisesOrLettings: Option[AboutFranchisesOrLettings] = None,
   aboutLeaseOrAgreementPartOne: Option[SensitiveAboutLeaseOrAgreementPartOne] = None,
@@ -60,7 +60,7 @@ case class SensitiveConnectedSubmission(
     stillConnectedDetails.map(_.decryptedValue),
     removeConnectionDetails.map(_.decryptedValue),
     aboutYouAndTheProperty.map(_.decryptedValue),
-    additionalInformation.map(_.decryptedValue),
+    additionalInformation,
     aboutTheTradingHistory,
     aboutFranchisesOrLettings,
     aboutLeaseOrAgreementPartOne.map(_.decryptedValue),
@@ -85,7 +85,7 @@ object SensitiveConnectedSubmission {
     connectedSubmission.stillConnectedDetails.map(SensitiveStillConnectedDetails(_)),
     connectedSubmission.removeConnectionDetails.map(SensitiveRemoveConnectionDetails(_)),
     connectedSubmission.aboutYouAndTheProperty.map(SensitiveAboutYouAndTheProperty(_)),
-    connectedSubmission.additionalInformation.map(SensitiveAdditionalInformation(_)),
+    connectedSubmission.additionalInformation,
     connectedSubmission.aboutTheTradingHistory,
     connectedSubmission.aboutFranchisesOrLettings,
     connectedSubmission.aboutLeaseOrAgreementPartOne.map(SensitiveAboutLeaseOrAgreementPartOne(_)),
