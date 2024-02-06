@@ -12,5 +12,8 @@ PUT           /submissions/connected/:referenceNumber           uk.gov.hmrc.tctr
 
 PUT           /submissions/requestRefNum                        uk.gov.hmrc.tctr.backend.controllers.RequestRefNumSubmissionController.submit
 
+GET           /stats/drafts-per-version                         uk.gov.hmrc.tctr.backend.controllers.StatsController.draftsPerVersion
+GET           /stats/drafts-expiration-queue                    uk.gov.hmrc.tctr.backend.controllers.StatsController.draftsExpirationQueue
+
 +nocsrf
 POST          /upscan/callback                                  uk.gov.hmrc.tctr.backend.controllers.UpscanCallbackController.callback
