@@ -17,8 +17,11 @@
 package uk.gov.hmrc.tctr.backend.models.stats
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.SubmissionDraftWrapper
+import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo.saveForDays
 
-import java.time.LocalDate
+import java.time.{LocalDate, ZoneOffset}
+import scala.util.Try
 
 /**
   * @author Yuriy Tumakha
@@ -27,4 +30,13 @@ case class Draft(reference: String, forType: String, version: String, expireOn: 
 
 object Draft {
   implicit val format: OFormat[Draft] = Json.format
+
+  def apply(sd: SubmissionDraftWrapper): Draft =
+    Draft(
+      sd._id,
+      Try((sd.submissionDraft \ "forType").as[String]).map(_.filter(_.isDigit)).getOrElse(""),
+      sd.appVersion.getOrElse(""),
+      sd.createdAt.atZone(ZoneOffset.UTC).toLocalDate.plusDays(saveForDays)
+    )
+
 }

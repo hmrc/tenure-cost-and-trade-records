@@ -18,7 +18,7 @@ package uk.gov.hmrc.tctr.backend.repository
 
 import com.google.inject.ImplementedBy
 import org.mongodb.scala.bson.conversions.Bson
-import org.mongodb.scala.model.{Filters, FindOneAndReplaceOptions, IndexModel, IndexOptions, Indexes, ReturnDocument}
+import org.mongodb.scala.model.{Filters, FindOneAndReplaceOptions, IndexModel, IndexOptions, Indexes, ReturnDocument, Sorts}
 import org.mongodb.scala.result.DeleteResult
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.mongo.MongoComponent
@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
+import uk.gov.hmrc.tctr.backend.models.stats.{Draft, DraftsExpirationQueue}
 
 /**
   * @author Yuriy Tumakha
@@ -80,6 +81,16 @@ class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent, encryptionJsonT
     collection
       .deleteOne(byId(id))
       .toFuture()
+
+  def getDraftsExpirationQueue(limit: Int): Future[DraftsExpirationQueue] = {
+    for {
+      total <- collection.countDocuments().toFuture()
+      submissionDrafts <- collection.find().sort(Sorts.descending("createdAt")).limit(limit).toFuture()
+    } yield {
+      val drafts = submissionDrafts.map(Draft(_))
+      DraftsExpirationQueue(drafts, total)
+    }
+  }
 
 }
 

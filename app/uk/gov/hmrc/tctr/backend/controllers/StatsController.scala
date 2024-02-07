@@ -47,15 +47,9 @@ class StatsController @Inject() (
   }
 
   def draftsExpirationQueue: Action[AnyContent] = Action.async { implicit request =>
-    val draftsExpirationQueue = DraftsExpirationQueue(
-      List(
-        Draft("Reference_01", "6010", "0.79.0", LocalDate.now.plusDays(2)),
-        Draft("Reference_02", "6015", "0.79.0", LocalDate.now.plusDays(2)),
-        Draft("Reference_03", "6015", "0.78.0", LocalDate.now.plusDays(1))
-      ),
-      1077
-    )
-    Ok(Json.toJson(draftsExpirationQueue))
+    submissionDraftRepo.getDraftsExpirationQueue(100).map { draftsExpirationQueue =>
+      Ok(Json.toJson(draftsExpirationQueue))
+    }
   }
 
 }
