@@ -50,7 +50,6 @@ class StatsControllerISpec extends IntegrationSpecBase with BeforeAndAfterAll wi
 
       response2.status shouldBe OK
       val draftsPerVersion = Json.parse(response2.body).as[Seq[DraftsPerVersion]]
-      println(response1.body)
 
       draftsPerVersion.map(_.drafts).sum shouldBe expirationQueue.total
       draftsPerVersion.length shouldBe expirationQueue.drafts.map(_.version).distinct.length
