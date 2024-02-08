@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
+package uk.gov.hmrc.tctr.backend.models.stats
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
-case class PropertyDetailsString(
-  propertyDetailsString: String
-)
+/**
+  * @author Yuriy Tumakha
+  */
+case class DraftsExpirationQueue(drafts: Seq[Draft], total: Long)
 
-object PropertyDetailsString {
-  implicit val format = Json.format[PropertyDetailsString]
+object DraftsExpirationQueue {
+  implicit val format: OFormat[DraftsExpirationQueue] = Json.format
 }
