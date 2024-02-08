@@ -18,7 +18,7 @@ package uk.gov.hmrc.tctr.backend.repository
 
 import com.google.inject.ImplementedBy
 import org.mongodb.scala.bson.conversions.Bson
-import org.mongodb.scala.model.{Filters, FindOneAndReplaceOptions, IndexModel, IndexOptions, Indexes, ReturnDocument, Sorts}
+import org.mongodb.scala.model._
 import org.mongodb.scala.result.DeleteResult
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.mongo.MongoComponent
@@ -27,13 +27,12 @@ import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.tctr.backend.BuildInfo
 import uk.gov.hmrc.tctr.backend.crypto.EncryptionJsonTransformer
 import uk.gov.hmrc.tctr.backend.models.SubmissionDraftWrapper
+import uk.gov.hmrc.tctr.backend.models.stats.{Draft, DraftsAggregate, DraftsExpirationQueue, DraftsPerVersion}
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo.saveForDays
 
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
-import uk.gov.hmrc.tctr.backend.models.stats.{Draft, DraftsExpirationQueue}
 
 /**
   * @author Yuriy Tumakha
@@ -52,7 +51,8 @@ class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent, encryptionJsonT
         )
       ),
       extraCodecs = Seq(
-        Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
+        Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat),
+        Codecs.playFormatCodec(DraftsAggregate.format)
       )
     )
     with SubmissionDraftRepo {
@@ -82,15 +82,27 @@ class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent, encryptionJsonT
       .deleteOne(byId(id))
       .toFuture()
 
-  def getDraftsExpirationQueue(limit: Int): Future[DraftsExpirationQueue] = {
+  def getDraftsExpirationQueue(limit: Int): Future[DraftsExpirationQueue] =
     for {
-      total <- collection.countDocuments().toFuture()
+      total            <- collection.countDocuments().toFuture()
       submissionDrafts <- collection.find().sort(Sorts.descending("createdAt")).limit(limit).toFuture()
     } yield {
       val drafts = submissionDrafts.map(Draft(_))
       DraftsExpirationQueue(drafts, total)
     }
-  }
+
+  def getDraftsPerVersion: Future[Seq[DraftsPerVersion]] =
+    collection
+      .aggregate[DraftsAggregate](
+        Seq(
+          Aggregates.group("$appVersion", Accumulators.sum("count", 1), Accumulators.max("maxCreatedAt", "$createdAt")),
+          Aggregates.sort(Sorts.descending("maxCreatedAt", "_id"))
+        )
+      )
+      .toFuture()
+      .map {
+        _.map(_.toDraftsPerVersion)
+      }
 
 }
 

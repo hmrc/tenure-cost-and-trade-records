@@ -21,7 +21,7 @@ import uk.gov.hmrc.play.language.LanguageUtils
 import uk.gov.hmrc.tctr.backend.util.DateUtil.dateOps
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, ZoneId, ZonedDateTime}
+import java.time.{Instant, LocalDate, ZoneId, ZoneOffset, ZonedDateTime}
 import java.util.{Date, Locale}
 import javax.inject.{Inject, Singleton}
 
@@ -36,6 +36,10 @@ object DateUtil {
 
   val shortDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.UK)
   val timeFormatter: DateTimeFormatter      = DateTimeFormatter.ofPattern("HH:mm", Locale.UK)
+
+  implicit class instantOps(instant: Instant) {
+   def toLocalDate: LocalDate = instant.atZone(ZoneOffset.UTC).toLocalDate
+  }
 
   implicit class dateOps(date: Date) {
     def asZonedDateTime: ZonedDateTime = date.toInstant.atZone(ukTimezone)

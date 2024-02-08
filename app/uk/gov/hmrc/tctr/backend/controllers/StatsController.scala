@@ -21,10 +21,8 @@ import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json._
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.tctr.backend.models.stats.{Draft, DraftsExpirationQueue, DraftsPerVersion}
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo
 
-import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
@@ -38,15 +36,13 @@ class StatsController @Inject() (
     extends BackendController(cc)
     with Logging {
 
-  def draftsPerVersion: Action[AnyContent] = Action.async { implicit request =>
-    val draftsPerVersion = List(
-      DraftsPerVersion("0.79.0", 9, LocalDate.now.plusDays(2)),
-      DraftsPerVersion("0.78.0", 2, LocalDate.now.plusDays(1))
-    )
-    Ok(Json.toJson(draftsPerVersion))
+  def draftsPerVersion: Action[AnyContent] = Action.async {
+    submissionDraftRepo.getDraftsPerVersion.map { draftsPerVersion =>
+      Ok(Json.toJson(draftsPerVersion))
+    }
   }
 
-  def draftsExpirationQueue: Action[AnyContent] = Action.async { implicit request =>
+  def draftsExpirationQueue: Action[AnyContent] = Action.async {
     submissionDraftRepo.getDraftsExpirationQueue(100).map { draftsExpirationQueue =>
       Ok(Json.toJson(draftsExpirationQueue))
     }

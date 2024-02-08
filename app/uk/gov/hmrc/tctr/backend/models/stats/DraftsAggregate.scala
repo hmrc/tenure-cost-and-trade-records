@@ -17,27 +17,21 @@
 package uk.gov.hmrc.tctr.backend.models.stats
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.SubmissionDraftWrapper
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo.saveForDays
-import uk.gov.hmrc.tctr.backend.util.DateUtil._
+import uk.gov.hmrc.tctr.backend.util.DateUtil.instantOps
 
-import java.time.LocalDate
-import scala.util.Try
+import java.time.Instant
 
 /**
   * @author Yuriy Tumakha
   */
-case class Draft(reference: String, forType: String, version: String, expireOn: LocalDate)
+case class DraftsAggregate(_id: Option[String], count: Long, maxCreatedAt: Instant) {
+  def toDraftsPerVersion: DraftsPerVersion =
+    DraftsPerVersion(_id.getOrElse(""), count, maxCreatedAt.toLocalDate.plusDays(saveForDays))
+}
 
-object Draft {
-  implicit val format: OFormat[Draft] = Json.format
+object DraftsAggregate {
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
-  def apply(sd: SubmissionDraftWrapper): Draft =
-    Draft(
-      sd._id,
-      Try((sd.submissionDraft \ "forType").as[String]).map(_.filter(_.isDigit)).getOrElse(""),
-      sd.appVersion.getOrElse(""),
-      sd.createdAt.toLocalDate.plusDays(saveForDays)
-    )
-
+  implicit val format: OFormat[DraftsAggregate] = Json.format
 }
