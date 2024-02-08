@@ -38,7 +38,7 @@ object DateUtil {
   val timeFormatter: DateTimeFormatter      = DateTimeFormatter.ofPattern("HH:mm", Locale.UK)
 
   implicit class instantOps(instant: Instant) {
-   def toLocalDate: LocalDate = instant.atZone(ZoneOffset.UTC).toLocalDate
+    def toLocalDate: LocalDate = instant.atZone(ZoneOffset.UTC).toLocalDate
   }
 
   implicit class dateOps(date: Date) {

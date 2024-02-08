@@ -19,8 +19,8 @@ package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 import play.api.libs.json.Json
 
 case class PropertyDetailsString(
-                                  propertyDetailsString: String
-                                )
+  propertyDetailsString: String
+)
 
 object PropertyDetailsString {
   implicit val format = Json.format[PropertyDetailsString]

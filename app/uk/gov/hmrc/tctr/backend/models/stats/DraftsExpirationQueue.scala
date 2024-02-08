@@ -18,10 +18,9 @@ package uk.gov.hmrc.tctr.backend.models.stats
 
 import play.api.libs.json.{Json, OFormat}
 
-
 /**
- * @author Yuriy Tumakha
- */
+  * @author Yuriy Tumakha
+  */
 case class DraftsExpirationQueue(drafts: Seq[Draft], total: Long)
 
 object DraftsExpirationQueue {
