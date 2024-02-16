@@ -1,7 +1,9 @@
-import sbt.Setting
+import sbt.{AutoPlugin, Setting}
 import scoverage.ScoverageKeys
 
-object CodeCoverageSettings {
+object CodeCoverageSettings extends AutoPlugin {
+
+  override def trigger = allRequirements
 
   private val excludedPackages: Seq[String] = Seq(
     "<empty>",
@@ -14,10 +16,11 @@ object CodeCoverageSettings {
     "testOnlyDoNotUseInAppConf.*"
   )
 
-  val settings: Seq[Setting[_]] = Seq(
+  override val projectSettings: Seq[Setting[?]] = Seq(
     ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
-    ScoverageKeys.coverageMinimumStmtTotal := 61,
+    ScoverageKeys.coverageMinimumStmtTotal := 62,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true
   )
+
 }
