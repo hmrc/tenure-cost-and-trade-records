@@ -18,11 +18,14 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.Json
 
-case class NetProfit(
-  netProfit: String
+import java.time.LocalDate
+
+case class TurnoverSection6030(
+  financialYearEnd: LocalDate,
+  tradingPeriod: Int,
+  grossIncome: Option[BigDecimal],
+  totalVisitorNumbers: Option[Int]
 )
-
-object NetProfit {
-  implicit val format = Json.format[NetProfit]
-
+object TurnoverSection6030 {
+  implicit val format = Json.format[TurnoverSection6030]
 }

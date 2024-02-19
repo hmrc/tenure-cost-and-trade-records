@@ -18,15 +18,14 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.VariableOperatingExpensesSections
-
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 case class AboutTheTradingHistory(
   occupationAndAccountingInformation: Option[OccupationalAndAccountingInformation] = None,
   turnoverSections: Seq[TurnoverSection] = Seq.empty,
-  turnoverSections1516: Seq[TurnoverSection1516] = Seq.empty,
-  grossProfitSections: Seq[GrossProfit] = Seq.empty,
+  turnoverSections6030: Seq[TurnoverSection6030] = Seq.empty,
   costOfSales: Seq[CostOfSales] = Seq.empty,
   fixedOperatingExpensesSections: Seq[FixedOperatingExpenses] = Seq.empty,
-  netProfit: Option[NetProfit] = None,
   otherCosts: Option[OtherCosts] = None,
   totalPayrollCostSections: Seq[TotalPayrollCost] = Seq.empty,
   variableOperatingExpenses: Option[VariableOperatingExpensesSections] = None,
@@ -37,5 +36,20 @@ case class AboutTheTradingHistory(
 )
 
 object AboutTheTradingHistory {
-  implicit val format = Json.format[AboutTheTradingHistory]
+  implicit val aboutTheTradingHistoryReads: Reads[AboutTheTradingHistory] = (
+    (__ \ "occupationAndAccountingInformation").readNullable[OccupationalAndAccountingInformation] and
+      (__ \ "turnoverSections").read[Seq[TurnoverSection]] and
+      (__ \ "turnoverSections6030").readNullable[Seq[TurnoverSection6030]].map(_.getOrElse(Seq.empty)) and
+      (__ \ "costOfSales").read[Seq[CostOfSales]] and
+      (__ \ "fixedOperatingExpensesSections").read[Seq[FixedOperatingExpenses]] and
+      (__ \ "otherCosts").readNullable[OtherCosts] and
+      (__ \ "totalPayrollCostSections").read[Seq[TotalPayrollCost]] and
+      (__ \ "variableOperatingExpenses").readNullable[VariableOperatingExpensesSections] and
+      (__ \ "incomeExpenditureSummary").readNullable[IncomeExpenditureSummary] and
+      (__ \ "incomeExpenditureSummaryData").read[Seq[IncomeExpenditureSummaryData]] and
+      (__ \ "unusualCircumstances").readNullable[UnusualCircumstances] and
+      (__ \ "checkYourAnswersAboutTheTradingHistory").readNullable[CheckYourAnswersAboutTheTradingHistory]
+  )(AboutTheTradingHistory.apply _)
+
+  implicit val format = Format(aboutTheTradingHistoryReads, Json.writes[AboutTheTradingHistory])
 }
