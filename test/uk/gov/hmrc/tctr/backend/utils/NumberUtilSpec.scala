@@ -22,8 +22,6 @@ import uk.gov.hmrc.tctr.backend.util.NumberUtil._
 
 class NumberUtilSpec extends AnyFlatSpec with Matchers {
 
-
-
   "removeTrailingZeros" should
     "remove zeros from a string" in {
       "1.00".removeTrailingZeros   should be("1")
