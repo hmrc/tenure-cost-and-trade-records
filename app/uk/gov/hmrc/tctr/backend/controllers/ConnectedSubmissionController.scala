@@ -26,7 +26,7 @@ import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.VacantPropertiesDetailsYes
-import uk.gov.hmrc.tctr.backend.repository.{ConnectedRepository, SubmittedMongoRepo}
+import uk.gov.hmrc.tctr.backend.repository.{ConnectedRepository, SubmissionDraftRepo, SubmittedMongoRepo}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,6 +35,7 @@ class ConnectedSubmissionController @Inject() (
   tctrConfig: AppConfig,
   repository: ConnectedRepository,
   submittedMongoRepo: SubmittedMongoRepo,
+  submissionDraftRepo: SubmissionDraftRepo,
   emailConnector: EmailConnector,
   auth: BackendAuthComponents,
   metric: MetricsHandler,
@@ -78,6 +79,7 @@ class ConnectedSubmissionController @Inject() (
     }
     /*Remove for submission checking*/
     submittedMongoRepo.insertIfUnique(submissionReference)
+    submissionDraftRepo.delete(submissionReference)
     metric.okSubmissions.mark()
   }
 
