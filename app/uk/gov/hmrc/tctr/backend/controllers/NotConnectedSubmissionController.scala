@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.{NotConnectedSubmission, NotConnectedSubmissionForm}
-import uk.gov.hmrc.tctr.backend.repository.{NotConnectedRepository, SubmittedMongoRepo}
+import uk.gov.hmrc.tctr.backend.repository.{NotConnectedRepository, SubmissionDraftRepo, SubmittedMongoRepo}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -35,6 +35,7 @@ class NotConnectedSubmissionController @Inject() (
   tctrConfig: AppConfig,
   repository: NotConnectedRepository,
   submittedMongoRepo: SubmittedMongoRepo,
+  submissionDraftRepo: SubmissionDraftRepo,
   emailConnector: EmailConnector,
   auth: BackendAuthComponents,
   metric: MetricsHandler,
@@ -74,6 +75,9 @@ class NotConnectedSubmissionController @Inject() (
     repository.insert(notConnectedSubmission)
     emailConnector.sendConnectionRemoved(notConnectedSubmission)
     submittedMongoRepo.insertIfUnique(submissionReference)
+
+    submissionDraftRepo.delete(submissionReference)
+
     metric.okSubmissions.mark()
   }
 
