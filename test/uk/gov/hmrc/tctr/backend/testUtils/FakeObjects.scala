@@ -203,6 +203,11 @@ trait FakeObjects {
     legalOrPlanningRestrictions = Some(LegalOrPlanningRestrictions(AnswerYes))
   )
 
+  val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
+    tradeServices = IndexedSeq.empty,
+    paymentForTradeServices = None
+  )
+
   // Additional information
   val prefilledAdditionalInformation: AdditionalInformation = AdditionalInformation(
     Some(FurtherInformationOrRemarksDetails("Further information or remarks details")),
@@ -222,6 +227,7 @@ trait FakeObjects {
       aboutFranchisesOrLettings = Some(prefilledAboutFranchiseOrLettings),
       aboutLeaseOrAgreementPartOne = Some(prefilledAboutLeaseOrAgreementPartOne),
       aboutLeaseOrAgreementPartTwo = Some(prefilledAboutLeaseOrAgreementPartTwo),
+      aboutLeaseOrAgreementPartThree = Some(prefilledAboutLeaseOrAgreementPartThree),
       additionalInformation = Some(prefilledAdditionalInformation),
       saveAsDraftPassword = "dummyPassword"
     )
