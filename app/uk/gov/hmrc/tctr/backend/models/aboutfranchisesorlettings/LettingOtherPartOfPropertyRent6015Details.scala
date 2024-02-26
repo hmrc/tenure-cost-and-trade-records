@@ -17,17 +17,15 @@
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class LettingSection(
-  lettingOtherPartOfPropertyInformationDetails: LettingOtherPartOfPropertyInformationDetails,
-  lettingOtherPartOfPropertyRentDetails: Option[LettingOtherPartOfPropertyRentDetails] = None,
-  lettingOtherPartOfPropertyRent6015Details: Option[LettingOtherPartOfPropertyRent6015Details] = None,
-  addAnotherLettingToProperty: Option[AnswersYesNo] = None,
-  itemsInRent: List[String] = List.empty
+import java.time.LocalDate
+
+case class LettingOtherPartOfPropertyRent6015Details(
+  annualRent: BigDecimal,
+  dateInput: LocalDate,
+  declaration: Boolean
 )
-
-object LettingSection {
-  implicit val format = Json.format[LettingSection]
+object LettingOtherPartOfPropertyRent6015Details {
+  implicit val format = Json.format[LettingOtherPartOfPropertyRent6015Details]
 
 }
