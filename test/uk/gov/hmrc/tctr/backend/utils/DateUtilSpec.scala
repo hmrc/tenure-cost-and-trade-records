@@ -20,7 +20,7 @@ import org.mockito.MockitoSugar.mock
 
 import java.time.{ZoneId, ZonedDateTime}
 import java.text.SimpleDateFormat
-import java.util.{Date, Locale}
+import java.util.Date
 import org.scalatestplus.play.PlaySpec
 import play.api.i18n.{Messages, MessagesApi}
 import uk.gov.hmrc.play.language.LanguageUtils
