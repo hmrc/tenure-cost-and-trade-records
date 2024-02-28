@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
+package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class LettingSection(
-  lettingOtherPartOfPropertyInformationDetails: LettingOtherPartOfPropertyInformationDetails,
-  lettingOtherPartOfPropertyRentDetails: Option[LettingOtherPartOfPropertyRentDetails] = None,
-  lettingOtherPartOfPropertyRent6015Details: Option[LettingOtherPartOfPropertyRent6015Details] = None,
-  addAnotherLettingToProperty: Option[AnswersYesNo] = None,
-  itemsInRent: List[String] = List.empty
+case class TradeServices(
+  details: TradeServicesDetails,
+  addAnotherService: Option[AnswersYesNo] = None
 )
 
-object LettingSection {
-  implicit val format = Json.format[LettingSection]
-
+object TradeServices {
+  implicit val format = Json.format[TradeServices]
 }

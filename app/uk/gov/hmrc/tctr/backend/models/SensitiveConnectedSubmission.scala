@@ -19,7 +19,7 @@ package uk.gov.hmrc.tctr.backend.models
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
-import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgreementPartTwo, SensitiveAboutLeaseOrAgreementPartOne}
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgreementPartThree, AboutLeaseOrAgreementPartTwo, SensitiveAboutLeaseOrAgreementPartOne}
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.AboutTheTradingHistory
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.SensitiveAboutYouAndTheProperty
@@ -45,6 +45,7 @@ case class SensitiveConnectedSubmission(
   aboutFranchisesOrLettings: Option[AboutFranchisesOrLettings] = None,
   aboutLeaseOrAgreementPartOne: Option[SensitiveAboutLeaseOrAgreementPartOne] = None,
   aboutLeaseOrAgreementPartTwo: Option[AboutLeaseOrAgreementPartTwo] = None,
+  aboutLeaseOrAgreementPartThree: Option[AboutLeaseOrAgreementPartThree] = None,
   saveAsDraftPassword: Option[String] = None,
   lastCYAPageUrl: Option[String] = None,
   requestReferenceNumberDetails: Option[SensitiveRequestReferenceNumber] = None,
@@ -65,6 +66,7 @@ case class SensitiveConnectedSubmission(
     aboutFranchisesOrLettings,
     aboutLeaseOrAgreementPartOne.map(_.decryptedValue),
     aboutLeaseOrAgreementPartTwo,
+    aboutLeaseOrAgreementPartThree,
     saveAsDraftPassword,
     lastCYAPageUrl,
     requestReferenceNumberDetails.map(_.decryptedValue),
@@ -90,6 +92,7 @@ object SensitiveConnectedSubmission {
     connectedSubmission.aboutFranchisesOrLettings,
     connectedSubmission.aboutLeaseOrAgreementPartOne.map(SensitiveAboutLeaseOrAgreementPartOne(_)),
     connectedSubmission.aboutLeaseOrAgreementPartTwo,
+    connectedSubmission.aboutLeaseOrAgreementPartThree,
     connectedSubmission.saveAsDraftPassword,
     connectedSubmission.lastCYAPageUrl,
     connectedSubmission.requestReferenceNumberDetails.map(SensitiveRequestReferenceNumber(_)),
