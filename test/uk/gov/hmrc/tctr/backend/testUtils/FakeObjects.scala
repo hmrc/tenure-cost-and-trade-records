@@ -178,7 +178,7 @@ trait FakeObjects {
     Some(AnswerYes),
     0,
     IndexedSeq(prefilledCateringOperationSectionYes),
-    IndexedSeq.empty,
+    None,
     Some(AnswerYes),
     0,
     IndexedSeq(prefilledLettingSectionYes)

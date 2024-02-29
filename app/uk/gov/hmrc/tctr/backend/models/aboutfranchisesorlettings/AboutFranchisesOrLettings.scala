@@ -24,7 +24,7 @@ case class AboutFranchisesOrLettings(
   cateringConcessionOrFranchise: Option[AnswersYesNo] = None,
   cateringOperationCurrentIndex: Int = 0,
   cateringOperationSections: IndexedSeq[CateringOperationSection] = IndexedSeq.empty,
-  cateringOperationBusinessSections: IndexedSeq[CateringOperationBusinessSection] = IndexedSeq.empty, // 6030 journey
+  cateringOperationBusinessSections: Option[IndexedSeq[CateringOperationBusinessSection]] = None, // 6030 journey
   lettingOtherPartOfProperty: Option[AnswersYesNo] = None,
   lettingCurrentIndex: Int = 0,
   lettingSections: IndexedSeq[LettingSection] = IndexedSeq.empty,
