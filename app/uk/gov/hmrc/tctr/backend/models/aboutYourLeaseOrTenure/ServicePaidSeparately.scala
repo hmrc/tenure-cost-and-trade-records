@@ -18,14 +18,10 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.Json
 
-case class AboutLeaseOrAgreementPartThree(
-  tradeServicesIndex: Int = 0,
-  servicesPaidIndex: Int = 0,
-  tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
-  servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
-  paymentForTradeServices: Option[PaymentForTradeServices] = None
+case class ServicePaidSeparately(
+  annualCharge: BigDecimal,
+  description: String
 )
-
-object AboutLeaseOrAgreementPartThree {
-  implicit val format = Json.format[AboutLeaseOrAgreementPartThree]
+object ServicePaidSeparately {
+  implicit val format = Json.format[ServicePaidSeparately]
 }

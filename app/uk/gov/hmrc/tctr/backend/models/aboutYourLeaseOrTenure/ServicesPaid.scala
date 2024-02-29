@@ -17,15 +17,13 @@
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class AboutLeaseOrAgreementPartThree(
-  tradeServicesIndex: Int = 0,
-  servicesPaidIndex: Int = 0,
-  tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
-  servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
-  paymentForTradeServices: Option[PaymentForTradeServices] = None
+case class ServicesPaid(
+  details: ServicePaidSeparately,
+  addAnotherPaidService: Option[AnswersYesNo] = None
 )
 
-object AboutLeaseOrAgreementPartThree {
-  implicit val format = Json.format[AboutLeaseOrAgreementPartThree]
+object ServicesPaid {
+  implicit val format = Json.format[ServicesPaid]
 }
