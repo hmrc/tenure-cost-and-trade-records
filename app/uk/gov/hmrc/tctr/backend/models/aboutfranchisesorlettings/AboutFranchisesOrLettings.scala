@@ -24,10 +24,12 @@ case class AboutFranchisesOrLettings(
   cateringConcessionOrFranchise: Option[AnswersYesNo] = None,
   cateringOperationCurrentIndex: Int = 0,
   cateringOperationSections: IndexedSeq[CateringOperationSection] = IndexedSeq.empty,
+  cateringOperationBusinessSections: Option[IndexedSeq[CateringOperationBusinessSection]] = None, // 6030 journey
   lettingOtherPartOfProperty: Option[AnswersYesNo] = None,
   lettingCurrentIndex: Int = 0,
   lettingSections: IndexedSeq[LettingSection] = IndexedSeq.empty,
-  checkYourAnswersAboutFranchiseOrLettings: Option[CheckYourAnswersAboutFranchiseOrLettings] = None
+  checkYourAnswersAboutFranchiseOrLettings: Option[CheckYourAnswersAboutFranchiseOrLettings] = None,
+  cateringOrFranchiseFee: Option[AnswersYesNo] = None // 6030 journey
 )
 
 object AboutFranchisesOrLettings {

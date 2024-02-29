@@ -91,7 +91,7 @@ class NotConnectedSubmissionControllerSpec
     )
     .build()
 
-  val controller = app.injector.instanceOf[NotConnectedSubmissionController]
+  private val controller = app.injector.instanceOf[NotConnectedSubmissionController]
 
   "NotConnectedSubmissionController" should {
     "handle valid submission" in {
