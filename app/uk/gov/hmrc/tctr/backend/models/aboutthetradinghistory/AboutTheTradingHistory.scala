@@ -32,6 +32,7 @@ case class AboutTheTradingHistory(
   incomeExpenditureSummary: Option[IncomeExpenditureSummary] = None,
   incomeExpenditureSummaryData: Seq[IncomeExpenditureSummaryData] = Seq.empty,
   unusualCircumstances: Option[UnusualCircumstances] = None,
+  electricVehicleChargingPoints: Option[ElectricVehicleChargingPoints] = None, // added March 2024
   checkYourAnswersAboutTheTradingHistory: Option[CheckYourAnswersAboutTheTradingHistory] = None
 )
 
@@ -48,6 +49,7 @@ object AboutTheTradingHistory {
       (__ \ "incomeExpenditureSummary").readNullable[IncomeExpenditureSummary] and
       (__ \ "incomeExpenditureSummaryData").read[Seq[IncomeExpenditureSummaryData]] and
       (__ \ "unusualCircumstances").readNullable[UnusualCircumstances] and
+      (__ \ "electricVehicleChargingPoints").readNullable[ElectricVehicleChargingPoints] and
       (__ \ "checkYourAnswersAboutTheTradingHistory").readNullable[CheckYourAnswersAboutTheTradingHistory]
   )(AboutTheTradingHistory.apply _)
 
