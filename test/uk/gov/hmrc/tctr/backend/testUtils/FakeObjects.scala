@@ -86,6 +86,9 @@ trait FakeObjects {
     "TRADING NAME"
   )
 
+  val prefilledPropertyUseLeasebackArrangement =
+    PropertyUseLeasebackArrangementDetails(AnswerYes)
+
   val baseFilledConnectedSubmission: ConnectedSubmission =
     ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token, Instant.now())
 
@@ -191,7 +194,7 @@ trait FakeObjects {
     Some(ConnectedToLandlordInformationDetails("This is some test information")),
     Some(LeaseOrAgreementYearsDetails(TenancyThreeYearsYes, RentThreeYearsYes, UnderReviewYes)),
     Some(CurrentRentPayableWithin12Months(CurrentRentWithin12MonthsYes, Some(prefilledDateInput))),
-    Some(AnswerYes),
+    Some(prefilledPropertyUseLeasebackArrangement),
     Some(AnnualRent(BigDecimal(9999999))),
     rentIncludeTradeServicesDetails = Some(RentIncludeTradeServicesDetails(AnswerYes)),
     rentIncludeFixturesAndFittingsDetails = Some(RentIncludeFixturesAndFittingsDetails(AnswerYes)),
