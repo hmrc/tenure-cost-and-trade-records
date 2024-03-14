@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
+package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class TenancyLeaseAgreementDetails(tenancyLeaseAgreements: AnswersYesNo)
+case class BunkeredFuelQuestion(
+  bunkeredFuelQuestion: AnswersYesNo
+)
 
-object TenancyLeaseAgreementDetails {
-  implicit val format = Json.format[TenancyLeaseAgreementDetails]
+object BunkeredFuelQuestion {
+  implicit val format: OFormat[BunkeredFuelQuestion] = Json.format[BunkeredFuelQuestion]
 }
