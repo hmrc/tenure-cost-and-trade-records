@@ -20,10 +20,9 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class BunkeredFuelQuestion(
-           bunkeredFuelQuestion: AnswersYesNo
+  bunkeredFuelQuestion: AnswersYesNo
 )
 
 object BunkeredFuelQuestion {
   implicit val format: OFormat[BunkeredFuelQuestion] = Json.format[BunkeredFuelQuestion]
 }
-
