@@ -19,7 +19,6 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 import play.api.libs.json.Json
 
 case class TradeServicesDetails(
-  sumExcludingVat: Option[BigDecimal] = None,
   description: String
 )
 object TradeServicesDetails {
