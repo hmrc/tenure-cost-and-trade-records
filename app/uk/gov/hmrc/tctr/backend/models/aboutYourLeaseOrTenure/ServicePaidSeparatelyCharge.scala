@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
-case class ServicePaidSeparately(
-  description: String
+case class ServicePaidSeparatelyCharge(
+  annualCharge: BigDecimal
 )
-object ServicePaidSeparately {
-  implicit val format = Json.format[ServicePaidSeparately]
+
+object ServicePaidSeparatelyCharge {
+  implicit val format: OFormat[ServicePaidSeparatelyCharge] = Json.format[ServicePaidSeparatelyCharge]
 }
