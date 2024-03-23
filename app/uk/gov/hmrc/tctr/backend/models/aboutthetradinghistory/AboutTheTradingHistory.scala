@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,11 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.VariableOperatingExpensesSections
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
+
 case class AboutTheTradingHistory(
   occupationAndAccountingInformation: Option[OccupationalAndAccountingInformation] = None,
   turnoverSections: Seq[TurnoverSection] = Seq.empty,
+  turnoverSections6020: Option[Seq[TurnoverSection6020]] = None,
   turnoverSections6030: Seq[TurnoverSection6030] = Seq.empty,
   costOfSales: Seq[CostOfSales] = Seq.empty,
   fixedOperatingExpensesSections: Seq[FixedOperatingExpenses] = Seq.empty,
@@ -42,6 +44,7 @@ object AboutTheTradingHistory {
   implicit val aboutTheTradingHistoryReads: Reads[AboutTheTradingHistory] = (
     (__ \ "occupationAndAccountingInformation").readNullable[OccupationalAndAccountingInformation] and
       (__ \ "turnoverSections").read[Seq[TurnoverSection]] and
+      (__ \ "turnoverSections6020").readNullable[Seq[TurnoverSection6020]] and
       (__ \ "turnoverSections6030").readNullable[Seq[TurnoverSection6030]].map(_.getOrElse(Seq.empty)) and
       (__ \ "costOfSales").read[Seq[CostOfSales]] and
       (__ \ "fixedOperatingExpensesSections").read[Seq[FixedOperatingExpenses]] and
