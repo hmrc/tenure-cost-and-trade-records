@@ -20,19 +20,11 @@ import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
-/**
-  * Turnover excluding fuel or letting income.
-  */
-case class TurnoverSection6020(
+case class BunkeredFuelSold(
   financialYearEnd: LocalDate,
-  shop: Option[BigDecimal],
-  carWash: Option[BigDecimal],
-  jetWash: Option[BigDecimal],
-  lottery: Option[BigDecimal],
-  payPointOrZone: Option[BigDecimal],
-  otherIncome: Option[BigDecimal]
+  fuelPerLiter: Option[BigDecimal]
 )
 
-object TurnoverSection6020 {
-  implicit val format: OFormat[TurnoverSection6020] = Json.format
+object BunkeredFuelSold {
+  implicit val format: OFormat[BunkeredFuelSold] = Json.format[BunkeredFuelSold]
 }
