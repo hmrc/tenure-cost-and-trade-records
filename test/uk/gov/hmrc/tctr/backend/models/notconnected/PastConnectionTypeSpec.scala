@@ -14,19 +14,27 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
+package uk.gov.hmrc.tctr.backend.models.notconnected
 
-import play.api.libs.json.Json
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 
-case class AboutLeaseOrAgreementPartThree(
-  tradeServicesIndex: Int = 0,
-  servicesPaidIndex: Int = 0,
-  tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
-  servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
-  paymentForTradeServices: Option[PaymentForTradeServices] = None,
-  typeOfTenure: Option[TypeOfTenure] = None // Add March 2024 for 6020
-)
+class PastConnectionTypeSpec extends AnyWordSpecLike with Matchers {
 
-object AboutLeaseOrAgreementPartThree {
-  implicit val format = Json.format[AboutLeaseOrAgreementPartThree]
+  "PastConnectionType" should {
+    "return key value" in {
+      val result = PastConnectionType.key
+      result shouldBe "pastConnectionType"
+    }
+
+    "return yes value" in {
+      val result = PastConnectionTypeYes.name
+      result shouldBe "yes"
+    }
+
+    "return no value" in {
+      val result = PastConnectionTypeNo.name
+      result shouldBe "no"
+    }
+  }
 }

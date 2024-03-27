@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,13 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Format, Json}
 
-case class AboutLeaseOrAgreementPartThree(
-  tradeServicesIndex: Int = 0,
-  servicesPaidIndex: Int = 0,
-  tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
-  servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
-  paymentForTradeServices: Option[PaymentForTradeServices] = None,
-  typeOfTenure: Option[TypeOfTenure] = None // Add March 2024 for 6020
+case class TypeOfTenure(
+  typeOfTenure: List[String] = List.empty,
+  typeOfTenureDetails: Option[String]
 )
 
-object AboutLeaseOrAgreementPartThree {
-  implicit val format = Json.format[AboutLeaseOrAgreementPartThree]
+object TypeOfTenure {
+  implicit val format: Format[TypeOfTenure] = Json.format[TypeOfTenure]
 }

@@ -39,7 +39,7 @@ case class AboutTheTradingHistory(
   bunkeredFuelQuestion: Option[BunkeredFuelQuestion] = None,
   bunkeredFuelSold: Option[Seq[BunkeredFuelSold]] = None,
   bunkerFuelCardsDetails: Option[IndexedSeq[BunkerFuelCardsDetails]] = None,
-  lowMarginFuelCardsDetails: Option[IndexedSeq[LowMarginFuelCardsDetails]] =None,
+  lowMarginFuelCardsDetails: Option[IndexedSeq[LowMarginFuelCardsDetails]] = None,
   checkYourAnswersAboutTheTradingHistory: Option[CheckYourAnswersAboutTheTradingHistory] = None
 )
 
