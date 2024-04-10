@@ -210,6 +210,7 @@ trait FakeObjects {
 
   val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
     tradeServices = IndexedSeq.empty,
+    carParking = Some(CarParking(Some(AnswerYes), Some(CarParkingSpaces(1, 2, 3)), Some(AnswerNo))),
     paymentForTradeServices = None
   )
 

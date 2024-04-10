@@ -18,7 +18,7 @@ object CodeCoverageSettings extends AutoPlugin {
 
   override val projectSettings: Seq[Setting[?]] = Seq(
     ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
-    ScoverageKeys.coverageMinimumStmtTotal := 64.5,
+    ScoverageKeys.coverageMinimumStmtTotal := 64.7,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true
   )

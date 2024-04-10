@@ -16,18 +16,17 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
-case class AboutLeaseOrAgreementPartThree(
-  tradeServicesIndex: Int = 0,
-  servicesPaidIndex: Int = 0,
-  tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
-  servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
-  carParking: Option[CarParking] = None,
-  paymentForTradeServices: Option[PaymentForTradeServices] = None,
-  typeOfTenure: Option[TypeOfTenure] = None // Add March 2024 for 6020
+/**
+  * @author Yuriy Tumakha
+  */
+case class CarParkingSpaces(
+  openSpaces: Int = 0,
+  coveredSpaces: Int = 0,
+  garages: Int = 0
 )
 
-object AboutLeaseOrAgreementPartThree {
-  implicit val format = Json.format[AboutLeaseOrAgreementPartThree]
+object CarParkingSpaces {
+  implicit val format: OFormat[CarParkingSpaces] = Json.format
 }
