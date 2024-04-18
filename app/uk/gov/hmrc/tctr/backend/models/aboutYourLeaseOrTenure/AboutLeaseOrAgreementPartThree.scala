@@ -24,6 +24,7 @@ case class AboutLeaseOrAgreementPartThree(
   tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
   servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
   carParking: Option[CarParking] = None,
+  rentedEquipmentDetails: Option[String] = None,
   paymentForTradeServices: Option[PaymentForTradeServices] = None,
   typeOfTenure: Option[TypeOfTenure] = None // Add March 2024 for 6020
 )
