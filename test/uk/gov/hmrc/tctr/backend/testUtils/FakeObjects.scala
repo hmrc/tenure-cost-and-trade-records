@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-import uk.gov.hmrc.tctr.backend.models._
 import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDuration}
+import uk.gov.hmrc.tctr.backend.models._
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure._
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings._
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory._
@@ -80,7 +80,10 @@ trait FakeObjects {
     )
 
   val prefilledDateInput: LocalDate               = LocalDate.of(2022, 6, 1)
+  val today: LocalDate                            = LocalDate.now
   val prefilledMonthYearInput: MonthsYearDuration = MonthsYearDuration(6, 2000)
+
+  val hundred: BigDecimal = BigDecimal(100)
 
   val prefilledTradingNameOperatingFromProperty: TradingNameOperatingFromProperty = TradingNameOperatingFromProperty(
     "TRADING NAME"
@@ -210,7 +213,9 @@ trait FakeObjects {
 
   val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
     tradeServices = IndexedSeq.empty,
-    carParking = Some(CarParking(Some(AnswerYes), Some(CarParkingSpaces(1, 2, 3)), Some(AnswerNo))),
+    throughputAffectsRent = ThroughputAffectsRent(AnswerYes, "Throughput affects rent details"),
+    carParking = CarParking(AnswerYes, CarParkingSpaces(1, 2, 3), AnswerYes, CarParkingSpaces(10), hundred, today),
+    rentedEquipmentDetails = "Rented equipment details",
     paymentForTradeServices = None
   )
 
