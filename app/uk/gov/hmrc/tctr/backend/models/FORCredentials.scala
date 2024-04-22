@@ -27,8 +27,7 @@ case class FORCredentials(
   billingAuthorityCode: String,
   forType: String,
   address: SensitiveAddress,
-  _id: String,
-  createdAt: Instant = Instant.now()
+  _id: String
 ) {
   def basicAuthString: String = "Basic " + encodedAuth
 
