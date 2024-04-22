@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class StillConnectedDetails(
@@ -38,5 +38,5 @@ case class StillConnectedDetails(
 )
 
 object StillConnectedDetails {
-  implicit val format = Json.format[StillConnectedDetails]
+  implicit val format: OFormat[StillConnectedDetails] = Json.format[StillConnectedDetails]
 }

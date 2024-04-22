@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgreementPartOne, AboutLeaseOrAgreementPartThree, AboutLeaseOrAgreementPartTwo}
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.AboutTheTradingHistory
@@ -51,5 +51,5 @@ case class ConnectedSubmission(
   downloadPDFDetails: Option[DownloadPDFDetails] = None
 )
 object ConnectedSubmission {
-  implicit val format = Json.format[ConnectedSubmission]
+  implicit val format: OFormat[ConnectedSubmission] = Json.format[ConnectedSubmission]
 }

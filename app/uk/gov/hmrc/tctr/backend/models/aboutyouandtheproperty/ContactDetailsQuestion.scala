@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class ContactDetailsQuestion(contactDetailsQuestion: AnswersYesNo)
 
 object ContactDetailsQuestion {
-  implicit val format = Json.format[ContactDetailsQuestion]
+  implicit val format: OFormat[ContactDetailsQuestion] = Json.format[ContactDetailsQuestion]
 }

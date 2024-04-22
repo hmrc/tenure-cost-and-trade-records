@@ -81,45 +81,11 @@ class ExportNotConnectedSubmissionsSpec
     Await.ready(system.terminate(), 2 seconds)
 
   object TestData {
-    lazy val repo             = mock[NotConnectedMongoRepository]
-    lazy val deskproConnector = new StubDeskproConnector()
-    lazy val batchSize        = 1
-    lazy val scheduler        = new ScheduleThatSchedulesImmediately5Times
-    lazy val audit            = mock[ForTCTRAudit]
-  }
-
-  private def createDeskproTicket(submission: NotConnectedSubmission): DeskproTicket = {
-    val message =
-      s"""
-         |Reference number : ${submission.id}
-         |
-         |ForType: ${submission.forType}
-         |
-         |Name: ${submission.fullName}
-         |Email address: ${submission.emailAddress.getOrElse("not provided")}
-         |Phone number: ${submission.phoneNumber.getOrElse("not provided")}
-         |Previously connected to property: ${if (submission.previouslyConnected.getOrElse(false)) "yes" else "no"}
-         |
-         |Address: ${submission.address.singleLine}
-         |
-         |Additional information:
-         |${submission.additionalInformation.getOrElse("")}${submission.lang.fold("")(lang => s"\n\nLanguage: $lang")}
-         |
-         |Ticket created by STaCI service : https://www.tax.service.gov.uk/send-trade-and-cost-information/login
- """.stripMargin
-
-    DeskproTicket(
-      submission.fullName,
-      submission.emailAddress.getOrElse("noreply@voa.gsi.gov.uk"),
-      "FOR6010 - Not connected property",
-      message,
-      "https://www.tax.service.gov.uk/sending-rental-information/not-connected",
-      "false",
-      "-",
-      "-",
-      "VOA",
-      "N/A"
-    )
+    lazy val repo: NotConnectedMongoRepository = mock[NotConnectedMongoRepository]
+    lazy val deskproConnector                  = new StubDeskproConnector()
+    lazy val batchSize                         = 1
+    lazy val scheduler                         = new ScheduleThatSchedulesImmediately5Times
+    lazy val audit: ForTCTRAudit               = mock[ForTCTRAudit]
   }
 
 }

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class AlternativeAddress(
   buildingNameNumber: String,
@@ -27,5 +27,5 @@ case class AlternativeAddress(
 )
 
 object AlternativeAddress {
-  implicit val format = Json.format[AlternativeAddress]
+  implicit val format: OFormat[AlternativeAddress] = Json.format[AlternativeAddress]
 }

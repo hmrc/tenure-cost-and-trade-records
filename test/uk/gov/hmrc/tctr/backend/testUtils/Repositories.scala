@@ -45,7 +45,6 @@ class InMemoryFailedLoginsRepo extends FailedLoginsRepo {
 }
 
 class StubCredentialsRepository extends CredentialsRepo {
-  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
   override def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] =
     Future.successful(None)
@@ -65,7 +64,7 @@ class StubCredentialsRepository extends CredentialsRepo {
 
 class StubSubmittedRepository @Inject() (mongo: MongoComponent, appConfig: AppConfig)(implicit ec: ExecutionContext)
     extends SubmittedMongoRepo(mongo, appConfig) {
-  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
+
   override def insertIfUnique(refNum: String): Future[InsertOneResult] = ???
 
   override def hasBeenSubmitted(refNum: String): Future[Boolean] = Future.successful(false)

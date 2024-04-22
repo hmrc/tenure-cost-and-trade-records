@@ -18,7 +18,7 @@ package uk.gov.hmrc.tctr.backend.repository
 
 import com.google.inject.ImplementedBy
 import org.mongodb.scala.{BulkWriteResult, MongoBulkWriteException}
-import org.mongodb.scala.bson.Document
+import org.mongodb.scala.bson.{BsonDateTime, BsonDocument, Document}
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.{Filters, IndexModel, IndexOptions, Indexes, UpdateOneModel, UpdateOptions, WriteModel}
 import org.mongodb.scala.result.{DeleteResult, InsertManyResult}
@@ -34,9 +34,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json._
-import org.mongodb.scala.bson.BsonDocument
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
 @ImplementedBy(classOf[CredentialsMongoRepo])
 trait CredentialsRepo {
@@ -128,7 +126,7 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent, configuration: Conf
     def toBson(doc: JsObject): BsonDocument = {
       val withLastModified = doc + ("LastModified" -> JsString(Instant.now().toString))
       val setData          = BsonDocument("$set" -> BsonDocument(Json.stringify(withLastModified)))
-      setData.append("$setOnInsert", BsonDocument("CreatedAt" -> Instant.now().toString))
+      setData.append("$setOnInsert", BsonDocument("createdAt" -> BsonDateTime(Instant.now().toEpochMilli)))
     }
 
     val bulkOps: Seq[WriteModel[_ <: FORCredentials]] = credentialsSeq.map { cred =>

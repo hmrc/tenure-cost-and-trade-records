@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class EditAddress(
   buildingNameNumber: String,
@@ -27,5 +27,5 @@ case class EditAddress(
 )
 
 object EditAddress {
-  implicit val format = Json.format[EditAddress]
+  implicit val format: OFormat[EditAddress] = Json.format[EditAddress]
 }

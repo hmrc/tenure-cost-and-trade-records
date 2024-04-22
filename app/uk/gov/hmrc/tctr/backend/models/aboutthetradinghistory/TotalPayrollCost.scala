@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
@@ -27,6 +27,6 @@ case class TotalPayrollCost(
 )
 
 object TotalPayrollCost {
-  implicit val format = Json.format[TotalPayrollCost]
+  implicit val format: OFormat[TotalPayrollCost] = Json.format[TotalPayrollCost]
 
 }

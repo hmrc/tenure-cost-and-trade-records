@@ -31,7 +31,6 @@ import uk.gov.hmrc.tctr.backend.models.{RequestReferenceNumberSubmission, Sensit
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
 @ImplementedBy(classOf[RequestReferenceNumberMongoRepository])
 trait RequestReferenceNumberRepository {

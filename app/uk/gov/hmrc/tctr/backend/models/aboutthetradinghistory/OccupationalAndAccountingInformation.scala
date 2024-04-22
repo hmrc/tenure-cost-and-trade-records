@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDuration}
 
 case class OccupationalAndAccountingInformation(
@@ -25,6 +25,6 @@ case class OccupationalAndAccountingInformation(
   yearEndChanged: Option[Boolean] = Some(false)
 )
 object OccupationalAndAccountingInformation {
-  implicit val format = Json.format[OccupationalAndAccountingInformation]
+  implicit val format: OFormat[OccupationalAndAccountingInformation] = Json.format[OccupationalAndAccountingInformation]
 
 }

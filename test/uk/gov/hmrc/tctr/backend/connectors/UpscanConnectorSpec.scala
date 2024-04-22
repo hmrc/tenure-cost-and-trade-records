@@ -24,12 +24,12 @@ import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.tctr.backend.models.UnknownError
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContextExecutor, Future}
 
 class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
 
-  implicit val ec                = scala.concurrent.ExecutionContext.global
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.global
+  implicit val hc: HeaderCarrier            = HeaderCarrier()
 
   private val httpClient = mock[HttpClient]
 

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class LettingPartOfPropertyDetails(
@@ -27,5 +27,5 @@ case class LettingPartOfPropertyDetails(
 )
 
 object LettingPartOfPropertyDetails {
-  implicit val format = Json.format[LettingPartOfPropertyDetails]
+  implicit val format: OFormat[LettingPartOfPropertyDetails] = Json.format[LettingPartOfPropertyDetails]
 }

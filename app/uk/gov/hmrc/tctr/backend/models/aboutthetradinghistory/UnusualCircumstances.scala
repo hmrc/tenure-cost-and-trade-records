@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class UnusualCircumstances(
   unusualCircumstances: String
 )
 
 object UnusualCircumstances {
-  implicit val format = Json.format[UnusualCircumstances]
+  implicit val format: OFormat[UnusualCircumstances] = Json.format[UnusualCircumstances]
 }
