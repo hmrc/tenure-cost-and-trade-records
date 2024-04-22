@@ -17,19 +17,12 @@
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class AboutLeaseOrAgreementPartThree(
-  tradeServicesIndex: Int = 0,
-  servicesPaidIndex: Int = 0,
-  tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
-  servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
-  carParking: Option[CarParking] = None,
-  rentedEquipmentDetails: Option[String] = None,
-  paymentForTradeServices: Option[PaymentForTradeServices] = None,
-  typeOfTenure: Option[TypeOfTenure] = None, // Add March 2024 for 6020
-  propertyUpdates: Option[PropertyUpdates] = None
+case class PropertyUpdates(
+  updates: AnswersYesNo
 )
 
-object AboutLeaseOrAgreementPartThree {
-  implicit val format: OFormat[AboutLeaseOrAgreementPartThree] = Json.format[AboutLeaseOrAgreementPartThree]
+object PropertyUpdates {
+  implicit val format: OFormat[PropertyUpdates] = Json.format[PropertyUpdates]
 }
