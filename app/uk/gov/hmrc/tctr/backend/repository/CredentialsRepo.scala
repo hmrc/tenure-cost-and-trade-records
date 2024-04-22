@@ -35,7 +35,6 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json._
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
 @ImplementedBy(classOf[CredentialsMongoRepo])
 trait CredentialsRepo {

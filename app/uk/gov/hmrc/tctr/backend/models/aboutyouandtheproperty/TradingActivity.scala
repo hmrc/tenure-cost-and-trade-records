@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class TradingActivity(
@@ -25,6 +25,6 @@ case class TradingActivity(
 )
 
 object TradingActivity {
-  implicit val format = Json.format[TradingActivity]
+  implicit val format: OFormat[TradingActivity] = Json.format[TradingActivity]
 
 }

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class LettingAddress(
   buildingNameNumber: String,
@@ -27,6 +27,6 @@ case class LettingAddress(
 )
 
 object LettingAddress {
-  implicit val format = Json.format[LettingAddress]
+  implicit val format: OFormat[LettingAddress] = Json.format[LettingAddress]
 
 }

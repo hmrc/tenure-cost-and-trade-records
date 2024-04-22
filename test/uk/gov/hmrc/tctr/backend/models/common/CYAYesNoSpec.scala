@@ -24,8 +24,8 @@ class CYAYesNoSpec extends AnyWordSpecLike with Matchers {
   "CYAYesNo" should {
     "Return values" in {
       CYAYesNo.key shouldBe "cyaYesNo"
-      CYAYes.name shouldBe "yes"
-      CYANo.name shouldBe "no"
+      CYAYes.name  shouldBe "yes"
+      CYANo.name   shouldBe "no"
     }
   }
 

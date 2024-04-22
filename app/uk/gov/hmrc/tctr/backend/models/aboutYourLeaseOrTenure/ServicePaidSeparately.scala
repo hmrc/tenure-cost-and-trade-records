@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class ServicePaidSeparately(
   description: String
 )
 object ServicePaidSeparately {
-  implicit val format = Json.format[ServicePaidSeparately]
+  implicit val format: OFormat[ServicePaidSeparately] = Json.format[ServicePaidSeparately]
 }

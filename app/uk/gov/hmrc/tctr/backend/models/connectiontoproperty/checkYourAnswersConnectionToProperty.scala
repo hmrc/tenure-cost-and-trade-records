@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class CheckYourAnswersConnectionToProperty(
   checkYourAnswersConnectionToProperty: String
 )
 
 object CheckYourAnswersConnectionToProperty {
-  implicit val format = Json.format[CheckYourAnswersConnectionToProperty]
+  implicit val format: OFormat[CheckYourAnswersConnectionToProperty] = Json.format[CheckYourAnswersConnectionToProperty]
 }

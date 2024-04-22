@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class RentIncludeFixturesOrFittingsInformationDetails(
   sumIncludedInRent: Option[BigDecimal]
 )
 
 object RentIncludeFixturesOrFittingsInformationDetails {
-  implicit val format = Json.format[RentIncludeFixturesOrFittingsInformationDetails]
+  implicit val format: OFormat[RentIncludeFixturesOrFittingsInformationDetails] =
+    Json.format[RentIncludeFixturesOrFittingsInformationDetails]
 }

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.requestReferenceNumber
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class RequestReferenceNumberAddress(
   buildingNameNumber: String,
@@ -27,5 +27,5 @@ case class RequestReferenceNumberAddress(
 )
 
 object RequestReferenceNumberAddress {
-  implicit val format = Json.format[RequestReferenceNumberAddress]
+  implicit val format: OFormat[RequestReferenceNumberAddress] = Json.format[RequestReferenceNumberAddress]
 }

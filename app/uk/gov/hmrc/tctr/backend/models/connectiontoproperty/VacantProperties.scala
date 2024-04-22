@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class VacantProperties(
   vacantProperties: VacantPropertiesDetails
 )
 
 object VacantProperties {
-  implicit val format = Json.format[VacantProperties]
+  implicit val format: OFormat[VacantProperties] = Json.format[VacantProperties]
 
 }

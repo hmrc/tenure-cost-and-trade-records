@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
 case class TenancyLeaseAgreementExpire(tenancyLeaseAgreementExpire: LocalDate)
 
 object TenancyLeaseAgreementExpire {
-  implicit val format = Json.format[TenancyLeaseAgreementExpire]
+  implicit val format: OFormat[TenancyLeaseAgreementExpire] = Json.format[TenancyLeaseAgreementExpire]
 }

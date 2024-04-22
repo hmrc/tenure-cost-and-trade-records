@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
 case class HowIsCurrentRentFixed(currentRentFixed: CurrentRentFixed, rentActuallyAgreed: LocalDate)
 
 object HowIsCurrentRentFixed {
-  implicit val format = Json.format[HowIsCurrentRentFixed]
+  implicit val format: OFormat[HowIsCurrentRentFixed] = Json.format[HowIsCurrentRentFixed]
 }

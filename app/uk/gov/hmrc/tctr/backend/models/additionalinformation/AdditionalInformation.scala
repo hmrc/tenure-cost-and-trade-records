@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.additionalinformation
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class AdditionalInformation(
   furtherInformationOrRemarksDetails: Option[FurtherInformationOrRemarksDetails] = None,
@@ -24,5 +24,5 @@ case class AdditionalInformation(
 )
 
 object AdditionalInformation {
-  implicit val format = Json.format[AdditionalInformation]
+  implicit val format: OFormat[AdditionalInformation] = Json.format[AdditionalInformation]
 }

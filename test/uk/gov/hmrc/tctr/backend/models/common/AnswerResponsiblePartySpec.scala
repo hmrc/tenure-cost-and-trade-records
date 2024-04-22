@@ -23,28 +23,28 @@ class AnswerResponsiblePartySpec extends AnyWordSpecLike with Matchers {
 
   "OutsideRepairs" should {
     "Return values" in {
-      OutsideRepairs.key shouldBe "outsideRepairs"
+      OutsideRepairs.key          shouldBe "outsideRepairs"
       OutsideRepairsLandlord.name shouldBe "landlord"
-      OutsideRepairsTenant.name shouldBe "tenant"
-      OutsideRepairsBoth.name shouldBe "both"
+      OutsideRepairsTenant.name   shouldBe "tenant"
+      OutsideRepairsBoth.name     shouldBe "both"
     }
   }
 
   "InsideRepairs" should {
     "Return values" in {
-      InsideRepairs.key shouldBe "insideRepairs"
+      InsideRepairs.key          shouldBe "insideRepairs"
       InsideRepairsLandlord.name shouldBe "landlord"
-      InsideRepairsTenant.name shouldBe "tenant"
-      InsideRepairsBoth.name shouldBe "both"
+      InsideRepairsTenant.name   shouldBe "tenant"
+      InsideRepairsBoth.name     shouldBe "both"
     }
   }
 
   "BuildingInsurance" should {
     "Return values" in {
-      BuildingInsurance.key shouldBe "buildingInsurance"
+      BuildingInsurance.key          shouldBe "buildingInsurance"
       BuildingInsuranceLandlord.name shouldBe "landlord"
-      BuildingInsuranceTenant.name shouldBe "tenant"
-      BuildingInsuranceBoth.name shouldBe "both"
+      BuildingInsuranceTenant.name   shouldBe "tenant"
+      BuildingInsuranceBoth.name     shouldBe "both"
     }
   }
 }
