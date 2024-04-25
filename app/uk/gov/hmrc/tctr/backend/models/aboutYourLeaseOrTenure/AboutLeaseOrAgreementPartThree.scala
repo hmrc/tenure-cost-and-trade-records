@@ -29,7 +29,10 @@ case class AboutLeaseOrAgreementPartThree(
   paymentForTradeServices: Option[PaymentForTradeServices] = None,
   typeOfTenure: Option[TypeOfTenure] = None, // Add March 2024 for 6020
   propertyUpdates: Option[PropertyUpdates] = None,
-  leaseSurrenderedEarly: Option[LeaseSurrenderedEarly] = None
+  leaseSurrenderedEarly: Option[LeaseSurrenderedEarly] = None,
+  benefitsGiven: Option[BenefitsGiven] = None,
+  benefitsGivenDetails: Option[BenefitsGivenDetails] = None,
+  capitalSumDescription: Option[CapitalSumDescription] = None
 )
 
 object AboutLeaseOrAgreementPartThree {
