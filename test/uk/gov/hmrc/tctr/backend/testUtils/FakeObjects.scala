@@ -216,7 +216,9 @@ trait FakeObjects {
     throughputAffectsRent = ThroughputAffectsRent(AnswerYes, "Throughput affects rent details"),
     carParking = CarParking(AnswerYes, CarParkingSpaces(1, 2, 3), AnswerYes, CarParkingSpaces(10), hundred, today),
     rentedEquipmentDetails = "Rented equipment details",
-    paymentForTradeServices = None
+    paymentForTradeServices = None,
+    leaseSurrenderedEarly = Some(LeaseSurrenderedEarly(AnswerNo)),
+    benefitsGiven = Some(BenefitsGiven(AnswerNo))
   )
 
   // Additional information
