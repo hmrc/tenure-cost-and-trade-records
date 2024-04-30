@@ -16,7 +16,9 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutFranchisesOrLettings(
@@ -29,7 +31,8 @@ case class AboutFranchisesOrLettings(
   lettingCurrentIndex: Int = 0,
   lettingSections: IndexedSeq[LettingSection] = IndexedSeq.empty,
   checkYourAnswersAboutFranchiseOrLettings: Option[CheckYourAnswersAboutFranchiseOrLettings] = None,
-  cateringOrFranchiseFee: Option[AnswersYesNo] = None // 6030 journey
+  cateringOrFranchiseFee: Option[AnswersYesNo] = None, // 6030 journey
+  lettings: Option[IndexedSeq[LettingPartOfProperty]] = None // 6020 lettings
 )
 
 object AboutFranchisesOrLettings {
