@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
-
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
