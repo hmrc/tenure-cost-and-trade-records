@@ -17,6 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutLeaseOrAgreementPartThree(
   tradeServicesIndex: Int = 0,
@@ -24,6 +25,7 @@ case class AboutLeaseOrAgreementPartThree(
   tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
   servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
   throughputAffectsRent: Option[ThroughputAffectsRent] = None,
+  isVATPayableForWholeProperty: Option[AnswersYesNo] = None,
   carParking: Option[CarParking] = None,
   rentedEquipmentDetails: Option[String] = None,
   paymentForTradeServices: Option[PaymentForTradeServices] = None,
