@@ -215,6 +215,7 @@ trait FakeObjects {
     tradeServices = IndexedSeq.empty,
     throughputAffectsRent = ThroughputAffectsRent(AnswerYes, "Throughput affects rent details"),
     isVATPayableForWholeProperty = AnswerYes,
+    isRentUnderReview = AnswerNo,
     carParking = CarParking(AnswerYes, CarParkingSpaces(1, 2, 3), AnswerYes, CarParkingSpaces(10), hundred, today),
     rentedEquipmentDetails = "Rented equipment details",
     paymentForTradeServices = None,
