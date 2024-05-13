@@ -158,7 +158,8 @@ trait FakeObjects {
         BigDecimal(567),
         BigDecimal(678)
       )
-    )
+    ),
+    doYouAcceptLowMarginFuelCard = AnswerNo
   )
 
   // Franchises or lettings

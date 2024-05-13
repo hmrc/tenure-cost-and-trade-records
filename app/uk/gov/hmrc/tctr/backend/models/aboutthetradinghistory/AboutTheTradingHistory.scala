@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.VariableOperatingExpensesSections
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutTheTradingHistory(
   occupationAndAccountingInformation: Option[OccupationalAndAccountingInformation] = None,
@@ -40,6 +41,7 @@ case class AboutTheTradingHistory(
   bunkeredFuelSold: Option[Seq[BunkeredFuelSold]] = None,
   bunkerFuelCardsDetails: Option[IndexedSeq[BunkerFuelCardsDetails]] = None,
   customerCreditAccounts: Option[Seq[CustomerCreditAccounts]] = None,
+  doYouAcceptLowMarginFuelCard: Option[AnswersYesNo] = None,
   percentageFromFuelCards: Option[Seq[PercentageFromFuelCards]] = None,
   lowMarginFuelCardsDetails: Option[IndexedSeq[LowMarginFuelCardsDetails]] = None,
   checkYourAnswersAboutTheTradingHistory: Option[CheckYourAnswersAboutTheTradingHistory] = None
@@ -65,6 +67,7 @@ object AboutTheTradingHistory {
       (__ \ "bunkeredFuelSold").readNullable[Seq[BunkeredFuelSold]] and
       (__ \ "bunkerFuelCardsDetails").readNullable[IndexedSeq[BunkerFuelCardsDetails]] and
       (__ \ "customerCreditAccounts").readNullable[Seq[CustomerCreditAccounts]] and
+      (__ \ "doYouAcceptLowMarginFuelCard").readNullable[AnswersYesNo] and
       (__ \ "percentageFromFuelCards").readNullable[Seq[PercentageFromFuelCards]] and
       (__ \ "lowMarginFuelCardsDetails").readNullable[IndexedSeq[LowMarginFuelCardsDetails]] and
       (__ \ "checkYourAnswersAboutTheTradingHistory").readNullable[CheckYourAnswersAboutTheTradingHistory]
