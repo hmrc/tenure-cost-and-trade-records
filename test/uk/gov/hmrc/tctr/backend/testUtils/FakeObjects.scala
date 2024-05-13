@@ -221,7 +221,9 @@ trait FakeObjects {
     rentedEquipmentDetails = "Rented equipment details",
     paymentForTradeServices = None,
     leaseSurrenderedEarly = Some(LeaseSurrenderedEarly(AnswerNo)),
-    benefitsGiven = Some(BenefitsGiven(AnswerNo))
+    benefitsGiven = Some(BenefitsGiven(AnswerNo)),
+    workCarriedOutDetails = Some(WorkCarriedOutDetails("workCarriedOutDetails")),
+    workCarriedOutCondition = Some(WorkCarriedOutCondition(AnswerYes))
   )
 
   // Additional information
