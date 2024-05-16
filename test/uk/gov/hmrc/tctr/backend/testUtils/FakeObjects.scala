@@ -140,6 +140,12 @@ trait FakeObjects {
     Some(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie))
   )
 
+  val prefilledAboutYouAndThePropertyPartTwo: AboutYouAndThePropertyPartTwo = AboutYouAndThePropertyPartTwo(
+    plantAndTechnology = Some("plant and technology"),
+    generatorCapacity  = Some("generator capacity"),
+    batteriesCapacity  = Some("batteries capacity")
+  )
+
   val prefilledConnectedSubmission: ConnectedSubmission = baseFilledConnectedSubmission.copy(
     stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
     aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes)
@@ -241,6 +247,7 @@ trait FakeObjects {
       createdAt = Instant.now(),
       stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
       aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes),
+      aboutYouAndThePropertyPartTwo = Some(prefilledAboutYouAndThePropertyPartTwo),
       aboutTheTradingHistory = Some(prefilledAboutYourTradingHistory),
       aboutFranchisesOrLettings = Some(prefilledAboutFranchiseOrLettings),
       aboutLeaseOrAgreementPartOne = Some(prefilledAboutLeaseOrAgreementPartOne),
