@@ -18,9 +18,9 @@ package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 import play.api.libs.json.{Json, OFormat}
 
 case class AboutYouAndThePropertyPartTwo(
-  plantAndTechnology: Option[PlantAndTechnology] = None,
-  generatorCapacity: Option[GeneratorCapacity] = None,
-  batteriesCapacity: Option[BatteriesCapacity] = None
+  plantAndTechnology: Option[String] = None,
+  generatorCapacity:  Option[String] = None,
+  batteriesCapacity:  Option[String] = None
 )
 
 object AboutYouAndThePropertyPartTwo {
