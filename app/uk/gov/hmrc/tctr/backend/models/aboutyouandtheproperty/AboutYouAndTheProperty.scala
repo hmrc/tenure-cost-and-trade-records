@@ -38,7 +38,8 @@ case class AboutYouAndTheProperty(
   charityQuestion: Option[AnswersYesNo] = None, // 6030
   tradingActivity: Option[TradingActivity] = None, //6030
   renewablesPlant: Option[RenewablesPlant] = None, // 6076
-  threeYearsConstructed: Option[AnswersYesNo] = None // 6076
+  threeYearsConstructed: Option[AnswersYesNo] = None, // 6076
+  costsBreakdown: Option[String] = None // 6076
 )
 
 object AboutYouAndTheProperty {
