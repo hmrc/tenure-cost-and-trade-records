@@ -40,7 +40,8 @@ case class SensitiveAboutYouAndTheProperty(
   charityQuestion: Option[AnswersYesNo] = None,
   tradingActivity: Option[TradingActivity] = None,
   renewablesPlant: Option[RenewablesPlant] = None,
-  threeYearsConstructed: Option[AnswersYesNo] = None
+  threeYearsConstructed: Option[AnswersYesNo] = None,
+  costsBreakdown: Option[String] = None
 ) extends Sensitive[AboutYouAndTheProperty] {
   override def decryptedValue: AboutYouAndTheProperty = AboutYouAndTheProperty(
     customerDetails.map(_.decryptedValue),
@@ -61,7 +62,8 @@ case class SensitiveAboutYouAndTheProperty(
     charityQuestion,
     tradingActivity,
     renewablesPlant,
-    threeYearsConstructed
+    threeYearsConstructed,
+    costsBreakdown
   )
 }
 
@@ -88,6 +90,9 @@ object SensitiveAboutYouAndTheProperty {
       aboutYouAndTheProperty.checkYourAnswersAboutTheProperty,
       aboutYouAndTheProperty.propertyDetailsString,
       aboutYouAndTheProperty.charityQuestion,
-      aboutYouAndTheProperty.tradingActivity
+      aboutYouAndTheProperty.tradingActivity,
+      aboutYouAndTheProperty.renewablesPlant,
+      aboutYouAndTheProperty.threeYearsConstructed,
+      aboutYouAndTheProperty.costsBreakdown
     )
 }

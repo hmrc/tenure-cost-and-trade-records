@@ -142,8 +142,8 @@ trait FakeObjects {
 
   val prefilledAboutYouAndThePropertyPartTwo: AboutYouAndThePropertyPartTwo = AboutYouAndThePropertyPartTwo(
     plantAndTechnology = Some("plant and technology"),
-    generatorCapacity  = Some("generator capacity"),
-    batteriesCapacity  = Some("batteries capacity")
+    generatorCapacity = Some("generator capacity"),
+    batteriesCapacity = Some("batteries capacity")
   )
 
   val prefilledConnectedSubmission: ConnectedSubmission = baseFilledConnectedSubmission.copy(
