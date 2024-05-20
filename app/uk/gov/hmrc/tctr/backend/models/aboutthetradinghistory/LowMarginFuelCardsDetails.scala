@@ -21,7 +21,7 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class LowMarginFuelCardsDetails(
   lowMarginFuelCardDetail: LowMarginFuelCardDetail,
-  addAnotherLowMarginFuelCardDetail: AnswersYesNo
+  addAnotherLowMarginFuelCardDetails: Option[AnswersYesNo] = None
 )
 
 object LowMarginFuelCardsDetails {
