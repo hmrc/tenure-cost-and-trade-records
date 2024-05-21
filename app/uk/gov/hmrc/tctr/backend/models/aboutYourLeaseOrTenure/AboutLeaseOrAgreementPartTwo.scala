@@ -33,6 +33,7 @@ case class AboutLeaseOrAgreementPartTwo(
   tenantAdditionsDisregardedDetails: Option[TenantAdditionsDisregardedDetails] = None,
   tenantsAdditionsDisregardedDetails: Option[TenantsAdditionsDisregardedDetails] = None,
   payACapitalSumDetails: Option[PayACapitalSumDetails] = None,
+  capitalSumDescription: Option[CapitalSumDescription] = None,
   paymentWhenLeaseIsGrantedDetails: Option[PaymentWhenLeaseIsGrantedDetails] = None,
   tenancyLeaseAgreementExpire: Option[TenancyLeaseAgreementExpire] = None,
   tenancyLeaseAgreementDetails: Option[TenancyLeaseAgreementDetails] = None,
