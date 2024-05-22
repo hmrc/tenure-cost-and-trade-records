@@ -21,7 +21,7 @@ import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgreementPartThree, AboutLeaseOrAgreementPartTwo, SensitiveAboutLeaseOrAgreementPartOne}
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
-import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.AboutTheTradingHistory
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.{AboutTheTradingHistory, AboutTheTradingHistoryPartOne}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.{AboutYouAndThePropertyPartTwo, SensitiveAboutYouAndTheProperty}
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.SensitiveStillConnectedDetails
@@ -43,6 +43,7 @@ case class SensitiveConnectedSubmission(
   aboutYouAndThePropertyPartTwo: Option[AboutYouAndThePropertyPartTwo] = None,
   additionalInformation: Option[AdditionalInformation] = None,
   aboutTheTradingHistory: Option[AboutTheTradingHistory] = None,
+  aboutTheTradingHistoryPartOne: Option[AboutTheTradingHistoryPartOne] = None,
   aboutFranchisesOrLettings: Option[AboutFranchisesOrLettings] = None,
   aboutLeaseOrAgreementPartOne: Option[SensitiveAboutLeaseOrAgreementPartOne] = None,
   aboutLeaseOrAgreementPartTwo: Option[AboutLeaseOrAgreementPartTwo] = None,
@@ -65,6 +66,7 @@ case class SensitiveConnectedSubmission(
     aboutYouAndThePropertyPartTwo,
     additionalInformation,
     aboutTheTradingHistory,
+    aboutTheTradingHistoryPartOne,
     aboutFranchisesOrLettings,
     aboutLeaseOrAgreementPartOne.map(_.decryptedValue),
     aboutLeaseOrAgreementPartTwo,
@@ -92,6 +94,7 @@ object SensitiveConnectedSubmission {
     connectedSubmission.aboutYouAndThePropertyPartTwo,
     connectedSubmission.additionalInformation,
     connectedSubmission.aboutTheTradingHistory,
+    connectedSubmission.aboutTheTradingHistoryPartOne,
     connectedSubmission.aboutFranchisesOrLettings,
     connectedSubmission.aboutLeaseOrAgreementPartOne.map(SensitiveAboutLeaseOrAgreementPartOne(_)),
     connectedSubmission.aboutLeaseOrAgreementPartTwo,
