@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, OFormat}
 case class CostOfSales6076(
   costOfSales6076Sum: Seq[CostOfSales6076Sum] = Seq.empty,
   otherSalesDetails: Option[String]
-) {}
+)
 
 object CostOfSales6076 {
   implicit val format: OFormat[CostOfSales6076] = Json.format[CostOfSales6076]

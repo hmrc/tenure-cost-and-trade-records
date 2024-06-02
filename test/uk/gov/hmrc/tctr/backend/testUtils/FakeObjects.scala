@@ -148,11 +148,12 @@ trait FakeObjects {
 
   val prefilledConnectedSubmission: ConnectedSubmission = baseFilledConnectedSubmission.copy(
     stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
-    aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes)
+    aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes),
+    aboutTheTradingHistoryPartOne = Some(prefilledAboutYourTradingHistoryPartOne)
   )
 
   // Trading history
-  val prefilledAboutYourTradingHistory: AboutTheTradingHistory = AboutTheTradingHistory(
+  val prefilledAboutYourTradingHistory: AboutTheTradingHistory               = AboutTheTradingHistory(
     Some(OccupationalAndAccountingInformation(MonthsYearDuration(9, 2017), DayMonthsDuration(27, 9))),
     Seq(
       TurnoverSection(
@@ -166,6 +167,54 @@ trait FakeObjects {
       )
     ),
     doYouAcceptLowMarginFuelCard = AnswerNo
+  )
+  val prefilledAboutYourTradingHistoryPartOne: AboutTheTradingHistoryPartOne = AboutTheTradingHistoryPartOne(
+    isFinancialYearEndDatesCorrect = Some(true),
+    turnoverSections6076 = Some(
+      Seq(
+        TurnoverSection6076(
+          financialYearEnd = LocalDate.of(2023, 3, 31),
+          tradingPeriod = 12,
+          electricityGenerated = Some("10000 kWh"),
+          otherIncome = Some(BigDecimal(5000.00)),
+          costOfSales6076 = Some(
+            CostOfSales6076(
+              costOfSales6076Sum = Seq(
+                CostOfSales6076Sum(
+                  fuelOrFeedstock = Some(BigDecimal(2000.00)),
+                  importedPower = Some(BigDecimal(1500.00)),
+                  TNuoS = Some(BigDecimal(1000.00)),
+                  BSuoS = Some(BigDecimal(800.00)),
+                  other = Some(BigDecimal(300.00))
+                )
+              ),
+              otherSalesDetails = Some("Additional sales details")
+            )
+          )
+        ),
+        TurnoverSection6076(
+          financialYearEnd = LocalDate.of(2022, 3, 31),
+          tradingPeriod = 12,
+          electricityGenerated = Some("8000 kWh"),
+          otherIncome = Some(BigDecimal(4000.00)),
+          costOfSales6076 = Some(
+            CostOfSales6076(
+              costOfSales6076Sum = Seq(
+                CostOfSales6076Sum(
+                  fuelOrFeedstock = Some(BigDecimal(1800.00)),
+                  importedPower = Some(BigDecimal(1300.00)),
+                  TNuoS = Some(BigDecimal(900.00)),
+                  BSuoS = Some(BigDecimal(700.00)),
+                  other = Some(BigDecimal(200.00))
+                )
+              ),
+              otherSalesDetails = Some("Additional sales details for previous year")
+            )
+          )
+        )
+      )
+    ),
+    otherIncomeDetails = Some("Some other income details")
   )
 
   // Franchises or lettings
@@ -249,6 +298,7 @@ trait FakeObjects {
       aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes),
       aboutYouAndThePropertyPartTwo = Some(prefilledAboutYouAndThePropertyPartTwo),
       aboutTheTradingHistory = Some(prefilledAboutYourTradingHistory),
+      aboutTheTradingHistoryPartOne = Some(prefilledAboutYourTradingHistoryPartOne),
       aboutFranchisesOrLettings = Some(prefilledAboutFranchiseOrLettings),
       aboutLeaseOrAgreementPartOne = Some(prefilledAboutLeaseOrAgreementPartOne),
       aboutLeaseOrAgreementPartTwo = Some(prefilledAboutLeaseOrAgreementPartTwo),
