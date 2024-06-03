@@ -148,12 +148,11 @@ trait FakeObjects {
 
   val prefilledConnectedSubmission: ConnectedSubmission = baseFilledConnectedSubmission.copy(
     stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
-    aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes),
-    aboutTheTradingHistoryPartOne = Some(prefilledAboutYourTradingHistoryPartOne)
+    aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes)
   )
 
   // Trading history
-  val prefilledAboutYourTradingHistory: AboutTheTradingHistory               = AboutTheTradingHistory(
+  val prefilledAboutYourTradingHistory: AboutTheTradingHistory              = AboutTheTradingHistory(
     Some(OccupationalAndAccountingInformation(MonthsYearDuration(9, 2017), DayMonthsDuration(27, 9))),
     Seq(
       TurnoverSection(
@@ -168,7 +167,7 @@ trait FakeObjects {
     ),
     doYouAcceptLowMarginFuelCard = AnswerNo
   )
-  val prefilledAboutYourTradingHistoryPartOne: AboutTheTradingHistoryPartOne = AboutTheTradingHistoryPartOne(
+  val prefilledAboutTheTradingHistoryPartOne: AboutTheTradingHistoryPartOne = AboutTheTradingHistoryPartOne(
     isFinancialYearEndDatesCorrect = Some(true),
     turnoverSections6076 = Some(
       Seq(
@@ -298,7 +297,7 @@ trait FakeObjects {
       aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes),
       aboutYouAndThePropertyPartTwo = Some(prefilledAboutYouAndThePropertyPartTwo),
       aboutTheTradingHistory = Some(prefilledAboutYourTradingHistory),
-      aboutTheTradingHistoryPartOne = Some(prefilledAboutYourTradingHistoryPartOne),
+      aboutTheTradingHistoryPartOne = Some(prefilledAboutTheTradingHistoryPartOne),
       aboutFranchisesOrLettings = Some(prefilledAboutFranchiseOrLettings),
       aboutLeaseOrAgreementPartOne = Some(prefilledAboutLeaseOrAgreementPartOne),
       aboutLeaseOrAgreementPartTwo = Some(prefilledAboutLeaseOrAgreementPartTwo),
