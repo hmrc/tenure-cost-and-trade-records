@@ -213,6 +213,13 @@ trait FakeObjects {
         )
       )
     ),
+    grossReceiptsExcludingVAT = Some(
+      Seq(
+        GrossReceiptsExcludingVAT(LocalDate.now()),
+        GrossReceiptsExcludingVAT(LocalDate.now().minusYears(1)),
+        GrossReceiptsExcludingVAT(LocalDate.now().minusYears(2))
+      )
+    ),
     otherIncomeDetails = Some("Some other income details")
   )
 
