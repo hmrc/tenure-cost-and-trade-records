@@ -168,51 +168,59 @@ trait FakeObjects {
     doYouAcceptLowMarginFuelCard = AnswerNo
   )
   val prefilledAboutTheTradingHistoryPartOne: AboutTheTradingHistoryPartOne = AboutTheTradingHistoryPartOne(
-    isFinancialYearEndDatesCorrect = true,
-    turnoverSections6076 = Seq(
-      TurnoverSection6076(
-        financialYearEnd = LocalDate.of(2023, 3, 31),
-        tradingPeriod = 12,
-        electricityGenerated = Some("10000 kWh"),
-        otherIncome = Some(BigDecimal(5000.00)),
-        costOfSales6076 = Some(
-          CostOfSales6076(
-            costOfSales6076Sum = Seq(
-              CostOfSales6076Sum(
-                fuelOrFeedstock = Some(BigDecimal(2000.00)),
-                importedPower = Some(BigDecimal(1500.00)),
-                TNuoS = Some(BigDecimal(1000.00)),
-                BSuoS = Some(BigDecimal(800.00)),
-                other = Some(BigDecimal(300.00))
-              )
-            ),
-            otherSalesDetails = Some("Additional sales details")
+    isFinancialYearEndDatesCorrect = Some(true),
+    turnoverSections6076 = Some(
+      Seq(
+        TurnoverSection6076(
+          financialYearEnd = LocalDate.of(2023, 3, 31),
+          tradingPeriod = 12,
+          electricityGenerated = Some("10000 kWh"),
+          otherIncome = Some(BigDecimal(5000.00)),
+          costOfSales6076 = Some(
+            CostOfSales6076(
+              costOfSales6076Sum = Seq(
+                CostOfSales6076Sum(
+                  fuelOrFeedstock = Some(BigDecimal(2000.00)),
+                  importedPower = Some(BigDecimal(1500.00)),
+                  TNuoS = Some(BigDecimal(1000.00)),
+                  BSuoS = Some(BigDecimal(800.00)),
+                  other = Some(BigDecimal(300.00))
+                )
+              ),
+              otherSalesDetails = Some("Additional sales details")
+            )
           )
         ),
-        headOfficeExpenses = 1308000
-      ),
-      TurnoverSection6076(
-        financialYearEnd = LocalDate.of(2022, 3, 31),
-        tradingPeriod = 12,
-        electricityGenerated = Some("8000 kWh"),
-        otherIncome = Some(BigDecimal(4000.00)),
-        costOfSales6076 = Some(
-          CostOfSales6076(
-            costOfSales6076Sum = Seq(
-              CostOfSales6076Sum(
-                fuelOrFeedstock = Some(BigDecimal(1800.00)),
-                importedPower = Some(BigDecimal(1300.00)),
-                TNuoS = Some(BigDecimal(900.00)),
-                BSuoS = Some(BigDecimal(700.00)),
-                other = Some(BigDecimal(200.00))
-              )
-            ),
-            otherSalesDetails = Some("Additional sales details for previous year")
+        TurnoverSection6076(
+          financialYearEnd = LocalDate.of(2022, 3, 31),
+          tradingPeriod = 12,
+          electricityGenerated = Some("8000 kWh"),
+          otherIncome = Some(BigDecimal(4000.00)),
+          costOfSales6076 = Some(
+            CostOfSales6076(
+              costOfSales6076Sum = Seq(
+                CostOfSales6076Sum(
+                  fuelOrFeedstock = Some(BigDecimal(1800.00)),
+                  importedPower = Some(BigDecimal(1300.00)),
+                  TNuoS = Some(BigDecimal(900.00)),
+                  BSuoS = Some(BigDecimal(700.00)),
+                  other = Some(BigDecimal(200.00))
+                )
+              ),
+              otherSalesDetails = Some("Additional sales details for previous year")
+            )
           )
-        ),
-        headOfficeExpenses = 1308000
+        )
       )
     ),
+    grossReceiptsExcludingVAT = Some(
+      Seq(
+        GrossReceiptsExcludingVAT(LocalDate.now()),
+        GrossReceiptsExcludingVAT(LocalDate.now().minusYears(1)),
+        GrossReceiptsExcludingVAT(LocalDate.now().minusYears(2))
+      )
+    ),
+    otherIncomeDetails = Some("Some other income details")
     otherIncomeDetails = "Some other income details",
     furtherInformationOrRemarks = "Further information or remarks"
   )
