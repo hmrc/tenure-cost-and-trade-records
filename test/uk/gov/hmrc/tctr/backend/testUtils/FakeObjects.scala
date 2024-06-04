@@ -220,7 +220,8 @@ trait FakeObjects {
         GrossReceiptsExcludingVAT(LocalDate.now().minusYears(2))
       )
     ),
-    otherIncomeDetails = Some("Some other income details")
+    otherIncomeDetails = "Some other income details",
+    furtherInformationOrRemarks = "Further information or remarks"
   )
 
   // Franchises or lettings
