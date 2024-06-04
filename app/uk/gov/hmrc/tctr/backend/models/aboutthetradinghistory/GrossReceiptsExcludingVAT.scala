@@ -20,18 +20,27 @@ import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
-case class GrossReceiptsExcludingVAT (
-                                       financialYearEnd: LocalDate,
-                                       electricitySales: Option[BigDecimal] = None,
-                                       feedInTariff: Option[BigDecimal] = None,
-                                       rocBuyout: Option[BigDecimal] = None,
-                                       rocRecycle: Option[BigDecimal] = None,
-                                       contractForDifference: Option[BigDecimal] = None,
-                                       capacityMarket: Option[BigDecimal] = None,
-                                       balancingServices: Option[BigDecimal] = None,
-                                       embeddedBenefits: Option[BigDecimal] = None
-                                     ) {
-  def total: BigDecimal = Seq(electricitySales, feedInTariff, rocBuyout, rocRecycle, contractForDifference, capacityMarket, balancingServices, embeddedBenefits).flatten.sum
+case class GrossReceiptsExcludingVAT(
+  financialYearEnd: LocalDate,
+  electricitySales: Option[BigDecimal] = None,
+  feedInTariff: Option[BigDecimal] = None,
+  rocBuyout: Option[BigDecimal] = None,
+  rocRecycle: Option[BigDecimal] = None,
+  contractForDifference: Option[BigDecimal] = None,
+  capacityMarket: Option[BigDecimal] = None,
+  balancingServices: Option[BigDecimal] = None,
+  embeddedBenefits: Option[BigDecimal] = None
+) {
+  def total: BigDecimal = Seq(
+    electricitySales,
+    feedInTariff,
+    rocBuyout,
+    rocRecycle,
+    contractForDifference,
+    capacityMarket,
+    balancingServices,
+    embeddedBenefits
+  ).flatten.sum
 }
 
 object GrossReceiptsExcludingVAT {
