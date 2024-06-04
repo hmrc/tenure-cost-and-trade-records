@@ -168,9 +168,8 @@ trait FakeObjects {
     doYouAcceptLowMarginFuelCard = AnswerNo
   )
   val prefilledAboutTheTradingHistoryPartOne: AboutTheTradingHistoryPartOne = AboutTheTradingHistoryPartOne(
-    isFinancialYearEndDatesCorrect = Some(true),
-    turnoverSections6076 = Some(
-      Seq(
+    isFinancialYearEndDatesCorrect = true,
+    turnoverSections6076 = Seq(
         TurnoverSection6076(
           financialYearEnd = LocalDate.of(2023, 3, 31),
           tradingPeriod = 12,
@@ -189,7 +188,8 @@ trait FakeObjects {
               ),
               otherSalesDetails = Some("Additional sales details")
             )
-          )
+          ),
+          headOfficeExpenses = 1308000
         ),
         TurnoverSection6076(
           financialYearEnd = LocalDate.of(2022, 3, 31),
@@ -209,11 +209,12 @@ trait FakeObjects {
               ),
               otherSalesDetails = Some("Additional sales details for previous year")
             )
-          )
+          ),
+          headOfficeExpenses = 1308000
         )
-      )
     ),
-    otherIncomeDetails = Some("Some other income details")
+    otherIncomeDetails = "Some other income details",
+    furtherInformationOrRemarks = "Further information or remarks"
   )
 
   // Franchises or lettings
