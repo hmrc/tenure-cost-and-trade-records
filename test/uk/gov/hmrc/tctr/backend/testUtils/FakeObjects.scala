@@ -176,18 +176,13 @@ trait FakeObjects {
           tradingPeriod = 12,
           electricityGenerated = Some("10000 kWh"),
           otherIncome = Some(BigDecimal(5000.00)),
-          costOfSales6076 = Some(
-            CostOfSales6076(
-              costOfSales6076Sum = Seq(
-                CostOfSales6076Sum(
-                  fuelOrFeedstock = Some(BigDecimal(2000.00)),
-                  importedPower = Some(BigDecimal(1500.00)),
-                  TNuoS = Some(BigDecimal(1000.00)),
-                  BSuoS = Some(BigDecimal(800.00)),
-                  other = Some(BigDecimal(300.00))
-                )
-              ),
-              otherSalesDetails = Some("Additional sales details")
+          costOfSales6076Sum = Some(
+            CostOfSales6076Sum(
+              fuelOrFeedstock = Some(BigDecimal(2000.00)),
+              importedPower = Some(BigDecimal(1500.00)),
+              TNuoS = Some(BigDecimal(1000.00)),
+              BSuoS = Some(BigDecimal(800.00)),
+              other = Some(BigDecimal(300.00))
             )
           )
         ),
@@ -196,18 +191,13 @@ trait FakeObjects {
           tradingPeriod = 12,
           electricityGenerated = Some("8000 kWh"),
           otherIncome = Some(BigDecimal(4000.00)),
-          costOfSales6076 = Some(
-            CostOfSales6076(
-              costOfSales6076Sum = Seq(
-                CostOfSales6076Sum(
-                  fuelOrFeedstock = Some(BigDecimal(1800.00)),
-                  importedPower = Some(BigDecimal(1300.00)),
-                  TNuoS = Some(BigDecimal(900.00)),
-                  BSuoS = Some(BigDecimal(700.00)),
-                  other = Some(BigDecimal(200.00))
-                )
-              ),
-              otherSalesDetails = Some("Additional sales details for previous year")
+          costOfSales6076Sum = Some(
+            CostOfSales6076Sum(
+              fuelOrFeedstock = Some(BigDecimal(1800.00)),
+              importedPower = Some(BigDecimal(1300.00)),
+              TNuoS = Some(BigDecimal(900.00)),
+              BSuoS = Some(BigDecimal(700.00)),
+              other = Some(BigDecimal(200.00))
             )
           )
         )
@@ -221,7 +211,8 @@ trait FakeObjects {
       )
     ),
     otherIncomeDetails = "Some other income details",
-    furtherInformationOrRemarks = "Further information or remarks"
+    furtherInformationOrRemarks = "Further information or remarks",
+    otherSalesDetails = "other sales details"
   )
 
   // Franchises or lettings
