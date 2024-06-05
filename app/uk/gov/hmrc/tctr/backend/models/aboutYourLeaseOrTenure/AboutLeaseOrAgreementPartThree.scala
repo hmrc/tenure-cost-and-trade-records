@@ -23,7 +23,8 @@ case class AboutLeaseOrAgreementPartThree(
   servicesPaidIndex: Int = 0,
   tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
   servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
-  paymentForTradeServices: Option[PaymentForTradeServices] = None
+  paymentForTradeServices: Option[PaymentForTradeServices] = None,
+  provideDetailsOfYourLease: Option[ProvideDetailsOfYourLease] = None
 )
 
 object AboutLeaseOrAgreementPartThree {

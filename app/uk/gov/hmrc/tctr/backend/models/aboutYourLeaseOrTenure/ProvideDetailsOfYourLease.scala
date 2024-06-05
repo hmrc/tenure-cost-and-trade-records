@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
+package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
 
+case class ProvideDetailsOfYourLease(
+                                      provideDetailsOfYourLease: String
+)
 
-case class LowMarginFuelCardDetail (name: String,
-                                    handlingFee: BigDecimal
-                                   )
-object LowMarginFuelCardDetail {
-  implicit val format:OFormat[LowMarginFuelCardDetail] = Json.format[LowMarginFuelCardDetail]
+object ProvideDetailsOfYourLease {
+  implicit val format = Json.format[ProvideDetailsOfYourLease]
+
 }

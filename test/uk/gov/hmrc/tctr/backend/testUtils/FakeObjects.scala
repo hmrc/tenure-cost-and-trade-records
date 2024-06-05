@@ -210,7 +210,8 @@ trait FakeObjects {
 
   val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
     tradeServices = IndexedSeq.empty,
-    paymentForTradeServices = None
+    paymentForTradeServices = None,
+    provideDetailsOfYourLease = None
   )
 
   // Additional information
