@@ -19,19 +19,22 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
 
-import java.time.LocalDate
-
-case class FixedOperatingExpenses(
-  financialYearEnd: LocalDate,
-  rent: BigDecimal = zeroBigDecimal,
-  businessRates: BigDecimal = zeroBigDecimal,
+/**
+  * 6076 Trading history - Operational and administrative expenses.
+  *
+  * @author Yuriy Tumakha
+  */
+case class OperationalExpenses(
+  advertising: BigDecimal = zeroBigDecimal,
+  administration: BigDecimal = zeroBigDecimal,
   insurance: BigDecimal = zeroBigDecimal,
-  loanInterest: BigDecimal = zeroBigDecimal,
-  depreciation: BigDecimal = zeroBigDecimal
+  legalFees: BigDecimal = zeroBigDecimal,
+  interest: BigDecimal = zeroBigDecimal,
+  other: BigDecimal = zeroBigDecimal
 ) {
-  def total: BigDecimal = Seq(rent, businessRates, insurance, loanInterest, depreciation).sum
+  def total: BigDecimal = Seq(advertising, administration, insurance, legalFees, interest, other).sum
 }
 
-object FixedOperatingExpenses {
-  implicit val format: OFormat[FixedOperatingExpenses] = Json.format
+object OperationalExpenses {
+  implicit val format: OFormat[OperationalExpenses] = Json.format
 }
