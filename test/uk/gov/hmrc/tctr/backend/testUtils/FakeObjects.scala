@@ -167,7 +167,7 @@ trait FakeObjects {
     ),
     costOfSales = Seq(CostOfSales(today, 1, 2, 3, 4)),
     fixedOperatingExpensesSections = Seq(FixedOperatingExpenses(today)),
-    otherCosts = OtherCosts(Seq(OtherCost(today, 1, 2))),
+    otherCosts = OtherCosts(Seq(OtherCost(today, 1, 2), OtherCost(today, None, None))),
     variableOperatingExpenses = VariableOperatingExpensesSections(Seq(VariableOperatingExpenses(today))),
     doYouAcceptLowMarginFuelCard = AnswerNo
   )
