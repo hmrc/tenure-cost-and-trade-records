@@ -17,11 +17,12 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.LowMarginFuelCardDetail
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class LowMarginFuelCardsDetails(
   lowMarginFuelCardDetail: LowMarginFuelCardDetail,
-  addAnotherLowMarginFuelCardDetails: Option[AnswersYesNo] = None
+  addAnotherLowMarginFuelCardDetail: AnswersYesNo
 )
 
 object LowMarginFuelCardsDetails {
