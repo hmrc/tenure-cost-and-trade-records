@@ -1,4 +1,4 @@
-§xa/*
+/*
  * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.LowMarginFuelCardDetail
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class LowMarginFuelCardsDetails(
