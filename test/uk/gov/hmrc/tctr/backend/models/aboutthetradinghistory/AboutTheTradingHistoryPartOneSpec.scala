@@ -16,22 +16,19 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 
-import java.time.LocalDate
+/**
+  * @author Yuriy Tumakha
+  */
+class AboutTheTradingHistoryPartOneSpec extends AnyFlatSpec with Matchers with FakeObjects {
 
-case class FixedOperatingExpenses(
-  financialYearEnd: LocalDate,
-  rent: BigDecimal = zeroBigDecimal,
-  businessRates: BigDecimal = zeroBigDecimal,
-  insurance: BigDecimal = zeroBigDecimal,
-  loanInterest: BigDecimal = zeroBigDecimal,
-  depreciation: BigDecimal = zeroBigDecimal
-) {
-  def total: BigDecimal = Seq(rent, businessRates, insurance, loanInterest, depreciation).sum
-}
+  "AboutTheTradingHistoryPartOne" should "handle model turnoverSections6076" in {
+    val turnoverSections6076 = prefilledAboutTheTradingHistoryPartOne.turnoverSections6076.getOrElse(Seq.empty)
+    turnoverSections6076.flatMap(_.costOfSales6076Sum.flatMap(_.other)).sum shouldBe 500
+    turnoverSections6076.flatMap(_.operationalExpenses.map(_.total)).sum    shouldBe 42
+  }
 
-object FixedOperatingExpenses {
-  implicit val format: OFormat[FixedOperatingExpenses] = Json.format
 }

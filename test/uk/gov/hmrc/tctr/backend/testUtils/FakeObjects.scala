@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -152,7 +152,7 @@ trait FakeObjects {
   )
 
   // Trading history
-  val prefilledAboutYourTradingHistory: AboutTheTradingHistory              = AboutTheTradingHistory(
+  val prefilledAboutYourTradingHistory: AboutTheTradingHistory = AboutTheTradingHistory(
     Some(OccupationalAndAccountingInformation(MonthsYearDuration(9, 2017), DayMonthsDuration(27, 9))),
     Seq(
       TurnoverSection(
@@ -165,54 +165,56 @@ trait FakeObjects {
         BigDecimal(678)
       )
     ),
+    costOfSales = Seq(CostOfSales(today, 1, 2, 3, 4)),
+    fixedOperatingExpensesSections = Seq(FixedOperatingExpenses(today)),
+    otherCosts = OtherCosts(Seq(OtherCost(today, 1, 2), OtherCost(today, None, None))),
+    variableOperatingExpenses = VariableOperatingExpensesSections(Seq(VariableOperatingExpenses(today))),
     doYouAcceptLowMarginFuelCard = AnswerNo
   )
+
   val prefilledAboutTheTradingHistoryPartOne: AboutTheTradingHistoryPartOne = AboutTheTradingHistoryPartOne(
-    isFinancialYearEndDatesCorrect = Some(true),
-    turnoverSections6076 = Some(
-      Seq(
-        TurnoverSection6076(
-          financialYearEnd = LocalDate.of(2023, 3, 31),
-          tradingPeriod = 12,
-          electricityGenerated = Some("10000 kWh"),
-          otherIncome = Some(BigDecimal(5000.00)),
-          costOfSales6076Sum = Some(
-            CostOfSales6076Sum(
-              fuelOrFeedstock = Some(BigDecimal(2000.00)),
-              importedPower = Some(BigDecimal(1500.00)),
-              TNuoS = Some(BigDecimal(1000.00)),
-              BSuoS = Some(BigDecimal(800.00)),
-              other = Some(BigDecimal(300.00))
-            )
-          )
+    isFinancialYearEndDatesCorrect = true,
+    turnoverSections6076 = Seq(
+      TurnoverSection6076(
+        financialYearEnd = LocalDate.of(2023, 3, 31),
+        tradingPeriod = 12,
+        electricityGenerated = "10000 kWh",
+        otherIncome = 5000,
+        costOfSales6076Sum = CostOfSales6076Sum(
+          fuelOrFeedstock = 2000,
+          importedPower = 1500,
+          TNuoS = 1000,
+          BSuoS = 800,
+          other = 300
         ),
-        TurnoverSection6076(
-          financialYearEnd = LocalDate.of(2022, 3, 31),
-          tradingPeriod = 12,
-          electricityGenerated = Some("8000 kWh"),
-          otherIncome = Some(BigDecimal(4000.00)),
-          costOfSales6076Sum = Some(
-            CostOfSales6076Sum(
-              fuelOrFeedstock = Some(BigDecimal(1800.00)),
-              importedPower = Some(BigDecimal(1300.00)),
-              TNuoS = Some(BigDecimal(900.00)),
-              BSuoS = Some(BigDecimal(700.00)),
-              other = Some(BigDecimal(200.00))
-            )
-          )
-        )
+        operationalExpenses = OperationalExpenses(1, 2, 3, 4, 5, 6),
+        headOfficeExpenses = 777
+      ),
+      TurnoverSection6076(
+        financialYearEnd = LocalDate.of(2022, 3, 31),
+        tradingPeriod = 12,
+        electricityGenerated = "8000 kWh",
+        otherIncome = 4000,
+        costOfSales6076Sum = CostOfSales6076Sum(
+          fuelOrFeedstock = 1800,
+          importedPower = 1300,
+          TNuoS = 900,
+          BSuoS = 700,
+          other = 200
+        ),
+        operationalExpenses = OperationalExpenses(1, 2, 3, 4, 5, 6),
+        headOfficeExpenses = 999
       )
     ),
-    grossReceiptsExcludingVAT = Some(
-      Seq(
-        GrossReceiptsExcludingVAT(LocalDate.now()),
-        GrossReceiptsExcludingVAT(LocalDate.now().minusYears(1)),
-        GrossReceiptsExcludingVAT(LocalDate.now().minusYears(2))
-      )
+    grossReceiptsExcludingVAT = Seq(
+      GrossReceiptsExcludingVAT(LocalDate.now()),
+      GrossReceiptsExcludingVAT(LocalDate.now().minusYears(1)),
+      GrossReceiptsExcludingVAT(LocalDate.now().minusYears(2))
     ),
     otherIncomeDetails = "Some other income details",
-    furtherInformationOrRemarks = "Further information or remarks",
-    otherSalesDetails = "other sales details"
+    otherOperationalExpensesDetails = "Other expenses",
+    otherSalesDetails = "other sales details",
+    furtherInformationOrRemarks = "Further information or remarks"
   )
 
   // Franchises or lettings
