@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.Form6010.MonthsYearDuration
 
 case class CurrentLeaseOrAgreementBegin(leaseBegin: MonthsYearDuration, grantedFor: String)
 
 object CurrentLeaseOrAgreementBegin {
-  implicit val format = Json.format[CurrentLeaseOrAgreementBegin]
+  implicit val format: OFormat[CurrentLeaseOrAgreementBegin] = Json.format[CurrentLeaseOrAgreementBegin]
 }

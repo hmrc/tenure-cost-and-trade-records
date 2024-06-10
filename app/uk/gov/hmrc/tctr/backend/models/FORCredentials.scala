@@ -20,15 +20,12 @@ import java.util.Base64
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 
-import java.time.Instant
-
 case class FORCredentials(
   forNumber: String,
   billingAuthorityCode: String,
   forType: String,
   address: SensitiveAddress,
-  _id: String,
-  createdAt: Instant = Instant.now()
+  _id: String
 ) {
   def basicAuthString: String = "Basic " + encodedAuth
 

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutYouAndTheProperty(
@@ -36,9 +36,12 @@ case class AboutYouAndTheProperty(
   checkYourAnswersAboutTheProperty: Option[CheckYourAnswersAboutYourProperty] = None,
   propertyDetailsString: Option[PropertyDetailsString] = None, //added for 6030 - February 2024
   charityQuestion: Option[AnswersYesNo] = None, // 6030
-  tradingActivity: Option[TradingActivity] = None //6030
+  tradingActivity: Option[TradingActivity] = None, //6030
+  renewablesPlant: Option[RenewablesPlant] = None, // 6076
+  threeYearsConstructed: Option[AnswersYesNo] = None, // 6076
+  costsBreakdown: Option[String] = None // 6076
 )
 
 object AboutYouAndTheProperty {
-  implicit val format = Json.format[AboutYouAndTheProperty]
+  implicit val format: OFormat[AboutYouAndTheProperty] = Json.format[AboutYouAndTheProperty]
 }

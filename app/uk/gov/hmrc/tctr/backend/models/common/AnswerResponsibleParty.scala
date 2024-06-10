@@ -44,7 +44,7 @@ object OutsideRepairs extends NamedEnumSupport[OutsideRepairs] {
 }
 
 sealed trait InsideRepairs extends NamedEnum {
-  val key: String = "outsideRepairs"
+  val key: String = "insideRepairs"
 }
 object InsideRepairsLandlord extends InsideRepairs {
   override def name: String = "landlord"

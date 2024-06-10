@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
@@ -31,5 +31,5 @@ case class TurnoverSection1516(
   totalSalesRevenue: BigDecimal
 )
 object TurnoverSection1516 {
-  implicit val format = Json.format[TurnoverSection1516]
+  implicit val format: OFormat[TurnoverSection1516] = Json.format[TurnoverSection1516]
 }

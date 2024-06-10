@@ -77,7 +77,7 @@ class AuthController @Inject() (
     }
 
   def retrieveFORType(referenceNum: String) =
-    auth.authorizedAction[Unit](permission).compose(Action).async { implicit request =>
+    auth.authorizedAction[Unit](permission).compose(Action).async {
       credsRepo.findById(referenceNum).map {
         case Some(credentials) => Ok(Json.toJson(ValidForTypeResponse(credentials.forType)))
         case None              => NotFound

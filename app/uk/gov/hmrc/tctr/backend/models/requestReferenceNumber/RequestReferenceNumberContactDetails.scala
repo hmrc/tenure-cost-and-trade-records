@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.requestReferenceNumber
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.ContactDetails
 
 case class RequestReferenceNumberContactDetails(
@@ -26,6 +26,7 @@ case class RequestReferenceNumberContactDetails(
 )
 
 object RequestReferenceNumberContactDetails {
-  implicit val format1 = Json.format[RequestReferenceNumberContactDetails]
+  implicit val format1: OFormat[RequestReferenceNumberContactDetails] =
+    Json.format[RequestReferenceNumberContactDetails]
 
 }

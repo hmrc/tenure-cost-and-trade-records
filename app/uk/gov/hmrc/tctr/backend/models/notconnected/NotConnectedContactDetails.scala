@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.notconnected
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.ContactDetails
 
 case class NotConnectedContactDetails(
@@ -26,6 +26,6 @@ case class NotConnectedContactDetails(
 )
 
 object NotConnectedContactDetails {
-  implicit val format = Json.format[NotConnectedContactDetails]
+  implicit val format: OFormat[NotConnectedContactDetails] = Json.format[NotConnectedContactDetails]
 
 }

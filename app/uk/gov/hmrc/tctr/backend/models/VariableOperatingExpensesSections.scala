@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.VariableOperatingExpenses
 
 /**
@@ -28,5 +28,5 @@ case class VariableOperatingExpensesSections(
 )
 
 object VariableOperatingExpensesSections {
-  implicit val format = Json.format[VariableOperatingExpensesSections]
+  implicit val format: OFormat[VariableOperatingExpensesSections] = Json.format[VariableOperatingExpensesSections]
 }

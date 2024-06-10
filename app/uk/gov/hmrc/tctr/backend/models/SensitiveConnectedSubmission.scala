@@ -21,8 +21,8 @@ import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgreementPartThree, AboutLeaseOrAgreementPartTwo, SensitiveAboutLeaseOrAgreementPartOne}
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
-import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.AboutTheTradingHistory
-import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.SensitiveAboutYouAndTheProperty
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.{AboutTheTradingHistory, AboutTheTradingHistoryPartOne}
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.{AboutYouAndThePropertyPartTwo, SensitiveAboutYouAndTheProperty}
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.SensitiveStillConnectedDetails
 import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
@@ -40,8 +40,10 @@ case class SensitiveConnectedSubmission(
   stillConnectedDetails: Option[SensitiveStillConnectedDetails] = None,
   removeConnectionDetails: Option[SensitiveRemoveConnectionDetails] = None,
   aboutYouAndTheProperty: Option[SensitiveAboutYouAndTheProperty] = None,
+  aboutYouAndThePropertyPartTwo: Option[AboutYouAndThePropertyPartTwo] = None,
   additionalInformation: Option[AdditionalInformation] = None,
   aboutTheTradingHistory: Option[AboutTheTradingHistory] = None,
+  aboutTheTradingHistoryPartOne: Option[AboutTheTradingHistoryPartOne] = None,
   aboutFranchisesOrLettings: Option[AboutFranchisesOrLettings] = None,
   aboutLeaseOrAgreementPartOne: Option[SensitiveAboutLeaseOrAgreementPartOne] = None,
   aboutLeaseOrAgreementPartTwo: Option[AboutLeaseOrAgreementPartTwo] = None,
@@ -61,8 +63,10 @@ case class SensitiveConnectedSubmission(
     stillConnectedDetails.map(_.decryptedValue),
     removeConnectionDetails.map(_.decryptedValue),
     aboutYouAndTheProperty.map(_.decryptedValue),
+    aboutYouAndThePropertyPartTwo,
     additionalInformation,
     aboutTheTradingHistory,
+    aboutTheTradingHistoryPartOne,
     aboutFranchisesOrLettings,
     aboutLeaseOrAgreementPartOne.map(_.decryptedValue),
     aboutLeaseOrAgreementPartTwo,
@@ -87,8 +91,10 @@ object SensitiveConnectedSubmission {
     connectedSubmission.stillConnectedDetails.map(SensitiveStillConnectedDetails(_)),
     connectedSubmission.removeConnectionDetails.map(SensitiveRemoveConnectionDetails(_)),
     connectedSubmission.aboutYouAndTheProperty.map(SensitiveAboutYouAndTheProperty(_)),
+    connectedSubmission.aboutYouAndThePropertyPartTwo,
     connectedSubmission.additionalInformation,
     connectedSubmission.aboutTheTradingHistory,
+    connectedSubmission.aboutTheTradingHistoryPartOne,
     connectedSubmission.aboutFranchisesOrLettings,
     connectedSubmission.aboutLeaseOrAgreementPartOne.map(SensitiveAboutLeaseOrAgreementPartOne(_)),
     connectedSubmission.aboutLeaseOrAgreementPartTwo,

@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
 
 import java.time.LocalDate
@@ -30,5 +30,5 @@ case class OtherCost(
 }
 
 object OtherCost {
-  implicit val format = Json.format[OtherCost]
+  implicit val format: OFormat[OtherCost] = Json.format[OtherCost]
 }

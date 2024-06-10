@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
-import uk.gov.hmrc.tctr.backend.models._
 import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDuration}
+import uk.gov.hmrc.tctr.backend.models._
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure._
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings._
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory._
@@ -80,7 +80,10 @@ trait FakeObjects {
     )
 
   val prefilledDateInput: LocalDate               = LocalDate.of(2022, 6, 1)
+  val today: LocalDate                            = LocalDate.now
   val prefilledMonthYearInput: MonthsYearDuration = MonthsYearDuration(6, 2000)
+
+  val hundred: BigDecimal = BigDecimal(100)
 
   val prefilledTradingNameOperatingFromProperty: TradingNameOperatingFromProperty = TradingNameOperatingFromProperty(
     "TRADING NAME"
@@ -137,6 +140,12 @@ trait FakeObjects {
     Some(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie))
   )
 
+  val prefilledAboutYouAndThePropertyPartTwo: AboutYouAndThePropertyPartTwo = AboutYouAndThePropertyPartTwo(
+    plantAndTechnology = Some("plant and technology"),
+    generatorCapacity = Some("generator capacity"),
+    batteriesCapacity = Some("batteries capacity")
+  )
+
   val prefilledConnectedSubmission: ConnectedSubmission = baseFilledConnectedSubmission.copy(
     stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
     aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes)
@@ -155,7 +164,57 @@ trait FakeObjects {
         BigDecimal(567),
         BigDecimal(678)
       )
-    )
+    ),
+    costOfSales = Seq(CostOfSales(today, 1, 2, 3, 4)),
+    fixedOperatingExpensesSections = Seq(FixedOperatingExpenses(today)),
+    otherCosts = OtherCosts(Seq(OtherCost(today, 1, 2), OtherCost(today, None, None))),
+    variableOperatingExpenses = VariableOperatingExpensesSections(Seq(VariableOperatingExpenses(today))),
+    doYouAcceptLowMarginFuelCard = AnswerNo
+  )
+
+  val prefilledAboutTheTradingHistoryPartOne: AboutTheTradingHistoryPartOne = AboutTheTradingHistoryPartOne(
+    isFinancialYearEndDatesCorrect = true,
+    turnoverSections6076 = Seq(
+      TurnoverSection6076(
+        financialYearEnd = LocalDate.of(2023, 3, 31),
+        tradingPeriod = 12,
+        electricityGenerated = "10000 kWh",
+        otherIncome = 5000,
+        costOfSales6076Sum = CostOfSales6076Sum(
+          fuelOrFeedstock = 2000,
+          importedPower = 1500,
+          TNuoS = 1000,
+          BSuoS = 800,
+          other = 300
+        ),
+        operationalExpenses = OperationalExpenses(1, 2, 3, 4, 5, 6),
+        headOfficeExpenses = 777
+      ),
+      TurnoverSection6076(
+        financialYearEnd = LocalDate.of(2022, 3, 31),
+        tradingPeriod = 12,
+        electricityGenerated = "8000 kWh",
+        otherIncome = 4000,
+        costOfSales6076Sum = CostOfSales6076Sum(
+          fuelOrFeedstock = 1800,
+          importedPower = 1300,
+          TNuoS = 900,
+          BSuoS = 700,
+          other = 200
+        ),
+        operationalExpenses = OperationalExpenses(1, 2, 3, 4, 5, 6),
+        headOfficeExpenses = 999
+      )
+    ),
+    grossReceiptsExcludingVAT = Seq(
+      GrossReceiptsExcludingVAT(LocalDate.now()),
+      GrossReceiptsExcludingVAT(LocalDate.now().minusYears(1)),
+      GrossReceiptsExcludingVAT(LocalDate.now().minusYears(2))
+    ),
+    otherIncomeDetails = "Some other income details",
+    otherOperationalExpensesDetails = "Other expenses",
+    otherSalesDetails = "other sales details",
+    furtherInformationOrRemarks = "Further information or remarks"
   )
 
   // Franchises or lettings
@@ -210,8 +269,17 @@ trait FakeObjects {
 
   val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
     tradeServices = IndexedSeq.empty,
+    provideDetailsOfYourLease = None,
+    throughputAffectsRent = ThroughputAffectsRent(AnswerYes, "Throughput affects rent details"),
+    isVATPayableForWholeProperty = AnswerYes,
+    isRentUnderReview = AnswerNo,
+    carParking = CarParking(AnswerYes, CarParkingSpaces(1, 2, 3), AnswerYes, CarParkingSpaces(10), hundred, today),
+    rentedEquipmentDetails = "Rented equipment details",
     paymentForTradeServices = None,
-    provideDetailsOfYourLease = None
+    leaseSurrenderedEarly = Some(LeaseSurrenderedEarly(AnswerNo)),
+    benefitsGiven = Some(BenefitsGiven(AnswerNo)),
+    workCarriedOutDetails = Some(WorkCarriedOutDetails("workCarriedOutDetails")),
+    workCarriedOutCondition = Some(WorkCarriedOutCondition(AnswerYes))
   )
 
   // Additional information
@@ -229,7 +297,9 @@ trait FakeObjects {
       createdAt = Instant.now(),
       stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
       aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes),
+      aboutYouAndThePropertyPartTwo = Some(prefilledAboutYouAndThePropertyPartTwo),
       aboutTheTradingHistory = Some(prefilledAboutYourTradingHistory),
+      aboutTheTradingHistoryPartOne = Some(prefilledAboutTheTradingHistoryPartOne),
       aboutFranchisesOrLettings = Some(prefilledAboutFranchiseOrLettings),
       aboutLeaseOrAgreementPartOne = Some(prefilledAboutLeaseOrAgreementPartOne),
       aboutLeaseOrAgreementPartTwo = Some(prefilledAboutLeaseOrAgreementPartTwo),

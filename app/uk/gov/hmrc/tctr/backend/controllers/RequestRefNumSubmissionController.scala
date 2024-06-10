@@ -19,7 +19,6 @@ package uk.gov.hmrc.tctr.backend.controllers
 import play.api.libs.json.{JsError, JsSuccess, JsValue}
 import play.api.mvc.{Action, ControllerComponents}
 import play.api.{Logger, Logging}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
@@ -27,15 +26,13 @@ import uk.gov.hmrc.tctr.backend.models.RequestReferenceNumberSubmission
 import uk.gov.hmrc.tctr.backend.repository.RequestReferenceNumberRepository
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class RequestRefNumSubmissionController @Inject() (
   repository: RequestReferenceNumberRepository,
   auth: BackendAuthComponents,
   metric: MetricsHandler,
   cc: ControllerComponents
-)(implicit ec: ExecutionContext)
-    extends BackendController(cc)
+) extends BackendController(cc)
     with InternalAuthAccess
     with Logging {
 
@@ -53,8 +50,8 @@ class RequestRefNumSubmissionController @Inject() (
       }
     }
 
-  private def saveRequestReferenceNumberSubmission(requestReferenceNumberSubmission: RequestReferenceNumberSubmission)(
-    implicit hc: HeaderCarrier
+  private def saveRequestReferenceNumberSubmission(
+    requestReferenceNumberSubmission: RequestReferenceNumberSubmission
   ): Unit = {
     repository.insert(requestReferenceNumberSubmission)
 

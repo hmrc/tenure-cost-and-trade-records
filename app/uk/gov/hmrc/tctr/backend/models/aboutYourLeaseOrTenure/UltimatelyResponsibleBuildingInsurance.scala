@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.BuildingInsurance
 
 case class UltimatelyResponsibleBuildingInsurance(
@@ -25,5 +25,6 @@ case class UltimatelyResponsibleBuildingInsurance(
 )
 
 object UltimatelyResponsibleBuildingInsurance {
-  implicit val format = Json.format[UltimatelyResponsibleBuildingInsurance]
+  implicit val format: OFormat[UltimatelyResponsibleBuildingInsurance] =
+    Json.format[UltimatelyResponsibleBuildingInsurance]
 }

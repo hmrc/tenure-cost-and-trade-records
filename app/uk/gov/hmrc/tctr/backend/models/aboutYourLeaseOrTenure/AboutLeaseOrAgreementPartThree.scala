@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutLeaseOrAgreementPartThree(
   tradeServicesIndex: Int = 0,
@@ -24,9 +25,21 @@ case class AboutLeaseOrAgreementPartThree(
   tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
   servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
   paymentForTradeServices: Option[PaymentForTradeServices] = None,
-  provideDetailsOfYourLease: Option[ProvideDetailsOfYourLease] = None
+  provideDetailsOfYourLease: Option[ProvideDetailsOfYourLease] = None,
+  throughputAffectsRent: Option[ThroughputAffectsRent] = None,
+  isVATPayableForWholeProperty: Option[AnswersYesNo] = None,
+  isRentUnderReview: Option[AnswersYesNo] = None,
+  carParking: Option[CarParking] = None,
+  rentedEquipmentDetails: Option[String] = None,
+  typeOfTenure: Option[TypeOfTenure] = None, // Add March 2024 for 6020
+  propertyUpdates: Option[PropertyUpdates] = None,
+  leaseSurrenderedEarly: Option[LeaseSurrenderedEarly] = None,
+  benefitsGiven: Option[BenefitsGiven] = None,
+  benefitsGivenDetails: Option[BenefitsGivenDetails] = None,
+  workCarriedOutDetails: Option[WorkCarriedOutDetails] = None,
+  workCarriedOutCondition: Option[WorkCarriedOutCondition] = None
 )
 
 object AboutLeaseOrAgreementPartThree {
-  implicit val format = Json.format[AboutLeaseOrAgreementPartThree]
+  implicit val format: OFormat[AboutLeaseOrAgreementPartThree] = Json.format[AboutLeaseOrAgreementPartThree]
 }

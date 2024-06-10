@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.tctr.backend.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgreementPartOne, AboutLeaseOrAgreementPartThree, AboutLeaseOrAgreementPartTwo}
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
-import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.AboutTheTradingHistory
-import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.AboutYouAndTheProperty
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.{AboutTheTradingHistory, AboutTheTradingHistoryPartOne}
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.{AboutYouAndTheProperty, AboutYouAndThePropertyPartTwo}
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.StillConnectedDetails
 import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
@@ -39,8 +39,10 @@ case class ConnectedSubmission(
   stillConnectedDetails: Option[StillConnectedDetails] = None,
   removeConnectionDetails: Option[RemoveConnectionDetails] = None,
   aboutYouAndTheProperty: Option[AboutYouAndTheProperty] = None,
+  aboutYouAndThePropertyPartTwo: Option[AboutYouAndThePropertyPartTwo] = None,
   additionalInformation: Option[AdditionalInformation] = None,
   aboutTheTradingHistory: Option[AboutTheTradingHistory] = None,
+  aboutTheTradingHistoryPartOne: Option[AboutTheTradingHistoryPartOne] = None,
   aboutFranchisesOrLettings: Option[AboutFranchisesOrLettings] = None,
   aboutLeaseOrAgreementPartOne: Option[AboutLeaseOrAgreementPartOne] = None,
   aboutLeaseOrAgreementPartTwo: Option[AboutLeaseOrAgreementPartTwo] = None,
@@ -51,5 +53,5 @@ case class ConnectedSubmission(
   downloadPDFDetails: Option[DownloadPDFDetails] = None
 )
 object ConnectedSubmission {
-  implicit val format = Json.format[ConnectedSubmission]
+  implicit val format: OFormat[ConnectedSubmission] = Json.format[ConnectedSubmission]
 }
