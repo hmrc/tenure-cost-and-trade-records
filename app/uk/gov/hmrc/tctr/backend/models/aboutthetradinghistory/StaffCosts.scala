@@ -23,7 +23,7 @@ case class StaffCosts(
   nationalInsurance: Option[BigDecimal],
   pensionContributions: Option[BigDecimal],
   remunerations: Option[BigDecimal]
-) {}
+)
 
 object StaffCosts {
   implicit val format: OFormat[StaffCosts] = Json.format[StaffCosts]
