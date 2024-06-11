@@ -188,7 +188,13 @@ trait FakeObjects {
           other = 300
         ),
         operationalExpenses = OperationalExpenses(1, 2, 3, 4, 5, 6),
-        headOfficeExpenses = 777
+        headOfficeExpenses = 777,
+        staffCosts = StaffCosts(
+          wagesAndSalaries = 100,
+          nationalInsurance = 200,
+          pensionContributions = 300,
+          remunerations = 400
+        )
       ),
       TurnoverSection6076(
         financialYearEnd = LocalDate.of(2022, 3, 31),
@@ -203,7 +209,13 @@ trait FakeObjects {
           other = 200
         ),
         operationalExpenses = OperationalExpenses(1, 2, 3, 4, 5, 6),
-        headOfficeExpenses = 999
+        headOfficeExpenses = 999,
+        staffCosts = StaffCosts(
+          wagesAndSalaries = 100,
+          nationalInsurance = 200,
+          pensionContributions = 300,
+          remunerations = 400
+        )
       )
     ),
     grossReceiptsExcludingVAT = Seq(
