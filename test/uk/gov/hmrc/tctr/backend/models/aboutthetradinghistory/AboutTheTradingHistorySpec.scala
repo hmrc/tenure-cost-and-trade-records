@@ -25,7 +25,7 @@ import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
   */
 class AboutTheTradingHistorySpec extends AnyFlatSpec with Matchers with FakeObjects {
 
-  "AboutTheTradingHistoryPartOne" should "handle turnover models" in {
+  "AboutTheTradingHistory" should "handle turnover models" in {
     val tradingHistory = prefilledAboutYourTradingHistory
     tradingHistory.costOfSales.map(_.total).sum                                                shouldBe 10
     tradingHistory.fixedOperatingExpensesSections.map(_.total).sum                             shouldBe 0
