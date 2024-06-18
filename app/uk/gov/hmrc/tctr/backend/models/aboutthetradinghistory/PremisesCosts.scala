@@ -17,27 +17,25 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
+case class PremisesCosts(
+  energyAndUtilities: BigDecimal = zeroBigDecimal,
+  buildingRepairAndMaintenance: BigDecimal = zeroBigDecimal,
+  repairsAndRenewalsOfFixtures: BigDecimal = zeroBigDecimal,
+  rent: BigDecimal = zeroBigDecimal,
+  businessRates: BigDecimal = zeroBigDecimal,
+  buildingInsurance: BigDecimal = zeroBigDecimal
+) {
+  def total = Seq(
+    energyAndUtilities,
+    buildingRepairAndMaintenance,
+    rent,
+    repairsAndRenewalsOfFixtures,
+    businessRates,
+    buildingInsurance
+  ).sum
+}
 
-import java.time.LocalDate
-
-/**
-  * 6076 Trading history.
-  *
-  * @author Yuriy Tumakha
-  */
-case class TurnoverSection6076(
-  financialYearEnd: LocalDate,
-  tradingPeriod: Int,
-  electricityGenerated: Option[String] = None,
-  otherIncome: Option[BigDecimal] = None,
-  costOfSales6076Sum: Option[CostOfSales6076Sum] = None,
-  operationalExpenses: Option[OperationalExpenses] = None,
-  headOfficeExpenses: Option[BigDecimal] = None,
-  staffCosts: Option[StaffCosts] = None,
-  grossReceiptsForBaseLoad: Option[GrossReceiptsForBaseLoad] = None,
-  premisesCosts: Option[PremisesCosts] = None
-)
-
-object TurnoverSection6076 {
-  implicit val format: OFormat[TurnoverSection6076] = Json.format
+object PremisesCosts {
+  implicit val format: OFormat[PremisesCosts] = Json.format
 }
