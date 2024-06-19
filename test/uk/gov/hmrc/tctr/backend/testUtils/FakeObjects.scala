@@ -226,7 +226,34 @@ trait FakeObjects {
     otherIncomeDetails = "Some other income details",
     otherOperationalExpensesDetails = "Other expenses",
     otherSalesDetails = "other sales details",
-    furtherInformationOrRemarks = "Further information or remarks"
+    furtherInformationOrRemarks = "Further information or remarks",
+    incomeExpenditureSummary6076 = "confirmed",
+    incomeExpenditureSummary6076Data = Seq(
+      IncomeExpenditureSummary6076Data(
+        financialYearEnd = "2024-03-31",
+        totalGrossReceipts = BigDecimal(1),
+        totalBaseLoadReceipts = BigDecimal(8),
+        totalOtherIncome = BigDecimal(5),
+        totalCostOfSales = BigDecimal(2),
+        totalStaffCosts = BigDecimal(1),
+        totalPremisesCosts = BigDecimal(1),
+        totalOperationalExpenses = BigDecimal(8),
+        headOfficeExpenses = BigDecimal(5),
+        netProfitOrLoss = BigDecimal(25)
+      ),
+      IncomeExpenditureSummary6076Data(
+        financialYearEnd = "2024-03-31",
+        totalGrossReceipts = BigDecimal(1),
+        totalBaseLoadReceipts = BigDecimal(8),
+        totalOtherIncome = BigDecimal(5),
+        totalCostOfSales = BigDecimal(2),
+        totalStaffCosts = BigDecimal(1),
+        totalPremisesCosts = BigDecimal(1),
+        totalOperationalExpenses = BigDecimal(8),
+        headOfficeExpenses = BigDecimal(5),
+        netProfitOrLoss = BigDecimal(25)
+      )
+    )
   )
 
   // Franchises or lettings
