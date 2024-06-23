@@ -15,16 +15,13 @@
  */
 
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
+
 import play.api.libs.json.{Json, OFormat}
 
-case class AboutYouAndThePropertyPartTwo(
-  plantAndTechnology: Option[String] = None,
-  generatorCapacity: Option[String] = None,
-  batteriesCapacity: Option[String] = None,
-  propertyCurrentlyUsed: Option[PropertyCurrentlyUsed] = None
+case class PropertyCurrentlyUsed(
+  propertyCurrentlyUsed: List[String] = List.empty,
+  anotherUseDetails: Option[String] = None
 )
-
-object AboutYouAndThePropertyPartTwo {
-  implicit val format: OFormat[AboutYouAndThePropertyPartTwo] = Json.format[AboutYouAndThePropertyPartTwo]
-
+object PropertyCurrentlyUsed {
+  implicit val format: OFormat[PropertyCurrentlyUsed] = Json.format
 }
