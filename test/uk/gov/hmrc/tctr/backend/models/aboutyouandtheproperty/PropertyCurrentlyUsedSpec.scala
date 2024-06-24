@@ -15,16 +15,18 @@
  */
 
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
-import play.api.libs.json.{Json, OFormat}
 
-case class AboutYouAndThePropertyPartTwo(
-  plantAndTechnology: Option[String] = None,
-  generatorCapacity: Option[String] = None,
-  batteriesCapacity: Option[String] = None,
-  propertyCurrentlyUsed: Option[PropertyCurrentlyUsed] = None
-)
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.Json
 
-object AboutYouAndThePropertyPartTwo {
-  implicit val format: OFormat[AboutYouAndThePropertyPartTwo] = Json.format[AboutYouAndThePropertyPartTwo]
+class PropertyCurrentlyUsedSpec extends PlaySpec {
+  "PropertyCurrentlyUsed" should {
+    "serialize and deserialize correctly" in {
+      val propertyCurrentlyUsed =
+        PropertyCurrentlyUsed(List("chaletPark", "touringSite", "other"), Some("anotherUsedDetails"))
 
+      val json = Json.toJson(propertyCurrentlyUsed)
+      json.as[PropertyCurrentlyUsed] mustBe propertyCurrentlyUsed
+    }
+  }
 }
