@@ -19,8 +19,6 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 
-import java.time.LocalDate
-
 class GrossReceiptsForBaseLoadSpec extends PlaySpec {
   "GrossReceiptsForBaseLoad" should {
     "serialize and deserialize correctly" in {
