@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,18 @@
  */
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.Json
 
-import play.api.libs.json.{Json, OFormat}
+class IncludedInYourRentDetailsSpec extends PlaySpec {
+  "IncludedInYourRent" should {
+    "serialize and deserialize correctly" in {
+      val includedInYourRentDetails =
+        IncludedInYourRentDetails(List("vat"), Some(BigDecimal(100.00)))
 
-case class IncludedInYourRentDetails(includedInYourRent: List[String] = List.empty, vatValue: Option[BigDecimal] = None)
+      val json = Json.toJson(includedInYourRentDetails)
+      json.as[IncludedInYourRentDetails] mustBe includedInYourRentDetails
+    }
 
-object IncludedInYourRentDetails {
-  implicit val format: OFormat[IncludedInYourRentDetails] = Json.format[IncludedInYourRentDetails]
+  }
 }
