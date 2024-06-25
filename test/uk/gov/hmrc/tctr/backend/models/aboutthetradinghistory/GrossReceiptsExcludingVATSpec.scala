@@ -19,13 +19,10 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 
-import java.time.LocalDate
-
 class GrossReceiptsExcludingVATSpec extends PlaySpec {
   "GrossReceiptsExcludingVATSpec" should {
     "serialize and deserialize correctly" in {
       val grossReceiptsExcludingVAT = GrossReceiptsExcludingVAT(
-        LocalDate.now(),
         Some(1),
         Some(2),
         Some(3),
@@ -40,7 +37,6 @@ class GrossReceiptsExcludingVATSpec extends PlaySpec {
     }
     "have correct total value" in {
       val grossReceiptsExcludingVAT = GrossReceiptsExcludingVAT(
-        LocalDate.now(),
         Some(1),
         Some(2),
         Some(3),
