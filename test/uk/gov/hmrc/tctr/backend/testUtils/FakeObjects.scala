@@ -194,6 +194,18 @@ trait FakeObjects {
           nationalInsurance = 200,
           pensionContributions = 300,
           remunerations = 400
+        ),
+        grossReceiptsExcludingVAT = GrossReceiptsExcludingVAT(1, 10),
+        incomeAndExpenditureSummary = IncomeAndExpenditureSummary6076(
+          totalGrossReceipts = 1,
+          totalBaseLoadReceipts = 8,
+          totalOtherIncome = 5,
+          totalCostOfSales = 2,
+          totalStaffCosts = 1,
+          totalPremisesCosts = 1,
+          totalOperationalExpenses = 8,
+          headOfficeExpenses = 5,
+          netProfitOrLoss = 25
         )
       ),
       TurnoverSection6076(
@@ -215,45 +227,26 @@ trait FakeObjects {
           nationalInsurance = 200,
           pensionContributions = 300,
           remunerations = 400
+        ),
+        grossReceiptsExcludingVAT = GrossReceiptsExcludingVAT(2, 20),
+        incomeAndExpenditureSummary = IncomeAndExpenditureSummary6076(
+          totalGrossReceipts = 1,
+          totalBaseLoadReceipts = 8,
+          totalOtherIncome = 5,
+          totalCostOfSales = 2,
+          totalStaffCosts = 1,
+          totalPremisesCosts = 1,
+          totalOperationalExpenses = 8,
+          headOfficeExpenses = 5,
+          netProfitOrLoss = 25
         )
       )
-    ),
-    grossReceiptsExcludingVAT = Seq(
-      GrossReceiptsExcludingVAT(LocalDate.now()),
-      GrossReceiptsExcludingVAT(LocalDate.now().minusYears(1)),
-      GrossReceiptsExcludingVAT(LocalDate.now().minusYears(2))
     ),
     otherIncomeDetails = "Some other income details",
     otherOperationalExpensesDetails = "Other expenses",
     otherSalesDetails = "other sales details",
     furtherInformationOrRemarks = "Further information or remarks",
-    incomeExpenditureSummary6076 = "confirmed",
-    incomeExpenditureSummary6076Data = Seq(
-      IncomeExpenditureSummary6076Data(
-        financialYearEnd = "2024-03-31",
-        totalGrossReceipts = BigDecimal(1),
-        totalBaseLoadReceipts = BigDecimal(8),
-        totalOtherIncome = BigDecimal(5),
-        totalCostOfSales = BigDecimal(2),
-        totalStaffCosts = BigDecimal(1),
-        totalPremisesCosts = BigDecimal(1),
-        totalOperationalExpenses = BigDecimal(8),
-        headOfficeExpenses = BigDecimal(5),
-        netProfitOrLoss = BigDecimal(25)
-      ),
-      IncomeExpenditureSummary6076Data(
-        financialYearEnd = "2024-03-31",
-        totalGrossReceipts = BigDecimal(1),
-        totalBaseLoadReceipts = BigDecimal(8),
-        totalOtherIncome = BigDecimal(5),
-        totalCostOfSales = BigDecimal(2),
-        totalStaffCosts = BigDecimal(1),
-        totalPremisesCosts = BigDecimal(1),
-        totalOperationalExpenses = BigDecimal(8),
-        headOfficeExpenses = BigDecimal(5),
-        netProfitOrLoss = BigDecimal(25)
-      )
-    )
+    incomeExpenditureConfirmation6076 = "confirmed"
   )
 
   // Franchises or lettings

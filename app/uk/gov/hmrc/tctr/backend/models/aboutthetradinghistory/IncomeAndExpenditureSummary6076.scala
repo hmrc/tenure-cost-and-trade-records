@@ -17,21 +17,20 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
 
-case class IncomeExpenditureSummary6076Data(
-  financialYearEnd: String,
-  totalGrossReceipts: BigDecimal,
-  totalBaseLoadReceipts: BigDecimal,
-  totalOtherIncome: BigDecimal,
-  totalCostOfSales: BigDecimal,
-  totalStaffCosts: BigDecimal,
-  totalPremisesCosts: BigDecimal,
-  totalOperationalExpenses: BigDecimal,
-  headOfficeExpenses: BigDecimal,
-  netProfitOrLoss: BigDecimal
+case class IncomeAndExpenditureSummary6076(
+  totalGrossReceipts: BigDecimal = zeroBigDecimal,
+  totalBaseLoadReceipts: BigDecimal = zeroBigDecimal,
+  totalOtherIncome: BigDecimal = zeroBigDecimal,
+  totalCostOfSales: BigDecimal = zeroBigDecimal,
+  totalStaffCosts: BigDecimal = zeroBigDecimal,
+  totalPremisesCosts: BigDecimal = zeroBigDecimal,
+  totalOperationalExpenses: BigDecimal = zeroBigDecimal,
+  headOfficeExpenses: BigDecimal = zeroBigDecimal,
+  netProfitOrLoss: BigDecimal = zeroBigDecimal
 )
-object IncomeExpenditureSummary6076Data {
 
-  implicit val format: OFormat[IncomeExpenditureSummary6076Data] = Json.format[IncomeExpenditureSummary6076Data]
-
+object IncomeAndExpenditureSummary6076 {
+  implicit val format: OFormat[IncomeAndExpenditureSummary6076] = Json.format
 }

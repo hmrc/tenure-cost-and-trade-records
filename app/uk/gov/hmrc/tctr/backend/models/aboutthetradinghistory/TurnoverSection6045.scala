@@ -21,25 +21,16 @@ import play.api.libs.json.{Json, OFormat}
 import java.time.LocalDate
 
 /**
-  * 6076 Trading history.
+  * 6045/6046 Trading history.
   *
   * @author Yuriy Tumakha
   */
-case class TurnoverSection6076(
+case class TurnoverSection6045(
   financialYearEnd: LocalDate,
   tradingPeriod: Int,
-  electricityGenerated: Option[String] = None,
-  otherIncome: Option[BigDecimal] = None,
-  costOfSales6076Sum: Option[CostOfSales6076Sum] = None,
-  operationalExpenses: Option[OperationalExpenses] = None,
-  headOfficeExpenses: Option[BigDecimal] = None,
-  staffCosts: Option[StaffCosts] = None,
-  grossReceiptsExcludingVAT: Option[GrossReceiptsExcludingVAT] = None,
-  grossReceiptsForBaseLoad: Option[GrossReceiptsForBaseLoad] = None,
-  premisesCosts: Option[PremisesCosts] = None,
-  incomeAndExpenditureSummary: Option[IncomeAndExpenditureSummary6076] = None
+  grossReceiptsFromCaravanFleetHire: Option[BigDecimal] = None
 )
 
-object TurnoverSection6076 {
-  implicit val format: OFormat[TurnoverSection6076] = Json.format
+object TurnoverSection6045 {
+  implicit val format: OFormat[TurnoverSection6045] = Json.format
 }
