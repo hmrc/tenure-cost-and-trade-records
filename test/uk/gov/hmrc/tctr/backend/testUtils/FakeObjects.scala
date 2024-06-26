@@ -174,6 +174,20 @@ trait FakeObjects {
 
   val prefilledAboutTheTradingHistoryPartOne: AboutTheTradingHistoryPartOne = AboutTheTradingHistoryPartOne(
     isFinancialYearEndDatesCorrect = true,
+    turnoverSections6045 = Seq(
+      TurnoverSection6045(
+        financialYearEnd = today,
+        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire()
+      ),
+      TurnoverSection6045(
+        financialYearEnd = today.minusYears(1),
+        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(51, 2000)
+      ),
+      TurnoverSection6045(
+        financialYearEnd = today.minusYears(2),
+        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(50, 3000)
+      )
+    ),
     turnoverSections6076 = Seq(
       TurnoverSection6076(
         financialYearEnd = LocalDate.of(2023, 3, 31),
