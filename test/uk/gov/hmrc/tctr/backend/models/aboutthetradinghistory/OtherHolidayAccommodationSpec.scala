@@ -29,5 +29,13 @@ class OtherHolidayAccommodationSpec extends PlaySpec {
       val json                      = Json.toJson(otherHolidayAccommodation: OtherHolidayAccommodation)
       json.as[OtherHolidayAccommodation] mustBe otherHolidayAccommodation
     }
+    "serialize and deserialize correctly with all fields" in {
+      val otherHolidayAccommodation = OtherHolidayAccommodation(
+        Some(AnswerYes),
+        Some(CheckYourAnswersOtherHolidayAccommodation("yes"))
+      )
+      val json                      = Json.toJson(otherHolidayAccommodation: OtherHolidayAccommodation)
+      json.as[OtherHolidayAccommodation] mustBe otherHolidayAccommodation
+    }
   }
 }
