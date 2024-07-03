@@ -29,6 +29,7 @@ case class AboutTheTradingHistoryPartOne(
   incomeExpenditureConfirmation6076: Option[String] = None,
   // 6045/6046
   turnoverSections6045: Option[Seq[TurnoverSection6045]] = None,
+  caravans: Option[Caravans] = None,
   otherHolidayAccommodation: Option[OtherHolidayAccommodation] = None
 )
 
