@@ -188,6 +188,7 @@ trait FakeObjects {
         grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(50, 3000)
       )
     ),
+    caravans = Caravans(AnswerYes, AnswerNo, 26), // 6045/46
     turnoverSections6076 = Seq(
       TurnoverSection6076(
         financialYearEnd = LocalDate.of(2023, 3, 31),
