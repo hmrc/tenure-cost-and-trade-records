@@ -19,12 +19,11 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class OtherHolidayAccommodation(
-  otherHolidayAccommodation: Option[AnswersYesNo] = None,
-  otherHolidayAccommodationDetails: Option[OtherHolidayAccommodationDetails] = None,
-  checkYourAnswersOtherHolidayAccommodation: Option[CheckYourAnswersOtherHolidayAccommodation] = None
+case class OtherHolidayAccommodationDetails(
+  otherHolidayAccommodationOpenAllYear: AnswersYesNo,
+  weeksOpen: Option[Int] = None
 )
 
-object OtherHolidayAccommodation {
-  implicit val format: OFormat[OtherHolidayAccommodation] = Json.format
+object OtherHolidayAccommodationDetails {
+  implicit val format: OFormat[OtherHolidayAccommodationDetails] = Json.format
 }
