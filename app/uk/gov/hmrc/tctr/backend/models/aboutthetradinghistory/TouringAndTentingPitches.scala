@@ -21,7 +21,7 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 case class TouringAndTentingPitches(
   tentingPitchesOnSite: Option[AnswersYesNo] = None,
   tentingPitchesAllYear: Option[TentingPitchesAllYear] = None,
-  cya: Option[String] = None
+  checkYourAnswersTentingPitches: Option[AnswersYesNo] = None
 )
 
 object TouringAndTentingPitches {
