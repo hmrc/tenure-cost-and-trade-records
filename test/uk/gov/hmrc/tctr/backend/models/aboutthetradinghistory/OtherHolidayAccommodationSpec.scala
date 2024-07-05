@@ -18,7 +18,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.common.AnswerYes
+import uk.gov.hmrc.tctr.backend.models.common.{AnswerNo, AnswerYes}
 
 class OtherHolidayAccommodationSpec extends PlaySpec {
   "OtherHolidayAccommodation" should {
@@ -32,7 +32,8 @@ class OtherHolidayAccommodationSpec extends PlaySpec {
     "serialize and deserialize correctly with all fields" in {
       val otherHolidayAccommodation = OtherHolidayAccommodation(
         Some(AnswerYes),
-        Some(CheckYourAnswersOtherHolidayAccommodation("yes"))
+        Some(OtherHolidayAccommodationDetails(AnswerNo, Some(1))),
+        Some(CheckYourAnswersOtherHolidayAccommodation("no"))
       )
       val json                      = Json.toJson(otherHolidayAccommodation: OtherHolidayAccommodation)
       json.as[OtherHolidayAccommodation] mustBe otherHolidayAccommodation
