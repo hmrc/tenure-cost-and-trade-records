@@ -86,16 +86,16 @@ class AuthController @Inject() (
 }
 
 object ValidLoginResponse {
-  implicit val f: Format[ValidLoginResponse] = Json.format[ValidLoginResponse]
+  implicit val f: Format[ValidLoginResponse] = Json.format
 }
 case class ValidLoginResponse(forAuthToken: String, forType: String, address: Address)
 
 object FailedLoginResponse {
-  implicit val f: Format[FailedLoginResponse] = Json.format[FailedLoginResponse]
+  implicit val f: Format[FailedLoginResponse] = Json.format
 }
 case class FailedLoginResponse(numberOfRemainingTriesUntilIPLockout: Int)
 
 object ValidForTypeResponse {
-  implicit val f: Format[ValidForTypeResponse] = Json.format[ValidForTypeResponse]
+  implicit val f: Format[ValidForTypeResponse] = Json.format
 }
 case class ValidForTypeResponse(FORType: String)

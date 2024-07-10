@@ -19,13 +19,13 @@ package uk.gov.hmrc.tctr.backend.repository
 import org.mongodb.scala.bson.{BsonString, Document}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.schema.Address
+import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
 import java.time.Instant
 import java.util.UUID
@@ -33,9 +33,9 @@ import java.util.UUID
 class NotConnectedRepositorySpec
     extends PlaySpec
     with BeforeAndAfterAll
-    with GuiceOneAppPerSuite
     with FutureAwaits
-    with DefaultAwaitTimeout {
+    with DefaultAwaitTimeout
+    with AppSuiteBase {
 
   val dbName = s"notConnectedRepositorySpec${UUID.randomUUID().toString.replaceAll("-", "")}"
 
@@ -45,9 +45,9 @@ class NotConnectedRepositorySpec
     .configure("mongodb.uri" -> testDbUri)
     .build()
 
-  def mongo: MongoComponent = app.injector.instanceOf[MongoComponent]
+  def mongo: MongoComponent = inject[MongoComponent]
 
-  def repository = app.injector.instanceOf[NotConnectedMongoRepository]
+  def repository = inject[NotConnectedMongoRepository]
 
   "NotConnectedRepository" should {
     "save NotConnectedSubmission to mongo" in {

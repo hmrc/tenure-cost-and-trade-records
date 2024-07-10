@@ -17,10 +17,8 @@
 package uk.gov.hmrc.tctr.backend.connectors
 
 import com.typesafe.config.ConfigFactory
-import org.mockito.scalatest.MockitoSugar
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.http.Status.{ACCEPTED, BAD_REQUEST, NOT_FOUND, OK}
 import play.api.libs.json.{JsObject, JsValue, Json, Writes}
@@ -28,24 +26,19 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.schema.Address
-import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 import uk.gov.hmrc.tctr.backend.util.DateUtil
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class EmailConnectorSpec
-    extends PlaySpec
-    with GuiceOneAppPerSuite
-    with MockitoSugar
-    with ScalaFutures
-    with FakeObjects {
+class EmailConnectorSpec extends PlaySpec with ScalaFutures with AppSuiteBase {
 
   private val sendEmailEndpoint            = "http://localhost:8300/hmrc/email"
   private val configuration                = Configuration(ConfigFactory.load("application.conf"))
   private val servicesConfig               = new ServicesConfig(configuration)
-  private val dateUtil                     = app.injector.instanceOf[DateUtil]
+  private val dateUtil                     = inject[DateUtil]
   implicit val hc: HeaderCarrier           = HeaderCarrier()
   private val email                        = "customer@email.com"
   private val testAddress                  = Address("001", Some("GORING ROAD"), Some("WEST SUSSEX"), "BN12 4AX")

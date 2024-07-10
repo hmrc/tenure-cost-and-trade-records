@@ -56,7 +56,7 @@ object SensitiveRequestReferenceNumberSubmission {
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
   @nowarn
   implicit def format(implicit crypto: MongoCrypto): Format[SensitiveRequestReferenceNumberSubmission] = mongoEntity {
-    Json.format[SensitiveRequestReferenceNumberSubmission]
+    Json.format
   }
 
   def apply(submission: RequestReferenceNumberSubmission): SensitiveRequestReferenceNumberSubmission =

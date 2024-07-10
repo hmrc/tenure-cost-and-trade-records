@@ -27,5 +27,5 @@ case class EditAddress(
 )
 
 object EditAddress {
-  implicit val format: OFormat[EditAddress] = Json.format[EditAddress]
+  implicit val format: OFormat[EditAddress] = Json.format
 }

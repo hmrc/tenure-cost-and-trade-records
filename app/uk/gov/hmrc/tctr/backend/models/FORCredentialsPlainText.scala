@@ -38,5 +38,5 @@ case class FORCredentialsPlainText(
 }
 
 object FORCredentialsPlainText {
-  implicit val plainFormat: OFormat[FORCredentialsPlainText] = Json.format[FORCredentialsPlainText]
+  implicit val plainFormat: OFormat[FORCredentialsPlainText] = Json.format
 }

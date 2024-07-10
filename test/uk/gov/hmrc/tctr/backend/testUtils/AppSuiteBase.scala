@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
+package uk.gov.hmrc.tctr.backend.testUtils
 
-import play.api.libs.json.{Json, OFormat}
+import org.mockito.MockitoSugar
+import org.scalatest.TestSuite
+import org.scalatest.matchers.should
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.test.Injecting
 
-case class EditTheAddress(
-  editAddress: EditAddress
-)
-object EditTheAddress {
-  implicit val format: OFormat[EditTheAddress] = Json.format
+/**
+  * @author Yuriy Tumakha
+  */
+trait AppSuiteBase
+    extends GuiceOneServerPerSuite
+    with should.Matchers
+    with Injecting
+    with MockitoSugar
+    with FakeObjects {
+  this: TestSuite =>
 }

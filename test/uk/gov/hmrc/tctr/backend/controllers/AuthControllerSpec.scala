@@ -18,13 +18,10 @@ package uk.gov.hmrc.tctr.backend.controllers
 
 import org.apache.pekko.stream.Materializer
 import org.mockito.IdiomaticMockito.StubbingOps
-import org.mockito.MockitoSugar.{mock, when}
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}
 
 import scala.concurrent.{ExecutionContext, Future}
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.bind
@@ -35,8 +32,9 @@ import uk.gov.hmrc.internalauth.client.{BackendAuthComponents, IAAction, Resourc
 import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
 import uk.gov.hmrc.tctr.backend.repository.CredentialsMongoRepo
 import uk.gov.hmrc.tctr.backend.security.Credentials
+import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
-class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
+class AuthControllerSpec extends AnyWordSpec with AppSuiteBase {
 
   implicit val ec: ExecutionContext            = ExecutionContext.Implicits.global
   implicit lazy val materializer: Materializer = app.materializer
@@ -48,6 +46,7 @@ class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
   mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
   protected val backendAuthComponentsStub: BackendAuthComponents =
     BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), ec)
+
   override def fakeApplication(): Application                    = new GuiceApplicationBuilder()
     .overrides(
       bind[CredentialsMongoRepo].toInstance(mockCredentialsRepo),
@@ -55,7 +54,7 @@ class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
     )
     .build()
 
-  def controller: AuthController = app.injector.instanceOf[AuthController]
+  def controller: AuthController = inject[AuthController]
 
   private val fakeRequest =
     FakeRequest("POST", "/").withBody(Credentials("refNum", "postcode")).withHeaders("Authorization" -> "fake-token")
@@ -80,7 +79,7 @@ class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
       // Mock the repository to return None when findById is called
       when(mockCredentialsRepo.findById(referenceNum)).thenReturn(Future.successful(None))
 
-      val controller = app.injector.instanceOf[AuthController]
+      val controller = inject[AuthController]
       val result     = controller.retrieveFORType(referenceNum)(fakeRequest)
       status(result) shouldBe Status.NOT_FOUND
     }

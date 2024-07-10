@@ -40,7 +40,7 @@ case class SensitiveAddress(
 
 object SensitiveAddress {
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAddress] = Json.format[SensitiveAddress]
+  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAddress] = Json.format
 
   def apply(address: Address): SensitiveAddress = SensitiveAddress(
     SensitiveString(address.buildingNameNumber),

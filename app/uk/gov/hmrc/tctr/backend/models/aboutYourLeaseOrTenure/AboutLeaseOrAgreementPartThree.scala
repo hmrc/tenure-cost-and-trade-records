@@ -41,5 +41,5 @@ case class AboutLeaseOrAgreementPartThree(
 )
 
 object AboutLeaseOrAgreementPartThree {
-  implicit val format: OFormat[AboutLeaseOrAgreementPartThree] = Json.format[AboutLeaseOrAgreementPartThree]
+  implicit val format: OFormat[AboutLeaseOrAgreementPartThree] = Json.format
 }

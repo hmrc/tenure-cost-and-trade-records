@@ -22,5 +22,5 @@ import uk.gov.hmrc.tctr.backend.models.Form6010.MonthsYearDuration
 case class CurrentLeaseOrAgreementBegin(leaseBegin: MonthsYearDuration, grantedFor: String)
 
 object CurrentLeaseOrAgreementBegin {
-  implicit val format: OFormat[CurrentLeaseOrAgreementBegin] = Json.format[CurrentLeaseOrAgreementBegin]
+  implicit val format: OFormat[CurrentLeaseOrAgreementBegin] = Json.format
 }

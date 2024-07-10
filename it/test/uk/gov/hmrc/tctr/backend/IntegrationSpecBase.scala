@@ -23,6 +23,7 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.{Application, Configuration}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
+import play.api.test.Injecting
 
 /**
   * @author Yuriy Tumakha
@@ -32,7 +33,8 @@ abstract class IntegrationSpecBase
     with Matchers
     with ScalaFutures
     with IntegrationPatience
-    with GuiceOneServerPerSuite {
+    with GuiceOneServerPerSuite
+    with Injecting {
 
   override def fakeApplication(): Application =
     GuiceApplicationBuilder()
@@ -41,8 +43,8 @@ abstract class IntegrationSpecBase
       )
       .build()
 
-  protected val wsClient: WSClient           = app.injector.instanceOf[WSClient]
-  protected val configuration: Configuration = app.injector.instanceOf[Configuration]
+  protected val wsClient: WSClient           = inject[WSClient]
+  protected val configuration: Configuration = inject[Configuration]
 
   protected val baseUrl    = s"http://localhost:$port"
   protected val appBaseUrl = s"$baseUrl/${configuration.get[String]("appName")}"
