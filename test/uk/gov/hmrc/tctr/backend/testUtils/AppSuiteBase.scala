@@ -19,14 +19,14 @@ package uk.gov.hmrc.tctr.backend.testUtils
 import org.mockito.MockitoSugar
 import org.scalatest.TestSuite
 import org.scalatest.matchers.should
-import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.Injecting
 
 /**
   * @author Yuriy Tumakha
   */
 trait AppSuiteBase
-    extends GuiceOneServerPerSuite
+    extends GuiceOneAppPerSuite
     with should.Matchers
     with Injecting
     with MockitoSugar
