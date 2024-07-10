@@ -39,7 +39,7 @@ private object AppDependencies {
   )
 
   private val testOnly = Seq(
-    ("org.mockito" %% "mockito-scala-scalatest" % mockitoScalaVersion % Test).cross(CrossVersion.for3Use2_13)
+    "org.mockito" %% "mockito-scala-scalatest" % mockitoScalaVersion % Test
   )
 
   private val integrationTestOnly = Seq(

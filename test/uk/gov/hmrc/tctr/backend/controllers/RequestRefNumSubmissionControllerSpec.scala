@@ -20,12 +20,8 @@ import org.apache.pekko.util.Timeout
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult.acknowledged
 import org.bson.BsonBoolean.TRUE
-import org.mockito.ArgumentMatchers.any
 import org.mockito.IdiomaticMockito.StubbingOps
-import org.mockito.Mockito.when
-import org.mockito.MockitoSugar.mock
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -42,18 +38,13 @@ import uk.gov.hmrc.internalauth.client._
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.RequestReferenceNumberSubmission
 import uk.gov.hmrc.tctr.backend.repository.RequestReferenceNumberRepository
-import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits
 import scala.concurrent.duration.DurationInt
 
-class RequestRefNumSubmissionControllerSpec
-    extends AnyWordSpec
-    with Matchers
-    with GuiceOneAppPerSuite
-    with ScalaFutures
-    with FakeObjects {
+class RequestRefNumSubmissionControllerSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppPerSuite with AppSuiteBase {
 
   implicit val timeout: Timeout                                  = 5.seconds
   private val expectedPredicate                                  =
@@ -74,7 +65,7 @@ class RequestRefNumSubmissionControllerSpec
       bind[BackendAuthComponents].toInstance(backendAuthComponentsStub)
     )
     .build()
-  def controller: RequestRefNumSubmissionController = app.injector.instanceOf[RequestRefNumSubmissionController]
+  def controller: RequestRefNumSubmissionController = inject[RequestRefNumSubmissionController]
 
   "RequestRefNumSubmissionController" should {
     "handle valid submission" in {

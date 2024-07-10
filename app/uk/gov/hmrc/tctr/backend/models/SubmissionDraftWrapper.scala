@@ -34,6 +34,5 @@ object SubmissionDraftWrapper {
 
   import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
-  implicit val format: OFormat[SubmissionDraftWrapper] = Json.format[SubmissionDraftWrapper]
-
+  implicit val format: OFormat[SubmissionDraftWrapper] = Json.format
 }

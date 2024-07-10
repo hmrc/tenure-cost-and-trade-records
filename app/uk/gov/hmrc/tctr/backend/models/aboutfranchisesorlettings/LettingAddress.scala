@@ -27,6 +27,5 @@ case class LettingAddress(
 )
 
 object LettingAddress {
-  implicit val format: OFormat[LettingAddress] = Json.format[LettingAddress]
-
+  implicit val format: OFormat[LettingAddress] = Json.format
 }

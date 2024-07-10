@@ -19,12 +19,9 @@ package uk.gov.hmrc.tctr.backend.controllers
 import org.apache.pekko.util.Timeout
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult
-import org.mockito.ArgumentMatchers._
 import org.mockito.IdiomaticMockito.StubbingOps
-import org.mockito.MockitoSugar
 import play.api.Application
 import play.api.mvc.ControllerComponents
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.{FakeRequest, Helpers}
@@ -38,18 +35,13 @@ import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
 import uk.gov.hmrc.tctr.backend.repository.{ConnectedRepository, SubmittedMongoRepo}
-import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class ConnectedSubmissionControllerSpec
-    extends AnyWordSpec
-    with Matchers
-    with GuiceOneAppPerSuite
-    with MockitoSugar
-    with FakeObjects {
+class ConnectedSubmissionControllerSpec extends AnyWordSpec with GuiceOneAppPerSuite with AppSuiteBase {
 
   implicit val timeout: Timeout                                  = 5.seconds
   implicit val ec: ExecutionContext                              = ExecutionContext.global
@@ -75,7 +67,7 @@ class ConnectedSubmissionControllerSpec
     )
     .build()
 
-  val controller: ConnectedSubmissionController = app.injector.instanceOf[ConnectedSubmissionController]
+  val controller: ConnectedSubmissionController = inject[ConnectedSubmissionController]
 
   when(mockMetrics.okSubmissions).thenReturn(meter)
   when(mockMetrics.failedSubmissions).thenReturn(meter)

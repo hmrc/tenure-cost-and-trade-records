@@ -18,15 +18,12 @@ package uk.gov.hmrc.tctr.backend.controllers
 
 import org.apache.pekko.util.Timeout
 import com.codahale.metrics.Meter
-import org.mockito.ArgumentMatchers.any
 import play.api.mvc._
 import play.api.test._
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import org.scalatestplus.play.guice._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{CONFLICT, CREATED}
 import play.api.test.Helpers.{POST, status}
@@ -40,20 +37,16 @@ import uk.gov.hmrc.tctr.backend.schema.Address
 import com.mongodb.client.result.InsertOneResult.acknowledged
 import org.bson.BsonBoolean.TRUE
 import org.mockito.IdiomaticMockito.StubbingOps
-import org.mockito.Mockito.when
-import org.mockito.MockitoSugar.mock
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
+import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
 import scala.concurrent.Future
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits
 import scala.concurrent.duration.DurationInt
 
-class NotConnectedSubmissionControllerSpec
-    extends AnyWordSpec
-    with Matchers
-    with GuiceOneAppPerSuite
-    with ScalaFutures {
+class NotConnectedSubmissionControllerSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppPerSuite with AppSuiteBase {
 
   implicit val timeout: Timeout                                  = 5.seconds
   private val expectedPredicate                                  =
@@ -91,7 +84,7 @@ class NotConnectedSubmissionControllerSpec
     )
     .build()
 
-  private val controller = app.injector.instanceOf[NotConnectedSubmissionController]
+  private val controller = inject[NotConnectedSubmissionController]
 
   "NotConnectedSubmissionController" should {
     "handle valid submission" in {

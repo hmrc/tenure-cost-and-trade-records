@@ -33,7 +33,5 @@ case class FORCredentials(
 }
 
 object FORCredentials {
-
-  implicit def format(implicit crypto: MongoCrypto): OFormat[FORCredentials] = Json.format[FORCredentials]
-
+  implicit def format(implicit crypto: MongoCrypto): OFormat[FORCredentials] = Json.format
 }

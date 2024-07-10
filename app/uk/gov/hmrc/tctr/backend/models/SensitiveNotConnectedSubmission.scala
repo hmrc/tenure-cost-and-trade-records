@@ -64,7 +64,7 @@ object SensitiveNotConnectedSubmission {
 
   @nowarn
   implicit def format(implicit crypto: MongoCrypto): Format[SensitiveNotConnectedSubmission] = mongoEntity {
-    Json.format[SensitiveNotConnectedSubmission]
+    Json.format
   }
 
   def apply(submission: NotConnectedSubmission): SensitiveNotConnectedSubmission =

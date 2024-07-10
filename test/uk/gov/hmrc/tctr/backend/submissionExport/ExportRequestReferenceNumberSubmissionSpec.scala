@@ -22,17 +22,14 @@ import com.mongodb.client.result.DeleteResult
 
 import java.time.Instant
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import java.time.Clock
-import org.mockito.scalatest.MockitoSugar
-import org.scalatest.matchers.should
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.tctr.backend.models.RequestReferenceNumberSubmission
 import uk.gov.hmrc.tctr.backend.repository._
-import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
-import uk.gov.hmrc.tctr.backend.testUtils.ScheduleThatSchedulesImmediately5Times
+import uk.gov.hmrc.tctr.backend.testUtils.{AppSuiteBase, ScheduleThatSchedulesImmediately5Times}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -42,14 +39,12 @@ class ExportRequestReferenceNumberSubmissionSpec
     extends TestKit(ActorSystem.create("submissionExportTest"))
     with ImplicitSender
     with AnyWordSpecLike
-    with should.Matchers
     with BeforeAndAfterAll
-    with MockitoSugar
     with GuiceOneAppPerSuite
-    with FakeObjects {
+    with AppSuiteBase {
 
-  def audit: ForTCTRAudit      = app.injector.instanceOf[ForTCTRAudit]
-  def configuration: AppConfig = app.injector.instanceOf[AppConfig]
+  def audit: ForTCTRAudit      = inject[ForTCTRAudit]
+  def configuration: AppConfig = inject[AppConfig]
 
   implicit val ec: ExecutionContext = system.dispatcher
 

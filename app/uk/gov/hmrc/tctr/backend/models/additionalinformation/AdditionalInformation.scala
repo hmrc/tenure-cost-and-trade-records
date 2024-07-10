@@ -24,5 +24,5 @@ case class AdditionalInformation(
 )
 
 object AdditionalInformation {
-  implicit val format: OFormat[AdditionalInformation] = Json.format[AdditionalInformation]
+  implicit val format: OFormat[AdditionalInformation] = Json.format
 }

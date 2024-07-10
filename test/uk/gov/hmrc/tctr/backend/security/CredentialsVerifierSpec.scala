@@ -19,10 +19,8 @@ package uk.gov.hmrc.tctr.backend.security
 import com.google.inject.AbstractModule
 import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import net.codingwell.scalaguice.ScalaModule
-import org.mockito.scalatest.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -35,12 +33,7 @@ import uk.gov.hmrc.tctr.backend.util.DateUtil.nowInUK
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class CredentialsVerifierSpec
-    extends AnyFlatSpec
-    with should.Matchers
-    with MockitoSugar
-    with TableDrivenPropertyChecks
-    with GuiceOneAppPerSuite {
+class CredentialsVerifierSpec extends AnyFlatSpec with TableDrivenPropertyChecks with GuiceOneAppPerSuite with AppSuiteBase {
 
   import TestData._
 
@@ -53,8 +46,8 @@ class CredentialsVerifierSpec
     })
     .build()
 
-  def mongo: MongoComponent = app.injector.instanceOf[MongoComponent]
-  def appConfig: AppConfig  = app.injector.instanceOf[AppConfig]
+  def mongo: MongoComponent = inject[MongoComponent]
+  def appConfig: AppConfig  = inject[AppConfig]
 
   behavior of "Credentials Verifier"
 

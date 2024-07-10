@@ -26,5 +26,5 @@ case class RefNum(referenceNumber: String, createdAt: Instant, _id: Option[Objec
 object RefNum {
   import uk.gov.hmrc.mongo.play.json.formats.MongoFormats.Implicits._
 
-  implicit val format: OFormat[RefNum] = Json.format[RefNum]
+  implicit val format: OFormat[RefNum] = Json.format
 }

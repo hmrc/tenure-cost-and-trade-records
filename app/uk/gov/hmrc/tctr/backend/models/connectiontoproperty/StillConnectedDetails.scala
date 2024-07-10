@@ -38,5 +38,5 @@ case class StillConnectedDetails(
 )
 
 object StillConnectedDetails {
-  implicit val format: OFormat[StillConnectedDetails] = Json.format[StillConnectedDetails]
+  implicit val format: OFormat[StillConnectedDetails] = Json.format
 }

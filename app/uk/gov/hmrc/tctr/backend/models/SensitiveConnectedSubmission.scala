@@ -79,8 +79,7 @@ case class SensitiveConnectedSubmission(
 }
 
 object SensitiveConnectedSubmission {
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveConnectedSubmission] =
-    Json.format[SensitiveConnectedSubmission]
+  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveConnectedSubmission] = Json.format
 
   def apply(connectedSubmission: ConnectedSubmission): SensitiveConnectedSubmission = SensitiveConnectedSubmission(
     connectedSubmission.referenceNumber,
