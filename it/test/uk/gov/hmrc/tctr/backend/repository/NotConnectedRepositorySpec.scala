@@ -50,25 +50,25 @@ class NotConnectedRepositorySpec
   "NotConnectedRepository" should {
     "save NotConnectedSubmission to mongo" in {
       val insertOneResult = await(repository.insert(aSubmission()))
-      insertOneResult.wasAcknowledged() mustBe true
-      insertOneResult.getInsertedId mustBe BsonString("9999000111")
+      insertOneResult.wasAcknowledged() shouldBe true
+      insertOneResult.getInsertedId shouldBe BsonString("9999000111")
     }
 
     "save NotConnectedSubmission to mongo and get it back" in {
       val id              = "9999000321"
       val insertOneResult = await(repository.insert(aSubmission().copy(id = id)))
-      insertOneResult.wasAcknowledged() mustBe true
+      insertOneResult.wasAcknowledged() shouldBe true
 
       val result = await(repository.findById(id))
 
-      result mustBe defined
+      result shouldBe defined
 
-      result.value mustBe (aSubmission().copy(id = id))
+      result.value shouldBe (aSubmission().copy(id = id))
     }
 
     "get some submission from repository" in {
       val submissions = await(repository.getSubmissions())
-      submissions must have size 2
+      submissions should have size 2
     }
 
     "Save createdAt as BSONDateTime in database" in {
@@ -77,7 +77,7 @@ class NotConnectedRepositorySpec
       await(repository.insert(submission))
 
       val dbSubmission = await(repository.findById(submission.id)).value
-      dbSubmission.createdAt mustBe submission.createdAt
+      dbSubmission.createdAt shouldBe submission.createdAt
     }
 
   }
