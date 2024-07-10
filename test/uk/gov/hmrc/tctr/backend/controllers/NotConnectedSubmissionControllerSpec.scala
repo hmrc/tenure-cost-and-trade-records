@@ -18,7 +18,6 @@ package uk.gov.hmrc.tctr.backend.controllers
 
 import org.apache.pekko.util.Timeout
 import com.codahale.metrics.Meter
-import org.mockito.ArgumentMatchers.any
 import play.api.mvc._
 import play.api.test._
 import play.api.inject.bind
@@ -38,6 +37,7 @@ import uk.gov.hmrc.tctr.backend.schema.Address
 import com.mongodb.client.result.InsertOneResult.acknowledged
 import org.bson.BsonBoolean.TRUE
 import org.mockito.IdiomaticMockito.StubbingOps
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
 import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
@@ -46,7 +46,7 @@ import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits
 import scala.concurrent.duration.DurationInt
 
-class NotConnectedSubmissionControllerSpec extends AnyWordSpec with ScalaFutures with AppSuiteBase {
+class NotConnectedSubmissionControllerSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppPerSuite with AppSuiteBase {
 
   implicit val timeout: Timeout                                  = 5.seconds
   private val expectedPredicate                                  =

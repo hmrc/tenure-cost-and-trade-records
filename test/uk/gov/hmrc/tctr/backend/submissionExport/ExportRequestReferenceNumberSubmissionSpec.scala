@@ -26,6 +26,7 @@ import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import java.time.Clock
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.tctr.backend.models.RequestReferenceNumberSubmission
 import uk.gov.hmrc.tctr.backend.repository._
 import uk.gov.hmrc.tctr.backend.testUtils.{AppSuiteBase, ScheduleThatSchedulesImmediately5Times}
@@ -39,6 +40,7 @@ class ExportRequestReferenceNumberSubmissionSpec
     with ImplicitSender
     with AnyWordSpecLike
     with BeforeAndAfterAll
+    with GuiceOneAppPerSuite
     with AppSuiteBase {
 
   def audit: ForTCTRAudit      = inject[ForTCTRAudit]

@@ -21,6 +21,7 @@ import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import net.codingwell.scalaguice.ScalaModule
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.mongo.MongoComponent
@@ -32,7 +33,7 @@ import uk.gov.hmrc.tctr.backend.util.DateUtil.nowInUK
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class CredentialsVerifierSpec extends AnyFlatSpec with TableDrivenPropertyChecks with AppSuiteBase {
+class CredentialsVerifierSpec extends AnyFlatSpec with TableDrivenPropertyChecks with GuiceOneAppPerSuite with AppSuiteBase {
 
   import TestData._
 

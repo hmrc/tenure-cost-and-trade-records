@@ -18,24 +18,22 @@ package uk.gov.hmrc.tctr.backend.repository
 
 import org.mongodb.scala.bson.{BsonString, Document}
 import org.scalatest.BeforeAndAfterAll
-import org.scalatestplus.play.PlaySpec
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.tctr.backend.IntegrationSpecBase
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.schema.Address
-import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
 import java.time.Instant
 import java.util.UUID
 
 class NotConnectedRepositorySpec
-    extends PlaySpec
+    extends IntegrationSpecBase
     with BeforeAndAfterAll
     with FutureAwaits
-    with DefaultAwaitTimeout
-    with AppSuiteBase {
+    with DefaultAwaitTimeout {
 
   val dbName = s"notConnectedRepositorySpec${UUID.randomUUID().toString.replaceAll("-", "")}"
 

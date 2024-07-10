@@ -19,11 +19,11 @@ package uk.gov.hmrc.tctr.backend.controllers
 import org.apache.pekko.util.Timeout
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult
-import org.mockito.ArgumentMatchers._
 import org.mockito.IdiomaticMockito.StubbingOps
 import play.api.Application
 import play.api.mvc.ControllerComponents
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers._
 import play.api.inject.bind
@@ -41,7 +41,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class ConnectedSubmissionControllerSpec extends AnyWordSpec with AppSuiteBase {
+class ConnectedSubmissionControllerSpec extends AnyWordSpec with GuiceOneAppPerSuite with AppSuiteBase {
 
   implicit val timeout: Timeout                                  = 5.seconds
   implicit val ec: ExecutionContext                              = ExecutionContext.global

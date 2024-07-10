@@ -22,6 +22,7 @@ import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout,
 
 import scala.concurrent.{ExecutionContext, Future}
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.bind
@@ -34,7 +35,7 @@ import uk.gov.hmrc.tctr.backend.repository.CredentialsMongoRepo
 import uk.gov.hmrc.tctr.backend.security.Credentials
 import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
-class AuthControllerSpec extends AnyWordSpec with AppSuiteBase {
+class AuthControllerSpec extends AnyWordSpec with GuiceOneAppPerSuite with AppSuiteBase {
 
   implicit val ec: ExecutionContext            = ExecutionContext.Implicits.global
   implicit lazy val materializer: Materializer = app.materializer

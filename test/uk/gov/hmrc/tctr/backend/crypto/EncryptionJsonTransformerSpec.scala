@@ -17,6 +17,7 @@
 package uk.gov.hmrc.tctr.backend.crypto
 
 import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json._
 import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
@@ -25,7 +26,7 @@ import scala.io.Source
 /**
   * @author Yuriy Tumakha
   */
-class EncryptionJsonTransformerSpec extends AnyFlatSpec with BeEncryptedMatchers with AppSuiteBase {
+class EncryptionJsonTransformerSpec extends AnyFlatSpec with BeEncryptedMatchers with GuiceOneAppPerSuite with AppSuiteBase {
 
   private val encryptionJsonTransformer = inject[EncryptionJsonTransformer]
   private val submissionDraftJson       = Json.parse(Source.fromResource("json/submissionDraft.json").mkString)

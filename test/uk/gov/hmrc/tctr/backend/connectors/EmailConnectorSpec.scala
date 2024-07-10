@@ -18,7 +18,8 @@ package uk.gov.hmrc.tctr.backend.connectors
 
 import com.typesafe.config.ConfigFactory
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.PlaySpec
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.http.Status.{ACCEPTED, BAD_REQUEST, NOT_FOUND, OK}
 import play.api.libs.json.{JsObject, JsValue, Json, Writes}
@@ -33,7 +34,7 @@ import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class EmailConnectorSpec extends PlaySpec with ScalaFutures with AppSuiteBase {
+class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppPerSuite with AppSuiteBase {
 
   private val sendEmailEndpoint            = "http://localhost:8300/hmrc/email"
   private val configuration                = Configuration(ConfigFactory.load("application.conf"))
@@ -105,8 +106,8 @@ class EmailConnectorSpec extends PlaySpec with ScalaFutures with AppSuiteBase {
       val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
 
       val response = emailConnector.sendVacantSubmissionConfirmation(email, "David Jones").futureValue
-      response.status mustBe ACCEPTED
-      response.body mustBe ""
+      response.status shouldBe ACCEPTED
+      response.body shouldBe ""
 
       verify(httpMock)
         .POST[JsObject, Unit](eqTo(sendEmailEndpoint), any[JsObject], any[Seq[(String, String)]])(
@@ -122,8 +123,8 @@ class EmailConnectorSpec extends PlaySpec with ScalaFutures with AppSuiteBase {
       val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmission).futureValue
-      response.status mustBe ACCEPTED
-      response.body mustBe ""
+      response.status shouldBe ACCEPTED
+      response.body shouldBe ""
 
       verify(httpMock)
         .POST[JsObject, Unit](eqTo(sendEmailEndpoint), any[JsObject], any[Seq[(String, String)]])(
@@ -139,8 +140,8 @@ class EmailConnectorSpec extends PlaySpec with ScalaFutures with AppSuiteBase {
       val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmissionCy).futureValue
-      response.status mustBe ACCEPTED
-      response.body mustBe ""
+      response.status shouldBe ACCEPTED
+      response.body shouldBe ""
 
       verify(httpMock)
         .POST[JsObject, Unit](eqTo(sendEmailEndpoint), any[JsObject], any[Seq[(String, String)]])(
@@ -157,8 +158,8 @@ class EmailConnectorSpec extends PlaySpec with ScalaFutures with AppSuiteBase {
       val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
 
       val response = emailConnector.sendSubmissionConfirmation(prefilledConnectedSubmission).futureValue
-      response.status mustBe BAD_REQUEST
-      response.body mustBe body
+      response.status shouldBe BAD_REQUEST
+      response.body shouldBe body
 
       verify(httpMock)
         .POST[JsObject, Unit](eqTo(sendEmailEndpoint), any[JsObject], any[Seq[(String, String)]])(
@@ -175,8 +176,8 @@ class EmailConnectorSpec extends PlaySpec with ScalaFutures with AppSuiteBase {
       val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
 
       val response = emailConnector.sendConnectionRemoved(submission).futureValue
-      response.status mustBe NOT_FOUND
-      response.body mustBe "Email not found"
+      response.status shouldBe NOT_FOUND
+      response.body shouldBe "Email not found"
 
       verifyZeroInteractions(httpMock)
     }

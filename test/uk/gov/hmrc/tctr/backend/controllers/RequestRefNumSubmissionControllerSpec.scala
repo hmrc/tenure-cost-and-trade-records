@@ -20,10 +20,10 @@ import org.apache.pekko.util.Timeout
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult.acknowledged
 import org.bson.BsonBoolean.TRUE
-import org.mockito.ArgumentMatchers.any
 import org.mockito.IdiomaticMockito.StubbingOps
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, CREATED}
 import play.api.inject.bind
@@ -44,7 +44,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits
 import scala.concurrent.duration.DurationInt
 
-class RequestRefNumSubmissionControllerSpec extends AnyWordSpec with ScalaFutures with AppSuiteBase {
+class RequestRefNumSubmissionControllerSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppPerSuite with AppSuiteBase {
 
   implicit val timeout: Timeout                                  = 5.seconds
   private val expectedPredicate                                  =
