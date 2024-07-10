@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend
 
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.should
 import org.scalatest.wordspec.AnyWordSpec
@@ -31,6 +32,7 @@ import play.api.test.Injecting
 abstract class IntegrationSpecBase
     extends AnyWordSpec
     with should.Matchers
+    with OptionValues
     with ScalaFutures
     with IntegrationPatience
     with GuiceOneServerPerSuite

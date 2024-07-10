@@ -63,7 +63,7 @@ class NotConnectedRepositorySpec
 
       result shouldBe defined
 
-      result.value shouldBe (aSubmission().copy(id = id))
+      result.value shouldBe aSubmission().copy(id = id)
     }
 
     "get some submission from repository" in {
