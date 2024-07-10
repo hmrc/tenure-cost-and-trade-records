@@ -17,6 +17,7 @@
 package uk.gov.hmrc.tctr.backend.testUtils
 
 import org.mockito.scalatest.MockitoSugar
+import org.scalatest.OptionValues
 import org.scalatest.matchers.should
 import play.api.test.{HasApp, Injecting}
 
@@ -27,6 +28,7 @@ trait AppSuiteBase
     extends Injecting
     with should.Matchers
     with MockitoSugar
+    with OptionValues
     with FakeObjects {
   self: HasApp =>
 }

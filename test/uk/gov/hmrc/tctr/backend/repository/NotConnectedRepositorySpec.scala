@@ -18,22 +18,26 @@ package uk.gov.hmrc.tctr.backend.repository
 
 import org.mongodb.scala.bson.{BsonString, Document}
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.mongo.MongoComponent
-import uk.gov.hmrc.tctr.backend.IntegrationSpecBase
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.schema.Address
+import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
 import java.time.Instant
 import java.util.UUID
 
 class NotConnectedRepositorySpec
-    extends IntegrationSpecBase
+    extends AnyWordSpec
     with BeforeAndAfterAll
     with FutureAwaits
-    with DefaultAwaitTimeout {
+    with DefaultAwaitTimeout
+    with GuiceOneAppPerSuite
+    with AppSuiteBase {
 
   val dbName = s"notConnectedRepositorySpec${UUID.randomUUID().toString.replaceAll("-", "")}"
 
@@ -51,7 +55,7 @@ class NotConnectedRepositorySpec
     "save NotConnectedSubmission to mongo" in {
       val insertOneResult = await(repository.insert(aSubmission()))
       insertOneResult.wasAcknowledged() shouldBe true
-      insertOneResult.getInsertedId shouldBe BsonString("9999000111")
+      insertOneResult.getInsertedId     shouldBe BsonString("9999000111")
     }
 
     "save NotConnectedSubmission to mongo and get it back" in {
