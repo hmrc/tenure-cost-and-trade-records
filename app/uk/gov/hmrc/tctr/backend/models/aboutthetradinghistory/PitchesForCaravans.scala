@@ -18,13 +18,12 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
 
-case class PitchesForCaravans(
-  tradingPeriod: Int = 52,
-  grossReceipts: Option[BigDecimal] = None,
-  numberOfPitches: Int = 0
-)
+case class PitchesForCaravans (
+                                tradingPeriod: Int = 52,
+                                grossReceipts: Option[BigDecimal] = None,
+                                numberOfPitches: Option[Int] = None
+                              )
 
 object PitchesForCaravans {
   implicit val format: OFormat[PitchesForCaravans] = Json.format[PitchesForCaravans]
-
 }
