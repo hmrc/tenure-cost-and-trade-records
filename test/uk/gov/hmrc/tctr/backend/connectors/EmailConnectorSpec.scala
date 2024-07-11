@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,21 @@
 package uk.gov.hmrc.tctr.backend.connectors
 
 import com.typesafe.config.ConfigFactory
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.http.Status.{ACCEPTED, BAD_REQUEST, NOT_FOUND, OK}
 import play.api.libs.json.{JsObject, JsValue, Json, Writes}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.schema.Address
-import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 import uk.gov.hmrc.tctr.backend.util.DateUtil
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppPerSuite with AppSuiteBase {
+class EmailConnectorSpec extends AnyWordAppSpec {
 
   private val sendEmailEndpoint            = "http://localhost:8300/hmrc/email"
   private val configuration                = Configuration(ConfigFactory.load("application.conf"))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,13 @@
 package uk.gov.hmrc.tctr.backend.security
 
 import com.google.inject.AbstractModule
-import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import net.codingwell.scalaguice.ScalaModule
 import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.play.bootstrap.metrics.Metrics
+import uk.gov.hmrc.tctr.backend.base.AnyFlatAppSpec
 import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.infrastructure._
 import uk.gov.hmrc.tctr.backend.testUtils._
@@ -33,11 +32,7 @@ import uk.gov.hmrc.tctr.backend.util.DateUtil.nowInUK
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class CredentialsVerifierSpec
-    extends AnyFlatSpec
-    with TableDrivenPropertyChecks
-    with GuiceOneAppPerSuite
-    with AppSuiteBase {
+class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChecks {
 
   import TestData._
 

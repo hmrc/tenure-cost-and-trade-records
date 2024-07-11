@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,24 +18,22 @@ package uk.gov.hmrc.tctr.backend.controllers
 
 import org.apache.pekko.stream.Materializer
 import org.mockito.IdiomaticMockito.StubbingOps
-import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}
-
-import scala.concurrent.{ExecutionContext, Future}
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.internalauth.client.Predicate.Permission
-import uk.gov.hmrc.internalauth.client.{BackendAuthComponents, IAAction, Resource, ResourceLocation, ResourceType, Retrieval}
 import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
+import uk.gov.hmrc.internalauth.client._
+import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.repository.CredentialsMongoRepo
 import uk.gov.hmrc.tctr.backend.security.Credentials
-import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
-class AuthControllerSpec extends AnyWordSpec with GuiceOneAppPerSuite with AppSuiteBase {
+import scala.concurrent.{ExecutionContext, Future}
+
+class AuthControllerSpec extends AnyWordAppSpec {
 
   implicit val ec: ExecutionContext            = ExecutionContext.Implicits.global
   implicit lazy val materializer: Materializer = app.materializer

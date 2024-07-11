@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.testUtils
+package uk.gov.hmrc.tctr.backend.base
 
-import org.mockito.scalatest.MockitoSugar
-import org.scalatest.OptionValues
-import org.scalatest.matchers.should
-import play.api.test.{HasApp, Injecting}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 /**
   * @author Yuriy Tumakha
   */
-trait AppSuiteBase extends Injecting with should.Matchers with MockitoSugar with OptionValues with FakeObjects {
-  self: HasApp =>
-}
+class AnyFlatAppSpec extends AnyFlatSpec with GuiceOneAppPerSuite with AppSuiteBase {}

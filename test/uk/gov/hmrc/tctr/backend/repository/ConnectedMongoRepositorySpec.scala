@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@
 
 package uk.gov.hmrc.tctr.backend.repository
 
-import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 
 /**
   * @author Yuriy Tumakha
   */
-class ConnectedMongoRepositorySpec extends MongoSpecBase with FakeObjects {
+class ConnectedMongoRepositorySpec extends MongoSpecBase {
 
   private val submissionDraftFindId = "99996010004"
 
