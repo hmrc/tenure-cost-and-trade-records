@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.repository
 
-
 /**
   * @author Yuriy Tumakha
   */

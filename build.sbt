@@ -1,11 +1,10 @@
 import uk.gov.hmrc.DefaultBuildSettings.itSettings
 
 val defaultPort = 9527
-val appName = "tenure-cost-and-trade-records"
+val appName     = "tenure-cost-and-trade-records"
 
 ThisBuild / majorVersion := 0
 ThisBuild / scalaVersion := "2.13.14"
-
 
 val microservice = Project(appName, file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin, BuildInfoPlugin)
