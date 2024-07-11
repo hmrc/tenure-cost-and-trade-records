@@ -48,7 +48,7 @@ class AuthControllerSpec extends AnyWordSpec with GuiceOneAppPerSuite with AppSu
   protected val backendAuthComponentsStub: BackendAuthComponents =
     BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), ec)
 
-  override def fakeApplication(): Application                    = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(
       bind[CredentialsMongoRepo].toInstance(mockCredentialsRepo),
       bind[BackendAuthComponents].toInstance(backendAuthComponentsStub)

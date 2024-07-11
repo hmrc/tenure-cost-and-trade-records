@@ -31,7 +31,12 @@ import scala.concurrent.ExecutionContext
 /**
   * @author Yuriy Tumakha
   */
-abstract class MongoSpecBase extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures with GuiceOneAppPerSuite with AppSuiteBase {
+abstract class MongoSpecBase
+    extends AnyFlatSpec
+    with BeforeAndAfterAll
+    with ScalaFutures
+    with GuiceOneAppPerSuite
+    with AppSuiteBase {
 
   private val testDbName = s"TCTR-${getClass.getSimpleName}"
   private val testDbUri  = s"mongodb://localhost:27017/$testDbName"

@@ -44,7 +44,11 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits
 import scala.concurrent.duration.DurationInt
 
-class RequestRefNumSubmissionControllerSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppPerSuite with AppSuiteBase {
+class RequestRefNumSubmissionControllerSpec
+    extends AnyWordSpec
+    with ScalaFutures
+    with GuiceOneAppPerSuite
+    with AppSuiteBase {
 
   implicit val timeout: Timeout                                  = 5.seconds
   private val expectedPredicate                                  =

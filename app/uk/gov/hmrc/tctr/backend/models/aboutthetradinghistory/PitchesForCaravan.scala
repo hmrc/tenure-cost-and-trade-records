@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.testUtils
+package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import org.mockito.scalatest.MockitoSugar
-import org.scalatest.OptionValues
-import org.scalatest.matchers.should
-import play.api.test.{HasApp, Injecting}
+import play.api.libs.json.{Json, OFormat}
 
-/**
-  * @author Yuriy Tumakha
-  */
-trait AppSuiteBase extends Injecting with should.Matchers with MockitoSugar with OptionValues with FakeObjects {
-  self: HasApp =>
+case class PitchesForCaravans(
+  tradingPeriod: Int = 52,
+  grossReceipts: Option[BigDecimal] = None,
+  numberOfPitches: Int = 0
+)
+
+object PitchesForCaravans {
+  implicit val format: OFormat[PitchesForCaravans] = Json.format[PitchesForCaravans]
+
 }

@@ -46,7 +46,11 @@ import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits
 import scala.concurrent.duration.DurationInt
 
-class NotConnectedSubmissionControllerSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppPerSuite with AppSuiteBase {
+class NotConnectedSubmissionControllerSpec
+    extends AnyWordSpec
+    with ScalaFutures
+    with GuiceOneAppPerSuite
+    with AppSuiteBase {
 
   implicit val timeout: Timeout                                  = 5.seconds
   private val expectedPredicate                                  =

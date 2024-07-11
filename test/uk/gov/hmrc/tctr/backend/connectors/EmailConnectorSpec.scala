@@ -107,7 +107,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
 
       val response = emailConnector.sendVacantSubmissionConfirmation(email, "David Jones").futureValue
       response.status shouldBe ACCEPTED
-      response.body shouldBe ""
+      response.body   shouldBe ""
 
       verify(httpMock)
         .POST[JsObject, Unit](eqTo(sendEmailEndpoint), any[JsObject], any[Seq[(String, String)]])(
@@ -124,7 +124,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmission).futureValue
       response.status shouldBe ACCEPTED
-      response.body shouldBe ""
+      response.body   shouldBe ""
 
       verify(httpMock)
         .POST[JsObject, Unit](eqTo(sendEmailEndpoint), any[JsObject], any[Seq[(String, String)]])(
@@ -141,7 +141,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmissionCy).futureValue
       response.status shouldBe ACCEPTED
-      response.body shouldBe ""
+      response.body   shouldBe ""
 
       verify(httpMock)
         .POST[JsObject, Unit](eqTo(sendEmailEndpoint), any[JsObject], any[Seq[(String, String)]])(
@@ -159,7 +159,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
 
       val response = emailConnector.sendSubmissionConfirmation(prefilledConnectedSubmission).futureValue
       response.status shouldBe BAD_REQUEST
-      response.body shouldBe body
+      response.body   shouldBe body
 
       verify(httpMock)
         .POST[JsObject, Unit](eqTo(sendEmailEndpoint), any[JsObject], any[Seq[(String, String)]])(
@@ -177,7 +177,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
 
       val response = emailConnector.sendConnectionRemoved(submission).futureValue
       response.status shouldBe NOT_FOUND
-      response.body shouldBe "Email not found"
+      response.body   shouldBe "Email not found"
 
       verifyZeroInteractions(httpMock)
     }

@@ -33,7 +33,11 @@ import uk.gov.hmrc.tctr.backend.util.DateUtil.nowInUK
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class CredentialsVerifierSpec extends AnyFlatSpec with TableDrivenPropertyChecks with GuiceOneAppPerSuite with AppSuiteBase {
+class CredentialsVerifierSpec
+    extends AnyFlatSpec
+    with TableDrivenPropertyChecks
+    with GuiceOneAppPerSuite
+    with AppSuiteBase {
 
   import TestData._
 

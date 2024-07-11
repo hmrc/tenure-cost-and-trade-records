@@ -26,7 +26,11 @@ import scala.io.Source
 /**
   * @author Yuriy Tumakha
   */
-class EncryptionJsonTransformerSpec extends AnyFlatSpec with BeEncryptedMatchers with GuiceOneAppPerSuite with AppSuiteBase {
+class EncryptionJsonTransformerSpec
+    extends AnyFlatSpec
+    with BeEncryptedMatchers
+    with GuiceOneAppPerSuite
+    with AppSuiteBase {
 
   private val encryptionJsonTransformer = inject[EncryptionJsonTransformer]
   private val submissionDraftJson       = Json.parse(Source.fromResource("json/submissionDraft.json").mkString)

@@ -27,7 +27,8 @@ import java.time.LocalDate
   */
 case class TurnoverSection6045(
   financialYearEnd: LocalDate,
-  grossReceiptsCaravanFleetHire: Option[GrossReceiptsCaravanFleetHire] = None
+  grossReceiptsCaravanFleetHire: Option[GrossReceiptsCaravanFleetHire] = None,
+  pitchesForCaravans: Option[PitchesForCaravans] = None
 )
 
 object TurnoverSection6045 {
