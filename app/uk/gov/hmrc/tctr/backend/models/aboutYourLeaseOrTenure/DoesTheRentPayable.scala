@@ -24,5 +24,5 @@ case class DoesTheRentPayable(
 )
 
 object DoesTheRentPayable {
-  implicit val format: OFormat[DoesTheRentPayable] = Json.format[DoesTheRentPayable]
+  implicit val format: OFormat[DoesTheRentPayable] = Json.format
 }

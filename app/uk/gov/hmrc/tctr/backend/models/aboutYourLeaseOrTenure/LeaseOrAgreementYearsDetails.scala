@@ -26,5 +26,4 @@ case class LeaseOrAgreementYearsDetails(
 
 object LeaseOrAgreementYearsDetails {
   implicit val format: OFormat[LeaseOrAgreementYearsDetails] = Json.format
-
 }

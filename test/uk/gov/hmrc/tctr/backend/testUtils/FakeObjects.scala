@@ -188,7 +188,19 @@ trait FakeObjects {
         grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(50, 3000)
       )
     ),
-    caravans = Caravans(AnswerYes, AnswerNo, 26), // 6045/46
+    caravans = Caravans( // 6045/46
+      anyStaticLeisureCaravansOnSite = AnswerYes,
+      openAllYear = AnswerNo,
+      weeksPerYear = 26,
+      singleCaravansAge = CaravansAge(
+        fleetHireCaravans = CaravansPerAgeCategory(10, 20, 30, 40),
+        privateCaravans = CaravansPerAgeCategory(5, 6, 7, 8)
+      ),
+      twinUnitCaravansAge = CaravansAge(
+        fleetHireCaravans = CaravansPerAgeCategory(100, 200, 300, 400),
+        privateCaravans = CaravansPerAgeCategory(1, 2, 3, 4)
+      )
+    ),
     turnoverSections6076 = Seq(
       TurnoverSection6076(
         financialYearEnd = LocalDate.of(2023, 3, 31),

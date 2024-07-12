@@ -30,5 +30,5 @@ case class TurnoverSection(
   averageOccupancyRate: Option[BigDecimal]
 )
 object TurnoverSection {
-  implicit val format: OFormat[TurnoverSection] = Json.format[TurnoverSection]
+  implicit val format: OFormat[TurnoverSection] = Json.format
 }

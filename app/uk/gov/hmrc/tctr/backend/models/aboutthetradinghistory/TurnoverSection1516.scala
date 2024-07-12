@@ -31,5 +31,5 @@ case class TurnoverSection1516(
   totalSalesRevenue: BigDecimal
 )
 object TurnoverSection1516 {
-  implicit val format: OFormat[TurnoverSection1516] = Json.format[TurnoverSection1516]
+  implicit val format: OFormat[TurnoverSection1516] = Json.format
 }

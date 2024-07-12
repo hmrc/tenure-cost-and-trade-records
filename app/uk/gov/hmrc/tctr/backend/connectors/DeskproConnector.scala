@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy
 
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
-import play.api.Logger
+import play.api.{Logger, Logging}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, RequestId}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -38,11 +38,10 @@ class HmrcDeskproConnector @Inject() (
   serviceConfig: ServicesConfig,
   http: HttpClient
 )(implicit executionContext: ExecutionContext)
-    extends DeskproConnector {
+    extends DeskproConnector
+    with Logging {
 
-  val logger = Logger(this.getClass)
-
-  implicit val format: OFormat[DeskproTicket] = Json.format[DeskproTicket]
+  implicit val format: OFormat[DeskproTicket] = Json.format
 
   val deskproUrl = serviceConfig.baseUrl("deskpro-ticket-queue")
 

@@ -91,5 +91,5 @@ case class FailedLogin(timestamp: Instant, ipAddress: String)
 case class FailedLoginsMongoSchema(_id: String, attempts: Seq[Instant])
 
 object FailedLoginsMongoSchema {
-  implicit val format: Format[FailedLoginsMongoSchema] = Json.format[FailedLoginsMongoSchema]
+  implicit val format: Format[FailedLoginsMongoSchema] = Json.format
 }
