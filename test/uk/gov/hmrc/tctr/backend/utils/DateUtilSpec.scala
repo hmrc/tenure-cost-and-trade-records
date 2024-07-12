@@ -16,27 +16,17 @@
 
 package uk.gov.hmrc.tctr.backend.utils
 
-import org.mockito.MockitoSugar.mock
-
-import java.time.{ZoneId, ZonedDateTime}
-import java.text.SimpleDateFormat
-import java.util.Date
 import org.scalatestplus.play.PlaySpec
-import play.api.i18n.{Messages, MessagesApi}
-import uk.gov.hmrc.play.language.LanguageUtils
-import uk.gov.hmrc.tctr.backend.util.DateUtil
 import uk.gov.hmrc.tctr.backend.util.DateUtil.dateOps
+
+import java.text.SimpleDateFormat
+import java.time.{ZoneId, ZonedDateTime}
+import java.util.Date
 
 class DateUtilSpec extends PlaySpec {
 
   val ukTimezone: ZoneId = ZoneId.of("Europe/London")
   val testDate: Date     = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-02-12 12:34:56")
-
-  val langUtil: LanguageUtils  = mock[LanguageUtils]
-  val messagesApi: MessagesApi = mock[MessagesApi]
-  val messages: Messages       = mock[Messages]
-
-  val dateUtil = new DateUtil(langUtil, messagesApi)
 
   "dateOps" should {
     "convert Date to ZonedDateTime using ukTimezone" in {

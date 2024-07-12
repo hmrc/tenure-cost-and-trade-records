@@ -41,7 +41,6 @@ class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChe
     .overrides(new AbstractModule with ScalaModule {
       override def configure(): Unit =
         bind[Metrics].toInstance(mock[Metrics])
-//        bind[RegularSchedule].to[DefaultRegularSchedule]
     })
     .build()
 

@@ -25,7 +25,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.schema.Address
-import uk.gov.hmrc.tctr.backend.util.DateUtil
+import uk.gov.hmrc.tctr.backend.util.DateUtilLocalised
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -36,7 +36,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
   private val sendEmailEndpoint            = "http://localhost:8300/hmrc/email"
   private val configuration                = Configuration(ConfigFactory.load("application.conf"))
   private val servicesConfig               = new ServicesConfig(configuration)
-  private val dateUtil                     = inject[DateUtil]
+  private val dateUtilLocalised            = inject[DateUtilLocalised]
   implicit val hc: HeaderCarrier           = HeaderCarrier()
   private val email                        = "customer@email.com"
   private val testAddress                  = Address("001", Some("GORING ROAD"), Some("WEST SUSSEX"), "BN12 4AX")
@@ -81,7 +81,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
   "EmailConnector" must {
     "verify that the email service is called on send tctr_submission_confirmation" in {
       val httpMock  = getHttpMock(OK)
-      val connector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val connector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       connector.sendSubmissionConfirmation(prefilledConnectedSubmission)
 
@@ -100,7 +100,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
 
     "send tctr_vacant_submission_confirmation" in {
       val httpMock       = getHttpMock(ACCEPTED)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendVacantSubmissionConfirmation(email, "David Jones").futureValue
       response.status shouldBe ACCEPTED
@@ -117,7 +117,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
 
     "send tctr_connection_removed" in {
       val httpMock       = getHttpMock(ACCEPTED)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmission).futureValue
       response.status shouldBe ACCEPTED
@@ -134,7 +134,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
 
     "send tctr_connection_removed_cy" in {
       val httpMock       = getHttpMock(ACCEPTED)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmissionCy).futureValue
       response.status shouldBe ACCEPTED
@@ -152,7 +152,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
     "handle error response on send tctr_submission_confirmation" in {
       val body           = """{"error":"Wrong email"}"""
       val httpMock       = getHttpMock(BAD_REQUEST, body)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendSubmissionConfirmation(prefilledConnectedSubmission).futureValue
       response.status shouldBe BAD_REQUEST
@@ -170,7 +170,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
     "don't send tctr_connection_removed if submission doesn't contain email address" in {
       val httpMock       = mock[HttpClient]
       val submission     = testNotConnectedSubmission.copy(emailAddress = None)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendConnectionRemoved(submission).futureValue
       response.status shouldBe NOT_FOUND

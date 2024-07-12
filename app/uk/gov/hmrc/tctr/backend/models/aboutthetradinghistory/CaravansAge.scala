@@ -22,8 +22,8 @@ import play.api.libs.json.{Json, OFormat}
   * @author Yuriy Tumakha
   */
 case class CaravansAge(
-  fleetHireCaravans: CaravansPerAgeCategory,
-  privateCaravans: CaravansPerAgeCategory
+  fleetHire: CaravansPerAgeCategory,
+  privateSublet: CaravansPerAgeCategory
 )
 
 object CaravansAge {

@@ -193,12 +193,12 @@ trait FakeObjects {
       openAllYear = AnswerNo,
       weeksPerYear = 26,
       singleCaravansAge = CaravansAge(
-        fleetHireCaravans = CaravansPerAgeCategory(10, 20, 30, 40),
-        privateCaravans = CaravansPerAgeCategory(5, 6, 7, 8)
+        fleetHire = CaravansPerAgeCategory(10, 20, 30, 40),
+        privateSublet = CaravansPerAgeCategory(5, 6, 7, 8)
       ),
       twinUnitCaravansAge = CaravansAge(
-        fleetHireCaravans = CaravansPerAgeCategory(100, 200, 300, 400),
-        privateCaravans = CaravansPerAgeCategory(1, 2, 3, 4)
+        fleetHire = CaravansPerAgeCategory(100, 200, 300, 400),
+        privateSublet = CaravansPerAgeCategory(1, 2, 3, 4)
       )
     ),
     turnoverSections6076 = Seq(
