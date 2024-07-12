@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy
 
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
-import play.api.{Logger, Logging}
+import play.api.Logging
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, RequestId}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
