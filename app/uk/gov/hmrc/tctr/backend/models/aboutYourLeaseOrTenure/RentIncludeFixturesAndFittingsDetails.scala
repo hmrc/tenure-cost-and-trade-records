@@ -22,6 +22,5 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 case class RentIncludeFixturesAndFittingsDetails(rentIncludeFixturesAndFittingsDetails: AnswersYesNo)
 
 object RentIncludeFixturesAndFittingsDetails {
-  implicit val format: OFormat[RentIncludeFixturesAndFittingsDetails] =
-    Json.format[RentIncludeFixturesAndFittingsDetails]
+  implicit val format: OFormat[RentIncludeFixturesAndFittingsDetails] = Json.format
 }

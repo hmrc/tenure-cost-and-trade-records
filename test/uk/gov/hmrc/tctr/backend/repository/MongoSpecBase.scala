@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,20 @@
 package uk.gov.hmrc.tctr.backend.repository
 
 import org.scalatest.BeforeAndAfterAll
-import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.PlayMongoModule
-import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
+import uk.gov.hmrc.tctr.backend.base.AppSuiteBase
 
 import scala.concurrent.ExecutionContext
 
 /**
   * @author Yuriy Tumakha
   */
-abstract class MongoSpecBase
-    extends AnyFlatSpec
-    with BeforeAndAfterAll
-    with ScalaFutures
-    with GuiceOneAppPerSuite
-    with AppSuiteBase {
+abstract class MongoSpecBase extends AnyFlatSpec with BeforeAndAfterAll with GuiceOneAppPerSuite with AppSuiteBase {
 
   private val testDbName = s"TCTR-${getClass.getSimpleName}"
   private val testDbUri  = s"mongodb://localhost:27017/$testDbName"

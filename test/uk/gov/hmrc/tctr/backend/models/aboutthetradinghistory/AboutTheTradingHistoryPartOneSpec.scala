@@ -30,6 +30,15 @@ class AboutTheTradingHistoryPartOneSpec extends AnyFlatSpec with Matchers with F
     turnoverSections6076.flatMap(_.costOfSales6076Sum.map(_.total)).sum  shouldBe 10500
     turnoverSections6076.flatMap(_.operationalExpenses.map(_.total)).sum shouldBe 42
     turnoverSections6076.flatMap(_.staffCosts.map(_.total)).sum          shouldBe 2000
+
+    val turnoverSections6045 = prefilledAboutTheTradingHistoryPartOne.turnoverSections6045.getOrElse(Seq.empty)
+    turnoverSections6045.headOption.map(_.financialYearEnd) shouldBe Some(today)
+
+    val caravans = prefilledAboutTheTradingHistoryPartOne.caravans
+    caravans.flatMap(_.singleCaravansAge).fold(0)(_.fleetHire.total)       shouldBe 100
+    caravans.flatMap(_.singleCaravansAge).fold(0)(_.privateSublet.total)   shouldBe 26
+    caravans.flatMap(_.twinUnitCaravansAge).fold(0)(_.fleetHire.total)     shouldBe 1000
+    caravans.flatMap(_.twinUnitCaravansAge).fold(0)(_.privateSublet.total) shouldBe 10
   }
 
 }

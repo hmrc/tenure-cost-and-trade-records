@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
+package uk.gov.hmrc.tctr.backend.base
 
-import play.api.libs.json.{Json, OFormat}
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-case class WhatIsYourCurrentRentBasedOnDetails(
-  currentRentBasedOn: CurrentRentBasedOn,
-  describe: Option[String]
-)
-
-object WhatIsYourCurrentRentBasedOnDetails {
-  implicit val format: OFormat[WhatIsYourCurrentRentBasedOnDetails] = Json.format
-}
+/**
+  * @author Yuriy Tumakha
+  */
+class AnyWordAppSpec extends AnyWordSpec with GuiceOneAppPerSuite with AppSuiteBase {}

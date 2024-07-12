@@ -25,5 +25,5 @@ case class PitchesForCaravans(
 )
 
 object PitchesForCaravans {
-  implicit val format: OFormat[PitchesForCaravans] = Json.format[PitchesForCaravans]
+  implicit val format: OFormat[PitchesForCaravans] = Json.format
 }

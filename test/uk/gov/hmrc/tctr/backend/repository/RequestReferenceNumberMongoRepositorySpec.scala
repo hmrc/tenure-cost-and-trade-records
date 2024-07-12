@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package uk.gov.hmrc.tctr.backend.repository
 
 import org.mongodb.scala.model.{Filters, FindOneAndReplaceOptions}
 import uk.gov.hmrc.tctr.backend.models.SensitiveRequestReferenceNumberSubmission
-import uk.gov.hmrc.tctr.backend.testUtils.{CustomMatchers, FakeObjects}
+import uk.gov.hmrc.tctr.backend.testUtils.CustomMatchers
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
-class RequestReferenceNumberMongoRepositorySpec extends MongoSpecBase with FakeObjects with CustomMatchers {
+class RequestReferenceNumberMongoRepositorySpec extends MongoSpecBase with CustomMatchers {
 
   private val submissionDraftFindId = "submissionId"
 

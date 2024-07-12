@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,26 @@
 package uk.gov.hmrc.tctr.backend.connectors
 
 import com.typesafe.config.ConfigFactory
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.http.Status.{ACCEPTED, BAD_REQUEST, NOT_FOUND, OK}
 import play.api.libs.json.{JsObject, JsValue, Json, Writes}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.schema.Address
-import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
-import uk.gov.hmrc.tctr.backend.util.DateUtil
+import uk.gov.hmrc.tctr.backend.util.DateUtilLocalised
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppPerSuite with AppSuiteBase {
+class EmailConnectorSpec extends AnyWordAppSpec {
 
   private val sendEmailEndpoint            = "http://localhost:8300/hmrc/email"
   private val configuration                = Configuration(ConfigFactory.load("application.conf"))
   private val servicesConfig               = new ServicesConfig(configuration)
-  private val dateUtil                     = inject[DateUtil]
+  private val dateUtilLocalised            = inject[DateUtilLocalised]
   implicit val hc: HeaderCarrier           = HeaderCarrier()
   private val email                        = "customer@email.com"
   private val testAddress                  = Address("001", Some("GORING ROAD"), Some("WEST SUSSEX"), "BN12 4AX")
@@ -84,7 +81,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
   "EmailConnector" must {
     "verify that the email service is called on send tctr_submission_confirmation" in {
       val httpMock  = getHttpMock(OK)
-      val connector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val connector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       connector.sendSubmissionConfirmation(prefilledConnectedSubmission)
 
@@ -103,7 +100,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
 
     "send tctr_vacant_submission_confirmation" in {
       val httpMock       = getHttpMock(ACCEPTED)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendVacantSubmissionConfirmation(email, "David Jones").futureValue
       response.status shouldBe ACCEPTED
@@ -120,7 +117,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
 
     "send tctr_connection_removed" in {
       val httpMock       = getHttpMock(ACCEPTED)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmission).futureValue
       response.status shouldBe ACCEPTED
@@ -137,7 +134,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
 
     "send tctr_connection_removed_cy" in {
       val httpMock       = getHttpMock(ACCEPTED)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmissionCy).futureValue
       response.status shouldBe ACCEPTED
@@ -155,7 +152,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
     "handle error response on send tctr_submission_confirmation" in {
       val body           = """{"error":"Wrong email"}"""
       val httpMock       = getHttpMock(BAD_REQUEST, body)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendSubmissionConfirmation(prefilledConnectedSubmission).futureValue
       response.status shouldBe BAD_REQUEST
@@ -173,7 +170,7 @@ class EmailConnectorSpec extends AnyWordSpec with ScalaFutures with GuiceOneAppP
     "don't send tctr_connection_removed if submission doesn't contain email address" in {
       val httpMock       = mock[HttpClient]
       val submission     = testNotConnectedSubmission.copy(emailAddress = None)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtil)
+      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendConnectionRemoved(submission).futureValue
       response.status shouldBe NOT_FOUND

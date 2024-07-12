@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.tctr.backend.models.{ConnectedSubmission, NotConnectedSubmission}
-import uk.gov.hmrc.tctr.backend.util.DateUtil
+import uk.gov.hmrc.tctr.backend.util.{DateUtil, DateUtilLocalised}
 
 import java.time.ZonedDateTime
 import java.util.Locale
@@ -34,8 +34,8 @@ import scala.concurrent.{ExecutionContext, Future}
   * @author Yuriy Tumakha
   */
 @Singleton
-class EmailConnector @Inject() (servicesConfig: ServicesConfig, http: HttpClient, dateUtil: DateUtil)(implicit
-  ec: ExecutionContext
+class EmailConnector @Inject() (servicesConfig: ServicesConfig, http: HttpClient, dateUtilLocalised: DateUtilLocalised)(
+  implicit ec: ExecutionContext
 ) extends Logging {
 
   private val emailServiceBaseUrl = servicesConfig.baseUrl("email")
@@ -92,7 +92,7 @@ class EmailConnector @Inject() (servicesConfig: ServicesConfig, http: HttpClient
 
   private def submissionDateParams(submissionDate: ZonedDateTime)(implicit lang: Lang): JsObject =
     Json.obj(
-      "submissionDate" -> dateUtil.formatDate(submissionDate, lang),
+      "submissionDate" -> dateUtilLocalised.formatDate(submissionDate, lang),
       "submissionTime" -> submissionDate.format(DateUtil.timeFormatter)
     )
 

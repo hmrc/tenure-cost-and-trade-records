@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,11 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import org.apache.pekko.util.Timeout
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult.acknowledged
+import org.apache.pekko.util.Timeout
 import org.bson.BsonBoolean.TRUE
 import org.mockito.IdiomaticMockito.StubbingOps
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, CREATED}
 import play.api.inject.bind
@@ -33,22 +30,18 @@ import play.api.mvc.Result
 import play.api.test.Helpers.{POST, status}
 import play.api.test._
 import uk.gov.hmrc.internalauth.client.Predicate.Permission
-import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
 import uk.gov.hmrc.internalauth.client._
+import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
+import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.RequestReferenceNumberSubmission
 import uk.gov.hmrc.tctr.backend.repository.RequestReferenceNumberRepository
-import uk.gov.hmrc.tctr.backend.testUtils.AppSuiteBase
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits
+import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 
-class RequestRefNumSubmissionControllerSpec
-    extends AnyWordSpec
-    with ScalaFutures
-    with GuiceOneAppPerSuite
-    with AppSuiteBase {
+class RequestRefNumSubmissionControllerSpec extends AnyWordAppSpec {
 
   implicit val timeout: Timeout                                  = 5.seconds
   private val expectedPredicate                                  =

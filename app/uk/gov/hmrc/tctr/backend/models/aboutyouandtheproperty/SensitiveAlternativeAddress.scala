@@ -40,8 +40,7 @@ case class SensitiveAlternativeAddress(
 
 object SensitiveAlternativeAddress {
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAlternativeAddress] =
-    Json.format[SensitiveAlternativeAddress]
+  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAlternativeAddress] = Json.format
 
   def apply(alternativeAddress: AlternativeAddress): SensitiveAlternativeAddress =
     SensitiveAlternativeAddress(

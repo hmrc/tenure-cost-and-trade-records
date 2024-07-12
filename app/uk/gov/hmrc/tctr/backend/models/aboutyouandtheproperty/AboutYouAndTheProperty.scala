@@ -43,5 +43,5 @@ case class AboutYouAndTheProperty(
 )
 
 object AboutYouAndTheProperty {
-  implicit val format: OFormat[AboutYouAndTheProperty] = Json.format[AboutYouAndTheProperty]
+  implicit val format: OFormat[AboutYouAndTheProperty] = Json.format
 }

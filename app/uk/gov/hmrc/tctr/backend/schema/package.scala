@@ -44,5 +44,5 @@ package object schema {
 //    }
 //  }
 
-  implicit val addressFormat: OFormat[Address] = Json.format[Address]
+  implicit val addressFormat: OFormat[Address] = Json.format
 }

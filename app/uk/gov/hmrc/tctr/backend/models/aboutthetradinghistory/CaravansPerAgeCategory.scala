@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
+package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
 
-case class WhatIsYourCurrentRentBasedOnDetails(
-  currentRentBasedOn: CurrentRentBasedOn,
-  describe: Option[String]
-)
+/**
+  * @author Yuriy Tumakha
+  */
+case class CaravansPerAgeCategory(
+  years0_5: Int = 0,
+  years6_10: Int = 0,
+  years11_15: Int = 0,
+  years15plus: Int = 0
+) {
+  def total: Int = years0_5 + years6_10 + years11_15 + years15plus
+}
 
-object WhatIsYourCurrentRentBasedOnDetails {
-  implicit val format: OFormat[WhatIsYourCurrentRentBasedOnDetails] = Json.format
+object CaravansPerAgeCategory {
+  implicit val format: OFormat[CaravansPerAgeCategory] = Json.format
 }
