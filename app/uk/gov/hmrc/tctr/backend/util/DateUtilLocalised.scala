@@ -24,9 +24,8 @@ import java.time.{LocalDate, ZonedDateTime}
 import java.util.Date
 import javax.inject.{Inject, Singleton}
 
-
 @Singleton
-class DateUtilLocalised @Inject()(langUtil: LanguageUtils, messagesApi: MessagesApi) {
+class DateUtilLocalised @Inject() (langUtil: LanguageUtils, messagesApi: MessagesApi) {
 
   def formatDate(localDate: LocalDate)(implicit messages: Messages): String =
     langUtil.Dates.formatDate(localDate)
