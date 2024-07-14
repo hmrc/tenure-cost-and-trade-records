@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.repository
 
+import org.mongodb.scala.SingleObservableFuture
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite

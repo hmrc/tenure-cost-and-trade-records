@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.repository
 
+import org.mongodb.scala.SingleObservableFuture
 import org.mongodb.scala.bson.{BsonString, Document}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpec
@@ -86,7 +87,7 @@ class NotConnectedRepositorySpec
 
   }
 
-  val testingDate = Instant ofEpochMilli Instant.now.toEpochMilli
+  val testingDate = Instant.ofEpochMilli(Instant.now.toEpochMilli)
 
   def aSubmission(): NotConnectedSubmission = NotConnectedSubmission(
     "9999000111",

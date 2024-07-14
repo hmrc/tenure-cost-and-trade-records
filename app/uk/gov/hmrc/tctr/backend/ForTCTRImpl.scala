@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import org.apache.pekko.actor.ActorSystem
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import uk.gov.hmrc.tctr.backend.infrastructure.{RegularSchedule, TestDataImporter}
-import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.repository._
 import uk.gov.hmrc.tctr.backend.submissionExport._
 
@@ -32,7 +31,6 @@ import scala.concurrent.ExecutionContext
 class ForTCTRImpl @Inject() (
   actorSystem: ActorSystem,
   tctrConfig: AppConfig,
-  metrics: MetricsHandler,
   audit: ForTCTRAudit,
   systemClock: Clock,
   regularSchedule: RegularSchedule,

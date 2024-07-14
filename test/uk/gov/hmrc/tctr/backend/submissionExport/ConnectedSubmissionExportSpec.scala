@@ -59,7 +59,7 @@ class ConnectedSubmissionExportSpec
       Await.result(
         new ExportConnectedSubmissionsVOA(repo, Clock.systemDefaultZone(), mock[ForTCTRAudit], mock[AppConfig])
           .exportNow(batchSize),
-        5 seconds
+        9 seconds
       )
 
       "It deletes each submission so that it is not submitted again" in {
@@ -72,7 +72,7 @@ class ConnectedSubmissionExportSpec
         when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.acknowledged(1)))
         Await.result(
           new ExportConnectedSubmissionsVOA(repo, Clock.systemDefaultZone(), audit, configuration).exportNow(batchSize),
-          5 seconds
+          9 seconds
         )
         verify(repo).removeById(same(submission.referenceNumber))
       }

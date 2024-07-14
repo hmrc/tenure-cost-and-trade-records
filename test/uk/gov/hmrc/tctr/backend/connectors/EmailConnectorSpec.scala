@@ -74,7 +74,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
         any[HeaderCarrier],
         any[ExecutionContext]
       )
-    ) thenReturn Future.successful(HttpResponse(returnedStatus, body))
+    ).thenReturn(Future.successful(HttpResponse(returnedStatus, body)))
     httpMock
   }
 
@@ -176,7 +176,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
       response.status shouldBe NOT_FOUND
       response.body   shouldBe "Email not found"
 
-      verifyZeroInteractions(httpMock)
+      verifyNoInteractions(httpMock)
     }
 
   }

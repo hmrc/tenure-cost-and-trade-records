@@ -16,13 +16,10 @@
 
 package uk.gov.hmrc.tctr.backend.security
 
-import com.google.inject.AbstractModule
-import net.codingwell.scalaguice.ScalaModule
 import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.mongo.MongoComponent
-import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import uk.gov.hmrc.tctr.backend.base.AnyFlatAppSpec
 import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.infrastructure._
@@ -38,10 +35,6 @@ class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChe
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure("mongodb.uri" -> "mongodb://localhost:27017/tenure-cost-and-trade-records")
-    .overrides(new AbstractModule with ScalaModule {
-      override def configure(): Unit =
-        bind[Metrics].toInstance(mock[Metrics])
-    })
     .build()
 
   def mongo: MongoComponent = inject[MongoComponent]
@@ -50,10 +43,10 @@ class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChe
   behavior of "Credentials Verifier"
 
   it should "lockout an IP address after the maximum number of failed login attempts is exceeded" in {
-    forAll(loginAttemptLengths) { attempts =>
+    forAll(loginAttemptLengths) { (attempts: Int) =>
       val config   = VerifierConfig(attempts, 1 hour, 1 hour, true, voaIP)
       val verifier = verifierWith(config, new SystemClock)
-      (1 to attempts) foreach { n =>
+      Range.Int.inclusive(1, attempts, 1).foreach { (n: Int) =>
         assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(attempts - n))
       }
       assert(await(verifier.verify(refNum, postcode, ip)) === IPLockout)

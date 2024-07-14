@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package uk.gov.hmrc.tctr.backend.repository
 
 import com.google.inject.ImplementedBy
+import org.mongodb.scala.{ObservableFuture, SingleObservableFuture}
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model._
 import org.mongodb.scala.result.DeleteResult
@@ -107,7 +108,7 @@ class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent, encryptionJsonT
 }
 
 object MongoSubmissionDraftRepo {
-  val saveForDays = 90
+  val saveForDays = 90L
 }
 
 @ImplementedBy(classOf[MongoSubmissionDraftRepo])

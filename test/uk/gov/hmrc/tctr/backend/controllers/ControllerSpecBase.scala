@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package uk.gov.hmrc.tctr.backend.controllers
 import org.apache.pekko.util.Timeout
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.mockito.MockitoSugar
 
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
@@ -26,7 +27,7 @@ import scala.language.postfixOps
 /**
   * @author Yuriy Tumakha
   */
-abstract class ControllerSpecBase extends AsyncFlatSpec with Matchers {
+abstract class ControllerSpecBase extends AsyncFlatSpec with Matchers with MockitoSugar {
 
   implicit val timeout: Timeout = 9 seconds
 

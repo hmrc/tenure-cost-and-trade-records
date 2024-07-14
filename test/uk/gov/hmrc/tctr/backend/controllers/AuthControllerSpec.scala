@@ -17,19 +17,18 @@
 package uk.gov.hmrc.tctr.backend.controllers
 
 import org.apache.pekko.stream.Materializer
-import org.mockito.IdiomaticMockito.StubbingOps
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.internalauth.client.Predicate.Permission
-import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
+import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
 import uk.gov.hmrc.internalauth.client._
 import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.repository.CredentialsMongoRepo
 import uk.gov.hmrc.tctr.backend.security.Credentials
+import uk.gov.hmrc.tctr.backend.testUtils.AuthStubBehaviour
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,13 +37,10 @@ class AuthControllerSpec extends AnyWordAppSpec {
   implicit val ec: ExecutionContext            = ExecutionContext.Implicits.global
   implicit lazy val materializer: Materializer = app.materializer
 
-  val mockCredentialsRepo: CredentialsMongoRepo                  = mock[CredentialsMongoRepo]
-  private val expectedPredicate                                  =
-    Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
-  protected val mockStubBehaviour: StubBehaviour                 = mock[StubBehaviour]
-  mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
+  val mockCredentialsRepo: CredentialsMongoRepo = mock[CredentialsMongoRepo]
+
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), ec)
+    BackendAuthComponentsStub(AuthStubBehaviour)(Helpers.stubControllerComponents(), ec)
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(
