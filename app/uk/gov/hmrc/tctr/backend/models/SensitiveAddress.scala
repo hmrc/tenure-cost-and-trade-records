@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,8 @@ object SensitiveAddress {
 
   def apply(address: Address): SensitiveAddress = SensitiveAddress(
     SensitiveString(address.buildingNameNumber),
-    address.street1.map(SensitiveString),
-    address.street2.map(SensitiveString),
+    address.street1.map(SensitiveString.apply),
+    address.street2.map(SensitiveString.apply),
     SensitiveString(address.postcode)
   )
 

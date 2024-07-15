@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,20 @@
 
 package uk.gov.hmrc.tctr.backend.security
 
+import org.mongodb.scala.SingleObservableFuture
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.Updates.{push, setOnInsert}
 import org.mongodb.scala.model._
 import play.api.libs.json._
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.tctr.backend.security.FailedLoginsMongoRepo.expireAfterDays
+
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
 
 trait FailedLoginsRepo {
   def mostRecent(ipAddress: String, amount: Int, since: Instant): Future[Seq[FailedLogin]]

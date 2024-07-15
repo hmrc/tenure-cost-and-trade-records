@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ class IPBlockingCredentialsVerifier @Inject() (
       lazy val firstFailedAttempt       = sorted.head
       lazy val lockoutInProgress        = (lastFailedAttempt.timestamp - firstFailedAttempt.timestamp) <= config.sessionWindow
       lazy val inSession                = recentAttempts filter {
-        _.timestamp isAfter startOfLoginSession
+        _.timestamp.isAfter(startOfLoginSession)
       }
 
       (hasExceededLoginAttempts && lockoutInProgress, inSession.length)

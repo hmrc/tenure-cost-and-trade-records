@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.repository
 
+import org.mongodb.scala.SingleObservableFuture
 import org.mongodb.scala.model.{Filters, FindOneAndReplaceOptions}
 import uk.gov.hmrc.tctr.backend.models.SensitiveNotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.testUtils.CustomMatchers

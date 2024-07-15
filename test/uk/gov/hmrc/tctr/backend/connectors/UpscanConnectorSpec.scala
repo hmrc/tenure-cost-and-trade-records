@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,16 @@
 
 package uk.gov.hmrc.tctr.backend.connectors
 
-import org.mockito.ArgumentMatchers._
-import org.mockito.MockitoSugar
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.tctr.backend.base.MockitoExtendedSugar
 import uk.gov.hmrc.tctr.backend.models.UnknownError
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
-class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
+class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoExtendedSugar {
 
   implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.global
   implicit val hc: HeaderCarrier            = HeaderCarrier()
@@ -40,7 +39,7 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
 
     when(
       httpClient
-        .GET[HttpResponse](any[String], any[Seq[(String, String)]], any[Seq[(String, String)]])(any(), any(), any())
+        .GET[HttpResponse](any[String], any[Seq[(String, String)]], any[Seq[(String, String)]])(any, any, any)
     ).thenReturn(Future.successful(HttpResponse(OK, testBody)))
 
     val connector = new UpscanConnector(httpClient)
@@ -58,7 +57,7 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
 
     when(
       httpClient
-        .GET[HttpResponse](any[String], any[Seq[(String, String)]], any[Seq[(String, String)]])(any(), any(), any())
+        .GET[HttpResponse](any[String], any[Seq[(String, String)]], any[Seq[(String, String)]])(any, any, any)
     ).thenReturn(Future.failed(new RuntimeException("Test exception")))
 
     val connector = new UpscanConnector(httpClient)

@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.base
+package uk.gov.hmrc.tctr.backend.testUtils
 
-import org.scalatest.OptionValues
-import org.scalatest.concurrent.{PatienceConfiguration, ScalaFutures}
-import org.scalatest.matchers.should
-import play.api.test.{HasApp, Injecting}
-import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.internalauth.client.{Predicate, Resource, ResourceType, Retrieval}
+import uk.gov.hmrc.internalauth.client.test.StubBehaviour
+
+import scala.concurrent.Future
 
 /**
   * @author Yuriy Tumakha
   */
-trait AppSuiteBase
-    extends Injecting
-    with should.Matchers
-    with MockitoExtendedSugar
-    with OptionValues
-    with ScalaFutures
-    with PatienceConfiguration
-    with FakeObjects {
-  self: HasApp =>
+object AuthStubBehaviour extends StubBehaviour {
+
+  override def stubAuth[R](predicate: Option[Predicate], retrieval: Retrieval[R]): Future[R] =
+    Future.unit.asInstanceOf[Future[R]]
+
+  override def stubListResources(token: String, resourceType: Option[ResourceType]): Future[Set[Resource]] =
+    Future.successful(Set.empty)
+
 }

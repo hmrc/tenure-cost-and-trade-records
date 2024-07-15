@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,9 +47,9 @@ class AppConfig @Inject() (runModeConfiguration: Configuration) {
   lazy val ipLockoutEnabled   = runModeConfiguration.get[Boolean]("authentication.ipLockoutEnabled")
   lazy val voaIPAddress       = runModeConfiguration.get[String]("authentication.voaIPAddress")
 
-  lazy val notConnectedSubmissionTTL = runModeConfiguration.get[Int]("notConnectedSubmissionTTL")
-  lazy val connectedSubmissionTTL    = runModeConfiguration.get[Int]("connectedSubmissionTTL")
-  lazy val requestReferenceNumberTTL = runModeConfiguration.get[Int]("requestReferenceNumberTTL")
-  lazy val submittedTTL              = runModeConfiguration.get[Int]("submittedTTL")
+  lazy val notConnectedSubmissionTTL = runModeConfiguration.get[Long]("notConnectedSubmissionTTL")
+  lazy val connectedSubmissionTTL    = runModeConfiguration.get[Long]("connectedSubmissionTTL")
+  lazy val requestReferenceNumberTTL = runModeConfiguration.get[Long]("requestReferenceNumberTTL")
+  lazy val submittedTTL              = runModeConfiguration.get[Long]("submittedTTL")
 
 }

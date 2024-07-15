@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package uk.gov.hmrc.tctr.backend.controllers
 
 import org.apache.pekko.util.Timeout
 import com.mongodb.bulk.BulkWriteResult
-import org.mockito.ArgumentMatchers._
-import org.mockito.MockitoSugar
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json._
@@ -31,14 +29,16 @@ import uk.gov.hmrc.tctr.backend.models.UpScanRequests._
 import uk.gov.hmrc.tctr.backend.connectors.UpscanConnector
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.repository.CredentialsRepo
+
 import java.time.Instant
 import org.scalatest.Succeeded
+import uk.gov.hmrc.tctr.backend.base.MockitoExtendedSugar
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with MockitoSugar {
+class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with MockitoExtendedSugar {
   implicit val timeout: Timeout     = 9.seconds
   implicit val ec: ExecutionContext = ExecutionContext.global
   implicit val hc: HeaderCarrier    = HeaderCarrier()
@@ -78,7 +78,7 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
                                        |    }
                                        ]""".stripMargin
 
-    when(mockUpscanConnector.download(any())(any())).thenReturn(Future.successful(Right(forCredentialsJsonResponse)))
+    when(mockUpscanConnector.download(any)(any)).thenReturn(Future.successful(Right(forCredentialsJsonResponse)))
     when(mockCredentialsRepo.bulkUpsert(any[Seq[FORCredentials]])(any[OFormat[FORCredentials]]))
       .thenReturn(Future.successful(mockBulkWriteResult))
 
@@ -91,7 +91,7 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
       Thread.sleep(5000)
     }
 
-    verify(mockUpscanConnector).download(any())(any())
+    verify(mockUpscanConnector).download(any)(any)
 
     verify(mockCredentialsRepo).bulkUpsert(any[Seq[FORCredentials]])(any[OFormat[FORCredentials]])
 

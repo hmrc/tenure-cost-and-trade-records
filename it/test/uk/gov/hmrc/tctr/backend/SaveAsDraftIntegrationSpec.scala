@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.tctr.backend
 
-import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import play.api.http.Status.{BAD_REQUEST, CREATED, NOT_FOUND, OK}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsNumber, Json}
+import play.api.libs.ws.{writeableOf_JsValue, writeableOf_String}
 import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo
 
 import java.util.UUID
@@ -73,7 +73,7 @@ class SaveAsDraftIntegrationSpec extends IntegrationSpecBase with BeforeAndAfter
         wsClient
           .url(s"$appBaseUrl/saveAsDraft/$submissionDraftSaveId")
           .withHttpHeaders(("Authorization", clientAuthToken))
-          .put(Json.toJson(Json.obj("a" -> 1)))
+          .put(Json.toJson(Json.obj("a" -> JsNumber(1))))
           .futureValue
 
       response.status shouldBe CREATED
@@ -155,7 +155,7 @@ class SaveAsDraftIntegrationSpec extends IntegrationSpecBase with BeforeAndAfter
         )
       )
       .futureValue
-    response.status mustEqual CREATED
+    response.status shouldBe CREATED
   }
 
 }

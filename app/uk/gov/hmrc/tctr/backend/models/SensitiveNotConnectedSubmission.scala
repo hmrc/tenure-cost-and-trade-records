@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,8 +73,8 @@ object SensitiveNotConnectedSubmission {
       submission.forType,
       SensitiveAddress(submission.address),
       SensitiveString(submission.fullName),
-      submission.emailAddress.map(SensitiveString),
-      submission.phoneNumber.map(SensitiveString),
+      submission.emailAddress.map(SensitiveString.apply),
+      submission.phoneNumber.map(SensitiveString.apply),
       submission.additionalInformation,
       submission.createdAt,
       submission.previouslyConnected,

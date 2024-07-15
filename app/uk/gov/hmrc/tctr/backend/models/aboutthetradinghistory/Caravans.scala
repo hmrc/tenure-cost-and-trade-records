@@ -28,8 +28,8 @@ case class Caravans(
   anyStaticLeisureCaravansOnSite: Option[AnswersYesNo] = None,
   openAllYear: Option[AnswersYesNo] = None,
   weeksPerYear: Option[Int] = None,
-  singleCaravansAge: Option[CaravansAge],
-  twinUnitCaravansAge: Option[CaravansAge]
+  singleCaravansAge: Option[CaravansAge] = None,
+  twinUnitCaravansAge: Option[CaravansAge] = None
 )
 
 object Caravans {

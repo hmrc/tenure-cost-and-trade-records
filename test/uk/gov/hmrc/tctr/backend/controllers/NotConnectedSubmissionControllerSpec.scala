@@ -20,7 +20,6 @@ import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult.acknowledged
 import org.apache.pekko.util.Timeout
 import org.bson.BsonBoolean.TRUE
-import org.mockito.IdiomaticMockito.StubbingOps
 import play.api.http.Status.{CONFLICT, CREATED}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -28,15 +27,15 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import play.api.test.Helpers.{POST, status}
 import play.api.test._
-import uk.gov.hmrc.internalauth.client.Predicate.Permission
-import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
 import uk.gov.hmrc.internalauth.client._
+import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
 import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.{NotConnectedSubmission, NotConnectedSubmissionForm}
 import uk.gov.hmrc.tctr.backend.repository.{NotConnectedRepository, SubmittedMongoRepo}
 import uk.gov.hmrc.tctr.backend.schema.Address
+import uk.gov.hmrc.tctr.backend.testUtils.AuthStubBehaviour
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits
@@ -45,13 +44,10 @@ import scala.concurrent.duration.DurationInt
 
 class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec {
 
-  implicit val timeout: Timeout                                  = 5.seconds
-  private val expectedPredicate                                  =
-    Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
-  protected val mockStubBehaviour: StubBehaviour                 = mock[StubBehaviour]
-  mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
+  implicit val timeout: Timeout = 5.seconds
+
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), Implicits.global)
+    BackendAuthComponentsStub(AuthStubBehaviour)(Helpers.stubControllerComponents(), Implicits.global)
 
   val mockRepository         = mock[NotConnectedRepository]
   val mockSubmittedMongoRepo = mock[SubmittedMongoRepo]
