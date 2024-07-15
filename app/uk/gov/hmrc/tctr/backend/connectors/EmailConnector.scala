@@ -87,7 +87,7 @@ class EmailConnector @Inject() (servicesConfig: ServicesConfig, http: HttpClient
 
   private def customerSubmissionParams(fullName: String, submissionDate: ZonedDateTime = DateUtil.nowInUK)(implicit
     lang: Lang
-  ): JsObject                                                                                    =
+  ): JsObject =
     Json.obj("recipientName_FullName" -> fullName) ++ submissionDateParams(submissionDate)
 
   private def submissionDateParams(submissionDate: ZonedDateTime)(implicit lang: Lang): JsObject =

@@ -33,6 +33,7 @@ class SaveAsDraftIntegrationSpec extends IntegrationSpecBase with BeforeAndAfter
   private val repo                        = inject[MongoSubmissionDraftRepo]
   private val clientAuthToken: String     = UUID.randomUUID().toString
   private val internalAuthBaseUrl: String = "http://localhost:8470"
+
   override def beforeAll(): Unit = {
     repo.save(submissionDraftFindId, Json.obj())
     repo.save(submissionDraftDeleteId, Json.obj("a" -> "b"))

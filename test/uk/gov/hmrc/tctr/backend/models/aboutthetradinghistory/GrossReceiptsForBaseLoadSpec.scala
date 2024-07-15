@@ -23,11 +23,7 @@ class GrossReceiptsForBaseLoadSpec extends PlaySpec {
   "GrossReceiptsForBaseLoad" should {
     "serialize and deserialize correctly" in {
       val grossReceiptsForBaseLoadSpec = GrossReceiptsForBaseLoad(
-        1,
-        2,
-        3,
-        4,
-        5
+        1, 2, 3, 4, 5
       )
       val json                         = Json.toJson(grossReceiptsForBaseLoadSpec: GrossReceiptsForBaseLoad)
       json.as[GrossReceiptsForBaseLoad] mustBe grossReceiptsForBaseLoadSpec
@@ -35,11 +31,7 @@ class GrossReceiptsForBaseLoadSpec extends PlaySpec {
 
     "have correct total value" in {
       val grossReceiptsForBaseLoadSpec = GrossReceiptsForBaseLoad(
-        1,
-        2,
-        3,
-        4,
-        5
+        1, 2, 3, 4, 5
       )
       grossReceiptsForBaseLoadSpec.total mustBe 15
     }

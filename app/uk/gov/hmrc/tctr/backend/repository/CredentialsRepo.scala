@@ -128,7 +128,7 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent, configuration: Conf
       setData.append("$setOnInsert", BsonDocument("createdAt" -> BsonDateTime(Instant.now().toEpochMilli)))
     }
 
-    val bulkOps: Seq[WriteModel[_ <: FORCredentials]] = credentialsSeq.map { cred =>
+    val bulkOps: Seq[WriteModel[? <: FORCredentials]] = credentialsSeq.map { cred =>
       val filter   = Filters.eq("_id", cred._id)
       val update   = new UpdateOptions().upsert(true)
       val document = toBson(toJson(cred))
