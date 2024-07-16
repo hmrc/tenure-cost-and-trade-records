@@ -26,7 +26,7 @@ private object AppDependencies {
   )
 
   private val commonTests = Seq(
-    "uk.gov.hmrc"            %% "bootstrap-test-play-30" % bootstrapVersion         % Test exclude ("com.github.tomakehurst", "wiremock"),
+    "uk.gov.hmrc"            %% "bootstrap-test-play-30" % bootstrapVersion         % Test,
     "org.playframework"      %% "play-test"              % PlayVersion.current      % Test,
     "org.apache.pekko"       %% "pekko-testkit"          % PlayVersion.pekkoVersion % Test,
     "org.scalatest"          %% "scalatest"              % scalatestVersion         % Test,
@@ -39,7 +39,7 @@ private object AppDependencies {
   )
 
   private val integrationTestOnly = Seq(
-    "org.wiremock" % "wiremock" % wiremockVersion % Test
+    //"org.wiremock" % "wiremock" % wiremockVersion % Test
   )
 
   val appDependencies: Seq[ModuleID] = compile ++ commonTests ++ testOnly
