@@ -28,24 +28,24 @@ class NumberUtilSpec extends AnyFlatSpec with Matchers {
       "12.345".removeTrailingZeros should be("12.345")
     }
 
-  "asMoney"             should
+  "asMoney" should
     "format corectly  string" in {
       BigDecimal("1").asMoney          should be("£1")
       BigDecimal("1234567.89").asMoney should be("£1,234,567.89")
     }
 
-  "asMoneyFull"         should
+  "asMoneyFull" should
     "format correctly string without removing  zeros" in {
       BigDecimal("1.00").asMoneyFull should be("£1.00")
     }
 
-  "withScale"           should
+  "withScale" should
     "set scale correctly" in {
       BigDecimal("1.00").withScale(2)    should be("1")
       BigDecimal("123.456").withScale(2) should be("123.46")
     }
 
-  "withScaleFull"       should
+  "withScaleFull" should
     "set scale correctly without removing zeros" in {
       zeroBigDecimal.withScaleFull(2)       should be("0.00")
       BigDecimal("123.45").withScaleFull(2) should be("123.45")

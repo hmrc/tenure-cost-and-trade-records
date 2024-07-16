@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ trait ExportNotConnectedSubmissions {
 class ExportNotConnectedSubmissionsDeskpro @Inject() (
   repository: NotConnectedRepository,
   deskproConnector: DeskproConnector,
-  ////TODO Add email connector here
+  //// TODO Add email connector here
   audit: ForTCTRAudit,
   clock: Clock,
   forConfig: AppConfig
@@ -72,7 +72,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
       logger.warn(s"${createDeskproTicket(submission)}")
       Future.unit
     } else {
-      //if ref number matches the prefix
+      // if ref number matches the prefix
       val deskproTicket = createDeskproTicket(submission)
       if (submission.id.startsWith(forConfig.testAccountPrefix)) {
         auditAccepted(submission.id, 999960, Map(requestId -> deskproTicket.sessionId))
@@ -86,7 +86,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
               s"Not connected submission exported to deskpro, deskproID: $deskproTicketId, submissionID: ${submission.id}"
             )
             auditAccepted(submission.id, deskproTicketId, Map(requestId -> deskproTicket.sessionId))
-            ///TODO Add email connector here - not added as not required for this PR
+            /// TODO Add email connector here - not added as not required for this PR
             repository.removeById(submission.id).map(_ => ())
           }
           .recover {

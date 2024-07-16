@@ -15,7 +15,7 @@ private object AppDependencies {
   val scalaTestPlusMockitoVersion = "3.2.19.0"
   val scalaGuiceVersion           = "6.0.0"
   val flexMarkVersion             = "0.64.8"
-  val wiremockVersion             = "2.21.0" // 3.8.0
+  val wiremockVersion             = "3.8.0"
 
   private val compile = Seq(
     "uk.gov.hmrc"       %% "bootstrap-backend-play-30"    % bootstrapVersion,
@@ -26,14 +26,12 @@ private object AppDependencies {
   )
 
   private val commonTests = Seq(
-    "uk.gov.hmrc"            %% "bootstrap-test-play-30" % bootstrapVersion            % Test,
-    "org.playframework"      %% "play-test"              % PlayVersion.current         % Test,
-    "org.apache.pekko"       %% "pekko-testkit"          % PlayVersion.pekkoVersion    % Test,
-    "org.scalatest"          %% "scalatest"              % scalatestVersion            % Test,
-    "org.scalatestplus.play" %% "scalatestplus-play"     % scalatestPlusPlayVersion    % Test,
-    "org.scalatestplus"      %% "mockito-5-12"           % scalaTestPlusMockitoVersion % Test,
-    "net.codingwell"         %% "scala-guice"            % scalaGuiceVersion           % Test,
-    "com.vladsch.flexmark"    % "flexmark-all"           % flexMarkVersion             % Test // for scalatest 3.2.x
+    "uk.gov.hmrc"            %% "bootstrap-test-play-30" % bootstrapVersion         % Test,
+    "org.playframework"      %% "play-test"              % PlayVersion.current      % Test,
+    "org.apache.pekko"       %% "pekko-testkit"          % PlayVersion.pekkoVersion % Test,
+    "org.scalatest"          %% "scalatest"              % scalatestVersion         % Test,
+    "org.scalatestplus.play" %% "scalatestplus-play"     % scalatestPlusPlayVersion % Test,
+    "com.vladsch.flexmark"    % "flexmark-all"           % flexMarkVersion          % Test // for scalatest 3.2.x
   )
 
   private val testOnly = Seq(
@@ -41,8 +39,7 @@ private object AppDependencies {
   )
 
   private val integrationTestOnly = Seq(
-    // "org.wiremock" % "wiremock" % wiremockVersion % Test
-    "com.github.tomakehurst" % "wiremock" % wiremockVersion % Test
+    //"org.wiremock" % "wiremock" % wiremockVersion % Test
   )
 
   val appDependencies: Seq[ModuleID] = compile ++ commonTests ++ testOnly

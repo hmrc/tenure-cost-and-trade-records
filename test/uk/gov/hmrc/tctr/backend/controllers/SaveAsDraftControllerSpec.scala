@@ -54,7 +54,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
     }
   }
 
-  it                      should "save SubmissionDraft" in {
+  it should "save SubmissionDraft" in {
     controller
       .put(StubSubmissionDraftRepo.correctDbId)(
         FakeRequest().withJsonBody(Json.obj("a" -> "b")).withHeaders("Authorization" -> "fake-token")
@@ -64,7 +64,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
       }
   }
 
-  it                      should "return 400 for empty body" in {
+  it should "return 400 for empty body" in {
     val res = controller.put("WRONG_ID")(
       FakeRequest().withHeaders("Content-Type" -> "application/json").withHeaders("Authorization" -> "fake-token")
     )
@@ -72,7 +72,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
     contentAsJson(res) shouldBe Json.obj("statusCode" -> BAD_REQUEST, "message" -> "JSON body is expected in request")
   }
 
-  it                      should "delete SubmissionDraft and return deletedCount = 1" in {
+  it should "delete SubmissionDraft and return deletedCount = 1" in {
     controller
       .delete(StubSubmissionDraftRepo.correctDbId)(FakeRequest().withHeaders("Authorization" -> "fake-token"))
       .map { result =>
@@ -81,7 +81,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
       }
   }
 
-  it                      should "on delete return deletedCount = 0 for unknown id" in {
+  it should "on delete return deletedCount = 0 for unknown id" in {
     controller.delete("UNKNOWN_ID")(FakeRequest().withHeaders("Authorization" -> "fake-token")).map { result =>
       result.header.status  shouldBe OK
       contentAsJson(result) shouldBe Json.obj("deletedCount" -> 0)

@@ -17,7 +17,7 @@
 package uk.gov.hmrc.tctr.backend.base
 
 import org.scalatest.OptionValues
-import org.scalatest.concurrent.{PatienceConfiguration, ScalaFutures}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.should
 import play.api.test.{HasApp, Injecting}
 import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
@@ -31,7 +31,7 @@ trait AppSuiteBase
     with MockitoExtendedSugar
     with OptionValues
     with ScalaFutures
-    with PatienceConfiguration
+    with IntegrationPatience
     with FakeObjects {
   self: HasApp =>
 }
