@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
+import uk.gov.hmrc.tctr.backend.models.*
 import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDuration}
-import uk.gov.hmrc.tctr.backend.models._
-import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure._
-import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings._
-import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory._
-import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty._
-import uk.gov.hmrc.tctr.backend.models.additionalinformation._
-import uk.gov.hmrc.tctr.backend.models.common._
-import uk.gov.hmrc.tctr.backend.models.connectiontoproperty._
-import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber._
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.*
+import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.*
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.*
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.*
+import uk.gov.hmrc.tctr.backend.models.additionalinformation.*
+import uk.gov.hmrc.tctr.backend.models.common.*
+import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
+import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.schema.Address
 
 import java.time.{Instant, LocalDate}
@@ -177,7 +177,11 @@ trait FakeObjects {
     turnoverSections6045 = Seq(
       TurnoverSection6045(
         financialYearEnd = today,
-        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire()
+        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(),
+        singleCaravansOwnedByOperator = CaravansTrading6045(52, 3000, 30),
+        singleCaravansSublet = CaravansTrading6045(52, 1000, 10),
+        twinUnitCaravansOwnedByOperator = CaravansTrading6045(26, 2000, 20),
+        twinUnitCaravansSublet = CaravansTrading6045()
       ),
       TurnoverSection6045(
         financialYearEnd = today.minusYears(1),

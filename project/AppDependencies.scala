@@ -39,7 +39,8 @@ private object AppDependencies {
   )
 
   private val integrationTestOnly = Seq(
-    //"org.wiremock" % "wiremock" % wiremockVersion % Test
+    // TODO: Upgrade wiremock when jackson-databind become compatible with Play and bootstrap-test-play-30
+    // "org.wiremock" % "wiremock" % wiremockVersion % Test
   )
 
   val appDependencies: Seq[ModuleID] = compile ++ commonTests ++ testOnly
