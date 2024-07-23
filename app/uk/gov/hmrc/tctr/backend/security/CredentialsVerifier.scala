@@ -42,7 +42,7 @@ class IPBlockingCredentialsVerifier @Inject() (
   implicit def toDuration(d: Instant): Duration = d.toEpochMilli millis
 
   implicit object DateOrdering extends Ordering[Instant] {
-    def compare(a: Instant, b: Instant) = if (a.isBefore(b)) -1 else if (b.isBefore(a)) 1 else 0
+    def compare(a: Instant, b: Instant) = if a.isBefore(b) then -1 else if (b.isBefore(a)) 1 else 0
   }
 
   def verify(referenceNum: String, postcode: String, ipAddress: Option[String]): Future[VerificationResult] =
@@ -94,18 +94,17 @@ class IPBlockingCredentialsVerifier @Inject() (
     attemptsMade: Int,
     ip: Option[String]
   ): Future[VerificationResult] =
-    if (authenticationRequired) {
+    if authenticationRequired then
       credsRepo.validate(referenceNum, postcode).map {
         case Some(credentials) => ValidCredentials(credentials)
         case None              =>
           ip map { i => loginsRepo.record(FailedLogin(clock.now().toInstant, i)) }
           InvalidCredentials(config.maxFailedLoginAttempts - (attemptsMade + 1))
       }
-    } else {
+    else
       ValidCredentials(
         FORCredentials(referenceNum, "", "", SensitiveAddress(testAddress(postcode.replace("+", ""))), "")
       )
-    }
 
 }
 

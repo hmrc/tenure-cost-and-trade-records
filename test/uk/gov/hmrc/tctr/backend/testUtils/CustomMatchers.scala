@@ -84,13 +84,13 @@ trait CustomMatchers {
 
   class BeSeqEqualToIgnoringMillisInSeq(expected: NotConnectedSubmission) extends Matcher[Seq[NotConnectedSubmission]] {
     def apply(left: Seq[NotConnectedSubmission]): MatchResult =
-      if (left.isEmpty) {
+      if left.isEmpty then
         MatchResult(
           matches = false,
           "The submission sequence was empty",
           "The submission sequence was not empty"
         )
-      } else {
+      else
         val leftFirst              = left.head
         val equalsWithoutTimestamp = leftFirst.copy(createdAt = expected.createdAt) == expected
         MatchResult(
@@ -98,19 +98,18 @@ trait CustomMatchers {
           s"The first submission $leftFirst did not equal $expected ignoring milliseconds",
           s"The first submission $leftFirst was equal to $expected ignoring milliseconds"
         )
-      }
   }
 
   class BeSeqEqualToIgnoringMillisInSeq2(expected: RequestReferenceNumberSubmission)
       extends Matcher[Seq[RequestReferenceNumberSubmission]] {
     def apply(left: Seq[RequestReferenceNumberSubmission]): MatchResult =
-      if (left.isEmpty) {
+      if left.isEmpty then
         MatchResult(
           matches = false,
           "The submission sequence was empty",
           "The submission sequence was not empty"
         )
-      } else {
+      else
         val leftFirst              = left.head
         val equalsWithoutTimestamp = leftFirst.copy(createdAt = expected.createdAt) == expected
         MatchResult(
@@ -118,7 +117,6 @@ trait CustomMatchers {
           s"The first submission $leftFirst did not equal $expected ignoring milliseconds",
           s"The first submission $leftFirst was equal to $expected ignoring milliseconds"
         )
-      }
   }
 
   def beSeqEqualToIgnoringMillisSeq(expected: NotConnectedSubmission) = new BeSeqEqualToIgnoringMillisInSeq(expected)

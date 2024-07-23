@@ -84,13 +84,12 @@ class MongoSubmissionDraftRepo @Inject() (mongo: MongoComponent, encryptionJsonT
       .toFuture()
 
   def getDraftsExpirationQueue(limit: Int): Future[DraftsExpirationQueue] =
-    for {
+    for
       total            <- collection.countDocuments().toFuture()
       submissionDrafts <- collection.find().sort(Sorts.descending("createdAt")).limit(limit).toFuture()
-    } yield {
+    yield
       val drafts = submissionDrafts.map(Draft(_))
       DraftsExpirationQueue(drafts, total)
-    }
 
   def getDraftsPerVersion: Future[Seq[DraftsPerVersion]] =
     collection

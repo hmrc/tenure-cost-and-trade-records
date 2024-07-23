@@ -41,7 +41,7 @@ class SaveAsDraftIntegrationSpec extends IntegrationSpecBase with BeforeAndAfter
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    if (!authTokenIsValid(clientAuthToken)) createClientAuthToken()
+    if !authTokenIsValid(clientAuthToken) then createClientAuthToken()
   }
 
   "SaveAsDraft GET endpoint" should {
