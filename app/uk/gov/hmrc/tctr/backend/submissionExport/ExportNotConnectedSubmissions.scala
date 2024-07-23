@@ -50,34 +50,30 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
 
   override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
     repository.getSubmissions(size).flatMap { submissions =>
-      if (submissions.nonEmpty)
-        logger.warn(s"Found ${submissions.length} not connected submissions to export")
+      if submissions.nonEmpty then logger.warn(s"Found ${submissions.length} not connected submissions to export")
       processSequentially(submissions)
     }
 
   def processSequentially(submission: Seq[NotConnectedSubmission])(implicit ec: ExecutionContext): Future[Unit] =
-    if (submission.isEmpty) {
-      Future.unit
-    } else {
-      processNext(submission.head).flatMap(_ => processSequentially(submission.tail))
-    }
+    if submission.isEmpty then Future.unit
+    else processNext(submission.head).flatMap(_ => processSequentially(submission.tail))
 
   private def processNext(
     submission: NotConnectedSubmission
   )(implicit executionContext: ExecutionContext): Future[Unit] =
-    if (isTooLongInQueue(submission)) {
+    if isTooLongInQueue(submission) then
       logger.error(s"Unable to export not connected journey, ref: ${submission.id}. MANUAL INTERVENTION REQUIRED")
       logBrokenSubmissionToSplunk(submission)
       repository.removeById(submission.id).map(_ => ())
       logger.warn(s"${createDeskproTicket(submission)}")
       Future.unit
-    } else {
+    else
       // if ref number matches the prefix
       val deskproTicket = createDeskproTicket(submission)
-      if (submission.id.startsWith(forConfig.testAccountPrefix)) {
+      if submission.id.startsWith(forConfig.testAccountPrefix) then
         auditAccepted(submission.id, 999960, Map(requestId -> deskproTicket.sessionId))
         repository.removeById(submission.id).map(_ => ())
-      } else {
+      else
         val deskproTicket = createDeskproTicket(submission)
         deskproConnector
           .createTicket(deskproTicket)
@@ -102,10 +98,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
               )
               logger.warn(failureReason, exception)
           }
-
-      }
       Future.unit
-    }
 
   private def handle400BadRequest(exception: UpstreamErrorResponse, submission: NotConnectedSubmission): Unit = {
     val invalidField = exception.message match {
@@ -177,7 +170,7 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
          |Name: ${submission.fullName}
          |Email address: ${submission.emailAddress.getOrElse("not provided")}
          |Phone number: ${submission.phoneNumber.getOrElse("not provided")}
-         |Previously connected to property: ${if (submission.previouslyConnected.getOrElse(false)) "yes" else "no"}
+         |Previously connected to property: ${if submission.previouslyConnected.getOrElse(false) then "yes" else "no"}
          |
          |Address: ${submission.address.singleLine}
          |

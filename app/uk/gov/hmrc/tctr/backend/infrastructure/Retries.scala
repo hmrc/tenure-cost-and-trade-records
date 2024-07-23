@@ -58,16 +58,14 @@ trait Retries {
     configuration
       .map { c =>
         val path = "http-verbs.retries.intervals"
-        if (c.hasPath(path)) {
+        if c.hasPath(path) then
           c.getDurationList(path)
             .asScala
             .map { d =>
               FiniteDuration(d.toMillis, TimeUnit.MILLISECONDS)
             }
             .toSeq
-        } else {
-          defaultIntervals
-        }
+        else defaultIntervals
       }
       .getOrElse(defaultIntervals)
   }

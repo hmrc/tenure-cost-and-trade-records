@@ -102,11 +102,8 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
       }
 
     override def save(id: String, submissionDraft: JsValue): Future[JsValue] =
-      if (id == correctDbId) {
-        Future.successful(submissionDraft)
-      } else {
-        Future.failed(new RuntimeException("SubmissionDraft wasn't found"))
-      }
+      if id == correctDbId then Future.successful(submissionDraft)
+      else Future.failed(new RuntimeException("SubmissionDraft wasn't found"))
 
     override def delete(id: String): Future[DeleteResult] = {
       val deletedCount = id match {

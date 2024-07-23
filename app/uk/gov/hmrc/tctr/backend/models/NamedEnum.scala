@@ -42,10 +42,10 @@ trait NamedEnumSupport[E <: NamedEnum] {
 
   implicit val queryStringBindable: QueryStringBindable[E] = new QueryStringBindable[E] {
     override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, E]] =
-      for {
+      for
         vs <- params.get(key)
         v  <- vs.headOption
-      } yield unapply(v) match {
+      yield unapply(v) match {
         case Some(e) => Right(e)
         case None    => Left(s"Invalid value; expected one of $options")
       }

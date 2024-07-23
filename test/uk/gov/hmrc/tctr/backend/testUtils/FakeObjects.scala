@@ -185,7 +185,11 @@ trait FakeObjects {
       ),
       TurnoverSection6045(
         financialYearEnd = today.minusYears(1),
-        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(51, 2000)
+        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(51, 2000),
+        singleCaravansOwnedByOperator = CaravansTrading6045(),
+        singleCaravansSublet = CaravansTrading6045(),
+        twinUnitCaravansOwnedByOperator = CaravansTrading6045(),
+        twinUnitCaravansSublet = CaravansTrading6045()
       ),
       TurnoverSection6045(
         financialYearEnd = today.minusYears(2),

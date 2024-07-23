@@ -24,14 +24,19 @@ import scala.language.postfixOps
 class ScheduleThatSchedulesImmediately5Times extends Schedule {
   var times              = 1
   def timeUntilNextRun() =
-    if (times == 5) 30 seconds else { times = times + 1; 0 seconds }
+    if times == 5 then 30 seconds
+    else
+      times = times + 1
+      0 seconds
 }
 
 class ScheduleOnce extends Schedule {
   var times = 1
 
   def timeUntilNextRun() =
-    if (times == 1) { times = times + 1; 0 seconds }
+    if times == 1 then
+      times = times + 1
+      0 seconds
     else 30 minutes
 }
 
@@ -39,6 +44,8 @@ case class ScheduleNTimes(n: Int) extends Schedule {
   var times = 1
 
   def timeUntilNextRun() =
-    if (times <= n) { times = times + 1; 0 seconds }
+    if times <= n then
+      times = times + 1
+      0 seconds
     else 30 minutes
 }

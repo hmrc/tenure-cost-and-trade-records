@@ -44,7 +44,7 @@ class ForTCTRImpl @Inject() (
 
   import tctrConfig._
 
-  if (requestRefNumExportEnabled) {
+  if requestRefNumExportEnabled then
     val repo     = requestReferenceNumberMongoRepository
     val exporter = new ExportRequestReferenceNumberSubmissionsVOA(repo, systemClock, audit, tctrConfig)
     new RequestReferenceNumberSubmissionExporter(
@@ -55,9 +55,8 @@ class ForTCTRImpl @Inject() (
       actorSystem.eventStream,
       regularSchedule
     ).start()
-  }
 
-  if (submissionExportEnabled) {
+  if submissionExportEnabled then
     val repo     = connectedMongoRepository
     val exporter = new ExportConnectedSubmissionsVOA(repo, systemClock, audit, tctrConfig)
     new ConnectedSubmissionExporter(
@@ -68,16 +67,7 @@ class ForTCTRImpl @Inject() (
       actorSystem.eventStream,
       regularSchedule
     ).start()
-  }
 
-  if (importTestData) {
-    testDataImporter.importValidations(credentialsMongoRepo)
-  }
-
-//  if (logQueuedSubmissions) {
-//    val logger = new SubmissionQueueSizeLogger(submissionRepository,metrics)
-//    val freq = submissionQueueSizeMonitoringFrequency
-//    actorSystem.scheduler.scheduleAtFixedRate(freq, freq) { () => logger.log() }
-//  }
+  if importTestData then testDataImporter.importValidations(credentialsMongoRepo)
 
 }

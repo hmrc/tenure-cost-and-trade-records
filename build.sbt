@@ -23,4 +23,4 @@ lazy val it = (project in file("it"))
   .settings(libraryDependencies ++= AppDependencies.itDependencies)
   .settings(itSettings(forkJvmPerTest = true))
 
-addCommandAlias("precommit", ";scalafmtSbt;scalafmtAll;it/test:scalafmt;coverage;test;it/test;coverageReport")
+addCommandAlias("precommit", "scalafmtSbt;scalafmtAll;it/test:scalafmt;coverage;test;it/test;coverageReport")

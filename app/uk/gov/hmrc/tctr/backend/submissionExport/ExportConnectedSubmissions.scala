@@ -45,35 +45,31 @@ class ExportConnectedSubmissionsVOA @Inject() (
 
   override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
     connectedMongoRepository.getSubmissions(size).flatMap { submissions =>
-      if (submissions.nonEmpty) logger.warn(s"Found ${submissions.length} connected submissions to export")
+      if submissions.nonEmpty then logger.warn(s"Found ${submissions.length} connected submissions to export")
       processSequentially(submissions)
       Future.unit
     }
 
   def processSequentially(submission: Seq[ConnectedSubmission])(implicit ec: ExecutionContext): Future[Unit] =
-    if (submission.isEmpty) {
-      Future.unit
-    } else {
-      processNext(submission.head).flatMap(_ => processSequentially(submission.tail))
-    }
+    if submission.isEmpty then Future.unit
+    else processNext(submission.head).flatMap(_ => processSequentially(submission.tail))
 
   private def processNext(
     submission: ConnectedSubmission
   )(implicit executionContext: ExecutionContext): Future[Unit] =
-    if (isTooLongInQueue(submission)) {
+    if isTooLongInQueue(submission) then
       logger.warn(
         s"Unable to export connected journey, ref: ${submission.referenceNumber}. MANUAL INTERVENTION REQUIRED"
       ) // Restore to error when the data is sent to BST
       auditSubmissionEvent("ConnectedSubmissionRemovedByTCTR", submission)
       connectedMongoRepository.removeById(submission.referenceNumber).map(_ => ())
       Future.unit
-    } else {
+    else
       logger.info(s"Connected submission exported to VOA, submissionID: ${submission.referenceNumber} NOT IMPLEMENTED")
       // auditEvent - "ConnectedSubmissionToVOA" - field statusCode = 200, responseMessage = unmodified response body
       // TODO Add email connector here - not added as not required for this PR
       // auditEvent - "ConnectedSubmissionToVOA" - field statusCode = 500 etc, responseMessage = unmodified response body
       Future.unit
-    }
 
   def isTooLongInQueue(submission: ConnectedSubmission): Boolean =
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.retryWindow, ChronoUnit.HOURS))
