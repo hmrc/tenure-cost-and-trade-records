@@ -16,16 +16,19 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.Json
 
-case class OtherHolidayAccommodation(
-  otherHolidayAccommodation: Option[AnswersYesNo] = None,
-  otherHolidayAccommodationDetails: Option[OtherHolidayAccommodationDetails] = None,
-  totalSiteCapacity: Option[TotalSiteCapacity] = None,
-  checkYourAnswersOtherHolidayAccommodation: Option[CheckYourAnswersOtherHolidayAccommodation] = None
-)
-
-object OtherHolidayAccommodation {
-  implicit val format: OFormat[OtherHolidayAccommodation] = Json.format
+class TotalSiteCapacitySpec extends PlaySpec {
+  "TotalSiteCapacity" should {
+    "serialize and deserialize correctly" in {
+      val totalSiteCapacity = TotalSiteCapacity(1, 2, 3)
+      val json              = Json.toJson(totalSiteCapacity)
+      json.as[TotalSiteCapacity] mustBe totalSiteCapacity
+    }
+    "Have correct total value" in {
+      val totalSiteCapacity = TotalSiteCapacity(1, 2, 3)
+      totalSiteCapacity.total mustBe 6
+    }
+  }
 }

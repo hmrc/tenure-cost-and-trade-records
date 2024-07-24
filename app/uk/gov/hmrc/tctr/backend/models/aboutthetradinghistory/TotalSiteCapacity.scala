@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,18 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
+import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
 
-case class OtherHolidayAccommodation(
-  otherHolidayAccommodation: Option[AnswersYesNo] = None,
-  otherHolidayAccommodationDetails: Option[OtherHolidayAccommodationDetails] = None,
-  totalSiteCapacity: Option[TotalSiteCapacity] = None,
-  checkYourAnswersOtherHolidayAccommodation: Option[CheckYourAnswersOtherHolidayAccommodation] = None
-)
+import java.time.LocalDate
 
-object OtherHolidayAccommodation {
-  implicit val format: OFormat[OtherHolidayAccommodation] = Json.format
+case class TotalSiteCapacity(
+  availableForLetting: BigDecimal = zeroBigDecimal,
+  occupiedBySeasonalStuff: BigDecimal = zeroBigDecimal,
+  privatelyOwned: BigDecimal = zeroBigDecimal
+) {
+  def total: BigDecimal = Seq(availableForLetting, occupiedBySeasonalStuff, privatelyOwned).sum
+}
+
+object TotalSiteCapacity {
+  implicit val format: OFormat[TotalSiteCapacity] = Json.format
 }
