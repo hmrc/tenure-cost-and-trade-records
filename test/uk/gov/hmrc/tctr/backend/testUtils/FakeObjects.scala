@@ -181,7 +181,10 @@ trait FakeObjects {
         singleCaravansOwnedByOperator = CaravansTrading6045(52, 3000, 30),
         singleCaravansSublet = CaravansTrading6045(52, 1000, 10),
         twinUnitCaravansOwnedByOperator = CaravansTrading6045(26, 2000, 20),
-        twinUnitCaravansSublet = CaravansTrading6045()
+        twinUnitCaravansSublet = CaravansTrading6045(),
+        pitchesForCaravans = TentingPitchesTradingData(10, Some(20.00), Some(30)),
+        pitchesForGlamping = TentingPitchesTradingData(10, Some(20.00), Some(30)),
+        rallyAreas = TentingPitchesTradingData(10, Some(20.00), Some(30))
       ),
       TurnoverSection6045(
         financialYearEnd = today.minusYears(1),
