@@ -17,16 +17,15 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.util.NumberUtil.zeroBigDecimal
 
 import java.time.LocalDate
 
 case class TotalSiteCapacity(
-  availableForLetting: BigDecimal = zeroBigDecimal,
-  occupiedBySeasonalStuff: BigDecimal = zeroBigDecimal,
-  privatelyOwned: BigDecimal = zeroBigDecimal
+  availableForLetting: Int = 0,
+  occupiedBySeasonalStuff: Int = 0,
+  privatelyOwned: Int = 0
 ) {
-  def total: BigDecimal = Seq(availableForLetting, occupiedBySeasonalStuff, privatelyOwned).sum
+  def total: Int = Seq(availableForLetting, occupiedBySeasonalStuff, privatelyOwned).sum
 }
 
 object TotalSiteCapacity {
