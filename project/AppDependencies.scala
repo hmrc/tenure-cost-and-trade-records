@@ -3,8 +3,8 @@ import sbt.*
 
 private object AppDependencies {
 
-  val bootstrapVersion          = "9.0.0"
-  val hmrcMongoVersion          = "2.1.0"
+  val bootstrapVersion          = "9.1.0"
+  val hmrcMongoVersion          = "2.2.0"
   val cryptoJsonVersion         = "8.0.0"
   val playLanguageVersion       = "8.0.0"
   val internalAuthClientVersion = "3.0.0"
@@ -15,7 +15,7 @@ private object AppDependencies {
   val scalaTestPlusMockitoVersion = "3.2.19.0"
   val scalaGuiceVersion           = "6.0.0"
   val flexMarkVersion             = "0.64.8"
-  val wiremockVersion             = "3.9.0"
+  val wiremockVersion             = "3.9.1"
 
   private val compile = Seq(
     "uk.gov.hmrc"       %% "bootstrap-backend-play-30"    % bootstrapVersion,
