@@ -89,7 +89,7 @@ trait FakeObjects {
     "TRADING NAME"
   )
 
-  val prefilledPropertyUseLeasebackArrangement =
+  val prefilledPropertyUseLeasebackArrangement: PropertyUseLeasebackArrangementDetails =
     PropertyUseLeasebackArrangementDetails(AnswerYes)
 
   val baseFilledConnectedSubmission: ConnectedSubmission =
@@ -196,7 +196,11 @@ trait FakeObjects {
       ),
       TurnoverSection6045(
         financialYearEnd = today.minusYears(2),
-        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(50, 3000)
+        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(50, 3000),
+        singleCaravansOwnedByOperator = CaravansTrading6045(),
+        singleCaravansSublet = CaravansTrading6045(),
+        twinUnitCaravansOwnedByOperator = CaravansTrading6045(),
+        twinUnitCaravansSublet = CaravansTrading6045()
       )
     ),
     caravans = Caravans( // 6045/46
@@ -378,7 +382,7 @@ trait FakeObjects {
       saveAsDraftPassword = "dummyPassword"
     )
 
-  val notConnectedSubmission = NotConnectedSubmission(
+  val notConnectedSubmission: NotConnectedSubmission = NotConnectedSubmission(
     referenceNumberNotConnected,
     forType6010,
     prefilledAddress,
