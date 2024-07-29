@@ -184,7 +184,7 @@ trait FakeObjects {
         twinUnitCaravansSublet = CaravansTrading6045(),
         pitchesForCaravans = TentingPitchesTradingData(10, Some(20.00), Some(30)),
         pitchesForGlamping = TentingPitchesTradingData(10, Some(20.00), Some(30)),
-        rallyAreas = TentingPitchesTradingData(10, Some(20.00), Some(30))
+        rallyAreas = RallyAreasTradingData(10, Some(20.00), Some(30))
       ),
       TurnoverSection6045(
         financialYearEnd = today.minusYears(1),
