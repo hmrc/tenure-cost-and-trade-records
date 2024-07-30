@@ -17,14 +17,14 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.LowMarginFuelCardDetail
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class LowMarginFuelCardsDetails(
-  lowMarginFuelCardDetail: LowMarginFuelCardDetail,
-  addAnotherLowMarginFuelCardDetail: Option[AnswersYesNo] = None
+case class CostOfSales6076IntermittentSum(
+  importedPower: Option[BigDecimal],
+  TNuoS: Option[BigDecimal],
+  BSuoS: Option[BigDecimal],
+  other: Option[BigDecimal]
 )
+object CostOfSales6076IntermittentSum {
 
-object LowMarginFuelCardsDetails {
-  implicit val format: OFormat[LowMarginFuelCardsDetails] = Json.format[LowMarginFuelCardsDetails]
+  implicit val format: OFormat[CostOfSales6076IntermittentSum] = Json.format[CostOfSales6076IntermittentSum]
 }
