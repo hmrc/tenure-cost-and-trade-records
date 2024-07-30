@@ -216,6 +216,12 @@ trait FakeObjects {
         privateSublet = CaravansPerAgeCategory(1, 2, 3, 4)
       )
     ),
+    touringAndTentingPitches = TouringAndTentingPitches(
+      tentingPitchesOnSite = AnswerYes,
+      tentingPitchesAllYear = TentingPitchesAllYear(AnswerYes, 1),
+      tentingPitchesTotal = 1,
+      tentingPitchesCertificated = AnswerYes
+    ),
     turnoverSections6076 = Seq(
       TurnoverSection6076(
         financialYearEnd = LocalDate.of(2023, 3, 31),
