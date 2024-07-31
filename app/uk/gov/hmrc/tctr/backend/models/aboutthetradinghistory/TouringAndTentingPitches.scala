@@ -21,6 +21,8 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 case class TouringAndTentingPitches(
   tentingPitchesOnSite: Option[AnswersYesNo] = None,
   tentingPitchesAllYear: Option[TentingPitchesAllYear] = None,
+  tentingPitchesTotal: Option[Int] = None,
+  tentingPitchesCertificated: Option[AnswersYesNo] = None,
   checkYourAnswersTentingPitches: Option[AnswersYesNo] = None
 )
 
