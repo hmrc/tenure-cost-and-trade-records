@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.tctr.backend.testUtils
 
+import uk.gov.hmrc.tctr.backend.models.*
 import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDuration}
-import uk.gov.hmrc.tctr.backend.models._
-import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure._
-import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings._
-import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory._
-import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty._
-import uk.gov.hmrc.tctr.backend.models.additionalinformation._
-import uk.gov.hmrc.tctr.backend.models.common._
-import uk.gov.hmrc.tctr.backend.models.connectiontoproperty._
-import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber._
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.*
+import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.*
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.*
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.*
+import uk.gov.hmrc.tctr.backend.models.additionalinformation.*
+import uk.gov.hmrc.tctr.backend.models.common.*
+import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
+import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.schema.Address
 
 import java.time.{Instant, LocalDate}
@@ -89,7 +89,7 @@ trait FakeObjects {
     "TRADING NAME"
   )
 
-  val prefilledPropertyUseLeasebackArrangement =
+  val prefilledPropertyUseLeasebackArrangement: PropertyUseLeasebackArrangementDetails =
     PropertyUseLeasebackArrangementDetails(AnswerYes)
 
   val baseFilledConnectedSubmission: ConnectedSubmission =
@@ -174,6 +174,48 @@ trait FakeObjects {
 
   val prefilledAboutTheTradingHistoryPartOne: AboutTheTradingHistoryPartOne = AboutTheTradingHistoryPartOne(
     isFinancialYearEndDatesCorrect = true,
+    turnoverSections6045 = Seq(
+      TurnoverSection6045(
+        financialYearEnd = today,
+        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(),
+        singleCaravansOwnedByOperator = CaravansTrading6045(52, 3000, 30),
+        singleCaravansSublet = CaravansTrading6045(52, 1000, 10),
+        twinUnitCaravansOwnedByOperator = CaravansTrading6045(26, 2000, 20),
+        twinUnitCaravansSublet = CaravansTrading6045(),
+        pitchesForCaravans = TentingPitchesTradingData(10, Some(20.00), Some(30)),
+        pitchesForGlamping = TentingPitchesTradingData(10, Some(20.00), Some(30)),
+        rallyAreas = RallyAreasTradingData(10, Some(20.00), Some(30))
+      ),
+      TurnoverSection6045(
+        financialYearEnd = today.minusYears(1),
+        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(51, 2000),
+        singleCaravansOwnedByOperator = CaravansTrading6045(),
+        singleCaravansSublet = CaravansTrading6045(),
+        twinUnitCaravansOwnedByOperator = CaravansTrading6045(),
+        twinUnitCaravansSublet = CaravansTrading6045()
+      ),
+      TurnoverSection6045(
+        financialYearEnd = today.minusYears(2),
+        grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(50, 3000),
+        singleCaravansOwnedByOperator = CaravansTrading6045(),
+        singleCaravansSublet = CaravansTrading6045(),
+        twinUnitCaravansOwnedByOperator = CaravansTrading6045(),
+        twinUnitCaravansSublet = CaravansTrading6045()
+      )
+    ),
+    caravans = Caravans( // 6045/46
+      anyStaticLeisureCaravansOnSite = AnswerYes,
+      openAllYear = AnswerNo,
+      weeksPerYear = 26,
+      singleCaravansAge = CaravansAge(
+        fleetHire = CaravansPerAgeCategory(10, 20, 30, 40),
+        privateSublet = CaravansPerAgeCategory(5, 6, 7, 8)
+      ),
+      twinUnitCaravansAge = CaravansAge(
+        fleetHire = CaravansPerAgeCategory(100, 200, 300, 400),
+        privateSublet = CaravansPerAgeCategory(1, 2, 3, 4)
+      )
+    ),
     turnoverSections6076 = Seq(
       TurnoverSection6076(
         financialYearEnd = LocalDate.of(2023, 3, 31),
@@ -194,6 +236,18 @@ trait FakeObjects {
           nationalInsurance = 200,
           pensionContributions = 300,
           remunerations = 400
+        ),
+        grossReceiptsExcludingVAT = GrossReceiptsExcludingVAT(1, 10),
+        incomeAndExpenditureSummary = IncomeAndExpenditureSummary6076(
+          totalGrossReceipts = 1,
+          totalBaseLoadReceipts = 8,
+          totalOtherIncome = 5,
+          totalCostOfSales = 2,
+          totalStaffCosts = 1,
+          totalPremisesCosts = 1,
+          totalOperationalExpenses = 8,
+          headOfficeExpenses = 5,
+          netProfitOrLoss = 25
         )
       ),
       TurnoverSection6076(
@@ -215,18 +269,26 @@ trait FakeObjects {
           nationalInsurance = 200,
           pensionContributions = 300,
           remunerations = 400
+        ),
+        grossReceiptsExcludingVAT = GrossReceiptsExcludingVAT(2, 20),
+        incomeAndExpenditureSummary = IncomeAndExpenditureSummary6076(
+          totalGrossReceipts = 1,
+          totalBaseLoadReceipts = 8,
+          totalOtherIncome = 5,
+          totalCostOfSales = 2,
+          totalStaffCosts = 1,
+          totalPremisesCosts = 1,
+          totalOperationalExpenses = 8,
+          headOfficeExpenses = 5,
+          netProfitOrLoss = 25
         )
       )
-    ),
-    grossReceiptsExcludingVAT = Seq(
-      GrossReceiptsExcludingVAT(LocalDate.now()),
-      GrossReceiptsExcludingVAT(LocalDate.now().minusYears(1)),
-      GrossReceiptsExcludingVAT(LocalDate.now().minusYears(2))
     ),
     otherIncomeDetails = "Some other income details",
     otherOperationalExpensesDetails = "Other expenses",
     otherSalesDetails = "other sales details",
-    furtherInformationOrRemarks = "Further information or remarks"
+    furtherInformationOrRemarks = "Further information or remarks",
+    incomeExpenditureConfirmation6076 = "confirmed"
   )
 
   // Franchises or lettings
@@ -320,7 +382,7 @@ trait FakeObjects {
       saveAsDraftPassword = "dummyPassword"
     )
 
-  val notConnectedSubmission = NotConnectedSubmission(
+  val notConnectedSubmission: NotConnectedSubmission = NotConnectedSubmission(
     referenceNumberNotConnected,
     forType6010,
     prefilledAddress,

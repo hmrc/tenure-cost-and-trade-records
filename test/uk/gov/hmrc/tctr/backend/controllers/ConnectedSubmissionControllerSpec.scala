@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,55 +16,41 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import org.apache.pekko.util.Timeout
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult
-import org.mockito.ArgumentMatchers._
-import org.mockito.IdiomaticMockito.StubbingOps
-import org.mockito.MockitoSugar
+import org.apache.pekko.util.Timeout
 import play.api.Application
-import play.api.mvc.ControllerComponents
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.test.{FakeRequest, Helpers}
-import play.api.test.Helpers._
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.internalauth.client.Predicate.Permission
-import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
-import uk.gov.hmrc.internalauth.client.{BackendAuthComponents, IAAction, Resource, ResourceLocation, ResourceType, Retrieval}
+import play.api.mvc.ControllerComponents
+import play.api.test.Helpers._
+import play.api.test.{FakeRequest, Helpers}
+import uk.gov.hmrc.internalauth.client._
+import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
+import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
 import uk.gov.hmrc.tctr.backend.repository.{ConnectedRepository, SubmittedMongoRepo}
-import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.tctr.backend.testUtils.AuthStubBehaviour
 
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContext, Future}
 
-class ConnectedSubmissionControllerSpec
-    extends AnyWordSpec
-    with Matchers
-    with GuiceOneAppPerSuite
-    with MockitoSugar
-    with FakeObjects {
+class ConnectedSubmissionControllerSpec extends AnyWordAppSpec {
 
-  implicit val timeout: Timeout                                  = 5.seconds
-  implicit val ec: ExecutionContext                              = ExecutionContext.global
-  private val expectedPredicate                                  =
-    Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
-  protected val mockStubBehaviour: StubBehaviour                 = mock[StubBehaviour]
-  mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
+  implicit val timeout: Timeout     = 5.seconds
+  implicit val ec: ExecutionContext = ExecutionContext.global
+
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), ec)
-  val mockRepository: ConnectedRepository                        = mock[ConnectedRepository]
-  val mockSubmittedRepo: SubmittedMongoRepo                      = mock[SubmittedMongoRepo]
-  val mockEmailConnector: EmailConnector                         = mock[EmailConnector]
-  val mockMetrics: MetricsHandler                                = mock[MetricsHandler]
-  val meter: Meter                                               = mock[Meter]
-  val fakeControllerComponents: ControllerComponents             = stubControllerComponents()
+    BackendAuthComponentsStub(AuthStubBehaviour)(Helpers.stubControllerComponents(), ec)
+
+  val mockRepository: ConnectedRepository            = mock[ConnectedRepository]
+  val mockSubmittedRepo: SubmittedMongoRepo          = mock[SubmittedMongoRepo]
+  val mockEmailConnector: EmailConnector             = mock[EmailConnector]
+  val mockMetrics: MetricsHandler                    = mock[MetricsHandler]
+  val meter: Meter                                   = mock[Meter]
+  val fakeControllerComponents: ControllerComponents = stubControllerComponents()
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(
@@ -75,7 +61,7 @@ class ConnectedSubmissionControllerSpec
     )
     .build()
 
-  val controller: ConnectedSubmissionController = app.injector.instanceOf[ConnectedSubmissionController]
+  val controller: ConnectedSubmissionController = inject[ConnectedSubmissionController]
 
   when(mockMetrics.okSubmissions).thenReturn(meter)
   when(mockMetrics.failedSubmissions).thenReturn(meter)

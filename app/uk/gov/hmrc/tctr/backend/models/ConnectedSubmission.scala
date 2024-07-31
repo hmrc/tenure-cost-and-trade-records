@@ -53,5 +53,5 @@ case class ConnectedSubmission(
   downloadPDFDetails: Option[DownloadPDFDetails] = None
 )
 object ConnectedSubmission {
-  implicit val format: OFormat[ConnectedSubmission] = Json.format[ConnectedSubmission]
+  implicit val format: OFormat[ConnectedSubmission] = Json.format
 }

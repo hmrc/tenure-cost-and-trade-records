@@ -25,6 +25,5 @@ case class MonthsYearDuration(months: Int, years: Int) {
 }
 
 object MonthsYearDuration {
-  implicit val format: OFormat[MonthsYearDuration] = Json.format[MonthsYearDuration]
-
+  implicit val format: OFormat[MonthsYearDuration] = Json.format
 }

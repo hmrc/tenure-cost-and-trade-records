@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,8 @@ import uk.gov.hmrc.tctr.backend.repository.MongoSubmissionDraftRepo
 class StatsControllerISpec extends IntegrationSpecBase with BeforeAndAfterAll with BeforeAndAfterEach {
 
   private val statsIdPrefix = "StatsTestDraft"
-  private val repo          = app.injector.instanceOf[MongoSubmissionDraftRepo]
+  private val repo          = inject[MongoSubmissionDraftRepo]
+
   override def beforeAll(): Unit = {
     repo.save(statsIdPrefix + 6015, Json.obj("a" -> "b", "forType" -> "FOR6015"))
     repo.save(statsIdPrefix + 6011, Json.obj("c" -> "d", "forType" -> "FOR6011"))

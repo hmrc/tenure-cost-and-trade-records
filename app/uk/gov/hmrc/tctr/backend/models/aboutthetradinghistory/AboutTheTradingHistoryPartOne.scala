@@ -20,13 +20,19 @@ import play.api.libs.json._
 
 case class AboutTheTradingHistoryPartOne(
   isFinancialYearEndDatesCorrect: Option[Boolean] = Some(false),
+  // 6076
   turnoverSections6076: Option[Seq[TurnoverSection6076]] = None,
-  grossReceiptsExcludingVAT: Option[Seq[GrossReceiptsExcludingVAT]] = None,
   otherIncomeDetails: Option[String] = None,
   otherOperationalExpensesDetails: Option[String] = None,
   otherSalesDetails: Option[String] = None,
   furtherInformationOrRemarks: Option[String] = None,
-  costOfSales: Seq[CostOfSales] = Seq.empty
+  costOfSales: Seq[CostOfSales] = Seq.empty,
+  incomeExpenditureConfirmation6076: Option[String] = None,
+  // 6045/6046
+  turnoverSections6045: Option[Seq[TurnoverSection6045]] = None,
+  caravans: Option[Caravans] = None,
+  otherHolidayAccommodation: Option[OtherHolidayAccommodation] = None,
+  touringAndTentingPitches: Option[TouringAndTentingPitches] = None
 )
 
 object AboutTheTradingHistoryPartOne {

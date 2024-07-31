@@ -76,7 +76,7 @@ class TestDataImporter @Inject() (
           Some("GORING-BY-SEA, WORTHING"),
           "BN12 4AX"
         )
-        val baCode  = if (n % 2 == 0) "BA3835" else "BA6815"
+        val baCode  = if n % 2 == 0 then "BA3835" else "BA6815"
         FORCredentials(s"9999$f$n2", baCode, s"FOR$f", SensitiveAddress(address), s"9999$f$n2")
       })
     )

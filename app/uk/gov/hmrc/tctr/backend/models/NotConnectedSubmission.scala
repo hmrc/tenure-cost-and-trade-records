@@ -41,7 +41,7 @@ object NotConnectedSubmission {
 
   @nowarn
   implicit val format: Format[NotConnectedSubmission] = mongoEntity {
-    Json.format[NotConnectedSubmission]
+    Json.format
   }
 
 }

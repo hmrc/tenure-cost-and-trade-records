@@ -65,7 +65,8 @@ class ConnectedSubmissionController @Inject() (
 
   def saveSubmission(submission: ConnectedSubmission, submissionReference: String)(implicit hc: HeaderCarrier): Unit = {
     repository.insert(submission)
-    if (isVacantPropertySubmission(submission)) {
+
+    if isVacantPropertySubmission(submission) then
       submission.stillConnectedDetails
         .flatMap(_.provideContactDetails)
         .map(_.yourContactDetails)
@@ -74,9 +75,8 @@ class ConnectedSubmissionController @Inject() (
         } { contact =>
           emailConnector.sendVacantSubmissionConfirmation(contact.contactDetails.email, contact.fullName)
         }
-    } else {
-      emailConnector.sendSubmissionConfirmation(submission)
-    }
+    else emailConnector.sendSubmissionConfirmation(submission)
+
     /*Remove for submission checking*/
     submittedMongoRepo.insertIfUnique(submissionReference)
 

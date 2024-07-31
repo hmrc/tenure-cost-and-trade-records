@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,11 @@ import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.testkit.{ImplicitSender, TestKit}
 import com.mongodb.client.result.DeleteResult
 import com.typesafe.config.ConfigFactory
-import org.mockito.scalatest.MockitoSugar
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.Configuration
+import uk.gov.hmrc.tctr.backend.base.MockitoExtendedSugar
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import uk.gov.hmrc.tctr.backend.connectors.{DeskproConnector, DeskproTicket}
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
@@ -42,7 +42,7 @@ class ExportNotConnectedSubmissionsSpec
     with AnyWordSpecLike
     with should.Matchers
     with BeforeAndAfterAll
-    with MockitoSugar {
+    with MockitoExtendedSugar {
 
   implicit val ec: ExecutionContext = system.dispatcher
 //  private val emailConnector = mock[EmailConnector]

@@ -24,6 +24,5 @@ case class PropertyUseLeasebackArrangementDetails(
 )
 
 object PropertyUseLeasebackArrangementDetails {
-  implicit val format: OFormat[PropertyUseLeasebackArrangementDetails] =
-    Json.format[PropertyUseLeasebackArrangementDetails]
+  implicit val format: OFormat[PropertyUseLeasebackArrangementDetails] = Json.format
 }

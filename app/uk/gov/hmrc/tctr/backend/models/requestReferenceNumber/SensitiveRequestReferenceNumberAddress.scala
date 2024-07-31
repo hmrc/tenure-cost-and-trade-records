@@ -34,8 +34,7 @@ case class SensitiveRequestReferenceNumberAddress(
 
 object SensitiveRequestReferenceNumberAddress {
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveRequestReferenceNumberAddress] =
-    Json.format[SensitiveRequestReferenceNumberAddress]
+  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveRequestReferenceNumberAddress] = Json.format
 
   def apply(noReferenceNumber: RequestReferenceNumber): SensitiveRequestReferenceNumberAddress =
     SensitiveRequestReferenceNumberAddress(

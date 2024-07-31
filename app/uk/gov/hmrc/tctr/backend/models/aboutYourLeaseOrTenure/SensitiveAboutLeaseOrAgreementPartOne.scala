@@ -69,8 +69,7 @@ case class SensitiveAboutLeaseOrAgreementPartOne(
 }
 
 object SensitiveAboutLeaseOrAgreementPartOne {
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAboutLeaseOrAgreementPartOne] =
-    Json.format[SensitiveAboutLeaseOrAgreementPartOne]
+  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAboutLeaseOrAgreementPartOne] = Json.format
 
   def apply(aboutLeaseOrAgreementPartOne: AboutLeaseOrAgreementPartOne): SensitiveAboutLeaseOrAgreementPartOne =
     SensitiveAboutLeaseOrAgreementPartOne(

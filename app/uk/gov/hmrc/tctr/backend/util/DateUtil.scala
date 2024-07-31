@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,11 @@
 
 package uk.gov.hmrc.tctr.backend.util
 
-import play.api.i18n.{Lang, Messages, MessagesApi}
-import uk.gov.hmrc.play.language.LanguageUtils
-import uk.gov.hmrc.tctr.backend.util.DateUtil.dateOps
+import play.api.i18n.Lang
 
 import java.time.format.DateTimeFormatter
-import java.time.{Instant, LocalDate, ZoneId, ZoneOffset, ZonedDateTime}
+import java.time._
 import java.util.{Date, Locale}
-import javax.inject.{Inject, Singleton}
 
 /**
   * @author Yuriy Tumakha
@@ -51,30 +48,5 @@ object DateUtil {
     case "cy" => cy
     case _    => en
   }
-
-}
-
-@Singleton
-class DateUtil @Inject() (langUtil: LanguageUtils, messagesApi: MessagesApi) {
-
-  def formatDate(localDate: LocalDate)(implicit messages: Messages): String =
-    langUtil.Dates.formatDate(localDate)
-
-  def formatDate(localDate: LocalDate, lang: Lang): String =
-    formatDate(localDate)(messagesByLang(lang))
-
-  def formatDate(zonedDateTime: ZonedDateTime)(implicit messages: Messages): String =
-    formatDate(zonedDateTime.toLocalDate)
-
-  def formatDate(zonedDateTime: ZonedDateTime, lang: Lang): String =
-    formatDate(zonedDateTime)(messagesByLang(lang))
-
-  def formatDate(date: Date)(implicit messages: Messages): String =
-    formatDate(date.asZonedDateTime)
-
-  def formatDate(date: Date, lang: Lang): String =
-    formatDate(date)(messagesByLang(lang))
-
-  private def messagesByLang(lang: Lang): Messages = messagesApi.preferred(Seq(lang))
 
 }

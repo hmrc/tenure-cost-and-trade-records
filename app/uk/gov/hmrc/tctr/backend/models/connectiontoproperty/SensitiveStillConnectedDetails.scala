@@ -60,8 +60,7 @@ case class SensitiveStillConnectedDetails(
 }
 
 object SensitiveStillConnectedDetails {
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveStillConnectedDetails] =
-    Json.format[SensitiveStillConnectedDetails]
+  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveStillConnectedDetails] = Json.format
 
   def apply(stillConnectedDetails: StillConnectedDetails): SensitiveStillConnectedDetails =
     SensitiveStillConnectedDetails(

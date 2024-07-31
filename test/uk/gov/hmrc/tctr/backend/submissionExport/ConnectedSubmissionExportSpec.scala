@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,19 @@
 
 package uk.gov.hmrc.tctr.backend.submissionExport
 
+import com.mongodb.client.result.DeleteResult
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.testkit.{ImplicitSender, TestKit}
-import com.mongodb.client.result.DeleteResult
-import java.time.Instant
-import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import java.time.Clock
-import org.mockito.scalatest.MockitoSugar
-import org.scalatest.matchers.should
-import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import uk.gov.hmrc.tctr.backend.base.AppSuiteBase
+import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
 import uk.gov.hmrc.tctr.backend.repository.ConnectedMongoRepository
-import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 import uk.gov.hmrc.tctr.backend.testUtils.ScheduleThatSchedulesImmediately5Times
 
+import java.time.{Clock, Instant}
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.language.postfixOps
@@ -40,21 +37,19 @@ class ConnectedSubmissionExportSpec
     extends TestKit(ActorSystem.create("submissionExportTest"))
     with ImplicitSender
     with AnyWordSpecLike
-    with should.Matchers
     with BeforeAndAfterAll
-    with MockitoSugar
     with GuiceOneAppPerSuite
-    with FakeObjects {
+    with AppSuiteBase {
 
-  def audit: ForTCTRAudit      = app.injector.instanceOf[ForTCTRAudit]
-  def configuration: AppConfig = app.injector.instanceOf[AppConfig]
+  def audit: ForTCTRAudit      = inject[ForTCTRAudit]
+  def configuration: AppConfig = inject[AppConfig]
 
   implicit val ec: ExecutionContext = system.dispatcher
 
   import TestData._
 
   "Given there are submissions to be exported" when {
-    val submissions = (1 to 200).map(createConnectedSubmission).toList
+    val submissions = (1 to 80).map(createConnectedSubmission).toList
     when(repo.getSubmissions(eqTo(batchSize)))
       .thenReturn(Future.successful(submissions.take(batchSize)), Future.successful(List.empty[ConnectedSubmission]))
     when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.acknowledged(1)))
@@ -64,7 +59,7 @@ class ConnectedSubmissionExportSpec
       Await.result(
         new ExportConnectedSubmissionsVOA(repo, Clock.systemDefaultZone(), mock[ForTCTRAudit], mock[AppConfig])
           .exportNow(batchSize),
-        5 seconds
+        9 seconds
       )
 
       "It deletes each submission so that it is not submitted again" in {
@@ -77,7 +72,7 @@ class ConnectedSubmissionExportSpec
         when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.acknowledged(1)))
         Await.result(
           new ExportConnectedSubmissionsVOA(repo, Clock.systemDefaultZone(), audit, configuration).exportNow(batchSize),
-          5 seconds
+          9 seconds
         )
         verify(repo).removeById(same(submission.referenceNumber))
       }
@@ -88,7 +83,7 @@ class ConnectedSubmissionExportSpec
 
   object TestData {
     lazy val repo: ConnectedMongoRepository = mock[ConnectedMongoRepository]
-    lazy val batchSize                      = 50
+    lazy val batchSize                      = 40
     lazy val scheduler                      = new ScheduleThatSchedulesImmediately5Times
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,16 @@
 
 package uk.gov.hmrc.tctr.backend.repository
 
+import org.mongodb.scala.SingleObservableFuture
 import org.mongodb.scala.bson.{BsonString, Document}
 import org.scalatest.BeforeAndAfterAll
-import org.scalatestplus.play.PlaySpec
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.tctr.backend.base.AppSuiteBase
 import uk.gov.hmrc.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.tctr.backend.schema.Address
 
@@ -31,11 +33,12 @@ import java.time.Instant
 import java.util.UUID
 
 class NotConnectedRepositorySpec
-    extends PlaySpec
+    extends AnyWordSpec
     with BeforeAndAfterAll
-    with GuiceOneAppPerSuite
     with FutureAwaits
-    with DefaultAwaitTimeout {
+    with DefaultAwaitTimeout
+    with GuiceOneAppPerSuite
+    with AppSuiteBase {
 
   val dbName = s"notConnectedRepositorySpec${UUID.randomUUID().toString.replaceAll("-", "")}"
 
@@ -45,32 +48,32 @@ class NotConnectedRepositorySpec
     .configure("mongodb.uri" -> testDbUri)
     .build()
 
-  def mongo: MongoComponent = app.injector.instanceOf[MongoComponent]
+  def mongo: MongoComponent = inject[MongoComponent]
 
-  def repository = app.injector.instanceOf[NotConnectedMongoRepository]
+  def repository = inject[NotConnectedMongoRepository]
 
   "NotConnectedRepository" should {
     "save NotConnectedSubmission to mongo" in {
       val insertOneResult = await(repository.insert(aSubmission()))
-      insertOneResult.wasAcknowledged() mustBe true
-      insertOneResult.getInsertedId mustBe BsonString("9999000111")
+      insertOneResult.wasAcknowledged() shouldBe true
+      insertOneResult.getInsertedId     shouldBe BsonString("9999000111")
     }
 
     "save NotConnectedSubmission to mongo and get it back" in {
       val id              = "9999000321"
       val insertOneResult = await(repository.insert(aSubmission().copy(id = id)))
-      insertOneResult.wasAcknowledged() mustBe true
+      insertOneResult.wasAcknowledged() shouldBe true
 
       val result = await(repository.findById(id))
 
-      result mustBe defined
+      result shouldBe defined
 
-      result.value mustBe (aSubmission().copy(id = id))
+      result.value shouldBe aSubmission().copy(id = id)
     }
 
     "get some submission from repository" in {
       val submissions = await(repository.getSubmissions())
-      submissions must have size 2
+      submissions should have size 2
     }
 
     "Save createdAt as BSONDateTime in database" in {
@@ -79,12 +82,12 @@ class NotConnectedRepositorySpec
       await(repository.insert(submission))
 
       val dbSubmission = await(repository.findById(submission.id)).value
-      dbSubmission.createdAt mustBe submission.createdAt
+      dbSubmission.createdAt shouldBe submission.createdAt
     }
 
   }
 
-  val testingDate = Instant ofEpochMilli Instant.now.toEpochMilli
+  val testingDate = Instant.ofEpochMilli(Instant.now.toEpochMilli)
 
   def aSubmission(): NotConnectedSubmission = NotConnectedSubmission(
     "9999000111",

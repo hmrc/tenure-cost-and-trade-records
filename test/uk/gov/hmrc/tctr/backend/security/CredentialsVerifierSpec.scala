@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,11 @@
 
 package uk.gov.hmrc.tctr.backend.security
 
-import com.google.inject.AbstractModule
-import uk.gov.hmrc.play.bootstrap.metrics.Metrics
-import net.codingwell.scalaguice.ScalaModule
-import org.mockito.scalatest.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.tctr.backend.base.AnyFlatAppSpec
 import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.infrastructure._
 import uk.gov.hmrc.tctr.backend.testUtils._
@@ -35,34 +29,24 @@ import uk.gov.hmrc.tctr.backend.util.DateUtil.nowInUK
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class CredentialsVerifierSpec
-    extends AnyFlatSpec
-    with should.Matchers
-    with MockitoSugar
-    with TableDrivenPropertyChecks
-    with GuiceOneAppPerSuite {
+class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChecks {
 
   import TestData._
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure("mongodb.uri" -> "mongodb://localhost:27017/tenure-cost-and-trade-records")
-    .overrides(new AbstractModule with ScalaModule {
-      override def configure(): Unit =
-        bind[Metrics].toInstance(mock[Metrics])
-//        bind[RegularSchedule].to[DefaultRegularSchedule]
-    })
     .build()
 
-  def mongo: MongoComponent = app.injector.instanceOf[MongoComponent]
-  def appConfig: AppConfig  = app.injector.instanceOf[AppConfig]
+  def mongo: MongoComponent = inject[MongoComponent]
+  def appConfig: AppConfig  = inject[AppConfig]
 
   behavior of "Credentials Verifier"
 
   it should "lockout an IP address after the maximum number of failed login attempts is exceeded" in {
-    forAll(loginAttemptLengths) { attempts =>
+    forAll(loginAttemptLengths) { (attempts: Int) =>
       val config   = VerifierConfig(attempts, 1 hour, 1 hour, true, voaIP)
       val verifier = verifierWith(config, new SystemClock)
-      (1 to attempts) foreach { n =>
+      Range.Int.inclusive(1, attempts, 1).foreach { (n: Int) =>
         assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(attempts - n))
       }
       assert(await(verifier.verify(refNum, postcode, ip)) === IPLockout)

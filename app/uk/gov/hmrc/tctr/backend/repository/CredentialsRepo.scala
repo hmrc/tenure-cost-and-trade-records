@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,15 @@
 package uk.gov.hmrc.tctr.backend.repository
 
 import com.google.inject.ImplementedBy
-import org.mongodb.scala.{BulkWriteResult, MongoBulkWriteException}
 import org.mongodb.scala.bson.{BsonDateTime, BsonDocument, Document}
 import org.mongodb.scala.model.Filters.equal
-import org.mongodb.scala.model.{Filters, IndexModel, IndexOptions, Indexes, UpdateOneModel, UpdateOptions, WriteModel}
+import org.mongodb.scala.model._
 import org.mongodb.scala.result.{DeleteResult, InsertManyResult}
-import play.api.libs.json.OWrites
+import org.mongodb.scala.{BulkWriteResult, MongoBulkWriteException, ObservableFuture, SingleObservableFuture, ToSingleObservablePublisher}
+import play.api.libs.json._
 import play.api.{Configuration, Logging}
 import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.FORCredentials
@@ -33,8 +34,6 @@ import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import play.api.libs.json._
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 @ImplementedBy(classOf[CredentialsMongoRepo])
 trait CredentialsRepo {
@@ -129,7 +128,7 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent, configuration: Conf
       setData.append("$setOnInsert", BsonDocument("createdAt" -> BsonDateTime(Instant.now().toEpochMilli)))
     }
 
-    val bulkOps: Seq[WriteModel[_ <: FORCredentials]] = credentialsSeq.map { cred =>
+    val bulkOps: Seq[WriteModel[? <: FORCredentials]] = credentialsSeq.map { cred =>
       val filter   = Filters.eq("_id", cred._id)
       val update   = new UpdateOptions().upsert(true)
       val document = toBson(toJson(cred))

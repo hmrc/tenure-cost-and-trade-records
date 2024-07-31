@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import org.apache.pekko.actor.ActorSystem
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import uk.gov.hmrc.tctr.backend.infrastructure.{RegularSchedule, TestDataImporter}
-import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.repository._
 import uk.gov.hmrc.tctr.backend.submissionExport._
 
@@ -32,7 +31,6 @@ import scala.concurrent.ExecutionContext
 class ForTCTRImpl @Inject() (
   actorSystem: ActorSystem,
   tctrConfig: AppConfig,
-  metrics: MetricsHandler,
   audit: ForTCTRAudit,
   systemClock: Clock,
   regularSchedule: RegularSchedule,
@@ -46,7 +44,7 @@ class ForTCTRImpl @Inject() (
 
   import tctrConfig._
 
-  if (requestRefNumExportEnabled) {
+  if requestRefNumExportEnabled then
     val repo     = requestReferenceNumberMongoRepository
     val exporter = new ExportRequestReferenceNumberSubmissionsVOA(repo, systemClock, audit, tctrConfig)
     new RequestReferenceNumberSubmissionExporter(
@@ -57,9 +55,8 @@ class ForTCTRImpl @Inject() (
       actorSystem.eventStream,
       regularSchedule
     ).start()
-  }
 
-  if (submissionExportEnabled) {
+  if submissionExportEnabled then
     val repo     = connectedMongoRepository
     val exporter = new ExportConnectedSubmissionsVOA(repo, systemClock, audit, tctrConfig)
     new ConnectedSubmissionExporter(
@@ -70,16 +67,7 @@ class ForTCTRImpl @Inject() (
       actorSystem.eventStream,
       regularSchedule
     ).start()
-  }
 
-  if (importTestData) {
-    testDataImporter.importValidations(credentialsMongoRepo)
-  }
-
-//  if (logQueuedSubmissions) {
-//    val logger = new SubmissionQueueSizeLogger(submissionRepository,metrics)
-//    val freq = submissionQueueSizeMonitoringFrequency
-//    actorSystem.scheduler.scheduleAtFixedRate(freq, freq) { () => logger.log() }
-//  }
+  if importTestData then testDataImporter.importValidations(credentialsMongoRepo)
 
 }

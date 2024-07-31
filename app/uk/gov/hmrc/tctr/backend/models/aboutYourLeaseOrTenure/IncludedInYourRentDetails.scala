@@ -18,8 +18,8 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.{Json, OFormat}
 
-case class IncludedInYourRentDetails(includedInYourRent: List[IncludedInYourRentInformation] = List.empty)
+case class IncludedInYourRentDetails(includedInYourRent: List[String] = List.empty, vatValue: Option[BigDecimal] = None)
 
 object IncludedInYourRentDetails {
-  implicit val format: OFormat[IncludedInYourRentDetails] = Json.format[IncludedInYourRentDetails]
+  implicit val format: OFormat[IncludedInYourRentDetails] = Json.format
 }

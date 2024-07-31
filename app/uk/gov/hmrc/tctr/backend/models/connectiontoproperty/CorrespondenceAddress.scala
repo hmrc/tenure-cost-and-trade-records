@@ -27,6 +27,5 @@ case class CorrespondenceAddress(
 )
 
 object CorrespondenceAddress {
-  implicit val format: OFormat[CorrespondenceAddress] = Json.format[CorrespondenceAddress]
-
+  implicit val format: OFormat[CorrespondenceAddress] = Json.format
 }

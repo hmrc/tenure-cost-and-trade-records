@@ -22,5 +22,5 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 case class ContactDetailsQuestion(contactDetailsQuestion: AnswersYesNo)
 
 object ContactDetailsQuestion {
-  implicit val format: OFormat[ContactDetailsQuestion] = Json.format[ContactDetailsQuestion]
+  implicit val format: OFormat[ContactDetailsQuestion] = Json.format
 }

@@ -21,13 +21,14 @@ import java.time.Instant
 
 object UpScanRequests {
 
-  implicit val initiateRequest: OFormat[InitiateRequest]                    = Json.format[InitiateRequest]
-  implicit val uploadRequests: OFormat[UploadRequest]                       = Json.format[UploadRequest]
-  implicit val initialResponse: OFormat[InitiateResponse]                   = Json.format[InitiateResponse]
-  implicit val uploadDetails: OFormat[UploadDetails]                        = Json.format[UploadDetails]
-  implicit val uploadConfirmationSucess: OFormat[UploadConfirmationSuccess] = Json.format[UploadConfirmationSuccess]
-  implicit val failureDetails: OFormat[FailureDetails]                      = Json.format[FailureDetails]
-  implicit val uploadConfirmationError: OFormat[UploadConfirmationError]    = Json.format[UploadConfirmationError]
+  implicit val initiateRequest: OFormat[InitiateRequest]                    = Json.format
+  implicit val uploadRequests: OFormat[UploadRequest]                       = Json.format
+  implicit val initialResponse: OFormat[InitiateResponse]                   = Json.format
+  implicit val uploadDetails: OFormat[UploadDetails]                        = Json.format
+  implicit val uploadConfirmationSucess: OFormat[UploadConfirmationSuccess] = Json.format
+  implicit val failureDetails: OFormat[FailureDetails]                      = Json.format
+  implicit val uploadConfirmationError: OFormat[UploadConfirmationError]    = Json.format
+
   case class InitiateRequest(
     callbackUrl: String,
     successRedirect: Option[String] = None,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,15 @@
 
 package uk.gov.hmrc.tctr.backend.crypto
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json._
-
-import play.api.test.Injecting
+import uk.gov.hmrc.tctr.backend.base.AnyFlatAppSpec
 
 import scala.io.Source
 
 /**
   * @author Yuriy Tumakha
   */
-class EncryptionJsonTransformerSpec
-    extends AnyFlatSpec
-    with should.Matchers
-    with Injecting
-    with GuiceOneAppPerSuite
-    with BeEncryptedMatchers {
+class EncryptionJsonTransformerSpec extends AnyFlatAppSpec with BeEncryptedMatchers {
 
   private val encryptionJsonTransformer = inject[EncryptionJsonTransformer]
   private val submissionDraftJson       = Json.parse(Source.fromResource("json/submissionDraft.json").mkString)
@@ -44,7 +35,7 @@ class EncryptionJsonTransformerSpec
     decryptedJson shouldBe submissionDraftJson
   }
 
-  it                          should "encrypt sensitive PII fields" in {
+  it should "encrypt sensitive PII fields" in {
     val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
 
     (encryptedJson \ "session" \ "userLoginDetails" \ "token")                                   shouldBe encrypted
@@ -62,7 +53,7 @@ class EncryptionJsonTransformerSpec
     (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "postcode")           shouldBe encrypted
   }
 
-  it                          should "not encrypt not PII fields" in {
+  it should "not encrypt not PII fields" in {
     val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
     println("Encrypted JSON: " + Json.prettyPrint(encryptedJson))
 

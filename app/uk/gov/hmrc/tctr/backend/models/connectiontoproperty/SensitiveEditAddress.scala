@@ -40,7 +40,7 @@ case class SensitiveEditAddress(
 
 object SensitiveEditAddress {
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveEditAddress] = Json.format[SensitiveEditAddress]
+  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveEditAddress] = Json.format
 
   def apply(editAddress: EditAddress): SensitiveEditAddress = SensitiveEditAddress(
     SensitiveString(editAddress.buildingNameNumber),

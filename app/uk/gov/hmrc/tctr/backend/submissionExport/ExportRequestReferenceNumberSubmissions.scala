@@ -44,7 +44,7 @@ class ExportRequestReferenceNumberSubmissionsVOA @Inject() (
 
   override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
     requestRefNumMongoRepository.getSubmissions(size).flatMap { submissions =>
-      if (submissions.nonEmpty)
+      if submissions.nonEmpty then
         logger.warn(s"Found ${submissions.length} Request reference number submissions to export")
       processSequentially(submissions)
       Future.unit
@@ -53,27 +53,20 @@ class ExportRequestReferenceNumberSubmissionsVOA @Inject() (
   def processSequentially(
     submission: Seq[RequestReferenceNumberSubmission]
   )(implicit ec: ExecutionContext): Future[Unit] =
-    if (submission.isEmpty) {
-      Future.unit
-    } else {
-      processNext(submission.head).flatMap(_ => processSequentially(submission.tail))
-    }
+    if submission.isEmpty then Future.unit
+    else processNext(submission.head).flatMap(_ => processSequentially(submission.tail))
 
   private def processNext(
     submission: RequestReferenceNumberSubmission
   )(implicit executionContext: ExecutionContext): Future[Unit] =
-    if (isTooLongInQueue(submission)) {
+    if isTooLongInQueue(submission) then
       logger.warn(
         s"Unable to export request reference number, id: ${submission.id}. MANUAL INTERVENTION REQUIRED"
       ) // Restore to error when the data is sent to BST
       auditSubmissionEvent("RequestRefNumSubmissionRemovedByTCTR", submission)
       requestRefNumMongoRepository.removeById(submission.id).map(_ => ())
       Future.unit
-    } else {
-      // auditEvent - "ConnectedSubmissionToVOA" - field statusCode = 200, responseMessage = unmodified response body
-      // auditEvent - "ConnectedSubmissionToVOA" - field statusCode = 500 etc, responseMessage = unmodified response body
-      Future.unit
-    }
+    else Future.unit
 
   def isTooLongInQueue(submission: RequestReferenceNumberSubmission): Boolean =
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.requestRefNumExportRetryWindow, ChronoUnit.HOURS))

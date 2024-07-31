@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,21 +36,21 @@ class MongoSubmissionDraftRepoSpec extends MongoSpecBase {
     repo.find(submissionDraftFindId).futureValue shouldBe Some(testSubmissionDraft)
   }
 
-  it                         should "return None by unknown id" in {
+  it should "return None by unknown id" in {
     repo.find("UNKNOWN_ID").futureValue shouldBe None
   }
 
-  it                         should "save SubmissionDraft" in {
+  it should "save SubmissionDraft" in {
     repo.save(submissionDraftSaveId, testSubmissionDraft).futureValue shouldBe testSubmissionDraft
   }
 
-  it                         should "return deletedCount = 1 on delete SubmissionDraft" in {
+  it should "return deletedCount = 1 on delete SubmissionDraft" in {
     repo.save(submissionDraftDeleteId, testSubmissionDraft).futureValue
 
     repo.delete(submissionDraftDeleteId).futureValue.getDeletedCount shouldBe 1
   }
 
-  it                         should "return deletedCount = 0 on delete by unknown id" in {
+  it should "return deletedCount = 0 on delete by unknown id" in {
     repo.delete("UNKNOWN_ID").futureValue.getDeletedCount shouldBe 0
   }
 

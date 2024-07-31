@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,15 @@
 package uk.gov.hmrc.tctr.backend.controllers
 
 import com.mongodb.client.result.DeleteResult
-import org.mockito.IdiomaticMockito.StubbingOps
-import org.mockito.MockitoSugar.mock
 import play.api.http.Status.{BAD_REQUEST, CREATED, NOT_FOUND, OK}
 import play.api.libs.json.{JsValue, Json}
-import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsJson, status, stubControllerComponents}
-import uk.gov.hmrc.internalauth.client.Predicate.Permission
-import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
-import uk.gov.hmrc.internalauth.client.{BackendAuthComponents, IAAction, Resource, ResourceLocation, ResourceType, Retrieval}
+import play.api.test.{FakeRequest, Helpers}
+import uk.gov.hmrc.internalauth.client.BackendAuthComponents
+import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
 import uk.gov.hmrc.tctr.backend.models.SubmissionDraftWrapper
 import uk.gov.hmrc.tctr.backend.repository.SubmissionDraftRepo
+import uk.gov.hmrc.tctr.backend.testUtils.AuthStubBehaviour
 
 import scala.concurrent.ExecutionContext.Implicits
 import scala.concurrent.Future
@@ -36,12 +34,9 @@ import scala.concurrent.Future
   * @author Yuriy Tumakha
   */
 class SaveAsDraftControllerSpec extends ControllerSpecBase {
-  private val expectedPredicate                                  =
-    Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
-  protected val mockStubBehaviour: StubBehaviour                 = mock[StubBehaviour]
-  mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
+
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), Implicits.global)
+    BackendAuthComponentsStub(AuthStubBehaviour)(Helpers.stubControllerComponents(), Implicits.global)
 
   def controller =
     new SaveAsDraftController(StubSubmissionDraftRepo, backendAuthComponentsStub, stubControllerComponents())
@@ -59,7 +54,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
     }
   }
 
-  it                      should "save SubmissionDraft" in {
+  it should "save SubmissionDraft" in {
     controller
       .put(StubSubmissionDraftRepo.correctDbId)(
         FakeRequest().withJsonBody(Json.obj("a" -> "b")).withHeaders("Authorization" -> "fake-token")
@@ -69,7 +64,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
       }
   }
 
-  it                      should "return 400 for empty body" in {
+  it should "return 400 for empty body" in {
     val res = controller.put("WRONG_ID")(
       FakeRequest().withHeaders("Content-Type" -> "application/json").withHeaders("Authorization" -> "fake-token")
     )
@@ -77,7 +72,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
     contentAsJson(res) shouldBe Json.obj("statusCode" -> BAD_REQUEST, "message" -> "JSON body is expected in request")
   }
 
-  it                      should "delete SubmissionDraft and return deletedCount = 1" in {
+  it should "delete SubmissionDraft and return deletedCount = 1" in {
     controller
       .delete(StubSubmissionDraftRepo.correctDbId)(FakeRequest().withHeaders("Authorization" -> "fake-token"))
       .map { result =>
@@ -86,7 +81,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
       }
   }
 
-  it                      should "on delete return deletedCount = 0 for unknown id" in {
+  it should "on delete return deletedCount = 0 for unknown id" in {
     controller.delete("UNKNOWN_ID")(FakeRequest().withHeaders("Authorization" -> "fake-token")).map { result =>
       result.header.status  shouldBe OK
       contentAsJson(result) shouldBe Json.obj("deletedCount" -> 0)
@@ -107,11 +102,8 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
       }
 
     override def save(id: String, submissionDraft: JsValue): Future[JsValue] =
-      if (id == correctDbId) {
-        Future.successful(submissionDraft)
-      } else {
-        Future.failed(new RuntimeException("SubmissionDraft wasn't found"))
-      }
+      if id == correctDbId then Future.successful(submissionDraft)
+      else Future.failed(new RuntimeException("SubmissionDraft wasn't found"))
 
     override def delete(id: String): Future[DeleteResult] = {
       val deletedCount = id match {

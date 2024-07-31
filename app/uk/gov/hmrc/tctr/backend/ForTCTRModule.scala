@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,21 +33,20 @@ import javax.inject.Singleton
 @Singleton
 class ForTCTRModule extends Module with Logging {
 
-  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[?]] =
     Seq(
       bind[RegularSchedule].to[DefaultRegularSchedule],
       bind[ForTCTRImpl].toSelf.eagerly(),
       bind[Clock].toProvider[ClockProvider]
     ) ++ notConnectedSubmissionExporter(configuration)
 
-  def notConnectedSubmissionExporter(configuration: Configuration): Seq[Binding[_]] = {
+  def notConnectedSubmissionExporter(configuration: Configuration): Seq[Binding[?]] = {
     val enableNotConnectedExport = configuration.get[Boolean]("notConnectedSubmissionExport.enabled")
-    if (enableNotConnectedExport) {
+    if enableNotConnectedExport then
       Seq(bind[NotConnectedSubmissionExporter].toProvider(classOf[NotConnectedSubmissionExporterProvider]).eagerly())
-    } else {
+    else
       logger.warn(s"NotConnectedSubmissionExporter disabled! Testing only.")
       Seq.empty
-    }
   }
 
 }

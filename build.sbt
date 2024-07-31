@@ -1,11 +1,10 @@
 import uk.gov.hmrc.DefaultBuildSettings.itSettings
 
 val defaultPort = 9527
-val appName = "tenure-cost-and-trade-records"
+val appName     = "tenure-cost-and-trade-records"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.12"
-
+ThisBuild / scalaVersion := "3.4.2"
 
 val microservice = Project(appName, file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin, BuildInfoPlugin)
@@ -14,7 +13,6 @@ val microservice = Project(appName, file("."))
     PlayKeys.playDefaultPort := defaultPort,
     libraryDependencies ++= AppDependencies.appDependencies,
     Test / fork := true, // must be true for Service Provider Interface
-    scalacOptions += "-Wconf:src=routes/.*:s",
     buildInfoPackage := "uk.gov.hmrc.tctr.backend",
     maintainer := "voa.service.optimisation@digital.hmrc.gov.uk"
   )
@@ -25,4 +23,4 @@ lazy val it = (project in file("it"))
   .settings(libraryDependencies ++= AppDependencies.itDependencies)
   .settings(itSettings(forkJvmPerTest = true))
 
-addCommandAlias("precommit", ";scalafmt;test:scalafmt;it/test:scalafmt;coverage;test;it/test;coverageReport")
+addCommandAlias("precommit", "scalafmtSbt;scalafmtAll;it/test:scalafmt;coverage;test;it/test;coverageReport")

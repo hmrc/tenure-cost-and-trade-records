@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,45 +17,39 @@
 package uk.gov.hmrc.tctr.backend.controllers
 
 import org.apache.pekko.stream.Materializer
-import org.mockito.IdiomaticMockito.StubbingOps
-import org.mockito.MockitoSugar.{mock, when}
-import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}
-
-import scala.concurrent.{ExecutionContext, Future}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.internalauth.client.Predicate.Permission
-import uk.gov.hmrc.internalauth.client.{BackendAuthComponents, IAAction, Resource, ResourceLocation, ResourceType, Retrieval}
-import uk.gov.hmrc.internalauth.client.test.{BackendAuthComponentsStub, StubBehaviour}
+import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
+import uk.gov.hmrc.internalauth.client._
+import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.repository.CredentialsMongoRepo
 import uk.gov.hmrc.tctr.backend.security.Credentials
+import uk.gov.hmrc.tctr.backend.testUtils.AuthStubBehaviour
 
-class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
+import scala.concurrent.{ExecutionContext, Future}
+
+class AuthControllerSpec extends AnyWordAppSpec {
 
   implicit val ec: ExecutionContext            = ExecutionContext.Implicits.global
   implicit lazy val materializer: Materializer = app.materializer
 
-  val mockCredentialsRepo: CredentialsMongoRepo                  = mock[CredentialsMongoRepo]
-  private val expectedPredicate                                  =
-    Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
-  protected val mockStubBehaviour: StubBehaviour                 = mock[StubBehaviour]
-  mockStubBehaviour.stubAuth(Some(expectedPredicate), Retrieval.EmptyRetrieval).returns(Future.unit)
+  val mockCredentialsRepo: CredentialsMongoRepo = mock[CredentialsMongoRepo]
+
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(mockStubBehaviour)(Helpers.stubControllerComponents(), ec)
-  override def fakeApplication(): Application                    = new GuiceApplicationBuilder()
+    BackendAuthComponentsStub(AuthStubBehaviour)(Helpers.stubControllerComponents(), ec)
+
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(
       bind[CredentialsMongoRepo].toInstance(mockCredentialsRepo),
       bind[BackendAuthComponents].toInstance(backendAuthComponentsStub)
     )
     .build()
 
-  def controller: AuthController = app.injector.instanceOf[AuthController]
+  def controller: AuthController = inject[AuthController]
 
   private val fakeRequest =
     FakeRequest("POST", "/").withBody(Credentials("refNum", "postcode")).withHeaders("Authorization" -> "fake-token")
@@ -80,7 +74,7 @@ class AuthControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
       // Mock the repository to return None when findById is called
       when(mockCredentialsRepo.findById(referenceNum)).thenReturn(Future.successful(None))
 
-      val controller = app.injector.instanceOf[AuthController]
+      val controller = inject[AuthController]
       val result     = controller.retrieveFORType(referenceNum)(fakeRequest)
       status(result) shouldBe Status.NOT_FOUND
     }
