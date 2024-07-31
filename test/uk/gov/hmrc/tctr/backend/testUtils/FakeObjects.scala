@@ -235,6 +235,12 @@ trait FakeObjects {
           BSuoS = 800,
           other = 300
         ),
+        costOfSales6076IntermittentSum = CostOfSales6076IntermittentSum(
+          importedPower = 1300,
+          TNuoS = 900,
+          BSuoS = 700,
+          other = 200
+        ),
         operationalExpenses = OperationalExpenses(1, 2, 3, 4, 5, 6),
         headOfficeExpenses = 777,
         staffCosts = StaffCosts(
@@ -263,6 +269,12 @@ trait FakeObjects {
         otherIncome = 4000,
         costOfSales6076Sum = CostOfSales6076Sum(
           fuelOrFeedstock = 1800,
+          importedPower = 1300,
+          TNuoS = 900,
+          BSuoS = 700,
+          other = 200
+        ),
+        costOfSales6076IntermittentSum = CostOfSales6076IntermittentSum(
           importedPower = 1300,
           TNuoS = 900,
           BSuoS = 700,
