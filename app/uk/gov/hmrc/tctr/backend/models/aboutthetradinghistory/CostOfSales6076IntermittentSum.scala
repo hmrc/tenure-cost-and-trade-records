@@ -23,7 +23,10 @@ case class CostOfSales6076IntermittentSum(
   TNuoS: Option[BigDecimal],
   BSuoS: Option[BigDecimal],
   other: Option[BigDecimal]
-)
+) {
+  def totalIntermittent: BigDecimal = Seq(importedPower, TNuoS, BSuoS, other).flatten.sum
+
+}
 object CostOfSales6076IntermittentSum {
 
   implicit val format: OFormat[CostOfSales6076IntermittentSum] = Json.format[CostOfSales6076IntermittentSum]

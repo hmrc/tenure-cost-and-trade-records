@@ -27,9 +27,10 @@ class AboutTheTradingHistoryPartOneSpec extends AnyFlatSpec with Matchers with F
 
   "AboutTheTradingHistoryPartOne" should "handle model turnoverSections6076" in {
     val turnoverSections6076 = prefilledAboutTheTradingHistoryPartOne.turnoverSections6076.getOrElse(Seq.empty)
-    turnoverSections6076.flatMap(_.costOfSales6076Sum.map(_.total)).sum  shouldBe 10500
-    turnoverSections6076.flatMap(_.operationalExpenses.map(_.total)).sum shouldBe 42
-    turnoverSections6076.flatMap(_.staffCosts.map(_.total)).sum          shouldBe 2000
+    turnoverSections6076.flatMap(_.costOfSales6076Sum.map(_.total)).sum                         shouldBe 10500
+    turnoverSections6076.flatMap(_.costOfSales6076IntermittentSum.map(_.totalIntermittent)).sum shouldBe 6200
+    turnoverSections6076.flatMap(_.operationalExpenses.map(_.total)).sum                        shouldBe 42
+    turnoverSections6076.flatMap(_.staffCosts.map(_.total)).sum                                 shouldBe 2000
 
     val turnoverSections6045 = prefilledAboutTheTradingHistoryPartOne.turnoverSections6045.getOrElse(Seq.empty)
     turnoverSections6045.headOption.map(_.financialYearEnd) shouldBe Some(today)
