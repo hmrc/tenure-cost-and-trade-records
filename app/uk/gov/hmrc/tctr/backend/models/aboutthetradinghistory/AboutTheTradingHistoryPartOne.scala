@@ -26,7 +26,6 @@ case class AboutTheTradingHistoryPartOne(
   otherOperationalExpensesDetails: Option[String] = None,
   otherSalesDetails: Option[String] = None,
   furtherInformationOrRemarks: Option[String] = None,
-  costOfSales: Seq[CostOfSales] = Seq.empty,
   incomeExpenditureConfirmation6076: Option[String] = None,
   // 6045/6046
   turnoverSections6045: Option[Seq[TurnoverSection6045]] = None,
