@@ -31,7 +31,8 @@ case class AboutTheTradingHistoryPartOne(
   turnoverSections6045: Option[Seq[TurnoverSection6045]] = None,
   caravans: Option[Caravans] = None,
   otherHolidayAccommodation: Option[OtherHolidayAccommodation] = None,
-  touringAndTentingPitches: Option[TouringAndTentingPitches] = None
+  touringAndTentingPitches: Option[TouringAndTentingPitches] = None,
+  additionalActivities: Option[AdditionalActivities] = None
 )
 
 object AboutTheTradingHistoryPartOne {

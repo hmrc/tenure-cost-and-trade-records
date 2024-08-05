@@ -222,6 +222,9 @@ trait FakeObjects {
       tentingPitchesTotal = 1,
       tentingPitchesCertificated = AnswerYes
     ),
+    additionalActivities = AdditionalActivities(
+      additionalActivitiesOnSite = AnswerYes
+    ),
     turnoverSections6076 = Seq(
       TurnoverSection6076(
         financialYearEnd = LocalDate.of(2023, 3, 31),
