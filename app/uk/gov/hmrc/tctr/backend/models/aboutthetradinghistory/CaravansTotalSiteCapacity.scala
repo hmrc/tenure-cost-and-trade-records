@@ -17,22 +17,22 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 /**
-  * 6045/6046 Trading history - Static holiday or leisure caravans pages.
-  *
   * @author Yuriy Tumakha
   */
-case class Caravans(
-  anyStaticLeisureCaravansOnSite: Option[AnswersYesNo] = None,
-  openAllYear: Option[AnswersYesNo] = None,
-  weeksPerYear: Option[Int] = None,
-  singleCaravansAge: Option[CaravansAge] = None,
-  twinUnitCaravansAge: Option[CaravansAge] = None,
-  totalSiteCapacity: Option[CaravansTotalSiteCapacity] = None
-)
+case class CaravansTotalSiteCapacity(
+  ownedByOperatorForFleetHire: Int = 0,
+  privatelyOwnedForOwnerAndFamily: Int = 0,
+  subletByOperator: Int = 0,
+  subletByPrivateOwners: Int = 0,
+  charitablePurposes: Int = 0,
+  seasonalStaff: Int = 0
+) {
+  def total: Int = ownedByOperatorForFleetHire + privatelyOwnedForOwnerAndFamily + subletByOperator +
+    subletByPrivateOwners + charitablePurposes + seasonalStaff
+}
 
-object Caravans {
-  implicit val format: OFormat[Caravans] = Json.format
+object CaravansTotalSiteCapacity {
+  implicit val format: OFormat[CaravansTotalSiteCapacity] = Json.format
 }
