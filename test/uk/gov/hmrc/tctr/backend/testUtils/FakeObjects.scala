@@ -224,7 +224,8 @@ trait FakeObjects {
       tentingPitchesCertificated = AnswerYes
     ),
     additionalActivities = AdditionalActivities(
-      additionalActivitiesOnSite = AnswerYes
+      additionalActivitiesOnSite = AnswerYes,
+      checkYourAnswersAdditionalActivities = AnswerYes
     ),
     turnoverSections6076 = Seq(
       TurnoverSection6076(
