@@ -215,7 +215,8 @@ trait FakeObjects {
         fleetHire = CaravansPerAgeCategory(100, 200, 300, 400),
         privateSublet = CaravansPerAgeCategory(1, 2, 3, 4)
       ),
-      totalSiteCapacity = CaravansTotalSiteCapacity(1, 2, 3, 4, 5, 6)
+      totalSiteCapacity = CaravansTotalSiteCapacity(),
+      caravansPerService = CaravansPerService()
     ),
     touringAndTentingPitches = TouringAndTentingPitches(
       tentingPitchesOnSite = AnswerYes,
