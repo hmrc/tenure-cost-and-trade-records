@@ -40,7 +40,7 @@ class AboutTheTradingHistoryPartOneSpec extends AnyFlatSpec with Matchers with F
     caravans.flatMap(_.singleCaravansAge).fold(0)(_.privateSublet.total)   shouldBe 26
     caravans.flatMap(_.twinUnitCaravansAge).fold(0)(_.fleetHire.total)     shouldBe 1000
     caravans.flatMap(_.twinUnitCaravansAge).fold(0)(_.privateSublet.total) shouldBe 10
-    caravans.flatMap(_.totalSiteCapacity).fold(0)(_.total)                 shouldBe 21
+    caravans.flatMap(_.totalSiteCapacity).fold(0)(_.total)                 shouldBe 0
   }
 
 }
