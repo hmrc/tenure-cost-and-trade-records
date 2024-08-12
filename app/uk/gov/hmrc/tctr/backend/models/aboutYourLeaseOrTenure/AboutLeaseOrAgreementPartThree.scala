@@ -37,7 +37,8 @@ case class AboutLeaseOrAgreementPartThree(
   benefitsGiven: Option[BenefitsGiven] = None,
   benefitsGivenDetails: Option[BenefitsGivenDetails] = None,
   workCarriedOutDetails: Option[WorkCarriedOutDetails] = None,
-  workCarriedOutCondition: Option[WorkCarriedOutCondition] = None
+  workCarriedOutCondition: Option[WorkCarriedOutCondition] = None,
+  rentIncludeTradeServicesDetailsTextArea: Option[String] = None // Added Aug 2024 for 6045/46
 )
 
 object AboutLeaseOrAgreementPartThree {
