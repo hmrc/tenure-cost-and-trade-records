@@ -220,12 +220,13 @@ trait FakeObjects {
     ),
     touringAndTentingPitches = TouringAndTentingPitches(
       tentingPitchesOnSite = AnswerYes,
-      tentingPitchesAllYear = TentingPitchesAllYear(AnswerYes, 1),
+      tentingPitchesAllYear = TentingPitchesAllYear(AnswerNo, 1),
       tentingPitchesTotal = 1,
       tentingPitchesCertificated = AnswerYes
     ),
     additionalActivities = AdditionalActivities(
       additionalActivitiesOnSite = AnswerYes,
+      additionalActivitiesAllYear = AdditionalActivitiesAllYear(AnswerNo, 1),
       checkYourAnswersAdditionalActivities = AnswerYes
     ),
     turnoverSections6076 = Seq(
