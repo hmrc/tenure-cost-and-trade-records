@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.crypto
 
-import play.api.libs.json.{JsObject, _}
+import play.api.libs.json.*
 import play.api.libs.json.Reads._
 import uk.gov.hmrc.crypto.{Crypted, PlainText}
 
