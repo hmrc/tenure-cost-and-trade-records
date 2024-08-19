@@ -16,13 +16,19 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.models.common.AnswerYes
 
-case class AboutLeaseOrAgreementPartFour(
-  rentIncludeStructuresBuildings: Option[AnswersYesNo] = None // Added Aug 2024 for 6045/46
-)
+class BenefitsGivenSpec extends PlaySpec {
+  "BenefitsGiven" should {
+    "serialize and deserialize correctly" in {
+      val benefitsGiven =
+        BenefitsGiven(AnswerYes)
 
-object AboutLeaseOrAgreementPartFour {
-  implicit val format: OFormat[AboutLeaseOrAgreementPartFour] = Json.format
+      val json = Json.toJson(benefitsGiven)
+      json.as[BenefitsGiven] mustBe benefitsGiven
+    }
+
+  }
 }

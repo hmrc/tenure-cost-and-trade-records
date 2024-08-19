@@ -39,7 +39,9 @@ class CaravansAnnualPitchFeeSpec extends AnyFlatSpec with Matchers with FakeObje
   "CaravansAnnualPitchFee" should "be serialized to json" in {
     val json = Json.toJson(caravansAnnualPitchFee)
     json.as[CaravansAnnualPitchFee] shouldBe caravansAnnualPitchFee
-    Json.stringify(json)            shouldBe """{"servicesIncludedInPitchFee":["waterAndDrainage","gas","electricity","other"],"gas":200,"otherPitchFeeDetails":"food - 200, cleaning - 200","waterAndDrainage":100,"electricity":300,"totalPitchFee":1000}"""
+    Json.stringify(
+      json
+    )                               shouldBe """{"servicesIncludedInPitchFee":["waterAndDrainage","gas","electricity","other"],"gas":200,"otherPitchFeeDetails":"food - 200, cleaning - 200","waterAndDrainage":100,"electricity":300,"totalPitchFee":1000}"""
   }
 
   it should "be deserialized from json" in {
