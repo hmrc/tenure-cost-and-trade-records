@@ -49,7 +49,7 @@ class ConnectedSubmissionExportSpec
   import TestData._
 
   "Given there are submissions to be exported" when {
-    val submissions = (1 to 80).map(createConnectedSubmission).toList
+    val submissions = (1 to 60).map(createConnectedSubmission).toList
     when(repo.getSubmissions(eqTo(batchSize)))
       .thenReturn(Future.successful(submissions.take(batchSize)), Future.successful(List.empty[ConnectedSubmission]))
     when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.acknowledged(1)))
@@ -83,7 +83,7 @@ class ConnectedSubmissionExportSpec
 
   object TestData {
     lazy val repo: ConnectedMongoRepository = mock[ConnectedMongoRepository]
-    lazy val batchSize                      = 40
+    lazy val batchSize                      = 30
     lazy val scheduler                      = new ScheduleThatSchedulesImmediately5Times
   }
 }

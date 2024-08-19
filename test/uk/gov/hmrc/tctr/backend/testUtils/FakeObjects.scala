@@ -21,7 +21,7 @@ import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDu
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.*
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.*
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.*
-import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.Caravans.CaravansPitchFeeServices.{Electricity, Gas, Other, WaterAndDrainage}
+import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.Caravans.CaravansPitchFeeServices.{Electricity, Other, WaterAndDrainage}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.*
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.*
 import uk.gov.hmrc.tctr.backend.models.common.*
