@@ -391,6 +391,10 @@ trait FakeObjects {
     workCarriedOutCondition = Some(WorkCarriedOutCondition(AnswerYes))
   )
 
+  val prefilledAboutLeaseOrAgreementPartFour: AboutLeaseOrAgreementPartFour = AboutLeaseOrAgreementPartFour(
+    rentIncludeStructuresBuildings = AnswerYes
+  )
+
   // Additional information
   val prefilledAdditionalInformation: AdditionalInformation = AdditionalInformation(
     Some(FurtherInformationOrRemarksDetails("Further information or remarks details")),

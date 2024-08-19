@@ -42,7 +42,7 @@ case class AboutLeaseOrAgreementPartThree(
   rentIncludeFixtureAndFittingsDetailsTextArea: Option[String] = None, // Added Aug 2024 for 6045/46
   rentDevelopedLand: Option[AnswersYesNo] = None, // Added Aug 2024 for 6045/46
   rentDevelopedLandDetails: Option[String] = None // Added Aug 2024 for 6045/46
-  )
+)
 
 object AboutLeaseOrAgreementPartThree {
   implicit val format: OFormat[AboutLeaseOrAgreementPartThree] = Json.format
