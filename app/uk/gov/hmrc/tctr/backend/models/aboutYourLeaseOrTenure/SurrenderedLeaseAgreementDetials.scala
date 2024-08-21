@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,12 @@
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class AboutLeaseOrAgreementPartFour(
-  rentIncludeStructuresBuildings: Option[AnswersYesNo] = None, // Added Aug 2024 for 6045/46
-  surrenderedLeaseAgreementDetails: Option[SurrenderedLeaseAgreementDetails] = None // Added Aug 2024 for 6045/46
+case class SurrenderedLeaseAgreementDetails(
+                                             surrenderedLeaseAgreementAmount: BigDecimal,
+                                             surrenderedLeaseAgreementMonths: String
+                                           )
 
-                                        )
-
-object AboutLeaseOrAgreementPartFour {
-  implicit val format: OFormat[AboutLeaseOrAgreementPartFour] = Json.format
+object SurrenderedLeaseAgreementDetails {
+  implicit val format: OFormat[SurrenderedLeaseAgreementDetails] = Json.format
 }
