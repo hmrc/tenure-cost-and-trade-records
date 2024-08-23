@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,19 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
-import play.api.libs.json.{Json, OFormat}
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.models.common.AnswerYes
 
-case class SurrenderedLeaseAgreementDetails(
-  surrenderedLeaseAgreementAmount: BigDecimal,
-  surrenderedLeaseAgreementMonths: String
-)
+class ConnectionToLandlordSpec extends PlaySpec {
+  "Connection To Landlord" should {
+    "serialize and deserialize correctly" in {
+      val connectionToLandlord =
+        ConnectedToLandlord(Some(AnswerYes))
 
-object SurrenderedLeaseAgreementDetails {
-  implicit val format: OFormat[SurrenderedLeaseAgreementDetails] = Json.format
+      val json = Json.toJson(connectionToLandlord)
+      json.as[ConnectedToLandlord] mustBe connectionToLandlord
+    }
+
+  }
 }
