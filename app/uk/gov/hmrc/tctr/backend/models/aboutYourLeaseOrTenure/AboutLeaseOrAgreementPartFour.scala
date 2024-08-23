@@ -21,6 +21,7 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutLeaseOrAgreementPartFour(
   rentIncludeStructuresBuildings: Option[AnswersYesNo] = None, // Added Aug 2024 for 6045/46
+  rentIncludeStructuresBuildingsDetails: Option[String] = None, // Added Aug 2024 for 6045/46
   surrenderedLeaseAgreementDetails: Option[SurrenderedLeaseAgreementDetails] = None // Added Aug 2024 for 6045/46
 
                                         )
