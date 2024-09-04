@@ -188,7 +188,8 @@ trait FakeObjects {
         rallyAreas = RallyAreasTradingData(10, Some(20.00), Some(30)),
         additionalShops = AdditionalShops(52, Some(100.00), Some(100.00)),
         additionalCatering = AdditionalCatering(52, Some(100.00), Some(100.00)),
-        additionalAmusements = AdditionalAmusements(52, Some(100.00))
+        additionalAmusements = AdditionalAmusements(52, Some(100.00)),
+        additionalMisc = AdditionalMisc(52, Some(100.00), Some(100.00), Some(10), Some(100.00), Some(100.00))
       ),
       TurnoverSection6045(
         financialYearEnd = today.minusYears(1),
@@ -240,6 +241,7 @@ trait FakeObjects {
       additionalActivitiesAllYear = AdditionalActivitiesAllYear(AnswerNo, 1),
       checkYourAnswersAdditionalActivities = AnswerYes
     ),
+    additionalMiscDetails = AdditionalMiscDetails(Some("details"), Some("details")),
     turnoverSections6076 = Seq(
       TurnoverSection6076(
         financialYearEnd = LocalDate.of(2023, 3, 31),

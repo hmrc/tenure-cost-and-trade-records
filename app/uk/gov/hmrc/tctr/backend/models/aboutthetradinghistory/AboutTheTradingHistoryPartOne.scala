@@ -32,7 +32,8 @@ case class AboutTheTradingHistoryPartOne(
   caravans: Option[Caravans] = None,
   otherHolidayAccommodation: Option[OtherHolidayAccommodation] = None,
   touringAndTentingPitches: Option[TouringAndTentingPitches] = None,
-  additionalActivities: Option[AdditionalActivities] = None
+  additionalActivities: Option[AdditionalActivities] = None,
+  additionalMiscDetails: Option[AdditionalMiscDetails] = None
 )
 
 object AboutTheTradingHistoryPartOne {
