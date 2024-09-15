@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgreementPartOne, AboutLeaseOrAgreementPartThree, AboutLeaseOrAgreementPartTwo}
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgreementPartFour, AboutLeaseOrAgreementPartOne, AboutLeaseOrAgreementPartThree, AboutLeaseOrAgreementPartTwo}
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.{AboutTheTradingHistory, AboutTheTradingHistoryPartOne}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.{AboutYouAndTheProperty, AboutYouAndThePropertyPartTwo}
@@ -47,6 +47,7 @@ case class ConnectedSubmission(
   aboutLeaseOrAgreementPartOne: Option[AboutLeaseOrAgreementPartOne] = None,
   aboutLeaseOrAgreementPartTwo: Option[AboutLeaseOrAgreementPartTwo] = None,
   aboutLeaseOrAgreementPartThree: Option[AboutLeaseOrAgreementPartThree] = None,
+  aboutLeaseOrAgreementPartFour: Option[AboutLeaseOrAgreementPartFour] = None,
   saveAsDraftPassword: Option[String] = None,
   lastCYAPageUrl: Option[String] = None,
   requestReferenceNumberDetails: Option[RequestReferenceNumberDetails] = None,

@@ -395,7 +395,11 @@ trait FakeObjects {
   )
 
   val prefilledAboutLeaseOrAgreementPartFour: AboutLeaseOrAgreementPartFour = AboutLeaseOrAgreementPartFour(
-    rentIncludeStructuresBuildings = AnswerYes
+    rentIncludeStructuresBuildings = AnswerYes,
+    rentIncludeStructuresBuildingsDetails = "Structures buildings details",
+    surrenderedLeaseAgreementDetails = SurrenderedLeaseAgreementDetails(1000, "Surrendered lease agreement details"),
+    isGivenRentFreePeriod = AnswerYes,
+    rentFreePeriodDetails = "Rent free period details"
   )
 
   // Additional information
@@ -420,6 +424,7 @@ trait FakeObjects {
       aboutLeaseOrAgreementPartOne = Some(prefilledAboutLeaseOrAgreementPartOne),
       aboutLeaseOrAgreementPartTwo = Some(prefilledAboutLeaseOrAgreementPartTwo),
       aboutLeaseOrAgreementPartThree = Some(prefilledAboutLeaseOrAgreementPartThree),
+      aboutLeaseOrAgreementPartFour = Some(prefilledAboutLeaseOrAgreementPartFour),
       additionalInformation = Some(prefilledAdditionalInformation),
       saveAsDraftPassword = "dummyPassword"
     )
