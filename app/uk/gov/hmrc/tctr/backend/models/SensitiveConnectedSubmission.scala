@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package uk.gov.hmrc.tctr.backend.models
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
-import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgreementPartThree, AboutLeaseOrAgreementPartTwo, SensitiveAboutLeaseOrAgreementPartOne}
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.*
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.{AboutTheTradingHistory, AboutTheTradingHistoryPartOne}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.{AboutYouAndThePropertyPartTwo, SensitiveAboutYouAndTheProperty}
@@ -48,6 +48,7 @@ case class SensitiveConnectedSubmission(
   aboutLeaseOrAgreementPartOne: Option[SensitiveAboutLeaseOrAgreementPartOne] = None,
   aboutLeaseOrAgreementPartTwo: Option[AboutLeaseOrAgreementPartTwo] = None,
   aboutLeaseOrAgreementPartThree: Option[AboutLeaseOrAgreementPartThree] = None,
+  aboutLeaseOrAgreementPartFour: Option[AboutLeaseOrAgreementPartFour] = None,
   saveAsDraftPassword: Option[String] = None,
   lastCYAPageUrl: Option[String] = None,
   requestReferenceNumberDetails: Option[SensitiveRequestReferenceNumber] = None,
@@ -71,6 +72,7 @@ case class SensitiveConnectedSubmission(
     aboutLeaseOrAgreementPartOne.map(_.decryptedValue),
     aboutLeaseOrAgreementPartTwo,
     aboutLeaseOrAgreementPartThree,
+    aboutLeaseOrAgreementPartFour,
     saveAsDraftPassword,
     lastCYAPageUrl,
     requestReferenceNumberDetails.map(_.decryptedValue),
@@ -98,6 +100,7 @@ object SensitiveConnectedSubmission {
     connectedSubmission.aboutLeaseOrAgreementPartOne.map(SensitiveAboutLeaseOrAgreementPartOne(_)),
     connectedSubmission.aboutLeaseOrAgreementPartTwo,
     connectedSubmission.aboutLeaseOrAgreementPartThree,
+    connectedSubmission.aboutLeaseOrAgreementPartFour,
     connectedSubmission.saveAsDraftPassword,
     connectedSubmission.lastCYAPageUrl,
     connectedSubmission.requestReferenceNumberDetails.map(SensitiveRequestReferenceNumber(_)),
