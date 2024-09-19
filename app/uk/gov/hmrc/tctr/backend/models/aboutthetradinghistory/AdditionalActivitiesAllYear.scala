@@ -20,8 +20,8 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AdditionalActivitiesAllYear(
-  tentingPitchesAllYear: AnswersYesNo,
-  weekOfPitchesUse: Option[Int] = None
+  additionalActivitiesAllYear: AnswersYesNo,
+  weeksOpen: Option[Int] = None
 )
 
 object AdditionalActivitiesAllYear {
