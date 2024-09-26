@@ -30,7 +30,8 @@ case class AboutFranchisesOrLettings(
   lettingSections: IndexedSeq[LettingSection] = IndexedSeq.empty,
   checkYourAnswersAboutFranchiseOrLettings: Option[CheckYourAnswersAboutFranchiseOrLettings] = None,
   cateringOrFranchiseFee: Option[AnswersYesNo] = None, // 6030 journey
-  lettings: Option[IndexedSeq[LettingPartOfProperty]] = None // 6020 lettings
+  lettings: Option[IndexedSeq[LettingPartOfProperty]] = None, // 6020 lettings
+  rentalIncome: Option[IndexedSeq[IncomeRecord]] = None
 )
 
 object AboutFranchisesOrLettings {
