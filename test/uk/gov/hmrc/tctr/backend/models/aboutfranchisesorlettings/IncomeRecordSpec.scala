@@ -17,25 +17,31 @@
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.Json
+import play.api.libs.json.{JsError, Json}
 
 class IncomeRecordSpec extends PlaySpec {
-  "AdditionalActivities" should {
 
-    "serialize and deserialize correctly for source franchise" in {
-      val incomeRecord = IncomeRecord(
-        sourceType = Some(TypeConcessionOrFranchise)
+  "IncomeRecord" should {
+
+    "serialize and deserialize correctly for ConcessionIncomeRecord" in {
+      val incomeRecord = ConcessionIncomeRecord(
+        sourceType = TypeConcessionOrFranchise
       )
       val json         = Json.toJson(incomeRecord: IncomeRecord)
       json.as[IncomeRecord] mustBe incomeRecord
     }
 
-    "serialize and deserialize correctly for source letting" in {
-      val incomeRecord = IncomeRecord(
-        sourceType = Some(TypeLetting)
+    "serialize and deserialize correctly for LettingIncomeRecord" in {
+      val incomeRecord = LettingIncomeRecord(
+        sourceType = TypeLetting
       )
       val json         = Json.toJson(incomeRecord: IncomeRecord)
       json.as[IncomeRecord] mustBe incomeRecord
+    }
+
+    "fail to deserialize for unknown sourceType" in {
+      val json = Json.obj("sourceType" -> "unknownType")
+      json.validate[IncomeRecord] mustBe a[JsError]
     }
   }
 }
