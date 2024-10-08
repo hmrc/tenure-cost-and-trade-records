@@ -19,21 +19,71 @@ package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsError, Json}
 
+import java.time.LocalDate
+
 class IncomeRecordSpec extends PlaySpec {
 
   "IncomeRecord" should {
 
-    "serialize and deserialize correctly for ConcessionIncomeRecord" in {
+    "serialize and deserialize correctly for ConcessionIncomeRecord with complete details" in {
       val incomeRecord = ConcessionIncomeRecord(
-        sourceType = TypeConcessionOrFranchise
+        sourceType = TypeConcessionOrFranchise,
+        businessDetails = Some(CateringOperationBusinessDetails("Pizza", "Restaurant", "concession")),
+        feeReceived = Some(
+          FeeReceived(
+            Seq(FeeReceivedPerYear(LocalDate.parse("2023-03-31"), 12, Some(BigDecimal(5000)))),
+            None
+          )
+        )
       )
       val json         = Json.toJson(incomeRecord: IncomeRecord)
       json.as[IncomeRecord] mustBe incomeRecord
     }
 
-    "serialize and deserialize correctly for LettingIncomeRecord" in {
+    "serialize and deserialize correctly for LettingIncomeRecord with complete details" in {
       val incomeRecord = LettingIncomeRecord(
-        sourceType = TypeLetting
+        sourceType = TypeLetting,
+        operatorDetails = Some(
+          LettingOtherPartOfPropertyInformationDetails(
+            operatorName = "Michal the Operator",
+            typeOfBusiness = "Letting",
+            lettingAddress = LettingAddress(
+              buildingNameNumber = "123",
+              street1 = Some("orange St"),
+              town = "Bristol",
+              county = Some("Bristol"),
+              postcode = "AB12C"
+            )
+          )
+        ),
+        rent = Some(
+          LettingOtherPartOfPropertyRentDetails(
+            annualRent = BigDecimal(12000),
+            dateInput = LocalDate.parse("2023-10-01")
+          )
+        ),
+        itemsIncluded = Some(List("noneOfThese"))
+      )
+      val json         = Json.toJson(incomeRecord: IncomeRecord)
+      json.as[IncomeRecord] mustBe incomeRecord
+    }
+
+    "serialize and deserialize correctly for ConcessionIncomeRecord with optional fields missing" in {
+      val incomeRecord = ConcessionIncomeRecord(
+        sourceType = TypeConcessionOrFranchise,
+        businessDetails = None,
+        feeReceived = None
+      )
+      val json         = Json.toJson(incomeRecord: IncomeRecord)
+      json.as[IncomeRecord] mustBe incomeRecord
+    }
+
+    "serialize and deserialize correctly for LettingIncomeRecord with optional fields missing" in {
+      val incomeRecord = LettingIncomeRecord(
+        sourceType = TypeLetting,
+        operatorDetails = None,
+        rent = None,
+        itemsIncluded = None
       )
       val json         = Json.toJson(incomeRecord: IncomeRecord)
       json.as[IncomeRecord] mustBe incomeRecord
