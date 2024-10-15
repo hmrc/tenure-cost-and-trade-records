@@ -17,6 +17,7 @@
 package uk.gov.hmrc.tctr.backend.controllers
 
 import org.apache.pekko.stream.Materializer
+import org.scalatest.OptionValues
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.bind
@@ -27,12 +28,14 @@ import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
 import uk.gov.hmrc.internalauth.client._
 import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.repository.CredentialsMongoRepo
+import uk.gov.hmrc.tctr.backend.models.{FORCredentials, SensitiveAddress}
+import uk.gov.hmrc.tctr.backend.schema.Address
 import uk.gov.hmrc.tctr.backend.security.Credentials
 import uk.gov.hmrc.tctr.backend.testUtils.AuthStubBehaviour
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthControllerSpec extends AnyWordAppSpec {
+class AuthControllerSpec extends AnyWordAppSpec with OptionValues {
 
   implicit val ec: ExecutionContext            = ExecutionContext.Implicits.global
   implicit lazy val materializer: Materializer = app.materializer
@@ -58,9 +61,25 @@ class AuthControllerSpec extends AnyWordAppSpec {
     "return 401 for invalid credentials" in {
       when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(None))
       val result = controller.authenticate(fakeRequest)
-      status(result)          shouldBe Status.UNAUTHORIZED
-      contentType(result)     shouldBe Some("application/json")
-      contentAsString(result) shouldBe """{"numberOfRemainingTriesUntilIPLockout":4}"""
+      status(result)            shouldBe Status.UNAUTHORIZED
+      contentType(result).value shouldBe "application/json"
+      contentAsString(result)   shouldBe """{"numberOfRemainingTriesUntilIPLockout":4}"""
+    }
+    "return 200 for valid credentials and it" should {
+      "set the isWelsh flag" in new ValidCredentialsFixture(billingAuthorityCode = "BA6810") {
+        when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(Some(forCredentials)))
+        val result = controller.authenticate(fakeRequest)
+        status(result)            shouldBe Status.OK
+        contentType(result).value shouldBe "application/json"
+        contentAsString(result)   shouldBe expectedContent(isWelsh = true)
+      }
+      "unset the isWelsh flag" in new ValidCredentialsFixture(billingAuthorityCode = "SM14BX") {
+        when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(Some(forCredentials)))
+        val result = controller.authenticate(fakeRequest)
+        status(result)            shouldBe Status.OK
+        contentType(result).value shouldBe "application/json"
+        contentAsString(result)   shouldBe expectedContent(isWelsh = false)
+      }
     }
   }
 
@@ -80,4 +99,9 @@ class AuthControllerSpec extends AnyWordAppSpec {
     }
   }
 
+  trait ValidCredentialsFixture(val billingAuthorityCode: String):
+    val sensitiveAddress                  = SensitiveAddress(Address("buildingNameNumber", Some("street1"), Some("street2"), "postcode"))
+    val forCredentials                    = FORCredentials("forNumber", billingAuthorityCode, "forType", sensitiveAddress, "_id")
+    def expectedContent(isWelsh: Boolean) =
+      s"""{"forAuthToken":"Basic Zm9yTnVtYmVyOlNlbnNpdGl2ZSguLi4p","forType":"forType","address":{"buildingNameNumber":"buildingNameNumber","postcode":"postcode","street1":"street1","street2":"street2"},"isWelsh":$isWelsh}"""
 }

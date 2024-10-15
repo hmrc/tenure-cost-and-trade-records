@@ -23,6 +23,7 @@ import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.infrastructure.Clock
+import uk.gov.hmrc.tctr.backend.models.BillingAuthority
 import uk.gov.hmrc.tctr.backend.repository.{CredentialsMongoRepo, SubmittedMongoRepo}
 import uk.gov.hmrc.tctr.backend.schema.Address
 import uk.gov.hmrc.tctr.backend.security._
@@ -68,7 +69,16 @@ class AuthController @Inject() (
       val ip          = request.headers.get(trueClientIp)
       verifier.verify(credentials.referenceNumber, credentials.postcode, ip) flatMap {
         case ValidCredentials(creds)               =>
-          Ok(Json.toJson(ValidLoginResponse(creds.basicAuthString, creds.forType, creds.address.decryptedValue)))
+          Ok(
+            Json.toJson(
+              ValidLoginResponse(
+                creds.basicAuthString,
+                creds.forType,
+                creds.address.decryptedValue,
+                BillingAuthority.isWelsh(creds.billingAuthorityCode)
+              )
+            )
+          )
         case InvalidCredentials(remainingAttempts) => Unauthorized(Json.toJson(FailedLoginResponse(remainingAttempts)))
         case IPLockout                             => Unauthorized(Json.toJson(FailedLoginResponse(0)))
         case AlreadySubmitted(items)               => Conflict(error(s"Duplicate submission. $items"))
@@ -88,7 +98,7 @@ class AuthController @Inject() (
 object ValidLoginResponse {
   implicit val f: Format[ValidLoginResponse] = Json.format
 }
-case class ValidLoginResponse(forAuthToken: String, forType: String, address: Address)
+case class ValidLoginResponse(forAuthToken: String, forType: String, address: Address, isWelsh: Boolean)
 
 object FailedLoginResponse {
   implicit val f: Format[FailedLoginResponse] = Json.format
