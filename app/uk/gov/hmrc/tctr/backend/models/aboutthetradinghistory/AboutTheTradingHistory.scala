@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.models.VariableOperatingExpensesSections
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
