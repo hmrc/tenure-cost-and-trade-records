@@ -326,7 +326,8 @@ trait FakeObjects {
     otherOperationalExpensesDetails = "Other expenses",
     otherSalesDetails = "other sales details",
     furtherInformationOrRemarks = "Further information or remarks",
-    incomeExpenditureConfirmation6076 = "confirmed"
+    incomeExpenditureConfirmation6076 = "confirmed",
+    areYouVATRegistered = AnswerYes
   )
 
   // Franchises or lettings

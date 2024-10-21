@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
-import play.api.libs.json._
+import play.api.libs.json.*
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutTheTradingHistoryPartOne(
   isFinancialYearEndDatesCorrect: Option[Boolean] = Some(false),
@@ -33,7 +34,9 @@ case class AboutTheTradingHistoryPartOne(
   otherHolidayAccommodation: Option[OtherHolidayAccommodation] = None,
   touringAndTentingPitches: Option[TouringAndTentingPitches] = None,
   additionalActivities: Option[AdditionalActivities] = None,
-  additionalMiscDetails: Option[AdditionalMiscDetails] = None
+  additionalMiscDetails: Option[AdditionalMiscDetails] = None,
+  // 6048
+  areYouVATRegistered: Option[AnswersYesNo] = None
 )
 
 object AboutTheTradingHistoryPartOne {
