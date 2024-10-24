@@ -326,8 +326,28 @@ trait FakeObjects {
     otherOperationalExpensesDetails = "Other expenses",
     otherSalesDetails = "other sales details",
     furtherInformationOrRemarks = "Further information or remarks",
-    incomeExpenditureConfirmation6076 = "confirmed",
-    areYouVATRegistered = AnswerYes
+    incomeExpenditureConfirmation6076 = "confirmed"
+  )
+
+  val prefilledAboutTheTradingHistoryPartOne6048: AboutTheTradingHistoryPartOne = AboutTheTradingHistoryPartOne(
+    isFinancialYearEndDatesCorrect = true,
+    areYouVATRegistered = AnswerYes,
+    turnoverSections6048 = Seq(
+      TurnoverSection6048(
+        today,
+        52,
+        income = Income6048(1, 2, 3)
+      ),
+      TurnoverSection6048(
+        today.minusYears(1),
+        50,
+        income = Income6048(10, 20, 30)
+      ),
+      TurnoverSection6048(
+        today.minusYears(2),
+        income = Income6048(100, 200, 300)
+      )
+    )
   )
 
   // Franchises or lettings

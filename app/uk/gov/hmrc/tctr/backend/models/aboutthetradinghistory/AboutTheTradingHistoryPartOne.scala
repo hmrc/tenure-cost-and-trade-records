@@ -24,7 +24,7 @@ case class AboutTheTradingHistoryPartOne(
   // 6076
   turnoverSections6076: Option[Seq[TurnoverSection6076]] = None,
   otherIncomeDetails: Option[String] = None,
-  otherOperationalExpensesDetails: Option[String] = None,
+  otherOperationalExpensesDetails: Option[String] = None, // Reused for 6048
   otherSalesDetails: Option[String] = None,
   furtherInformationOrRemarks: Option[String] = None,
   incomeExpenditureConfirmation6076: Option[String] = None,
@@ -36,6 +36,7 @@ case class AboutTheTradingHistoryPartOne(
   additionalActivities: Option[AdditionalActivities] = None,
   additionalMiscDetails: Option[AdditionalMiscDetails] = None,
   // 6048
+  turnoverSections6048: Option[Seq[TurnoverSection6048]] = None,
   areYouVATRegistered: Option[AnswersYesNo] = None
 )
 
