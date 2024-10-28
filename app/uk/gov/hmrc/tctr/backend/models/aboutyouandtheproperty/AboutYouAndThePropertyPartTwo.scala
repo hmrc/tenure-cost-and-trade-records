@@ -16,12 +16,14 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.Form6010.MonthsYearDuration
 
 case class AboutYouAndThePropertyPartTwo(
   plantAndTechnology: Option[String] = None,
   generatorCapacity: Option[String] = None,
   batteriesCapacity: Option[String] = None,
-  propertyCurrentlyUsed: Option[PropertyCurrentlyUsed] = None
+  propertyCurrentlyUsed: Option[PropertyCurrentlyUsed] = None,
+  commercialLetDate: Option[MonthsYearDuration] = None
 )
 
 object AboutYouAndThePropertyPartTwo {
