@@ -23,9 +23,7 @@ case class AboutYouAndThePropertyPartTwo(
   generatorCapacity: Option[String] = None,
   batteriesCapacity: Option[String] = None,
   propertyCurrentlyUsed: Option[PropertyCurrentlyUsed] = None,
-  commercialLetDate: Option[MonthsYearDuration] = None,
-  commercialLetAvailability: Option[Int] = None,
-  commercialLetAvailabilityWelsh: Option[Seq[LettingAvailability]] = None
+  commercialLetDate: Option[MonthsYearDuration] = None
 )
 
 object AboutYouAndThePropertyPartTwo {

@@ -145,24 +145,7 @@ trait FakeObjects {
     plantAndTechnology = Some("plant and technology"),
     generatorCapacity = Some("generator capacity"),
     batteriesCapacity = Some("batteries capacity"),
-    commercialLetDate = Some(MonthsYearDuration(months = 6, years = 2023)),
-    commercialLetAvailability = Some(100),
-    commercialLetAvailabilityWelsh = Some(
-      Seq(
-        LettingAvailability(
-          financialYearEnd = LocalDate.of(2024, 3, 31),
-          numberOfNights = Some(BigDecimal(120))
-        ),
-        LettingAvailability(
-          financialYearEnd = LocalDate.of(2023, 3, 31),
-          numberOfNights = Some(BigDecimal(130))
-        ),
-        LettingAvailability(
-          financialYearEnd = LocalDate.of(2022, 3, 31),
-          numberOfNights = Some(BigDecimal(110))
-        )
-      )
-    )
+    commercialLetDate = Some(MonthsYearDuration(months = 6, years = 2023))
   )
 
   val prefilledConnectedSubmission: ConnectedSubmission = baseFilledConnectedSubmission.copy(
