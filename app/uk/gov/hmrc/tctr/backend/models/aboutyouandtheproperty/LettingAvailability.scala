@@ -15,19 +15,16 @@
  */
 
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.Form6010.MonthsYearDuration
 
-case class AboutYouAndThePropertyPartTwo(
-  plantAndTechnology: Option[String] = None,
-  generatorCapacity: Option[String] = None,
-  batteriesCapacity: Option[String] = None,
-  propertyCurrentlyUsed: Option[PropertyCurrentlyUsed] = None,
-  commercialLetDate: Option[MonthsYearDuration] = None,
-  commercialLetAvailability: Option[Int] = None,
-  commercialLetAvailabilityWelsh: Option[Seq[LettingAvailability]] = None
+import play.api.libs.json.{Json, OFormat}
+
+import java.time.LocalDate
+
+case class LettingAvailability(
+  financialYearEnd: LocalDate,
+  numberOfNights: Option[BigDecimal] = None
 )
 
-object AboutYouAndThePropertyPartTwo {
-  implicit val format: OFormat[AboutYouAndThePropertyPartTwo] = Json.format
+object LettingAvailability {
+  implicit val format: OFormat[LettingAvailability] = Json.format
 }
