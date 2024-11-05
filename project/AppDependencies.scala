@@ -13,7 +13,6 @@ private object AppDependencies {
   val scalatestPlusPlayVersion    = "7.0.1"
   val scalatestVersion            = "3.2.19"
   val scalaTestPlusMockitoVersion = "3.2.19.0"
-  val scalaGuiceVersion           = "6.0.0"
   val flexMarkVersion             = "0.64.8"
   val wiremockVersion             = "3.9.1"
 
