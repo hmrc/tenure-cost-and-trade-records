@@ -18,20 +18,17 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Json, OFormat}
 
-import java.time.LocalDate
-
 /**
-  * 6048 Trading history.
-  *
   * @author Yuriy Tumakha
   */
-case class TurnoverSection6048(
-  financialYearEnd: LocalDate,
-  tradingPeriod: Int = 52,
-  income: Option[Income6048] = None,
-  fixedCosts: Option[FixedCosts6048] = None
-)
+case class FixedCosts6048(
+  insurance: Option[BigDecimal] = None,
+  businessRatesOrCouncilTax: Option[BigDecimal] = None,
+  rent: Option[BigDecimal] = None
+) {
+  def total: BigDecimal = Seq(insurance, businessRatesOrCouncilTax, rent).flatten.sum
+}
 
-object TurnoverSection6048 {
-  implicit val format: OFormat[TurnoverSection6048] = Json.format
+object FixedCosts6048 {
+  implicit val format: OFormat[FixedCosts6048] = Json.format
 }
