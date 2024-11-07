@@ -18,20 +18,23 @@ package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.models.common.{AnswerNo, AnswerYes}
 
-import java.time.LocalDate
+class ContactDetailsQuestionSpec extends PlaySpec {
 
-class LettingAvailabilitySpec extends PlaySpec {
+  "ContactDetailsQuestion" should {
+    "serialize and deserialize correctly for AnswerYes" in {
+      val contactDetailsQuestion = ContactDetailsQuestion(contactDetailsQuestion = AnswerYes)
 
-  "LettingAvailability" should {
-    "serialize and deserialize correctly" in {
-      val lettingAvailability = LettingAvailability(
-        financialYearEnd = LocalDate.of(2024, 3, 31),
-        numberOfNights = 120
-      )
+      val json = Json.toJson(contactDetailsQuestion)
+      json.as[ContactDetailsQuestion] mustBe contactDetailsQuestion
+    }
 
-      val json = Json.toJson(lettingAvailability)
-      json.as[LettingAvailability] mustBe lettingAvailability
+    "serialize and deserialize correctly for AnswerNo" in {
+      val contactDetailsQuestion = ContactDetailsQuestion(contactDetailsQuestion = AnswerNo)
+
+      val json = Json.toJson(contactDetailsQuestion)
+      json.as[ContactDetailsQuestion] mustBe contactDetailsQuestion
     }
   }
 }

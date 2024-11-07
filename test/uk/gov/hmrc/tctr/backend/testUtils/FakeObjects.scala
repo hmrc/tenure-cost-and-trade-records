@@ -151,15 +151,15 @@ trait FakeObjects {
       Seq(
         LettingAvailability(
           financialYearEnd = LocalDate.of(2024, 3, 31),
-          numberOfNights = Some(BigDecimal(120))
+          numberOfNights = 120
         ),
         LettingAvailability(
           financialYearEnd = LocalDate.of(2023, 3, 31),
-          numberOfNights = Some(BigDecimal(130))
+          numberOfNights = 130
         ),
         LettingAvailability(
           financialYearEnd = LocalDate.of(2022, 3, 31),
-          numberOfNights = Some(BigDecimal(110))
+          numberOfNights = 110
         )
       )
     )
