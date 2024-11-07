@@ -22,7 +22,7 @@ import java.time.LocalDate
 
 case class LettingAvailability(
   financialYearEnd: LocalDate,
-  numberOfNights: Option[BigDecimal] = None
+  numberOfNights: Int
 )
 
 object LettingAvailability {
