@@ -162,6 +162,23 @@ trait FakeObjects {
           numberOfNights = 110
         )
       )
+    ),
+    completedCommercialLettings = Some(100),
+    completedCommercialLettingsWelsh = Some(
+      Seq(
+        CompletedLettings(
+          financialYearEnd = LocalDate.of(2024, 3, 31),
+          numberOfNights = 120
+        ),
+        CompletedLettings(
+          financialYearEnd = LocalDate.of(2023, 3, 31),
+          numberOfNights = 130
+        ),
+        CompletedLettings(
+          financialYearEnd = LocalDate.of(2022, 3, 31),
+          numberOfNights = 110
+        )
+      )
     )
   )
 
