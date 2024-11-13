@@ -29,7 +29,7 @@ case class AboutYouAndThePropertyPartTwo(
   commercialLetAvailabilityWelsh: Option[Seq[LettingAvailability]] = None,
   completedCommercialLettings: Option[Int] = None,
   completedCommercialLettingsWelsh: Option[Seq[CompletedLettings]] = None,
-  partsUnavailable: Option[AnswersYesNo]
+  partsUnavailable: Option[AnswersYesNo] = None
 )
 
 object AboutYouAndThePropertyPartTwo {
