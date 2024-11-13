@@ -17,6 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.Form6010.MonthsYearDuration
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutYouAndThePropertyPartTwo(
   plantAndTechnology: Option[String] = None,
@@ -27,7 +28,8 @@ case class AboutYouAndThePropertyPartTwo(
   commercialLetAvailability: Option[Int] = None,
   commercialLetAvailabilityWelsh: Option[Seq[LettingAvailability]] = None,
   completedCommercialLettings: Option[Int] = None,
-  completedCommercialLettingsWelsh: Option[Seq[CompletedLettings]] = None
+  completedCommercialLettingsWelsh: Option[Seq[CompletedLettings]] = None,
+  partsUnavailable: Option[AnswersYesNo]
 )
 
 object AboutYouAndThePropertyPartTwo {

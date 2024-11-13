@@ -179,7 +179,8 @@ trait FakeObjects {
           numberOfNights = 110
         )
       )
-    )
+    ),
+    partsUnavailable = Some(AnswerYes)
   )
 
   val prefilledConnectedSubmission: ConnectedSubmission = baseFilledConnectedSubmission.copy(
