@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
-import java.time.LocalDate
-import java.time.YearMonth
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects

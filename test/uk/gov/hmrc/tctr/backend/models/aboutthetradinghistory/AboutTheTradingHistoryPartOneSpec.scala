@@ -62,6 +62,7 @@ class AboutTheTradingHistoryPartOneSpec extends AnyFlatSpec with Matchers with F
     turnoverSections6048.flatMap(_.fixedCosts.map(_.total)).sum          shouldBe 777
     turnoverSections6048.flatMap(_.accountingCosts.map(_.total)).sum     shouldBe 888
     turnoverSections6048.flatMap(_.administrativeCosts.map(_.total)).sum shouldBe 999
+    turnoverSections6048.flatMap(_.operationalCosts.map(_.total)).sum    shouldBe 666
   }
 
 }
