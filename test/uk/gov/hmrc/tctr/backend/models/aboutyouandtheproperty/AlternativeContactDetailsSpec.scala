@@ -18,7 +18,6 @@ package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.AlternativeContactDetails
 import uk.gov.hmrc.tctr.backend.models.common.ContactDetails
 
 class AlternativeContactDetailsSpec extends PlaySpec {

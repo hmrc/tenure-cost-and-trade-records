@@ -17,8 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.{JsSuccess, Json}
-import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.AlternativeAddress
+import play.api.libs.json.Json
 
 class AlternativeAddressSpec extends PlaySpec {
 
