@@ -29,7 +29,8 @@ case class AboutYouAndThePropertyPartTwo(
   commercialLetAvailabilityWelsh: Option[Seq[LettingAvailability]] = None,
   completedCommercialLettings: Option[Int] = None,
   completedCommercialLettingsWelsh: Option[Seq[CompletedLettings]] = None,
-  partsUnavailable: Option[AnswersYesNo] = None
+  partsUnavailable: Option[AnswersYesNo] = None,
+  occupiersList: Option[Seq[OccupiersDetails]] = None
 )
 
 object AboutYouAndThePropertyPartTwo {
