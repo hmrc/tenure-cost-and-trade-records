@@ -20,8 +20,8 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class PayACapitalSumAmountDetails(
-                                        capitalSumPaidAmountDetails: BigDecimal
-                                      )
+  capitalSumPaidAmountDetails: BigDecimal
+)
 
 object PayACapitalSumAmountDetails {
   implicit val format: OFormat[PayACapitalSumAmountDetails] = Json.format
