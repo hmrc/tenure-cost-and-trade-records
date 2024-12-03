@@ -181,7 +181,7 @@ trait FakeObjects {
       )
     ),
     partsUnavailable = Some(AnswerYes),
-    occupiersList = Seq(
+    occupiersList = IndexedSeq(
       OccupiersDetails("Mrs  Brown", "21 Baker Street BS45AS Bristol"),
       OccupiersDetails("Mr   Brown", "21 Baker Street BS45AS Bristol"),
       OccupiersDetails("Miss Brown", "21 Baker Street BS45AS Bristol")
