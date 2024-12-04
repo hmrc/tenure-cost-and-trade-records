@@ -21,6 +21,7 @@ import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.{AboutLeaseOrAgree
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.{AboutTheTradingHistory, AboutTheTradingHistoryPartOne}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.{AboutYouAndTheProperty, AboutYouAndThePropertyPartTwo}
+import uk.gov.hmrc.tctr.backend.models.accommodation.AccommodationDetails
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.StillConnectedDetails
 import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
@@ -51,7 +52,8 @@ case class ConnectedSubmission(
   saveAsDraftPassword: Option[String] = None,
   lastCYAPageUrl: Option[String] = None,
   requestReferenceNumberDetails: Option[RequestReferenceNumberDetails] = None,
-  downloadPDFDetails: Option[DownloadPDFDetails] = None
+  downloadPDFDetails: Option[DownloadPDFDetails] = None,
+  accommodationDetails: Option[AccommodationDetails] = None
 )
 object ConnectedSubmission {
   implicit val format: OFormat[ConnectedSubmission] = Json.format

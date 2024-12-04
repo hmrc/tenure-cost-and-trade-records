@@ -23,13 +23,14 @@ import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.*
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.*
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.Caravans.CaravansPitchFeeServices.{Electricity, Other, WaterAndDrainage}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.*
+import uk.gov.hmrc.tctr.backend.models.accommodation.{AccommodationDetails, AccommodationUnit}
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.*
 import uk.gov.hmrc.tctr.backend.models.common.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.schema.Address
 
-import java.time.{Instant, LocalDate}
+import java.time.Instant
 
 trait FakeObjects {
   val referenceNumber: String             = "99996010004"
@@ -541,6 +542,12 @@ trait FakeObjects {
     Some(CheckYourAnswersAdditionalInformation("CYA"))
   )
 
+  val prefilledAccommodationDetails: AccommodationDetails = AccommodationDetails(
+    List(
+      AccommodationUnit("Unit Name", "unit type")
+    )
+  )
+
   def createConnectedSubmission(n: Int): ConnectedSubmission =
     ConnectedSubmission(
       referenceNumber = (n + 1000000).toString.take(7),
@@ -559,7 +566,8 @@ trait FakeObjects {
       aboutLeaseOrAgreementPartThree = Some(prefilledAboutLeaseOrAgreementPartThree),
       aboutLeaseOrAgreementPartFour = Some(prefilledAboutLeaseOrAgreementPartFour),
       additionalInformation = Some(prefilledAdditionalInformation),
-      saveAsDraftPassword = "dummyPassword"
+      saveAsDraftPassword = "dummyPassword",
+      accommodationDetails = Some(prefilledAccommodationDetails)
     )
 
   val notConnectedSubmission: NotConnectedSubmission = NotConnectedSubmission(

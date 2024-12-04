@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
+package uk.gov.hmrc.tctr.backend.models.accommodation
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class PayACapitalSumAmountDetails(
-  capitalSumPaidAmountDetails: BigDecimal
+/**
+  * @author Yuriy Tumakha
+  */
+case class AccommodationDetails(
+  accommodationUnits: List[AccommodationUnit],
+  sectionCompleted: Option[AnswersYesNo] = None
 )
 
-object PayACapitalSumAmountDetails {
-  implicit val format: OFormat[PayACapitalSumAmountDetails] = Json.format
-}
+object AccommodationDetails:
+  implicit val format: OFormat[AccommodationDetails] = Json.format
