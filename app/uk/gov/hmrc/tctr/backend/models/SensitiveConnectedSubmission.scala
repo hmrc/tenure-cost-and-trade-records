@@ -23,6 +23,7 @@ import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.*
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.{AboutTheTradingHistory, AboutTheTradingHistoryPartOne}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.{AboutYouAndThePropertyPartTwo, SensitiveAboutYouAndTheProperty}
+import uk.gov.hmrc.tctr.backend.models.accommodation.AccommodationDetails
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.SensitiveStillConnectedDetails
 import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
@@ -52,7 +53,8 @@ case class SensitiveConnectedSubmission(
   saveAsDraftPassword: Option[String] = None,
   lastCYAPageUrl: Option[String] = None,
   requestReferenceNumberDetails: Option[SensitiveRequestReferenceNumber] = None,
-  downloadPDFDetails: Option[DownloadPDFDetails] = None
+  downloadPDFDetails: Option[DownloadPDFDetails] = None,
+  accommodationDetails: Option[AccommodationDetails] = None
 ) extends Sensitive[ConnectedSubmission] {
 
   override def decryptedValue: ConnectedSubmission = ConnectedSubmission(
@@ -76,7 +78,8 @@ case class SensitiveConnectedSubmission(
     saveAsDraftPassword,
     lastCYAPageUrl,
     requestReferenceNumberDetails.map(_.decryptedValue),
-    downloadPDFDetails
+    downloadPDFDetails,
+    accommodationDetails
   )
 }
 
@@ -104,7 +107,8 @@ object SensitiveConnectedSubmission {
     connectedSubmission.saveAsDraftPassword,
     connectedSubmission.lastCYAPageUrl,
     connectedSubmission.requestReferenceNumberDetails.map(SensitiveRequestReferenceNumber(_)),
-    connectedSubmission.downloadPDFDetails
+    connectedSubmission.downloadPDFDetails,
+    connectedSubmission.accommodationDetails
   )
 
 }
