@@ -30,7 +30,7 @@ import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.schema.Address
 
-import java.time.Instant
+import java.time.{Instant, LocalDate}
 
 trait FakeObjects {
   val referenceNumber: String             = "99996010004"
