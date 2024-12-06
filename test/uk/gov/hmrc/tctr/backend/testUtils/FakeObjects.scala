@@ -23,7 +23,7 @@ import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.*
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.*
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.Caravans.CaravansPitchFeeServices.{Electricity, Other, WaterAndDrainage}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.*
-import uk.gov.hmrc.tctr.backend.models.accommodation.{AccommodationDetails, AccommodationUnit}
+import uk.gov.hmrc.tctr.backend.models.accommodation.*
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.*
 import uk.gov.hmrc.tctr.backend.models.common.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
@@ -544,7 +544,9 @@ trait FakeObjects {
 
   val prefilledAccommodationDetails: AccommodationDetails = AccommodationDetails(
     List(
-      AccommodationUnit("Unit Name", "unit type")
+      AccommodationUnit("Unit 1", "unit type", AvailableRooms(2, 4, 6, "Game room", 10)),
+      AccommodationUnit("Unit 2", "", AvailableRooms()),
+      AccommodationUnit("Unit 3", "")
     )
   )
 
