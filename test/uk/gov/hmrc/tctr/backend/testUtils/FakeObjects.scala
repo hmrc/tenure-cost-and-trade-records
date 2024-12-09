@@ -125,20 +125,30 @@ trait FakeObjects {
   )
 
   // About you and the property sessions
-  val prefilledAboutYouAndThePropertyYes: AboutYouAndTheProperty = AboutYouAndTheProperty(
-    Some(CustomerDetails("Full Name", ContactDetails(prefilledFakePhoneNo, prefilledFakeEmail))),
-    Some(PropertyDetails(CurrentPropertyHotel, None)),
-    Some(WebsiteForPropertyDetails(BuildingOperationHaveAWebsiteYes, Some("webAddress"))),
-    Some(AnswerYes),
-    Some(PremisesLicenseGrantedInformationDetails("Premises licence granted details")),
-    Some(AnswerYes),
-    Some(LicensableActivitiesInformationDetails("Licensable activities details")),
-    Some(AnswerYes),
-    Some(PremisesLicenseConditionsDetails("Premises license conditions details")),
-    Some(AnswerYes),
-    Some(EnforcementActionHasBeenTakenInformationDetails("Enforcement action taken details")),
-    Some(AnswerYes),
-    Some(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie))
+  val prefilledAboutYouAndTheProperty: AboutYouAndTheProperty = AboutYouAndTheProperty(
+    customerDetails = Some(CustomerDetails("Full Name", ContactDetails(prefilledFakePhoneNo, prefilledFakeEmail))),
+    propertyDetails = Some(PropertyDetails(CurrentPropertyHotel, None)),
+    websiteForPropertyDetails = Some(WebsiteForPropertyDetails(BuildingOperationHaveAWebsiteYes, Some("webAddress"))),
+    premisesLicenseGrantedDetail = Some(AnswerYes),
+    premisesLicenseGrantedInformationDetails =
+      Some(PremisesLicenseGrantedInformationDetails("Premises licence granted details")),
+    licensableActivities = Some(AnswerYes),
+    licensableActivitiesInformationDetails =
+      Some(LicensableActivitiesInformationDetails("Licensable activities details")),
+    premisesLicenseConditions = Some(AnswerYes),
+    premisesLicenseConditionsDetails = Some(PremisesLicenseConditionsDetails("Premises license conditions details")),
+    enforcementAction = Some(AnswerYes),
+    enforcementActionHasBeenTakenInformationDetails =
+      Some(EnforcementActionHasBeenTakenInformationDetails("Enforcement action taken details")),
+    tiedForGoods = Some(AnswerYes),
+    tiedForGoodsDetails = Some(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie)),
+    checkYourAnswersAboutTheProperty = Some(CheckYourAnswersAboutYourProperty("test")),
+    propertyDetailsString = Some(PropertyDetailsString("test")),
+    charityQuestion = Some(AnswerYes),
+    tradingActivity = Some(TradingActivity(AnswerYes, "details")),
+    renewablesPlant = Some(RenewablesPlant(Intermittent)),
+    threeYearsConstructed = Some(AnswerYes),
+    costsBreakdown = Some("test")
   )
 
   val prefilledAboutYouAndThePropertyPartTwo: AboutYouAndThePropertyPartTwo = AboutYouAndThePropertyPartTwo(
@@ -190,7 +200,7 @@ trait FakeObjects {
 
   val prefilledConnectedSubmission: ConnectedSubmission = baseFilledConnectedSubmission.copy(
     stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
-    aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes)
+    aboutYouAndTheProperty = Some(prefilledAboutYouAndTheProperty)
   )
 
   // Trading history
@@ -513,18 +523,31 @@ trait FakeObjects {
   )
 
   val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
-    tradeServices = IndexedSeq.empty,
+    tradeServices = IndexedSeq(TradeServices(TradeServicesDetails("description"))),
+    servicesPaid = IndexedSeq(ServicesPaid(ServicePaidSeparately("description"))),
+    paymentForTradeServices = PaymentForTradeServices(AnswerYes),
     provideDetailsOfYourLease = None,
     throughputAffectsRent = ThroughputAffectsRent(AnswerYes, "Throughput affects rent details"),
     isVATPayableForWholeProperty = AnswerYes,
     isRentUnderReview = AnswerNo,
     carParking = CarParking(AnswerYes, CarParkingSpaces(1, 2, 3), AnswerYes, CarParkingSpaces(10), hundred, today),
     rentedEquipmentDetails = "Rented equipment details",
-    paymentForTradeServices = None,
-    leaseSurrenderedEarly = Some(LeaseSurrenderedEarly(AnswerNo)),
+    typeOfTenure = Some(
+      TypeOfTenure(
+        typeOfTenure = List("testType1", "testType2"),
+        typeOfTenureDetails = Some("details")
+      )
+    ),
+    propertyUpdates = Some(PropertyUpdates(AnswerYes)),
+    leaseSurrenderedEarly = Some(LeaseSurrenderedEarly(AnswerYes)),
     benefitsGiven = Some(BenefitsGiven(AnswerNo)),
+    benefitsGivenDetails = Some(BenefitsGivenDetails("details")),
     workCarriedOutDetails = Some(WorkCarriedOutDetails("workCarriedOutDetails")),
-    workCarriedOutCondition = Some(WorkCarriedOutCondition(AnswerYes))
+    workCarriedOutCondition = Some(WorkCarriedOutCondition(AnswerYes)),
+    rentIncludeTradeServicesDetailsTextArea = Some("details"),
+    rentIncludeFixtureAndFittingsDetailsTextArea = Some("details"),
+    rentDevelopedLand = Some(AnswerYes),
+    rentDevelopedLandDetails = Some("details")
   )
 
   val prefilledAboutLeaseOrAgreementPartFour: AboutLeaseOrAgreementPartFour = AboutLeaseOrAgreementPartFour(
@@ -549,7 +572,7 @@ trait FakeObjects {
       token = "dummyToken",
       createdAt = Instant.now(),
       stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
-      aboutYouAndTheProperty = Some(prefilledAboutYouAndThePropertyYes),
+      aboutYouAndTheProperty = Some(prefilledAboutYouAndTheProperty),
       aboutYouAndThePropertyPartTwo = Some(prefilledAboutYouAndThePropertyPartTwo),
       aboutTheTradingHistory = Some(prefilledAboutYourTradingHistory),
       aboutTheTradingHistoryPartOne = Some(prefilledAboutTheTradingHistoryPartOne),
