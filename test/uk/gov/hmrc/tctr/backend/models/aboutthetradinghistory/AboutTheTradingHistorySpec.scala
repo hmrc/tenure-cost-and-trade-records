@@ -18,6 +18,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import play.api.libs.json.Json
 import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 
 /**
@@ -31,6 +32,11 @@ class AboutTheTradingHistorySpec extends AnyFlatSpec with Matchers with FakeObje
     tradingHistory.fixedOperatingExpensesSections.map(_.total).sum                             shouldBe 0
     tradingHistory.otherCosts.map(_.otherCosts.map(_.total).sum)                               shouldBe Some(3)
     tradingHistory.variableOperatingExpenses.map(_.variableOperatingExpenses.map(_.total).sum) shouldBe Some(0)
+  }
+
+  it should "be serialized/deserialized from JSON" in {
+    val json = Json.toJson(prefilledAboutYourTradingHistory)
+    json.as[AboutTheTradingHistory] shouldBe prefilledAboutYourTradingHistory
   }
 
 }

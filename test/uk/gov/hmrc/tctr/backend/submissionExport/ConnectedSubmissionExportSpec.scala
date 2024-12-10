@@ -83,7 +83,7 @@ class ConnectedSubmissionExportSpec
 
   object TestData {
     lazy val repo: ConnectedMongoRepository = mock[ConnectedMongoRepository]
-    lazy val batchSize                      = 30
+    lazy val batchSize                      = 20
     lazy val scheduler                      = new ScheduleThatSchedulesImmediately5Times
   }
 }

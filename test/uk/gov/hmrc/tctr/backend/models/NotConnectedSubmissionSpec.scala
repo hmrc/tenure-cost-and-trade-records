@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
+package uk.gov.hmrc.tctr.backend.models
 
-import play.api.libs.json.{Json, OFormat}
-
-import java.time.LocalDate
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 
 /**
-  * Turnover excluding fuel or letting income.
+  * @author Yuriy Tumakha
   */
-case class TurnoverSection6020(
-  financialYearEnd: LocalDate,
-  shop: Option[BigDecimal] = None,
-  carWash: Option[BigDecimal] = None,
-  jetWash: Option[BigDecimal] = None,
-  lottery: Option[BigDecimal] = None,
-  payPointOrZone: Option[BigDecimal] = None,
-  otherIncome: Option[BigDecimal] = None
-)
+class NotConnectedSubmissionSpec extends AnyFlatSpec with Matchers with FakeObjects:
 
-object TurnoverSection6020 {
-  implicit val format: OFormat[TurnoverSection6020] = Json.format
-}
+  "NotConnectedSubmission" should "be serialized/deserialized from JSON" in {
+    val json = Json.toJson(notConnectedSubmission)
+    json.as[NotConnectedSubmission] shouldBe notConnectedSubmission
+  }
