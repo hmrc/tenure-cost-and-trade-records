@@ -30,6 +30,7 @@ import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.schema.Address
 
+import java.time.temporal.ChronoUnit.MILLIS
 import java.time.{Instant, LocalDate}
 
 trait FakeObjects {
@@ -217,6 +218,12 @@ trait FakeObjects {
         BigDecimal(567),
         BigDecimal(678)
       )
+    ),
+    Some(Seq(TurnoverSection6020(today))),
+    Seq(
+      TurnoverSection6030(today, 52, 100, 100),
+      TurnoverSection6030(today.minusYears(1), 52, 200, 200),
+      TurnoverSection6030(today.minusYears(2), 52, 300, 300)
     ),
     costOfSales = Seq(CostOfSales(today, 1, 2, 3, 4)),
     fixedOperatingExpensesSections = Seq(FixedOperatingExpenses(today)),
@@ -498,8 +505,6 @@ trait FakeObjects {
     rentIncludesVat = Some(RentIncludesVatDetails(AnswerYes))
   )
 
-  import java.time.LocalDate
-
   val prefilledAboutLeaseOrAgreementPartTwo: AboutLeaseOrAgreementPartTwo = AboutLeaseOrAgreementPartTwo(
     rentPayableVaryAccordingToGrossOrNetDetails = Some(RentPayableVaryAccordingToGrossOrNetDetails(AnswerYes)),
     rentPayableVaryAccordingToGrossOrNetInformationDetails =
@@ -603,7 +608,7 @@ trait FakeObjects {
     Some("test@test.com"),
     Some("12312312312"),
     Some("additional info"),
-    Instant.now(),
+    Instant.now.truncatedTo(MILLIS),
     false
   )
 

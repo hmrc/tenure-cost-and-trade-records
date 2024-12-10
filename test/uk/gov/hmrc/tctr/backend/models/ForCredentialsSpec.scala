@@ -16,11 +16,16 @@
 
 package uk.gov.hmrc.tctr.backend.models
 
-import org.scalatest.matchers.should._
-import org.scalatest.flatspec._
+import org.scalatest.flatspec.*
+import org.scalatest.matchers.should.*
+import play.api.libs.json.Json
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
+import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
+import uk.gov.hmrc.tctr.backend.testUtils.SensitiveTestHelper
 
-class ForCredentialsSpec extends AnyFlatSpec with Matchers {
+class ForCredentialsSpec extends AnyFlatSpec with Matchers with SensitiveTestHelper:
+
+  implicit val crypto: MongoCrypto = new TestMongoCrypto(loadTestConfig())
 
   val credentials: FORCredentials = FORCredentials(
     "9999601001",
@@ -40,4 +45,7 @@ class ForCredentialsSpec extends AnyFlatSpec with Matchers {
     result shouldBe "Basic OTk5OTYwMTAwMTpTZW5zaXRpdmUoLi4uKQ=="
   }
 
-}
+  it should "be serialized/deserialized from JSON" in {
+    val json = Json.toJson(credentials)
+    json.as[FORCredentials] shouldBe credentials
+  }

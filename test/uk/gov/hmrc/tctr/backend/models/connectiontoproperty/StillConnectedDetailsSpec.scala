@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models
+package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 
-import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.VariableOperatingExpenses
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 
 /**
   * @author Yuriy Tumakha
   */
-case class VariableOperatingExpensesSections(
-  variableOperatingExpenses: Seq[VariableOperatingExpenses] = Seq.empty,
-  otherExpensesDetails: Option[String] = None
-)
+class StillConnectedDetailsSpec extends AnyFlatSpec with Matchers with FakeObjects:
 
-object VariableOperatingExpensesSections {
-  implicit val format: OFormat[VariableOperatingExpensesSections] = Json.format
-}
+  "StillConnectedDetails" should "be serialized/deserialized from JSON" in {
+    val json = Json.toJson(prefilledStillConnectedDetailsYesToAll)
+    json.as[StillConnectedDetails] shouldBe prefilledStillConnectedDetailsYesToAll
+  }
