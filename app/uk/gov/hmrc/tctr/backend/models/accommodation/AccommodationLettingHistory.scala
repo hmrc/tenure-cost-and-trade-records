@@ -17,16 +17,18 @@
 package uk.gov.hmrc.tctr.backend.models.accommodation
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
+
+import java.time.LocalDate
 
 /**
   * @author Yuriy Tumakha
   */
-case class AccommodationDetails(
-  accommodationUnits: List[AccommodationUnit],
-  lettingHistory: Option[List[AccommodationLettingHistory]] = None,
-  sectionCompleted: Option[AnswersYesNo] = None
+case class AccommodationLettingHistory(
+  financialYearEnd: LocalDate,
+  nightsAvailableToLet: Option[BigDecimal] = None,
+  nightsLet: Option[BigDecimal] = None,
+  weeksAvailableForPersonalUse: Option[BigDecimal] = None
 )
 
-object AccommodationDetails:
-  implicit val format: OFormat[AccommodationDetails] = Json.format
+object AccommodationLettingHistory:
+  implicit val format: OFormat[AccommodationLettingHistory] = Json.format
