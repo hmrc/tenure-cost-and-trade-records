@@ -576,7 +576,7 @@ trait FakeObjects {
       AccommodationUnit("Unit 2", "", AvailableRooms()),
       AccommodationUnit("Unit 3", "")
     ),
-    List(AccommodationLettingHistory(today, 99, 9, 5)),
+    Seq(AccommodationLettingHistory(today, 99, 9, 5)),
     AnswerYes
   )
 
