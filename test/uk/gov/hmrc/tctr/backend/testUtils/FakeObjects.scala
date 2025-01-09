@@ -28,6 +28,7 @@ import uk.gov.hmrc.tctr.backend.models.additionalinformation.*
 import uk.gov.hmrc.tctr.backend.models.common.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
+import uk.gov.hmrc.tctr.backend.models.lettingHistory.*
 import uk.gov.hmrc.tctr.backend.schema.Address
 
 import java.time.temporal.ChronoUnit.MILLIS
@@ -200,9 +201,77 @@ trait FakeObjects {
     )
   )
 
+  // lettingHistory 6048
+
+  val LettingHistoryAddress: lettingHistory.Address.type = uk.gov.hmrc.tctr.backend.models.lettingHistory.Address
+
+  val prefilledLettingHistory: LettingHistory = LettingHistory(
+    hasPermanentResidents = Some(true),
+    permanentResidents = List(
+      ResidentDetail(
+        name = "Big Bob",
+        address = "123 Clifton Road, Bristol"
+      ),
+      ResidentDetail(
+        name = "Little Bob",
+        address = "456 Gloucester Road, Bristol"
+      )
+    ),
+    hasCompletedLettings = Some(true),
+    completedLettings = List(
+      OccupierDetail(
+        name = "Other Bob",
+        address = LettingHistoryAddress(
+          line1 = "789 Park Street",
+          line2 = Some("Flat 2"),
+          town = "Bristol",
+          county = Some("Avon"),
+          postcode = "BS1 5DS"
+        ),
+        rental = Some(
+          LocalPeriod(
+            fromDate = LocalDate.of(2023, 1, 1),
+            toDate = LocalDate.of(2023, 6, 30)
+          )
+        )
+      ),
+      OccupierDetail(
+        name = "Big Bob",
+        address = LettingHistoryAddress(
+          line1 = "321 Stokes Croft",
+          line2 = None,
+          town = "Bristol",
+          county = Some("Avon"),
+          postcode = "BS1 3PR"
+        ),
+        rental = None
+      )
+    ),
+    intendedLettings = Some(
+      IntendedLettings(
+        nights = Some(120),
+        hasStopped = Some(false),
+        whenWasLastLet = Some(LocalDate.of(2024, 5, 15)),
+        isYearlyAvailable = Some(true)
+      )
+    ),
+    advertisingOnline = Some(true),
+    advertisingOnlineDetails = List(
+      AdvertisingOnline(
+        websiteAddress = "www.123.co.uk",
+        propertyReferenceNumber = "BR1234"
+      ),
+      AdvertisingOnline(
+        websiteAddress = "www.abc.com",
+        propertyReferenceNumber = "LB5678"
+      )
+    )
+  )
+
   val prefilledConnectedSubmission: ConnectedSubmission = baseFilledConnectedSubmission.copy(
     stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
-    aboutYouAndTheProperty = Some(prefilledAboutYouAndTheProperty)
+    aboutYouAndTheProperty = Some(prefilledAboutYouAndTheProperty),
+    lettingHistory = Some(prefilledLettingHistory)
   )
 
   // Trading history
