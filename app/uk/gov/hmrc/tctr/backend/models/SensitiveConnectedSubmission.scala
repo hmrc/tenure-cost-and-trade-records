@@ -27,10 +27,9 @@ import uk.gov.hmrc.tctr.backend.models.accommodation.AccommodationDetails
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.SensitiveStillConnectedDetails
 import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
-import uk.gov.hmrc.tctr.backend.models.lettingHistory.*
 import uk.gov.hmrc.tctr.backend.models.notconnected.SensitiveRemoveConnectionDetails
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.SensitiveRequestReferenceNumber
-
+import uk.gov.hmrc.tctr.backend.models.lettingHistory.SensitiveLettingHistory
 import java.time.Instant
 
 case class SensitiveConnectedSubmission(

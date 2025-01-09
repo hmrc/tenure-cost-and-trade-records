@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.tctr.backend.models.lettingHistory
 
+import play.api.libs.json.{Json, Format}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
+import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 
 case class SensitiveAddress(
                              line1: SensitiveString,
@@ -37,8 +39,7 @@ case class SensitiveAddress(
 
 object SensitiveAddress:
 
-  import play.api.libs.json.{Format, Json}
-  import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
+  import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
 
   implicit def format(using crypto: MongoCrypto): Format[SensitiveAddress] = Json.format
 
