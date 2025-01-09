@@ -27,6 +27,7 @@ import uk.gov.hmrc.tctr.backend.models.accommodation.AccommodationDetails
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.SensitiveStillConnectedDetails
 import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
+import uk.gov.hmrc.tctr.backend.models.lettingHistory.*
 import uk.gov.hmrc.tctr.backend.models.notconnected.SensitiveRemoveConnectionDetails
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.SensitiveRequestReferenceNumber
 
@@ -54,6 +55,7 @@ case class SensitiveConnectedSubmission(
   lastCYAPageUrl: Option[String] = None,
   requestReferenceNumberDetails: Option[SensitiveRequestReferenceNumber] = None,
   downloadPDFDetails: Option[DownloadPDFDetails] = None,
+  lettingHistory: Option[SensitiveLettingHistory] = None,
   accommodationDetails: Option[AccommodationDetails] = None
 ) extends Sensitive[ConnectedSubmission] {
 
@@ -79,6 +81,7 @@ case class SensitiveConnectedSubmission(
     lastCYAPageUrl,
     requestReferenceNumberDetails.map(_.decryptedValue),
     downloadPDFDetails,
+    lettingHistory.map(_.decryptedValue),
     accommodationDetails
   )
 }
@@ -108,6 +111,7 @@ object SensitiveConnectedSubmission {
     connectedSubmission.lastCYAPageUrl,
     connectedSubmission.requestReferenceNumberDetails.map(SensitiveRequestReferenceNumber(_)),
     connectedSubmission.downloadPDFDetails,
+    connectedSubmission.lettingHistory.map(SensitiveLettingHistory(_)),
     connectedSubmission.accommodationDetails
   )
 

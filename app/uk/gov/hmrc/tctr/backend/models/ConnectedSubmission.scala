@@ -27,6 +27,7 @@ import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.StillConnectedDetail
 import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
 import uk.gov.hmrc.tctr.backend.models.notconnected.RemoveConnectionDetails
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.RequestReferenceNumberDetails
+import uk.gov.hmrc.tctr.backend.models.lettingHistory.*
 import uk.gov.hmrc.tctr.backend.schema.Address
 
 import java.time.Instant
@@ -53,6 +54,7 @@ case class ConnectedSubmission(
   lastCYAPageUrl: Option[String] = None,
   requestReferenceNumberDetails: Option[RequestReferenceNumberDetails] = None,
   downloadPDFDetails: Option[DownloadPDFDetails] = None,
+  lettingHistory: Option[LettingHistory] = None,
   accommodationDetails: Option[AccommodationDetails] = None
 )
 object ConnectedSubmission {
