@@ -16,18 +16,18 @@
 
 package uk.gov.hmrc.tctr.backend.models.lettingHistory
 
-import play.api.libs.json.{Json, Format}
+import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 
 case class SensitiveAddress(
-                             line1: SensitiveString,
-                             line2: Option[SensitiveString],
-                             town: SensitiveString,
-                             county: Option[SensitiveString],
-                             postcode: SensitiveString
-                           ) extends Sensitive[Address]:
+  line1: SensitiveString,
+  line2: Option[SensitiveString],
+  town: SensitiveString,
+  county: Option[SensitiveString],
+  postcode: SensitiveString
+) extends Sensitive[Address]:
 
   override def decryptedValue: Address = Address(
     line1.decryptedValue,
@@ -51,4 +51,3 @@ object SensitiveAddress:
       address.county.map(SensitiveString),
       SensitiveString(address.postcode)
     )
-

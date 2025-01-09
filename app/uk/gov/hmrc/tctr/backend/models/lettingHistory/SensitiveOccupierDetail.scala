@@ -21,10 +21,10 @@ import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 
 case class SensitiveOccupierDetail(
-                                    name: SensitiveString,
-                                    address: SensitiveAddress,
-                                    rental: Option[LocalPeriod]
-                                  ) extends Sensitive[OccupierDetail]:
+  name: SensitiveString,
+  address: SensitiveAddress,
+  rental: Option[LocalPeriod]
+) extends Sensitive[OccupierDetail]:
 
   override def decryptedValue: OccupierDetail =
     OccupierDetail(

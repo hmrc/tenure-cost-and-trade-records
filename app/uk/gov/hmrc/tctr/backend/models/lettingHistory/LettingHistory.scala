@@ -19,19 +19,16 @@ package uk.gov.hmrc.tctr.backend.models.lettingHistory
 import play.api.libs.json.{Format, Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class LettingHistory (
-                            hasPermanentResidents: Option[Boolean] = None,
-                            permanentResidents: List[ResidentDetail] = Nil,
-                            mayHaveMorePermanentResidents: Option[Boolean] = None,
-                            hasCompletedLettings: Option[Boolean] = None,
-                            completedLettings: List[OccupierDetail] = Nil,
-                            mayHaveMoreCompletedLettings: Option[Boolean] = None,
-                            intendedLettings: Option[IntendedLettings] = None,
-                            advertisingOnline: Option[Boolean] = None,
-                            advertisingOnlineDetails: List[AdvertisingOnline] = Nil,
-                            mayHaveMoreAdvertisingDetails: Option[Boolean] = None
-                          )
+case class LettingHistory(
+  hasPermanentResidents: Option[Boolean] = None,
+  permanentResidents: List[ResidentDetail] = Nil,
+  hasCompletedLettings: Option[Boolean] = None,
+  completedLettings: List[OccupierDetail] = Nil,
+  intendedLettings: Option[IntendedLettings] = None,
+  advertisingOnline: Option[Boolean] = None,
+  advertisingOnlineDetails: List[AdvertisingOnline] = Nil
+)
 
 object LettingHistory {
-  given Format[LettingHistory]                   = Json.format
+  given Format[LettingHistory] = Json.format
 }

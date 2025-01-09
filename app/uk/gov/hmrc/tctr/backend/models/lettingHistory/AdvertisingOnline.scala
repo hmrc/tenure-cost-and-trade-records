@@ -24,6 +24,5 @@ case class AdvertisingOnline(
 )
 
 object AdvertisingOnline:
-  
-  given Format[AdvertisingOnline] = Json.format
 
+  given Format[AdvertisingOnline] = Json.format

@@ -18,28 +18,22 @@ package uk.gov.hmrc.tctr.backend.models.lettingHistory
 
 import uk.gov.hmrc.crypto.Sensitive
 
-
-
 case class SensitiveLettingHistory(
-                                    hasPermanentResidents: Option[Boolean],
-                                    permanentResidents: Option[List[SensitiveResidentDetail]],
-                                    mayHaveMorePermanentResidents: Option[Boolean],
-                                    hasCompletedLettings: Option[Boolean],
-                                    completedLettings: Option[List[SensitiveOccupierDetail]],
-                                    mayHaveMoreCompletedLettings: Option[Boolean],
-                                    intendedLettings: Option[IntendedLettings],
-                                    advertisingOnline: Option[Boolean],
-                                    advertisingOnlineDetails: List[AdvertisingOnline]
-                                  ) extends Sensitive[LettingHistory]:
+  hasPermanentResidents: Option[Boolean],
+  permanentResidents: Option[List[SensitiveResidentDetail]],
+  hasCompletedLettings: Option[Boolean],
+  completedLettings: Option[List[SensitiveOccupierDetail]],
+  intendedLettings: Option[IntendedLettings],
+  advertisingOnline: Option[Boolean],
+  advertisingOnlineDetails: List[AdvertisingOnline]
+) extends Sensitive[LettingHistory]:
 
   override def decryptedValue: LettingHistory =
     LettingHistory(
       hasPermanentResidents,
       permanentResidents.fold(Nil)(_.map(_.decryptedValue)),
-      mayHaveMorePermanentResidents,
       hasCompletedLettings,
       completedLettings.fold(Nil)(_.map(_.decryptedValue)),
-      mayHaveMoreCompletedLettings,
       intendedLettings,
       advertisingOnline,
       advertisingOnlineDetails
@@ -48,7 +42,7 @@ case class SensitiveLettingHistory(
 object SensitiveLettingHistory:
   import play.api.libs.json.{Format, Json}
   import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
-  
+
   implicit def format(using crypto: MongoCrypto): Format[SensitiveLettingHistory] = Json.format
 
   def apply(lettingHistory: LettingHistory): SensitiveLettingHistory =
@@ -58,15 +52,12 @@ object SensitiveLettingHistory:
         if lettingHistory.hasPermanentResidents.isEmpty
         then None
         else Some(lettingHistory.permanentResidents.map(SensitiveResidentDetail(_))),
-      mayHaveMorePermanentResidents = lettingHistory.mayHaveMorePermanentResidents,
       hasCompletedLettings = lettingHistory.hasCompletedLettings,
       completedLettings =
         if lettingHistory.hasCompletedLettings.isEmpty
         then None
         else Some(lettingHistory.completedLettings.map(SensitiveOccupierDetail(_))),
-      mayHaveMoreCompletedLettings = lettingHistory.mayHaveMoreCompletedLettings,
       intendedLettings = lettingHistory.intendedLettings,
       advertisingOnline = lettingHistory.advertisingOnline,
       advertisingOnlineDetails = lettingHistory.advertisingOnlineDetails
     )
-

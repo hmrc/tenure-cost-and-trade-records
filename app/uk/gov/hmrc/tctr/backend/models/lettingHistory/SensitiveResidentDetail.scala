@@ -19,11 +19,10 @@ package uk.gov.hmrc.tctr.backend.models.lettingHistory
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 
-
 case class SensitiveResidentDetail(
-                                    name: SensitiveString,
-                                    address: SensitiveString
-                                  ) extends Sensitive[ResidentDetail]:
+  name: SensitiveString,
+  address: SensitiveString
+) extends Sensitive[ResidentDetail]:
 
   override def decryptedValue: ResidentDetail =
     ResidentDetail(
@@ -37,7 +36,6 @@ object SensitiveResidentDetail:
 
   import play.api.libs.json.{Format, Json}
   implicit def format(using crypto: MongoCrypto): Format[SensitiveResidentDetail] = Json.format
-
 
   def apply(residentDetail: ResidentDetail): SensitiveResidentDetail =
     SensitiveResidentDetail(

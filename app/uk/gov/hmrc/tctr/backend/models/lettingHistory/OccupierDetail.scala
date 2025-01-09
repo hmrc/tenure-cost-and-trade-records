@@ -19,10 +19,10 @@ package uk.gov.hmrc.tctr.backend.models.lettingHistory
 import play.api.libs.json.{Format, Json}
 
 case class OccupierDetail(
-                           name: String,
-                           address: Address,
-                           rental: Option[LocalPeriod]
-                         )
+  name: String,
+  address: Address,
+  rental: Option[LocalPeriod]
+)
 
 object OccupierDetail:
-  given Format[OccupierDetail]                                                     = Json.format
+  given Format[OccupierDetail] = Json.format

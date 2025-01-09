@@ -19,12 +19,12 @@ package uk.gov.hmrc.tctr.backend.models.lettingHistory
 import play.api.libs.json.{Format, Json}
 
 case class Address(
-                    line1: String,
-                    line2: Option[String],
-                    town: String,
-                    county: Option[String],
-                    postcode: String
-                  )
+  line1: String,
+  line2: Option[String],
+  town: String,
+  county: Option[String],
+  postcode: String
+)
 
 object Address:
-  given Format[Address]                                                                       = Json.format
+  given Format[Address] = Json.format

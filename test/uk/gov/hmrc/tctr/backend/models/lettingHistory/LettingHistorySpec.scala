@@ -16,14 +16,16 @@
 
 package uk.gov.hmrc.tctr.backend.models.lettingHistory
 
-import play.api.libs.json.{Format, Json}
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.Json
+import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 
-import java.time.LocalDate
+class LettingHistorySpec extends PlaySpec with FakeObjects {
 
-case class LocalPeriod(
-  fromDate: LocalDate,
-  toDate: LocalDate
-)
-
-object LocalPeriod:
-  given Format[LocalPeriod] = Json.format
+  "LettingHistory" should {
+    "serialize and deserialize correctly" in {
+      val json = Json.toJson(prefilledLettingHistory)
+      json.as[LettingHistory] mustBe prefilledLettingHistory
+    }
+  }
+}

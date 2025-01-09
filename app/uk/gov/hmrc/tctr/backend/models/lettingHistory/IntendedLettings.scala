@@ -21,12 +21,11 @@ import play.api.libs.json.{Format, Json}
 import java.time.LocalDate
 
 case class IntendedLettings(
-                             nights: Option[Int] = None,
-                             hasStopped: Option[Boolean] = None,
-                             whenWasLastLet: Option[LocalDate] = None,
-                             isYearlyAvailable: Option[Boolean] = None
-                           )
+  nights: Option[Int] = None,
+  hasStopped: Option[Boolean] = None,
+  whenWasLastLet: Option[LocalDate] = None,
+  isYearlyAvailable: Option[Boolean] = None
+)
 
 object IntendedLettings:
-  given Format[IntendedLettings]     = Json.format
-
+  given Format[IntendedLettings] = Json.format
