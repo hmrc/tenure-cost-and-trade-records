@@ -69,11 +69,10 @@ class ExportNotConnectedSubmissionsSpec
         5 second
       )
 
-      "It deletes each submission so that it is not submitted again" in {
+      "It deletes each submission so that it is not submitted again" in
         submissions.take(batchSize).foreach { s =>
           verify(repo).removeById(same(s.id))
         }
-      }
     }
   }
 

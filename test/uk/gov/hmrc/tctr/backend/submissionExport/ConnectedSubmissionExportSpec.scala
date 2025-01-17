@@ -62,9 +62,8 @@ class ConnectedSubmissionExportSpec
         9 seconds
       )
 
-      "It deletes each submission so that it is not submitted again" in {
+      "It deletes each submission so that it is not submitted again" in
         submissions.take(batchSize).foreach(s => verify(repo).removeById(same(s.referenceNumber)))
-      }
 
       "It deletes a submission that is a permanent failure" in {
         val submission = createConnectedSubmission(1).copy(createdAt = Instant.ofEpochMilli(0))
