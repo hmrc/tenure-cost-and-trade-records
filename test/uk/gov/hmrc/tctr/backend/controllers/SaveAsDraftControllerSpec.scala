@@ -81,12 +81,11 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
       }
   }
 
-  it should "on delete return deletedCount = 0 for unknown id" in {
+  it should "on delete return deletedCount = 0 for unknown id" in
     controller.delete("UNKNOWN_ID")(FakeRequest().withHeaders("Authorization" -> "fake-token")).map { result =>
       result.header.status  shouldBe OK
       contentAsJson(result) shouldBe Json.obj("deletedCount" -> 0)
     }
-  }
 
   object StubSubmissionDraftRepo extends SubmissionDraftRepo {
 

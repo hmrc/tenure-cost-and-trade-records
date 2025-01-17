@@ -17,7 +17,6 @@
 package uk.gov.hmrc.tctr.backend.models.lettingHistory
 
 import play.api.libs.json.{Format, Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class LettingHistory(
   hasPermanentResidents: Option[Boolean] = None,

@@ -46,8 +46,8 @@ object SensitiveAddress:
   def apply(address: Address): SensitiveAddress =
     SensitiveAddress(
       SensitiveString(address.line1),
-      address.line2.map(SensitiveString),
+      address.line2.map(SensitiveString.apply),
       SensitiveString(address.town),
-      address.county.map(SensitiveString),
+      address.county.map(SensitiveString.apply),
       SensitiveString(address.postcode)
     )
