@@ -645,9 +645,16 @@ trait FakeObjects {
         "Unit 1",
         "unit type",
         AvailableRooms(2, 4, 6, "Game room", 10),
-        Seq(AccommodationLettingHistory(today, 99, 9, 11))
+        Seq(AccommodationLettingHistory(today, 99, 9, 11)),
+        HighSeasonTariff(LocalDate.of(2025, 5, 1), LocalDate.of(2025, 8, 31))
       ),
-      AccommodationUnit("Unit 2", "", AvailableRooms(), Seq(AccommodationLettingHistory(today, 99, 9, 22))),
+      AccommodationUnit(
+        "Unit 2",
+        "",
+        AvailableRooms(),
+        Seq(AccommodationLettingHistory(today, 99, 9, 22)),
+        HighSeasonTariff(LocalDate.of(2025, 5, 1), LocalDate.of(2025, 8, 31))
+      ),
       AccommodationUnit("Unit 3", "")
     ),
     AnswerYes
