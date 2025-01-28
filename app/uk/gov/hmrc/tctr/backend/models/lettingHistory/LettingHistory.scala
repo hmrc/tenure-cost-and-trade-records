@@ -23,9 +23,9 @@ case class LettingHistory(
   permanentResidents: List[ResidentDetail] = Nil,
   hasCompletedLettings: Option[Boolean] = None,
   completedLettings: List[OccupierDetail] = Nil,
-  intendedLettings: Option[IntendedLettings] = None,
-  advertisingOnline: Option[Boolean] = None,
-  advertisingOnlineDetails: List[AdvertisingOnline] = Nil
+  intendedLettings: Option[IntendedDetail] = None,
+  hasOnlineAdvertising: Option[Boolean] = None,
+  onlineAdvertising: List[AdvertisingDetail] = Nil
 )
 
 object LettingHistory {
