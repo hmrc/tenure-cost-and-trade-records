@@ -18,14 +18,10 @@ package uk.gov.hmrc.tctr.backend.models.lettingHistory
 
 import play.api.libs.json.{Format, Json}
 
-import java.time.LocalDate
-
-case class IntendedLettings(
-  nights: Option[Int] = None,
-  hasStopped: Option[Boolean] = None,
-  whenWasLastLet: Option[LocalDate] = None,
-  isYearlyAvailable: Option[Boolean] = None
+case class AdvertisingDetail(
+  websiteAddress: String,
+  propertyReferenceNumber: String
 )
 
-object IntendedLettings:
-  given Format[IntendedLettings] = Json.format
+object AdvertisingDetail:
+  given Format[AdvertisingDetail] = Json.format

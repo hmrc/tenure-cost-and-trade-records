@@ -248,20 +248,21 @@ trait FakeObjects {
       )
     ),
     intendedLettings = Some(
-      IntendedLettings(
+      IntendedDetail(
         nights = Some(120),
         hasStopped = Some(false),
         whenWasLastLet = Some(LocalDate.of(2024, 5, 15)),
-        isYearlyAvailable = Some(true)
+        isYearlyAvailable = Some(true),
+        tradingSeason = None
       )
     ),
-    advertisingOnline = Some(true),
-    advertisingOnlineDetails = List(
-      AdvertisingOnline(
+    hasOnlineAdvertising = Some(true),
+    onlineAdvertising = List(
+      AdvertisingDetail(
         websiteAddress = "www.123.co.uk",
         propertyReferenceNumber = "BR1234"
       ),
-      AdvertisingOnline(
+      AdvertisingDetail(
         websiteAddress = "www.abc.com",
         propertyReferenceNumber = "LB5678"
       )
