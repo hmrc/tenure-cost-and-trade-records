@@ -42,7 +42,7 @@ class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChe
 
   behavior of "Credentials Verifier"
 
-  it should "lockout an IP address after the maximum number of failed login attempts is exceeded" in {
+  it should "lockout an IP address after the maximum number of failed login attempts is exceeded" in
     forAll(loginAttemptLengths) { (attempts: Int) =>
       val config   = VerifierConfig(attempts, 1 hour, 1 hour, true, voaIP)
       val verifier = verifierWith(config, new SystemClock)
@@ -51,7 +51,6 @@ class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChe
       }
       assert(await(verifier.verify(refNum, postcode, ip)) === IPLockout)
     }
-  }
 
   it should "allow further login attempts after the lockout timeframe has elapsed" in {
     val config   =
