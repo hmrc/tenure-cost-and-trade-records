@@ -24,6 +24,7 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
   */
 case class AccommodationDetails(
   accommodationUnits: List[AccommodationUnit],
+  exceededMaxUnits: Option[Boolean] = None,
   sectionCompleted: Option[AnswersYesNo] = None
 )
 
