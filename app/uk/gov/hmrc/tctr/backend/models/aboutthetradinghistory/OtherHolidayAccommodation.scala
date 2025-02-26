@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class OtherHolidayAccommodation(
   otherHolidayAccommodation: Option[AnswersYesNo] = None,
-  otherHolidayAccommodationDetails: Option[OtherHolidayAccommodationDetails] = None,
   totalSiteCapacity: Option[TotalSiteCapacity] = None,
   checkYourAnswersOtherHolidayAccommodation: Option[CheckYourAnswersOtherHolidayAccommodation] = None
 )

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.common.{AnswerNo, AnswerYes}
+import uk.gov.hmrc.tctr.backend.models.common.AnswerYes
 
 class AdditionalActivitiesSpec extends PlaySpec {
   "AdditionalActivities" should {
@@ -26,7 +26,6 @@ class AdditionalActivitiesSpec extends PlaySpec {
     "serialize and deserialize correctly with all fields" in {
       val additionalActivities = AdditionalActivities(
         additionalActivitiesOnSite = Some(AnswerYes),
-        additionalActivitiesAllYear = Some(AdditionalActivitiesAllYear(AnswerNo, Some(1))),
         checkYourAnswersAdditionalActivities = Some(AnswerYes)
       )
       val json                 = Json.toJson(additionalActivities: AdditionalActivities)

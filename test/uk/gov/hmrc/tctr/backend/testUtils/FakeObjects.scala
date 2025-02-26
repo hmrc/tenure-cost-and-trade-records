@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -308,17 +308,17 @@ trait FakeObjects {
       TurnoverSection6045(
         financialYearEnd = today,
         grossReceiptsCaravanFleetHire = GrossReceiptsCaravanFleetHire(),
-        singleCaravansOwnedByOperator = CaravansTrading6045(52, 3000, 30),
-        singleCaravansSublet = CaravansTrading6045(52, 1000, 10),
-        twinUnitCaravansOwnedByOperator = CaravansTrading6045(26, 2000, 20),
+        singleCaravansOwnedByOperator = CaravansTrading6045(3000, 30),
+        singleCaravansSublet = CaravansTrading6045(1000, 10),
+        twinUnitCaravansOwnedByOperator = CaravansTrading6045(2000, 20),
         twinUnitCaravansSublet = CaravansTrading6045(),
         pitchesForCaravans = TentingPitchesTradingData(10, Some(20.00), Some(30)),
-        pitchesForGlamping = TentingPitchesTradingData(10, Some(20.00), Some(30)),
-        rallyAreas = RallyAreasTradingData(10, Some(20.00), Some(30)),
+        pitchesForGlamping = TentingPitchesData(Some(20.00), Some(30)),
+        rallyAreas = RallyAreasTradingData(Some(20.00), Some(30)),
         additionalShops = AdditionalShops(52, Some(100.00), Some(100.00)),
-        additionalCatering = AdditionalCatering(52, Some(100.00), Some(100.00)),
-        additionalAmusements = AdditionalAmusements(52, Some(100.00)),
-        additionalMisc = AdditionalMisc(52, Some(100.00), Some(100.00), Some(10), Some(100.00), Some(100.00))
+        additionalCatering = AdditionalCatering(Some(100.00), Some(100.00)),
+        additionalAmusements = AdditionalAmusements(Some(100.00)),
+        additionalMisc = AdditionalMisc(Some(100.00), Some(100.00), Some(10), Some(100.00), Some(100.00))
       ),
       TurnoverSection6045(
         financialYearEnd = today.minusYears(1),
@@ -339,8 +339,6 @@ trait FakeObjects {
     ),
     caravans = Caravans( // 6045/46
       anyStaticLeisureCaravansOnSite = AnswerYes,
-      openAllYear = AnswerNo,
-      weeksPerYear = 26,
       singleCaravansAge = CaravansAge(
         fleetHire = CaravansPerAgeCategory(10, 20, 30, 40),
         privateSublet = CaravansPerAgeCategory(5, 6, 7, 8)
@@ -361,13 +359,11 @@ trait FakeObjects {
     ),
     touringAndTentingPitches = TouringAndTentingPitches(
       tentingPitchesOnSite = AnswerYes,
-      tentingPitchesAllYear = TentingPitchesAllYear(AnswerNo, 1),
       tentingPitchesTotal = 1,
       tentingPitchesCertificated = AnswerYes
     ),
     additionalActivities = AdditionalActivities(
       additionalActivitiesOnSite = AnswerYes,
-      additionalActivitiesAllYear = AdditionalActivitiesAllYear(AnswerNo, 1),
       checkYourAnswersAdditionalActivities = AnswerYes
     ),
     additionalMiscDetails = AdditionalMiscDetails(Some("details"), Some("details")),

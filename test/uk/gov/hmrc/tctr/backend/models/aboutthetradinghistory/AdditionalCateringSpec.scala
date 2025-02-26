@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ class AdditionalCateringSpec extends PlaySpec {
 
     "serialize and deserialize correctly with all fields" in {
       val additionalShops = AdditionalCatering(
-        tradingPeriod = 52,
         grossReceipts = Some(100.00),
         costOfPurchase = Some(100.00)
       )
