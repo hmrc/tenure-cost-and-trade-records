@@ -18,12 +18,21 @@ package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsError, Json}
+import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 
 import java.time.LocalDate
 
-class IncomeRecordSpec extends PlaySpec {
+class IncomeRecordSpec extends PlaySpec with FakeObjects{
 
   "IncomeRecord" should {
+    "serialize and deserialize correctly for FranchiseIncomeRecord with complete details" in {
+      val incomeRecord = FranchiseIncomeRecord(
+        sourceType = TypeConcessionOrFranchise,
+        businessDetails = Some(CateringOperationDetails("Jon Doe", "Restaurant", prefilledCateringAddress)),
+      )
+      val json = Json.toJson(incomeRecord: IncomeRecord)
+      json.as[IncomeRecord] mustBe incomeRecord
+    }
 
     "serialize and deserialize correctly for ConcessionIncomeRecord with complete details" in {
       val incomeRecord = ConcessionIncomeRecord(
