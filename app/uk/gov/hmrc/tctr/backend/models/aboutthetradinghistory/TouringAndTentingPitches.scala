@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class TouringAndTentingPitches(
   tentingPitchesOnSite: Option[AnswersYesNo] = None,
-  tentingPitchesAllYear: Option[TentingPitchesAllYear] = None,
   tentingPitchesTotal: Option[Int] = None,
   tentingPitchesCertificated: Option[AnswersYesNo] = None,
   checkYourAnswersTentingPitches: Option[AnswersYesNo] = None

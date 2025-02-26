@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,15 @@ import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 
 import java.time.LocalDate
 
-class IncomeRecordSpec extends PlaySpec with FakeObjects{
+class IncomeRecordSpec extends PlaySpec with FakeObjects {
 
   "IncomeRecord" should {
     "serialize and deserialize correctly for FranchiseIncomeRecord with complete details" in {
       val incomeRecord = FranchiseIncomeRecord(
         sourceType = TypeConcessionOrFranchise,
-        businessDetails = Some(CateringOperationDetails("Jon Doe", "Restaurant", prefilledCateringAddress)),
+        businessDetails = Some(CateringOperationDetails("Jon Doe", "Restaurant", prefilledCateringAddress))
       )
-      val json = Json.toJson(incomeRecord: IncomeRecord)
+      val json         = Json.toJson(incomeRecord: IncomeRecord)
       json.as[IncomeRecord] mustBe incomeRecord
     }
 

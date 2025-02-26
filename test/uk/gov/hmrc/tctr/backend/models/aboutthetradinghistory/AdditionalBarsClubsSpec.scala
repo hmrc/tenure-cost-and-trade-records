@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ class AdditionalBarsClubsSpec extends PlaySpec {
 
     "serialize and deserialize correctly with all fields" in {
       val additionalBarsClubs = AdditionalBarsClubs(
-        tradingPeriod = 52,
         grossReceiptsBars = Some(100.00),
         barPurchases = Some(100.00),
         grossClubMembership = Some(100.00),

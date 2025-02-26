@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
   */
 case class Caravans(
   anyStaticLeisureCaravansOnSite: Option[AnswersYesNo] = None,
-  openAllYear: Option[AnswersYesNo] = None,
-  weeksPerYear: Option[Int] = None,
   singleCaravansAge: Option[CaravansAge] = None,
   twinUnitCaravansAge: Option[CaravansAge] = None,
   totalSiteCapacity: Option[CaravansTotalSiteCapacity] = None,

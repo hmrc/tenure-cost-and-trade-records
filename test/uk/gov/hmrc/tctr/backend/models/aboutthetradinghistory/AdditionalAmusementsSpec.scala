@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ class AdditionalAmusementsSpec extends PlaySpec {
 
     "serialize and deserialize correctly with all fields" in {
       val additionalAmusements = AdditionalAmusements(
-        tradingPeriod = 52,
         receipts = Some(100.00)
       )
       val json                 = Json.toJson(additionalAmusements: AdditionalAmusements)
