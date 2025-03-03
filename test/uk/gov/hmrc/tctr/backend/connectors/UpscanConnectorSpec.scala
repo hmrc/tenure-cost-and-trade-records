@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,37 +16,48 @@
 
 package uk.gov.hmrc.tctr.backend.connectors
 
+import org.scalatest.EitherValues
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.http.Status.OK
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.tctr.backend.base.MockitoExtendedSugar
 import uk.gov.hmrc.tctr.backend.models.UnknownError
 
-import scala.concurrent.{ExecutionContextExecutor, Future}
+import java.net.URL
+import scala.concurrent.ExecutionContextExecutor
 
-class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoExtendedSugar {
+class UpscanConnectorSpec
+    extends AnyFlatSpec
+    with Matchers
+    with MockitoExtendedSugar
+    with ScalaFutures
+    with EitherValues {
 
   implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.global
   implicit val hc: HeaderCarrier            = HeaderCarrier()
 
-  private val httpClient = mock[HttpClient]
+  private def httpGetMock(responseStatusOrFailure: Either[Throwable, Int]): HttpClientV2 =
+    val httpClientV2Mock = mock[HttpClientV2]
+    when(
+      httpClientV2Mock.get(any[URL])(any[HeaderCarrier])
+    ).thenReturn(RequestBuilderStub(responseStatusOrFailure))
+    httpClientV2Mock
 
   "UpscanConnector" should "download content on a successful request" in {
 
-    val testUrl  = "http://test.url"
-    val testBody = "Test response body"
+    val testUrl     = "http://test.url"
+    val requestBody = ""
 
-    when(
-      httpClient
-        .GET[HttpResponse](any[String], any[Seq[(String, String)]], any[Seq[(String, String)]])(any, any, any)
-    ).thenReturn(Future.successful(HttpResponse(OK, testBody)))
+    val httpClient = httpGetMock(Right(OK))
 
     val connector = new UpscanConnector(httpClient)
-    val result    = connector.download(testUrl)
+    val result    = connector.download(testUrl).futureValue
 
-    result.map {
-      case Right(body) => body shouldBe testBody
+    result match {
+      case Right(body) => body shouldBe requestBody
       case _           => fail("Expected a successful download")
     }
   }
@@ -55,15 +66,12 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoExtended
 
     val testUrl = "http://test.url"
 
-    when(
-      httpClient
-        .GET[HttpResponse](any[String], any[Seq[(String, String)]], any[Seq[(String, String)]])(any, any, any)
-    ).thenReturn(Future.failed(new RuntimeException("Test exception")))
+    val httpClient = httpGetMock(Left(new RuntimeException("Test exception")))
 
     val connector = new UpscanConnector(httpClient)
-    val result    = connector.download(testUrl)
+    val result    = connector.download(testUrl).futureValue
 
-    result.map {
+    result match {
       case Left(err) => err shouldBe UnknownError("Unable to download file, please try again later")
       case _         => fail("Expected an error response")
     }

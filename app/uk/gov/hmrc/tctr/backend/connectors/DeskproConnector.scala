@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,15 @@
 package uk.gov.hmrc.tctr.backend.connectors
 
 import com.google.inject.ImplementedBy
-
-import javax.inject.{Inject, Singleton}
-import play.api.libs.json._
 import play.api.Logging
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, RequestId}
+import play.api.libs.json.*
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, RequestId, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[HmrcDeskproConnector])
@@ -36,24 +38,32 @@ trait DeskproConnector {
 @Singleton
 class HmrcDeskproConnector @Inject() (
   serviceConfig: ServicesConfig,
-  http: HttpClient
+  httpClientV2: HttpClientV2
 )(implicit executionContext: ExecutionContext)
     extends DeskproConnector
     with Logging {
 
   implicit val format: OFormat[DeskproTicket] = Json.format
 
-  val deskproUrl = serviceConfig.baseUrl("deskpro-ticket-queue")
+  val deskproUrl = serviceConfig.baseUrl("deskpro-ticket-queue") + "/deskpro/ticket"
 
   override def createTicket(ticket: DeskproTicket): Future[Long] = {
 
     implicit val hc = HeaderCarrier(requestId = Some(RequestId(ticket.sessionId)))
 
-    http.POST[DeskproTicket, JsObject](deskproUrl + "/deskpro/ticket", ticket, Seq.empty).map { response =>
-      val ticketNumber = response.value("ticket_id").as[JsNumber].as[Long]
-      logger.info(s"Created deskpro ticket with number : $ticketNumber")
-      ticketNumber
-    }
+    httpClientV2
+      .post(url"$deskproUrl")
+      .withBody(Json.toJson(ticket))
+      .execute[JsObject]
+      .map { response =>
+        val ticketNumber = response.value("ticket_id").as[JsNumber].as[Long]
+        logger.info(s"Created deskpro ticket with number : $ticketNumber")
+        ticketNumber
+      }
+      .recoverWith { case e: Exception =>
+        logger.error(s"Creating deskpro ticket FAILED: ${e.getMessage}", e)
+        Future.failed(e)
+      }
   }
 
 }

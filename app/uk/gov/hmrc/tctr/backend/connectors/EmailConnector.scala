@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,11 @@ package uk.gov.hmrc.tctr.backend.connectors
 import play.api.Logging
 import play.api.http.Status.{ACCEPTED, OK}
 import play.api.i18n.Lang
-import play.api.libs.json.{JsObject, JsValue, Json}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
+import play.api.libs.json.{JsObject, Json}
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.tctr.backend.models.{ConnectedSubmission, NotConnectedSubmission}
 import uk.gov.hmrc.tctr.backend.util.{DateUtil, DateUtilLocalised}
@@ -34,8 +37,12 @@ import scala.concurrent.{ExecutionContext, Future}
   * @author Yuriy Tumakha
   */
 @Singleton
-class EmailConnector @Inject() (servicesConfig: ServicesConfig, http: HttpClient, dateUtilLocalised: DateUtilLocalised)(
-  implicit ec: ExecutionContext
+class EmailConnector @Inject() (
+  servicesConfig: ServicesConfig,
+  httpClientV2: HttpClientV2,
+  dateUtilLocalised: DateUtilLocalised
+)(implicit
+  ec: ExecutionContext
 ) extends Logging {
 
   private val emailServiceBaseUrl = servicesConfig.baseUrl("email")
@@ -112,16 +119,22 @@ class EmailConnector @Inject() (servicesConfig: ServicesConfig, http: HttpClient
     )
     val headers = Seq("Content-Type" -> "application/json")
 
-    // The default HttpReads will wrap the response in an exception and make the body inaccessible
-    implicit val responseReads: HttpReads[HttpResponse] = (_, _, response: HttpResponse) => response
-
-    http.POST[JsValue, HttpResponse](sendEmailUrl, json, headers).map { res =>
-      res.status match {
-        case OK | ACCEPTED => logger.info(s"Send email to user successful: ${res.status}")
-        case _             => logger.error(s"Send email to user FAILED: ${res.status} ${res.body}")
+    httpClientV2
+      .post(url"$sendEmailUrl")
+      .withBody(json)
+      .setHeader(headers*)
+      .execute[HttpResponse]
+      .map { res =>
+        res.status match {
+          case OK | ACCEPTED => logger.info(s"Send email to user successful: ${res.status}")
+          case _             => logger.error(s"Send email to user FAILED: ${res.status} ${res.body}")
+        }
+        res
       }
-      res
-    }
+      .recoverWith { case e: Exception =>
+        logger.error(s"Send email to user FAILED: ${e.getMessage}", e)
+        Future.failed(e)
+      }
   }
 
 }
