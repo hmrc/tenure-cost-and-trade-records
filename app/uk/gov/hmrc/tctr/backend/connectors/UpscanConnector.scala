@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,23 @@
 package uk.gov.hmrc.tctr.backend.connectors
 
 import play.api.Logging
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
 import uk.gov.hmrc.tctr.backend.models.UnknownError
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpscanConnector @Inject() (http: HttpClient)(implicit ec: ExecutionContext) extends Logging {
+class UpscanConnector @Inject() (httpClientV2: HttpClientV2)(implicit ec: ExecutionContext) extends Logging {
 
   def download(url: String)(implicit hc: HeaderCarrier): Future[Either[UnknownError, String]] =
-    http
-      .GET[HttpResponse](url, Seq.empty, Seq.empty)
+    httpClientV2
+      .get(url"$url")
+      .execute[HttpResponse]
       .map(response => Right(response.body))
       .recover { case e: Exception =>
-        logger.warn("Unable to download file from upscan", e)
+        logger.warn("Unable to download file from Upscan", e)
         Left(UnknownError("Unable to download file, please try again later"))
       }
 
