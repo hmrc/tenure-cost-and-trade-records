@@ -27,16 +27,23 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects {
   "IncomeRecord" should {
     "serialize and deserialize correctly for FranchiseIncomeRecord with complete details" in {
       val incomeRecord = FranchiseIncomeRecord(
-        sourceType = TypeConcessionOrFranchise,
-        businessDetails = Some(CateringOperationDetails("Jon Doe", "Restaurant", prefilledCateringAddress))
+        sourceType = TypeFranchise,
+        businessDetails = Some(CateringOperationDetails("Jon Doe", "Restaurant", prefilledCateringAddress)),
+        rent = Some(
+          LettingOtherPartOfPropertyRentDetails(
+            annualRent = BigDecimal(12000),
+            dateInput = LocalDate.parse("2023-10-01")
+          )
+        ),
+        itemsIncluded = Some(List("noneOfThese"))
       )
-      val json         = Json.toJson(incomeRecord: IncomeRecord)
-      json.as[IncomeRecord] mustBe incomeRecord
+      val json         = Json.toJson(incomeRecord: FranchiseIncomeRecord)
+      json.as[FranchiseIncomeRecord] mustBe incomeRecord
     }
 
     "serialize and deserialize correctly for ConcessionIncomeRecord with complete details" in {
       val incomeRecord = ConcessionIncomeRecord(
-        sourceType = TypeConcessionOrFranchise,
+        sourceType = TypeConcession,
         businessDetails = Some(CateringOperationBusinessDetails("Pizza", "Restaurant", "concession")),
         feeReceived = Some(
           FeeReceived(
@@ -45,8 +52,8 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects {
           )
         )
       )
-      val json         = Json.toJson(incomeRecord: IncomeRecord)
-      json.as[IncomeRecord] mustBe incomeRecord
+      val json         = Json.toJson(incomeRecord: ConcessionIncomeRecord)
+      json.as[ConcessionIncomeRecord] mustBe incomeRecord
     }
 
     "serialize and deserialize correctly for LettingIncomeRecord with complete details" in {
@@ -73,15 +80,24 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects {
         ),
         itemsIncluded = Some(List("noneOfThese"))
       )
-      val json         = Json.toJson(incomeRecord: IncomeRecord)
-      json.as[IncomeRecord] mustBe incomeRecord
+      val json         = Json.toJson(incomeRecord: LettingIncomeRecord)
+      json.as[LettingIncomeRecord] mustBe incomeRecord
     }
 
     "serialize and deserialize correctly for ConcessionIncomeRecord with optional fields missing" in {
       val incomeRecord = ConcessionIncomeRecord(
-        sourceType = TypeConcessionOrFranchise,
+        sourceType = TypeConcession,
         businessDetails = None,
         feeReceived = None
+      )
+      val json         = Json.toJson(incomeRecord: IncomeRecord)
+      json.as[IncomeRecord] mustBe incomeRecord
+    }
+
+    "serialize and deserialize correctly FranchiseIncomeRecord with optional fields missing" in {
+      val incomeRecord = FranchiseIncomeRecord(
+        sourceType = TypeFranchise,
+        businessDetails = None
       )
       val json         = Json.toJson(incomeRecord: IncomeRecord)
       json.as[IncomeRecord] mustBe incomeRecord
