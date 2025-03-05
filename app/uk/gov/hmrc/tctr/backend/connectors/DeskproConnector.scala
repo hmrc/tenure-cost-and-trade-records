@@ -45,14 +45,15 @@ class HmrcDeskproConnector @Inject() (
 
   implicit val format: OFormat[DeskproTicket] = Json.format
 
-  val deskproUrl = serviceConfig.baseUrl("deskpro-ticket-queue") + "/deskpro/ticket"
+  private val deskproBaseUrl = serviceConfig.baseUrl("deskpro-ticket-queue") + "/deskpro/ticket"
+  private val deskproURL = url"$deskproBaseUrl/deskpro/ticket"
 
   override def createTicket(ticket: DeskproTicket): Future[Long] = {
 
     implicit val hc = HeaderCarrier(requestId = Some(RequestId(ticket.sessionId)))
 
     httpClientV2
-      .post(url"$deskproUrl")
+      .post(deskproURL)
       .withBody(Json.toJson(ticket))
       .execute[JsObject]
       .map { response =>

@@ -46,7 +46,7 @@ class EmailConnector @Inject() (
 ) extends Logging {
 
   private val emailServiceBaseUrl = servicesConfig.baseUrl("email")
-  private val sendEmailUrl        = s"$emailServiceBaseUrl/hmrc/email"
+  private val sendEmailURL        = url"$emailServiceBaseUrl/hmrc/email"
   private val englishLang         = Lang(Locale.UK)
   private val langMap             = Map(
     "en" -> englishLang,
@@ -120,7 +120,7 @@ class EmailConnector @Inject() (
     val headers = Seq("Content-Type" -> "application/json")
 
     httpClientV2
-      .post(url"$sendEmailUrl")
+      .post(sendEmailURL)
       .withBody(json)
       .setHeader(headers*)
       .execute[HttpResponse]
