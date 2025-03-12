@@ -18,12 +18,12 @@ package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import play.api.libs.json.{Json, OFormat}
 
-import java.time.LocalDate
-
-case class LettingOtherPartOfPropertyRentDetails(
-  annualRent: BigDecimal,
-  dateInput: LocalDate
+case class BusinessDetails(
+  operatorName: String,
+  typeOfBusiness: String,
+  cateringAddress: BusinessAddress
 )
-object LettingOtherPartOfPropertyRentDetails {
-  implicit val format: OFormat[LettingOtherPartOfPropertyRentDetails] = Json.format
+
+object BusinessDetails {
+  implicit val format: OFormat[BusinessDetails] = Json.format
 }

@@ -28,9 +28,9 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects {
     "serialize and deserialize correctly for FranchiseIncomeRecord with complete details" in {
       val incomeRecord = FranchiseIncomeRecord(
         sourceType = TypeFranchise,
-        businessDetails = Some(CateringOperationDetails("Jon Doe", "Restaurant", prefilledCateringAddress)),
+        businessDetails = Some(BusinessDetails("Jon Doe", "Restaurant", prefilledCateringAddress)),
         rent = Some(
-          LettingOtherPartOfPropertyRentDetails(
+          PropertyRentDetails(
             annualRent = BigDecimal(12000),
             dateInput = LocalDate.parse("2023-10-01")
           )
@@ -41,10 +41,21 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects {
       json.as[FranchiseIncomeRecord] mustBe incomeRecord
     }
 
+    "serialize and deserialize correctly for Concession6015IncomeRecord with complete details" in {
+      val incomeRecord = Concession6015IncomeRecord(
+        sourceType = TypeConcession,
+        businessDetails = Some(BusinessDetails("Pizza", "Restaurant", prefilledCateringAddress)),
+        rent = Some(RentReceivedFrom(BigDecimal(100), true)),
+        calculatingTheRent = Some(CalculatingTheRent("test", LocalDate.of(2021, 1, 1)))
+      )
+      val json         = Json.toJson(incomeRecord: Concession6015IncomeRecord)
+      json.as[Concession6015IncomeRecord] mustBe incomeRecord
+    }
+
     "serialize and deserialize correctly for ConcessionIncomeRecord with complete details" in {
       val incomeRecord = ConcessionIncomeRecord(
         sourceType = TypeConcession,
-        businessDetails = Some(CateringOperationBusinessDetails("Pizza", "Restaurant", "concession")),
+        businessDetails = Some(ConcessionBusinessDetails("Pizza", "Restaurant", "concession")),
         feeReceived = Some(
           FeeReceived(
             Seq(FeeReceivedPerYear(LocalDate.parse("2023-03-31"), 12, Some(BigDecimal(5000)))),
@@ -60,7 +71,7 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects {
       val incomeRecord = LettingIncomeRecord(
         sourceType = TypeLetting,
         operatorDetails = Some(
-          LettingOtherPartOfPropertyInformationDetails(
+          OperatorDetails(
             operatorName = "Michal the Operator",
             typeOfBusiness = "Letting",
             lettingAddress = LettingAddress(
@@ -73,7 +84,7 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects {
           )
         ),
         rent = Some(
-          LettingOtherPartOfPropertyRentDetails(
+          PropertyRentDetails(
             annualRent = BigDecimal(12000),
             dateInput = LocalDate.parse("2023-10-01")
           )
