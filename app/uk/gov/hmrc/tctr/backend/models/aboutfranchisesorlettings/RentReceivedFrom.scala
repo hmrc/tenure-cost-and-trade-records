@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,12 @@
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class LettingSection(
-  lettingOtherPartOfPropertyInformationDetails: OperatorDetails,
-  lettingOtherPartOfPropertyRentDetails: Option[PropertyRentDetails] = None,
-  lettingOtherPartOfPropertyRent6015Details: Option[LettingOtherPartOfPropertyRent6015Details] = None,
-  addAnotherLettingToProperty: Option[AnswersYesNo] = None,
-  itemsInRent: List[String] = List.empty
+case class RentReceivedFrom(
+  annualRent: BigDecimal,
+  declaration: Boolean
 )
 
-object LettingSection {
-  implicit val format: OFormat[LettingSection] = Json.format
+object RentReceivedFrom {
+  implicit val format: OFormat[RentReceivedFrom] = Json.format
 }

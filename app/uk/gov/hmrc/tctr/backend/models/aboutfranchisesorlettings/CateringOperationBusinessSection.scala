@@ -23,7 +23,7 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
   * 6030 CateringOperationBusinessSection.
   */
 case class CateringOperationBusinessSection(
-  cateringOperationBusinessDetails: CateringOperationBusinessDetails,
+  cateringOperationBusinessDetails: ConcessionBusinessDetails,
   feeReceived: Option[FeeReceived] = None,
   addAnotherOperationToProperty: Option[AnswersYesNo] = None
 )

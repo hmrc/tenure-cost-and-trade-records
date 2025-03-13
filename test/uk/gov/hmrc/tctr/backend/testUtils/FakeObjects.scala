@@ -66,8 +66,8 @@ trait FakeObjects {
   val prefilledFakeName                                                 = "John Doe"
   val prefilledFakePhoneNo                                              = "12345678901"
   val prefilledFakeEmail                                                = "test@email.com"
-  val prefilledCateringAddress: CateringAddress                         =
-    CateringAddress("004", Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", Some("West sussex"), "BN12 4AX")
+  val prefilledCateringAddress: BusinessAddress                         =
+    BusinessAddress("004", Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", Some("West sussex"), "BN12 4AX")
   val prefilledLettingAddress: LettingAddress                           =
     LettingAddress("004", Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", Some("West sussex"), "BN12 4AX")
   val prefilledLandlordAddress: LandlordAddress                         =
@@ -489,18 +489,18 @@ trait FakeObjects {
 
   // Franchises or lettings
   val prefilledCateringOperationSectionYes: CateringOperationSection = CateringOperationSection(
-    CateringOperationDetails("Operator Name", "Type of Business", prefilledCateringAddress),
+    BusinessDetails("Operator Name", "Type of Business", prefilledCateringAddress),
     Some(CateringOperationRentDetails(BigDecimal(1500), prefilledDateInput)),
     Some(AnswerYes)
   )
 
   val prefilledLettingSectionYes: LettingSection = LettingSection(
-    LettingOtherPartOfPropertyInformationDetails(
+    OperatorDetails(
       "Operator Name",
       "Type of Business",
       prefilledLettingAddress
     ),
-    Some(LettingOtherPartOfPropertyRentDetails(BigDecimal(1500), prefilledDateInput)),
+    Some(PropertyRentDetails(BigDecimal(1500), prefilledDateInput)),
     Some(LettingOtherPartOfPropertyRent6015Details(BigDecimal(1500), prefilledDateInput, true)),
     Some(AnswerYes)
   )

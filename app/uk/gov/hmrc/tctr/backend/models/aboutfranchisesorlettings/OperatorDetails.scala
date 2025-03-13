@@ -18,12 +18,12 @@ package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import play.api.libs.json.{Json, OFormat}
 
-case class LettingOtherPartOfPropertyInformationDetails(
+case class OperatorDetails(
   operatorName: String,
   typeOfBusiness: String,
   lettingAddress: LettingAddress
 )
 
-object LettingOtherPartOfPropertyInformationDetails {
-  implicit val format: OFormat[LettingOtherPartOfPropertyInformationDetails] = Json.format
+object OperatorDetails {
+  implicit val format: OFormat[OperatorDetails] = Json.format
 }

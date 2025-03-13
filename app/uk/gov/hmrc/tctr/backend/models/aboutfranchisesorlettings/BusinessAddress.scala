@@ -18,7 +18,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import play.api.libs.json.{Json, OFormat}
 
-case class CateringAddress(
+case class BusinessAddress(
   buildingNameNumber: String,
   street1: Option[String],
   town: String,
@@ -26,6 +26,6 @@ case class CateringAddress(
   postcode: String
 )
 
-object CateringAddress {
-  implicit val format: OFormat[CateringAddress] = Json.format
+object BusinessAddress {
+  implicit val format: OFormat[BusinessAddress] = Json.format
 }
