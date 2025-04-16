@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,11 @@ import scala.concurrent.Future
 /**
   * @author Yuriy Tumakha
   */
-object AuthStubBehaviour extends StubBehaviour {
+object AuthStubBehaviour extends StubBehaviour:
 
   override def stubAuth[R](predicate: Option[Predicate], retrieval: Retrieval[R]): Future[R] =
     Future.unit.asInstanceOf[Future[R]]
 
+  // TODO: Remove method after upgrade to internal-auth-client-play-30 4.0+
   override def stubListResources(token: String, resourceType: Option[ResourceType]): Future[Set[Resource]] =
     Future.successful(Set.empty)
-
-}
