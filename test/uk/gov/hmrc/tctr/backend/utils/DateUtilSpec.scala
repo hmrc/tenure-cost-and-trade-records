@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,12 @@
 package uk.gov.hmrc.tctr.backend.utils
 
 import org.scalatestplus.play.PlaySpec
+import uk.gov.hmrc.tctr.backend.util.DateUtil
 import uk.gov.hmrc.tctr.backend.util.DateUtil.dateOps
+import uk.gov.hmrc.tctr.backend.util.DateUtil.instantOps
 
 import java.text.SimpleDateFormat
-import java.time.{ZoneId, ZonedDateTime}
+import java.time.{LocalDate, ZoneId, ZoneOffset, ZonedDateTime}
 import java.util.Date
 
 class DateUtilSpec extends PlaySpec {
@@ -36,6 +38,27 @@ class DateUtilSpec extends PlaySpec {
       val expected: ZonedDateTime = testDate.toInstant.atZone(ukTimezone)
 
       result mustBe expected
+    }
+  }
+
+  "instantOps" should {
+    "convert Instant to LocalDate at zone UTC" in {
+
+      val testInstant = testDate.toInstant
+
+      val result: LocalDate = testInstant.toLocalDate
+
+      val expected: LocalDate = testInstant.atZone(ZoneOffset.UTC).toLocalDate
+
+      result mustBe expected
+    }
+  }
+
+  "DateUtil.langByCode" should {
+    "parse lang code string and return corresponding Lang" in {
+      DateUtil.langByCode("cy") mustBe DateUtil.cy
+      DateUtil.langByCode("en") mustBe DateUtil.en
+      DateUtil.langByCode("xx") mustBe DateUtil.en
     }
   }
 
