@@ -6,7 +6,7 @@ private object AppDependencies {
   val bootstrapVersion          = "9.11.0"
   val hmrcMongoVersion          = "2.6.0"
   val cryptoJsonVersion         = "8.2.0"
-  val playLanguageVersion       = "8.1.0"
+  val playLanguageVersion       = "9.0.0"
   val internalAuthClientVersion = "3.1.0"
 
   // Test dependencies
@@ -14,7 +14,6 @@ private object AppDependencies {
   val scalatestVersion            = "3.2.19"
   val scalaTestPlusMockitoVersion = "3.2.19.0"
   val flexMarkVersion             = "0.64.8"
-  val wiremockVersion             = "3.9.1"
 
   private val compile = Seq(
     "uk.gov.hmrc"       %% "bootstrap-backend-play-30"    % bootstrapVersion,
@@ -37,12 +36,8 @@ private object AppDependencies {
     "org.scalatestplus" %% "mockito-5-12" % scalaTestPlusMockitoVersion % Test
   )
 
-  private val integrationTestOnly = Seq(
-    // TODO: Upgrade wiremock when jackson-databind become compatible with Play and bootstrap-test-play-30
-    // "org.wiremock" % "wiremock" % wiremockVersion % Test
-  )
-
   val appDependencies: Seq[ModuleID] = compile ++ commonTests ++ testOnly
 
-  val itDependencies: Seq[ModuleID] = commonTests ++ integrationTestOnly
+  val itDependencies: Seq[ModuleID] = commonTests
+
 }
