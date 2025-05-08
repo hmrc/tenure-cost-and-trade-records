@@ -4,7 +4,7 @@ val defaultPort = 9527
 val appName     = "tenure-cost-and-trade-records"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "3.6.4"
+ThisBuild / scalaVersion := "3.7.0"
 
 val microservice = Project(appName, file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin, BuildInfoPlugin)
@@ -14,7 +14,9 @@ val microservice = Project(appName, file("."))
     libraryDependencies ++= AppDependencies.appDependencies,
     Test / fork := true, // must be true for Service Provider Interface
     buildInfoPackage := "uk.gov.hmrc.tctr.backend",
-    maintainer := "voa.service.optimisation@digital.hmrc.gov.uk"
+    maintainer := "voa.service.optimisation@digital.hmrc.gov.uk",
+    scalacOptions += "-Wconf:src=routes/.*:s",
+    scalacOptions += "-Wconf:msg=Flag .* set repeatedly:s"
   )
 
 lazy val it = (project in file("it"))

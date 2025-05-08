@@ -70,7 +70,7 @@ class UpscanCallbackController @Inject() (
                   case Failure(e)                        =>
                     logger.error(s"Error during Upscan file download: ${e.getMessage}")
                 }
-              }(ec)
+              }(using ec)
 
               Future.successful(Ok(Json.obj("status" -> "Processing started")))
             case _                                                                   =>

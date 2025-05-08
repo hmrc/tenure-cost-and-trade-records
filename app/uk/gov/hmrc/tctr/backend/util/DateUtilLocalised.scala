@@ -31,19 +31,19 @@ class DateUtilLocalised @Inject() (langUtil: LanguageUtils, messagesApi: Message
     langUtil.Dates.formatDate(localDate)
 
   def formatDate(localDate: LocalDate, lang: Lang): String =
-    formatDate(localDate)(messagesByLang(lang))
+    formatDate(localDate)(using messagesByLang(lang))
 
   def formatDate(zonedDateTime: ZonedDateTime)(implicit messages: Messages): String =
     formatDate(zonedDateTime.toLocalDate)
 
   def formatDate(zonedDateTime: ZonedDateTime, lang: Lang): String =
-    formatDate(zonedDateTime)(messagesByLang(lang))
+    formatDate(zonedDateTime)(using messagesByLang(lang))
 
   def formatDate(date: Date)(implicit messages: Messages): String =
     formatDate(date.asZonedDateTime)
 
   def formatDate(date: Date, lang: Lang): String =
-    formatDate(date)(messagesByLang(lang))
+    formatDate(date)(using messagesByLang(lang))
 
   private def messagesByLang(lang: Lang): Messages = messagesApi.preferred(Seq(lang))
 

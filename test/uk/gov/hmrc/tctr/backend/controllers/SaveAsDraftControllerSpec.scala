@@ -36,7 +36,7 @@ import scala.concurrent.Future
 class SaveAsDraftControllerSpec extends ControllerSpecBase {
 
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(Helpers.stubControllerComponents(), Implicits.global)
+    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), Implicits.global)
 
   def controller =
     new SaveAsDraftController(StubSubmissionDraftRepo, backendAuthComponentsStub, stubControllerComponents())

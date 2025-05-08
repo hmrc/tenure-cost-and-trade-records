@@ -67,7 +67,7 @@ class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Execu
         case Some(failedLoginsMongo) =>
           failedLoginsMongo.attempts
             .filter(_.isAfter(since.minusSeconds(1)))
-            .sortBy(_.toEpochMilli)(Ordering.Long.reverse)
+            .sortBy(_.toEpochMilli)(using Ordering.Long.reverse)
             .take(amount)
             .map(FailedLogin(_, ipAddress))
         case None                    => Seq.empty

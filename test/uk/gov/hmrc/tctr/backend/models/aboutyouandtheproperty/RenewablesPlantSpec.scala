@@ -54,11 +54,11 @@ class RenewablesPlantSpec extends PlaySpec {
     }
 
     "serialize Intermittent to string 'intermittent'" in {
-      Json.toJson(Intermittent)(renewablesPlantDetailsWrites).as[String] mustBe "intermittent"
+      Json.toJson(Intermittent)(using renewablesPlantDetailsWrites).as[String] mustBe "intermittent"
     }
 
     "serialize BaseLoad to string 'baseload'" in {
-      Json.toJson(BaseLoad)(renewablesPlantDetailsWrites).as[String] mustBe "baseload"
+      Json.toJson(BaseLoad)(using renewablesPlantDetailsWrites).as[String] mustBe "baseload"
     }
   }
 }

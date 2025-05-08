@@ -43,7 +43,7 @@ class ConnectedSubmissionControllerSpec extends AnyWordAppSpec {
   implicit val ec: ExecutionContext = ExecutionContext.global
 
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(Helpers.stubControllerComponents(), ec)
+    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ec)
 
   val mockRepository: ConnectedRepository            = mock[ConnectedRepository]
   val mockSubmittedRepo: SubmittedMongoRepo          = mock[SubmittedMongoRepo]
@@ -77,7 +77,7 @@ class ConnectedSubmissionControllerSpec extends AnyWordAppSpec {
       val request = FakeRequest().withBody(submission).withHeaders("Authorization" -> "fake-token")
       val result  = controller.submit(submissionReference).apply(request)
 
-      status(result)(timeout) shouldBe CREATED
+      status(result)(using timeout) shouldBe CREATED
     }
   }
 
@@ -90,7 +90,7 @@ class ConnectedSubmissionControllerSpec extends AnyWordAppSpec {
       val request = FakeRequest().withBody(submission).withHeaders("Authorization" -> "fake-token")
       val result  = controller.submit(submissionReference).apply(request)
 
-      status(result)(timeout) shouldBe CONFLICT
+      status(result)(using timeout) shouldBe CONFLICT
     }
   }
 

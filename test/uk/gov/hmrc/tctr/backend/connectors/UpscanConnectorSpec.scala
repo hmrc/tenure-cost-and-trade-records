@@ -42,7 +42,7 @@ class UpscanConnectorSpec
   private def httpGetMock(responseStatusOrFailure: Either[Throwable, Int]): HttpClientV2 =
     val httpClientV2Mock = mock[HttpClientV2]
     when(
-      httpClientV2Mock.get(any[URL])(any[HeaderCarrier])
+      httpClientV2Mock.get(any[URL])(using any[HeaderCarrier])
     ).thenReturn(RequestBuilderStub(responseStatusOrFailure))
     httpClientV2Mock
 

@@ -68,7 +68,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
   private def httpPostMock(responseStatus: Int): HttpClientV2 =
     val httpClientV2Mock = mock[HttpClientV2]
     when(
-      httpClientV2Mock.post(any[URL])(any[HeaderCarrier])
+      httpClientV2Mock.post(any[URL])(using any[HeaderCarrier])
     ).thenReturn(RequestBuilderStub(Right(responseStatus)))
     httpClientV2Mock
 
@@ -85,7 +85,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
       response.body   shouldBe bodyJson
 
       verify(httpMock)
-        .post(any[URL])(any[HeaderCarrier])
+        .post(any[URL])(using any[HeaderCarrier])
     }
 
     "send tctr_vacant_submission_confirmation" in {
@@ -97,7 +97,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
       response.body     should include(email)
 
       verify(httpMock)
-        .post(any[URL])(any[HeaderCarrier])
+        .post(any[URL])(using any[HeaderCarrier])
     }
 
     "send tctr_connection_removed" in {
@@ -109,7 +109,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
       response.body     should include("Full Name")
 
       verify(httpMock)
-        .post(any[URL])(any[HeaderCarrier])
+        .post(any[URL])(using any[HeaderCarrier])
     }
 
     "send tctr_connection_removed_cy" in {
@@ -121,7 +121,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
       response.body     should include("tctr_connection_removed_cy")
 
       verify(httpMock)
-        .post(any[URL])(any[HeaderCarrier])
+        .post(any[URL])(using any[HeaderCarrier])
     }
 
     "handle error response on send tctr_submission_confirmation" in {
@@ -135,7 +135,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
       response.body   shouldBe body
 
       verify(httpMock)
-        .post(any[URL])(any[HeaderCarrier])
+        .post(any[URL])(using any[HeaderCarrier])
     }
 
     "don't send tctr_connection_removed if submission doesn't contain email address" in {
