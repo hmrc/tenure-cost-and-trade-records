@@ -31,7 +31,6 @@ case class SensitiveRemoveConnectionDetails(
 }
 
 object SensitiveRemoveConnectionDetails {
-  import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
 
   implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveRemoveConnectionDetails] = Json.format
 

@@ -47,7 +47,7 @@ class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec {
   implicit val timeout: Timeout = 5.seconds
 
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(Helpers.stubControllerComponents(), Implicits.global)
+    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), Implicits.global)
 
   val mockRepository         = mock[NotConnectedRepository]
   val mockSubmittedMongoRepo = mock[SubmittedMongoRepo]

@@ -78,22 +78,22 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
                                        |    }
                                        ]""".stripMargin
 
-    when(mockUpscanConnector.download(any)(any)).thenReturn(Future.successful(Right(forCredentialsJsonResponse)))
-    when(mockCredentialsRepo.bulkUpsert(any[Seq[FORCredentials]])(any[OFormat[FORCredentials]]))
+    when(mockUpscanConnector.download(any)(using any)).thenReturn(Future.successful(Right(forCredentialsJsonResponse)))
+    when(mockCredentialsRepo.bulkUpsert(any[Seq[FORCredentials]])(using any[OFormat[FORCredentials]]))
       .thenReturn(Future.successful(mockBulkWriteResult))
 
     val request = FakeRequest().withBody(validUploadConfirmation)
     val result  = controller.callback()(request)
 
-    status(result)(timeout) shouldBe OK
+    status(result)(using timeout) shouldBe OK
 
     scala.concurrent.blocking {
       Thread.sleep(5000)
     }
 
-    verify(mockUpscanConnector).download(any)(any)
+    verify(mockUpscanConnector).download(any)(using any)
 
-    verify(mockCredentialsRepo).bulkUpsert(any[Seq[FORCredentials]])(any[OFormat[FORCredentials]])
+    verify(mockCredentialsRepo).bulkUpsert(any[Seq[FORCredentials]])(using any[OFormat[FORCredentials]])
 
     Future.successful(Succeeded)
   }

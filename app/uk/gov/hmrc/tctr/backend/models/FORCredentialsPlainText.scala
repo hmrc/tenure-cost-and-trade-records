@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package uk.gov.hmrc.tctr.backend.models
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.schema.Address
 
 case class FORCredentialsPlainText(
@@ -26,8 +25,9 @@ case class FORCredentialsPlainText(
   forType: String,
   address: Address,
   _id: String
-) {
-  def toSensitive(implicit crypto: MongoCrypto): FORCredentials =
+):
+
+  def toSensitive: FORCredentials =
     FORCredentials(
       forNumber = this.forNumber,
       billingAuthorityCode = this.billingAuthorityCode,
@@ -35,8 +35,7 @@ case class FORCredentialsPlainText(
       address = SensitiveAddress(this.address),
       _id = this._id
     )
-}
 
-object FORCredentialsPlainText {
+object FORCredentialsPlainText:
+
   implicit val plainFormat: OFormat[FORCredentialsPlainText] = Json.format
-}
