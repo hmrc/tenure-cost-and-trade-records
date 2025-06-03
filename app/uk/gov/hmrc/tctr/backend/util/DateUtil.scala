@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,18 +29,14 @@ object DateUtil {
 
   val ukTimezone: ZoneId = ZoneId.of("Europe/London")
   val en: Lang           = Lang(Locale.UK)
-  val cy: Lang           = Lang(new Locale("cy"))
+  val cy: Lang           = Lang(new Locale("cy")) // TODO: use Locale.of when JDK21 become available in sm2 on Jenkins
 
   val shortDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.UK)
   val timeFormatter: DateTimeFormatter      = DateTimeFormatter.ofPattern("HH:mm", Locale.UK)
 
-  implicit class instantOps(instant: Instant) {
-    def toLocalDate: LocalDate = instant.atZone(ZoneOffset.UTC).toLocalDate
-  }
+  extension (instant: Instant) def toLocalDate: LocalDate = instant.atZone(ZoneOffset.UTC).toLocalDate
 
-  implicit class dateOps(date: Date) {
-    def asZonedDateTime: ZonedDateTime = date.toInstant.atZone(ukTimezone)
-  }
+  extension (date: Date) def asZonedDateTime: ZonedDateTime = date.toInstant.atZone(ukTimezone)
 
   def nowInUK: ZonedDateTime = ZonedDateTime.now(ukTimezone)
 

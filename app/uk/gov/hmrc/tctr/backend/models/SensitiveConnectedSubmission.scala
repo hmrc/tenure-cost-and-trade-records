@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,9 @@ import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
 import uk.gov.hmrc.tctr.backend.models.notconnected.SensitiveRemoveConnectionDetails
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.SensitiveRequestReferenceNumber
 import uk.gov.hmrc.tctr.backend.models.lettingHistory.SensitiveLettingHistory
+
 import java.time.Instant
+import scala.language.implicitConversions
 
 case class SensitiveConnectedSubmission(
   referenceNumber: String,
@@ -86,7 +88,7 @@ case class SensitiveConnectedSubmission(
 }
 
 object SensitiveConnectedSubmission {
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveConnectedSubmission] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveConnectedSubmission] = Json.format
 
   def apply(connectedSubmission: ConnectedSubmission): SensitiveConnectedSubmission = SensitiveConnectedSubmission(
     connectedSubmission.referenceNumber,

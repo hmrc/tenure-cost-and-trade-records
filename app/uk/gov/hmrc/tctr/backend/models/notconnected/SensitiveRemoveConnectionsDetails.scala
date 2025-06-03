@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.common.SensitiveContactDetails
 
+import scala.language.implicitConversions
+
 case class SensitiveRemoveConnectionsDetails(
   removeConnectionFullName: SensitiveString,
   removeConnectionDetails: SensitiveContactDetails,
@@ -37,7 +39,7 @@ case class SensitiveRemoveConnectionsDetails(
 object SensitiveRemoveConnectionsDetails {
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
 
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveRemoveConnectionsDetails] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveRemoveConnectionsDetails] = Json.format
 
   def apply(removeConnectionsDetails: RemoveConnectionsDetails): SensitiveRemoveConnectionsDetails =
     SensitiveRemoveConnectionsDetails(

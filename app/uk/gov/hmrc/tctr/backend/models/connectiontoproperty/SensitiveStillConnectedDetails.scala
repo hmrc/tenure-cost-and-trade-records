@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
+
+import scala.language.implicitConversions
 
 case class SensitiveStillConnectedDetails(
   addressConnectionType: Option[AddressConnectionType] = None,
@@ -60,7 +62,7 @@ case class SensitiveStillConnectedDetails(
 }
 
 object SensitiveStillConnectedDetails {
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveStillConnectedDetails] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveStillConnectedDetails] = Json.format
 
   def apply(stillConnectedDetails: StillConnectedDetails): SensitiveStillConnectedDetails =
     SensitiveStillConnectedDetails(

@@ -18,8 +18,7 @@ package uk.gov.hmrc.tctr.backend.utils
 
 import org.scalatestplus.play.PlaySpec
 import uk.gov.hmrc.tctr.backend.util.DateUtil
-import uk.gov.hmrc.tctr.backend.util.DateUtil.dateOps
-import uk.gov.hmrc.tctr.backend.util.DateUtil.instantOps
+import uk.gov.hmrc.tctr.backend.util.DateUtil.*
 
 import java.text.SimpleDateFormat
 import java.time.{LocalDate, ZoneId, ZoneOffset, ZonedDateTime}

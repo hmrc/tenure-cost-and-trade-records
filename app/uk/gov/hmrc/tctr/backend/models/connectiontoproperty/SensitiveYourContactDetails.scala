@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.common.SensitiveContactDetails
 
+import scala.language.implicitConversions
+
 case class SensitiveYourContactDetails(
   fullName: SensitiveString,
   contactDetails: SensitiveContactDetails,
@@ -39,7 +41,7 @@ case class SensitiveYourContactDetails(
 object SensitiveYourContactDetails {
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
 
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveYourContactDetails] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveYourContactDetails] = Json.format
 
   def apply(yourContactDetails: YourContactDetails): SensitiveYourContactDetails = SensitiveYourContactDetails(
     SensitiveString(yourContactDetails.fullName),
