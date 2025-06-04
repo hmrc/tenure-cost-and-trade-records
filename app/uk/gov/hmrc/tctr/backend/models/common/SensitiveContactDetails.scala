@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 
+import scala.language.implicitConversions
+
 case class SensitiveContactDetails(phone: SensitiveString, email: SensitiveString) extends Sensitive[ContactDetails] {
 
   override def decryptedValue: ContactDetails = ContactDetails(
@@ -32,7 +34,7 @@ case class SensitiveContactDetails(phone: SensitiveString, email: SensitiveStrin
 
 object SensitiveContactDetails {
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveContactDetails] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveContactDetails] = Json.format
 
   def apply(contactDetails: ContactDetails): SensitiveContactDetails = SensitiveContactDetails(
     SensitiveString(contactDetails.phone),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,14 @@ import play.api.libs.json.Format
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.crypto.json.JsonEncryption
 
+import scala.language.implicitConversions
+
 /**
   * @author Yuriy Tumakha
   */
 object SensitiveFormats {
 
-  implicit def sensitiveStringFormat(implicit crypto: MongoCrypto): Format[SensitiveString] =
+  implicit def sensitiveStringFormat(using crypto: MongoCrypto): Format[SensitiveString] =
     JsonEncryption.sensitiveEncrypterDecrypter(SensitiveString.apply)
 
 }

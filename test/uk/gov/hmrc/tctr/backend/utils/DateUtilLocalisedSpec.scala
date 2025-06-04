@@ -18,7 +18,7 @@ package uk.gov.hmrc.tctr.backend.utils
 
 import play.api.i18n.{Messages, MessagesApi}
 import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
-import uk.gov.hmrc.tctr.backend.util.DateUtil.dateOps
+import uk.gov.hmrc.tctr.backend.util.DateUtil.*
 import uk.gov.hmrc.tctr.backend.util.{DateUtil, DateUtilLocalised}
 
 import java.text.SimpleDateFormat

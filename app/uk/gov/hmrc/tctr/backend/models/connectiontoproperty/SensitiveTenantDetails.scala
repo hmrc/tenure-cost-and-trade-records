@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 
+import scala.language.implicitConversions
+
 case class SensitiveTenantDetails(
   name: String,
   descriptionOfLetting: String,
@@ -35,7 +37,7 @@ case class SensitiveTenantDetails(
 }
 
 object SensitiveTenantDetails {
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveTenantDetails] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveTenantDetails] = Json.format
 
   def apply(tenantDetails: TenantDetails): SensitiveTenantDetails = SensitiveTenantDetails(
     tenantDetails.name,

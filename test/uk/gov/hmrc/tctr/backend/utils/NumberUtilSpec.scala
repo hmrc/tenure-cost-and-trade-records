@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ package uk.gov.hmrc.tctr.backend.utils
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import uk.gov.hmrc.tctr.backend.util.NumberUtil._
+import uk.gov.hmrc.tctr.backend.util.NumberUtil.*
 
 class NumberUtilSpec extends AnyFlatSpec with Matchers {
 
   "removeTrailingZeros" should
     "remove zeros from a string" in {
-      "1.00".removeTrailingZeros   should be("1")
-      "12.345".removeTrailingZeros should be("12.345")
+      "1.00".removedTrailingZeros   should be("1")
+      "12.345".removedTrailingZeros should be("12.345")
     }
 
   "asMoney" should

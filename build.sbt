@@ -16,7 +16,9 @@ val microservice = Project(appName, file("."))
     buildInfoPackage := "uk.gov.hmrc.tctr.backend",
     maintainer := "voa.service.optimisation@digital.hmrc.gov.uk",
     scalacOptions += "-Wconf:src=routes/.*:s",
-    scalacOptions += "-Wconf:msg=Flag .* set repeatedly:s"
+    scalacOptions += "-Wconf:msg=Flag .* set repeatedly:s",
+    scalacOptions += "-feature",
+    javaOptions += "-XX:+EnableDynamicAgentLoading"
   )
 
 lazy val it = (project in file("it"))

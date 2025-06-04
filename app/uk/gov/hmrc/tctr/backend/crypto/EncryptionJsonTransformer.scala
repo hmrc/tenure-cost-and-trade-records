@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import javax.inject.{Inject, Singleton}
   * @author Yuriy Tumakha
   */
 @Singleton
-class EncryptionJsonTransformer @Inject() ()(implicit crypto: MongoCrypto) {
+class EncryptionJsonTransformer @Inject() ()(using crypto: MongoCrypto) {
 
   private val encrypter: String => String = str => crypto.encrypt(PlainText(str)).value
 

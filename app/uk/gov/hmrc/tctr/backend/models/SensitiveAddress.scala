@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.tctr.backend.schema.Address
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
+
+import scala.language.implicitConversions
 
 /**
   * @author Yuriy Tumakha
@@ -45,7 +47,7 @@ object SensitiveAddress {
 
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
 
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAddress] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveAddress] = Json.format
 
   def apply(address: Address): SensitiveAddress = SensitiveAddress(
     SensitiveString(address.buildingNameNumber),

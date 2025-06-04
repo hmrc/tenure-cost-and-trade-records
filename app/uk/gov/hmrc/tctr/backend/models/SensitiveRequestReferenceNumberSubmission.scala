@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.SensitiveRequestAd
 
 import java.time.Instant
 import scala.annotation.nowarn
+import scala.language.implicitConversions
 
 case class SensitiveRequestReferenceNumberSubmission(
   id: String,
@@ -55,7 +56,7 @@ case class SensitiveRequestReferenceNumberSubmission(
 object SensitiveRequestReferenceNumberSubmission {
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
   @nowarn
-  implicit def format(implicit crypto: MongoCrypto): Format[SensitiveRequestReferenceNumberSubmission] = mongoEntity {
+  implicit def format(using crypto: MongoCrypto): Format[SensitiveRequestReferenceNumberSubmission] = mongoEntity {
     Json.format
   }
 

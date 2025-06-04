@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.tctr.backend
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 
 import scala.concurrent.Future
+import scala.language.implicitConversions
 
 package object controllers {
   implicit def toFuture[A](a: A): Future[A] = Future.successful(a)
   implicit def toOpt[A](a: A): Option[A]    = Some(a)
 
-  def error(msg: String) = Json.toJson("error" -> msg)
+  def error(msg: String): JsValue = Json.toJson("error" -> msg)
 
 }
