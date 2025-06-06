@@ -6,7 +6,7 @@ private object AppDependencies {
   val bootstrapVersion          = "9.13.0"
   val hmrcMongoVersion          = "2.6.0"
   val cryptoJsonVersion         = "8.2.0"
-  val playLanguageVersion       = "9.0.0"
+  val playLanguageVersion       = "9.1.0"
   val internalAuthClientVersion = "3.1.0"
 
   // Test dependencies
