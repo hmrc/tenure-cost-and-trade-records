@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,19 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
-import play.api.libs.json._
+import play.api.libs.json.*
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutFranchisesOrLettings(
   franchisesOrLettingsTiedToProperty: Option[AnswersYesNo] = None,
-  cateringConcessionOrFranchise: Option[AnswersYesNo] = None,
-  cateringOperationCurrentIndex: Int = 0,
-  cateringOperationSections: IndexedSeq[CateringOperationSection] = IndexedSeq.empty,
-  cateringOperationBusinessSections: Option[IndexedSeq[CateringOperationBusinessSection]] = None, // 6030 journey
-  lettingOtherPartOfProperty: Option[AnswersYesNo] = None,
-  lettingCurrentIndex: Int = 0,
-  lettingSections: IndexedSeq[LettingSection] = IndexedSeq.empty,
+  currentMaxOfLetting: Option[Boolean] = None,
   checkYourAnswersAboutFranchiseOrLettings: Option[CheckYourAnswersAboutFranchiseOrLettings] = None,
+  fromCYA: Option[Boolean] = None,
   lettings: Option[IndexedSeq[LettingPartOfProperty]] = None, // 6020 lettings
   rentalIncome: Option[IndexedSeq[IncomeRecord]] = None,
-  rentalIncomeIndex: Int = 0
+  rentalIncomeIndex: Int = 0,
+  lettingCurrentIndex: Int = 0,
+  rentalIncomeMax: Option[Boolean] = None
 )
 
 object AboutFranchisesOrLettings {

@@ -488,32 +488,68 @@ trait FakeObjects {
   )
 
   // Franchises or lettings
-  val prefilledCateringOperationSectionYes: CateringOperationSection = CateringOperationSection(
-    BusinessDetails("Operator Name", "Type of Business", prefilledCateringAddress),
-    Some(CateringOperationRentDetails(BigDecimal(1500), prefilledDateInput)),
-    Some(AnswerYes)
-  )
-
-  val prefilledLettingSectionYes: LettingSection = LettingSection(
-    OperatorDetails(
-      "Operator Name",
-      "Type of Business",
-      prefilledLettingAddress
-    ),
-    Some(PropertyRentDetails(BigDecimal(1500), prefilledDateInput)),
-    Some(LettingOtherPartOfPropertyRent6015Details(BigDecimal(1500), prefilledDateInput, true)),
-    Some(AnswerYes)
-  )
 
   val prefilledAboutFranchiseOrLettings: AboutFranchisesOrLettings = AboutFranchisesOrLettings(
-    Some(AnswerYes),
-    Some(AnswerYes),
-    0,
-    IndexedSeq(prefilledCateringOperationSectionYes),
-    None,
-    Some(AnswerYes),
-    0,
-    IndexedSeq(prefilledLettingSectionYes)
+    franchisesOrLettingsTiedToProperty = Some(AnswerYes),
+    currentMaxOfLetting = Some(true),
+    checkYourAnswersAboutFranchiseOrLettings = None,
+    fromCYA = Some(false),
+    lettings = None,
+    rentalIncome = Some(
+      IndexedSeq(
+        LettingIncomeRecord(
+          sourceType = TypeLetting,
+          operatorDetails = Some(
+            OperatorDetails(
+              operatorName = "Mike Test",
+              typeOfBusiness = "test",
+              lettingAddress = LettingAddress(
+                buildingNameNumber = "123",
+                street1 = Some("Test Street"),
+                town = "London",
+                county = Some("London"),
+                postcode = "SW1A 1AA"
+              )
+            )
+          ),
+          rent = Some(
+            PropertyRentDetails(
+              annualRent = BigDecimal(12000),
+              dateInput = LocalDate.of(2023, 1, 1)
+            )
+          ),
+          itemsIncluded = None,
+          addAnotherRecord = None
+        ),
+        FranchiseIncomeRecord(
+          sourceType = TypeFranchise,
+          businessDetails = Some(
+            BusinessDetails(
+              operatorName = "Test operator",
+              typeOfBusiness = "test",
+              cateringAddress = BusinessAddress(
+                buildingNameNumber = "456",
+                street1 = Some("Test Street"),
+                town = "Bristol",
+                county = Some("Bristol"),
+                postcode = "BS123C"
+              )
+            )
+          ),
+          rent = Some(
+            PropertyRentDetails(
+              annualRent = BigDecimal(24000),
+              dateInput = LocalDate.of(2023, 4, 1)
+            )
+          ),
+          itemsIncluded = None,
+          addAnotherRecord = None
+        )
+      )
+    ),
+    rentalIncomeIndex = 1,
+    lettingCurrentIndex = 0,
+    rentalIncomeMax = Some(false)
   )
 
   // About the lease or agreement
