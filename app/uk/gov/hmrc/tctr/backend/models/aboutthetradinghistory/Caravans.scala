@@ -34,7 +34,7 @@ case class Caravans(
   annualPitchFee: Option[CaravansAnnualPitchFee] = None
 )
 
-object Caravans {
+object Caravans:
 
   implicit val format: OFormat[Caravans] = Json.format
 
@@ -50,5 +50,3 @@ object Caravans {
 
   object CaravansPitchFeeServices:
     implicit val format: Format[CaravansPitchFeeServices] = Scala3EnumJsonFormat.format
-
-}
