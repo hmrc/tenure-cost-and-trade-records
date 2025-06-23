@@ -548,7 +548,6 @@ trait FakeObjects {
       )
     ),
     rentalIncomeIndex = 1,
-    lettingCurrentIndex = 0,
     rentalIncomeMax = Some(false)
   )
 
@@ -562,7 +561,7 @@ trait FakeObjects {
     currentRentPayableWithin12Months =
       Some(CurrentRentPayableWithin12Months(CurrentRentWithin12MonthsYes, Some(prefilledDateInput))),
     propertyUseLeasebackAgreement = Some(prefilledPropertyUseLeasebackArrangement),
-    annualRent = Some(AnnualRent(BigDecimal(1000.00))),
+    annualRent = Some(BigDecimal(1000.00)),
     currentRentFirstPaid = Some(CurrentRentFirstPaid(prefilledDateInput)),
     currentLeaseOrAgreementBegin = Some(CurrentLeaseOrAgreementBegin(MonthsYearDuration(12, 2022), "test duration")),
     includedInYourRentDetails = Some(
