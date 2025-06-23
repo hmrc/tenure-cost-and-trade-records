@@ -17,7 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Format, Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.Scala3EnumFormat
+import uk.gov.hmrc.tctr.backend.models.Scala3EnumJsonFormat
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 /**
@@ -49,6 +49,6 @@ object Caravans {
   end CaravansPitchFeeServices
 
   object CaravansPitchFeeServices:
-    implicit val format: Format[CaravansPitchFeeServices] = Scala3EnumFormat.format
+    implicit val format: Format[CaravansPitchFeeServices] = Scala3EnumJsonFormat.format
 
 }

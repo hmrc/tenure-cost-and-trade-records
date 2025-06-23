@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,24 @@
 package uk.gov.hmrc.tctr.backend.models.common
 
 import play.api.libs.json.Format
-import uk.gov.hmrc.tctr.backend.models.{EnumFormat, NamedEnum, NamedEnumSupport}
+import uk.gov.hmrc.tctr.backend.models.Scala3EnumJsonFormat
 
-sealed trait AnswersYesNo extends NamedEnum {
-  val key = "answersYesNo"
-}
-object AnswerYes extends AnswersYesNo {
-  val name = "yes"
-}
-object AnswerNo extends AnswersYesNo {
-  val name = "no"
-}
+/**
+  * @author Yuriy Tumakha
+  */
+enum AnswersYesNo(answer: String):
+  override def toString: String = answer
 
-object AnswersYesNo extends NamedEnumSupport[AnswersYesNo] {
+  def toBoolean: Boolean = this == AnswerYes
 
-  implicit val format: Format[AnswersYesNo] = EnumFormat(
-    AnswersYesNo
-  )
+  case AnswerYes extends AnswersYesNo("yes")
+  case AnswerNo extends AnswersYesNo("no")
+end AnswersYesNo
 
-  val all = List(AnswerYes, AnswerNo)
+object AnswersYesNo:
 
-  val key = all.head.key
-}
+  implicit val format: Format[AnswersYesNo] = Scala3EnumJsonFormat.format
+
+  def apply(answerYes: Boolean): AnswersYesNo = if (answerYes) AnswerYes else AnswerNo
+
+  extension (boolean: Boolean) def toAnswer: AnswersYesNo = AnswersYesNo(boolean)

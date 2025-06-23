@@ -17,7 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models.accommodation
 
 import play.api.libs.json.Format
-import uk.gov.hmrc.tctr.backend.models.Scala3EnumFormat
+import uk.gov.hmrc.tctr.backend.models.Scala3EnumJsonFormat
 
 /**
   * @author Yuriy Tumakha
@@ -34,4 +34,4 @@ enum AccommodationTariffItem(item: String):
 end AccommodationTariffItem
 
 object AccommodationTariffItem:
-  implicit val format: Format[AccommodationTariffItem] = Scala3EnumFormat.format
+  implicit val format: Format[AccommodationTariffItem] = Scala3EnumJsonFormat.format

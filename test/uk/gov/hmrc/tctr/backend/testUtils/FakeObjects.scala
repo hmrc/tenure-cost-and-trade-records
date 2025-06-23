@@ -26,6 +26,7 @@ import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.*
 import uk.gov.hmrc.tctr.backend.models.accommodation.*
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.*
 import uk.gov.hmrc.tctr.backend.models.common.*
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.models.lettingHistory.*
