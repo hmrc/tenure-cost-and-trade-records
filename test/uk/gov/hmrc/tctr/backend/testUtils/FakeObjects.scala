@@ -104,7 +104,7 @@ trait FakeObjects {
     Some(AddressConnectionTypeYes),
     Some(ConnectionToThePropertyOccupierTrustee),
     Some(EditTheAddress(EditAddress("Street 1", Some("Street 2"), "Town", Some("County"), "BN12 4AX"))),
-    Some(VacantProperties(VacantPropertiesDetailsYes)),
+    Some(AnswerYes),
     Some(TradingNameOperatingFromProperty("ABC LTD")),
     Some(AnswerYes),
     Some(AnswerYes),
@@ -132,7 +132,7 @@ trait FakeObjects {
   val prefilledAboutYouAndTheProperty: AboutYouAndTheProperty = AboutYouAndTheProperty(
     customerDetails = Some(CustomerDetails("Full Name", ContactDetails(prefilledFakePhoneNo, prefilledFakeEmail))),
     propertyDetails = Some(PropertyDetails(CurrentPropertyHotel, None)),
-    websiteForPropertyDetails = Some(WebsiteForPropertyDetails(BuildingOperationHaveAWebsiteYes, Some("webAddress"))),
+    websiteForPropertyDetails = Some(WebsiteForPropertyDetails(AnswerYes, Some("webAddress"))),
     premisesLicenseGrantedDetail = Some(AnswerYes),
     premisesLicenseGrantedInformationDetails =
       Some(PremisesLicenseGrantedInformationDetails("Premises licence granted details")),
@@ -557,10 +557,8 @@ trait FakeObjects {
     aboutTheLandlord = Some(AboutTheLandlord(prefilledFakeName, prefilledLandlordAddress)),
     connectedToLandlord = Some(AnswerYes),
     connectedToLandlordDetails = Some(ConnectedToLandlordInformationDetails("Test")),
-    leaseOrAgreementYearsDetails =
-      Some(LeaseOrAgreementYearsDetails(TenancyThreeYearsYes, RentThreeYearsYes, UnderReviewYes)),
-    currentRentPayableWithin12Months =
-      Some(CurrentRentPayableWithin12Months(CurrentRentWithin12MonthsYes, Some(prefilledDateInput))),
+    leaseOrAgreementYearsDetails = Some(LeaseOrAgreementYearsDetails(AnswerYes, AnswerYes, AnswerYes)),
+    currentRentPayableWithin12Months = Some(CurrentRentPayableWithin12Months(AnswerYes, Some(prefilledDateInput))),
     propertyUseLeasebackAgreement = Some(prefilledPropertyUseLeasebackArrangement),
     annualRent = Some(BigDecimal(1000.00)),
     currentRentFirstPaid = Some(CurrentRentFirstPaid(prefilledDateInput)),

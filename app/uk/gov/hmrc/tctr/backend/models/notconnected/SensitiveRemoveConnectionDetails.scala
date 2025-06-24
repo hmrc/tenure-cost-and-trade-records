@@ -19,12 +19,13 @@ package uk.gov.hmrc.tctr.backend.models.notconnected
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 import scala.language.implicitConversions
 
 case class SensitiveRemoveConnectionDetails(
   removeConnectionDetails: Option[SensitiveRemoveConnectionsDetails] = None,
-  pastConnectionType: Option[PastConnectionType] = None
+  pastConnectionType: Option[AnswersYesNo] = None
 ) extends Sensitive[RemoveConnectionDetails] {
   override def decryptedValue: RemoveConnectionDetails = RemoveConnectionDetails(
     removeConnectionDetails.map(_.decryptedValue),
@@ -32,7 +33,7 @@ case class SensitiveRemoveConnectionDetails(
   )
 }
 
-object SensitiveRemoveConnectionDetails {
+object SensitiveRemoveConnectionDetails:
 
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveRemoveConnectionDetails] = Json.format
 
@@ -41,4 +42,3 @@ object SensitiveRemoveConnectionDetails {
       removeConnectionDetails.removeConnectionDetails.map(SensitiveRemoveConnectionsDetails(_)),
       removeConnectionDetails.pastConnectionType
     )
-}
