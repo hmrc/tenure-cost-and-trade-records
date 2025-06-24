@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,33 +18,34 @@ package uk.gov.hmrc.tctr.backend.models.common
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+import uk.gov.hmrc.tctr.backend.models.common.ResponsibilityParty.InsideRepairs.*
+import uk.gov.hmrc.tctr.backend.models.common.ResponsibilityParty.OutsideRepairs.*
+import uk.gov.hmrc.tctr.backend.models.common.ResponsibilityParty.BuildingInsurance.*
 
-class AnswerResponsiblePartySpec extends AnyWordSpecLike with Matchers {
+class ResponsiblePartySpec extends AnyWordSpecLike with Matchers {
 
   "OutsideRepairs" should {
     "Return values" in {
-      OutsideRepairs.key          shouldBe "outsideRepairs"
-      OutsideRepairsLandlord.name shouldBe "landlord"
-      OutsideRepairsTenant.name   shouldBe "tenant"
-      OutsideRepairsBoth.name     shouldBe "both"
+      OutsideRepairsLandlord.toString shouldBe "landlord"
+      OutsideRepairsTenant.toString   shouldBe "tenant"
+      OutsideRepairsBoth.toString     shouldBe "both"
     }
   }
 
   "InsideRepairs" should {
     "Return values" in {
-      InsideRepairs.key          shouldBe "insideRepairs"
-      InsideRepairsLandlord.name shouldBe "landlord"
-      InsideRepairsTenant.name   shouldBe "tenant"
-      InsideRepairsBoth.name     shouldBe "both"
+      InsideRepairsLandlord.toString shouldBe "landlord"
+      InsideRepairsTenant.toString   shouldBe "tenant"
+      InsideRepairsBoth.toString     shouldBe "both"
     }
   }
 
   "BuildingInsurance" should {
     "Return values" in {
-      BuildingInsurance.key          shouldBe "buildingInsurance"
-      BuildingInsuranceLandlord.name shouldBe "landlord"
-      BuildingInsuranceTenant.name   shouldBe "tenant"
-      BuildingInsuranceBoth.name     shouldBe "both"
+      BuildingInsuranceLandlord.toString shouldBe "landlord"
+      BuildingInsuranceTenant.toString   shouldBe "tenant"
+      BuildingInsuranceBoth.toString     shouldBe "both"
     }
   }
+
 }

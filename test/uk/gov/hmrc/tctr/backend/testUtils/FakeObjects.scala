@@ -19,15 +19,24 @@ package uk.gov.hmrc.tctr.backend.testUtils
 import uk.gov.hmrc.tctr.backend.models.*
 import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDuration}
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.*
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.CurrentRentBasedOn.*
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.CurrentRentFixed.*
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.MethodToFixCurrentRent.*
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.*
+import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.TypeOfIncome.*
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.*
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.Caravans.CaravansPitchFeeServices.{Electricity, Other, WaterAndDrainage}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.*
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.CurrentPropertyUsed.*
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.RenewablesPlantDetails.*
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.TiedForGoodsInformation.*
 import uk.gov.hmrc.tctr.backend.models.accommodation.*
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.*
 import uk.gov.hmrc.tctr.backend.models.common.*
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
+import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.AddressConnectionType.*
+import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.ConnectionToProperty.*
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.models.lettingHistory.*
 import uk.gov.hmrc.tctr.backend.schema.Address
@@ -613,7 +622,7 @@ trait FakeObjects {
     rentPayableVaryOnQuantityOfBeersInformationDetails =
       Some(RentPayableVaryOnQuantityOfBeersInformationDetails("test description")),
     howIsCurrentRentFixed = Some(HowIsCurrentRentFixed(CurrentRentFixedNewLeaseAgreement, LocalDate.now)),
-    methodToFixCurrentRentDetails = Some(MethodToFixCurrentRentDetails(MethodToFixCurrentRentsAgreement)),
+    methodToFixCurrentRentDetails = Some(MethodToFixCurrentRentDetails(MethodToFixCurrentRentAgreement)),
     intervalsOfRentReview = Some(IntervalsOfRentReview(Some("test description"), Some(LocalDate.now))),
     canRentBeReducedOnReviewDetails = Some(CanRentBeReducedOnReviewDetails(AnswerYes)),
     incentivesPaymentsConditionsDetails = Some(IncentivesPaymentsConditionsDetails(AnswerYes)),

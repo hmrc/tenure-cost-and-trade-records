@@ -17,37 +17,19 @@
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import play.api.libs.json.Format
-import uk.gov.hmrc.tctr.backend.models.{EnumFormat, NamedEnum, NamedEnumSupport}
+import uk.gov.hmrc.tctr.backend.models.Scala3EnumJsonFormat
 
-sealed trait TypeOfLetting extends NamedEnum {
-  val key = "typeOfLetting"
-}
+/**
+  * @author Yuriy Tumakha
+  */
+enum TypeOfLetting(typeOfLetting: String):
+  override def toString: String = typeOfLetting
 
-object TypeOfLettingAutomatedTellerMachine extends TypeOfLetting {
-  val name = "automatedTellerMachine"
-}
+  case TypeOfLettingAutomatedTellerMachine extends TypeOfLetting("automatedTellerMachine")
+  case TypeOfLettingTelecomMast extends TypeOfLetting("telecomMast")
+  case TypeOfLettingAdvertisingRight extends TypeOfLetting("advertisingRight")
+  case TypeOfLettingOther extends TypeOfLetting("other")
+end TypeOfLetting
 
-object TypeOfLettingTelecomMast extends TypeOfLetting {
-  val name = "telecomMast"
-}
-
-object TypeOfLettingAdvertisingRight extends TypeOfLetting {
-  val name = "advertisingRight"
-}
-
-object TypeOfLettingOther extends TypeOfLetting {
-  val name = "other"
-}
-
-object TypeOfLetting extends NamedEnumSupport[TypeOfLetting] {
-  implicit val format: Format[TypeOfLetting] = EnumFormat(TypeOfLetting)
-
-  override def all: Seq[TypeOfLetting] = List(
-    TypeOfLettingAutomatedTellerMachine,
-    TypeOfLettingTelecomMast,
-    TypeOfLettingAdvertisingRight,
-    TypeOfLettingOther
-  )
-
-  val key = all.head.key
-}
+object TypeOfLetting:
+  implicit val format: Format[TypeOfLetting] = Scala3EnumJsonFormat.format

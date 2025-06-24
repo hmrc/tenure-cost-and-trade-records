@@ -18,6 +18,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json._
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.IncludedInYourRentInformation.*
 
 class IncludedInYourRentInformationSpec extends PlaySpec {
   "IncludedInYourRentInformation" should {

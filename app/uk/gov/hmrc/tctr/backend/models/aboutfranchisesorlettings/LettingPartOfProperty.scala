@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
-import play.api.libs.json._
+import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.TypeOfLetting.*
+import play.api.libs.json.*
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 import java.time.LocalDate

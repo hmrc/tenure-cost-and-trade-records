@@ -17,33 +17,19 @@
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.Format
-import uk.gov.hmrc.tctr.backend.models.{EnumFormat, NamedEnum, NamedEnumSupport}
+import uk.gov.hmrc.tctr.backend.models.Scala3EnumJsonFormat
 
-sealed trait MethodToFixCurrentRents extends NamedEnum {
-  override def key: String = "methodUsedToFixCurrentRent"
-}
-object MethodToFixCurrentRentsAgreement extends MethodToFixCurrentRents {
-  override def name: String = "agreement"
-}
-object MethodToFixCurrentRentsArbitration extends MethodToFixCurrentRents {
-  override def name: String = "arbitration"
-}
+/**
+  * @author Yuriy Tumakha
+  */
+enum MethodToFixCurrentRent(methodUsedToFixCurrentRent: String):
+  override def toString: String = methodUsedToFixCurrentRent
 
-object MethodToFixCurrentRentIndependentExpert extends MethodToFixCurrentRents {
-  override def name: String = "independentExpert"
-}
-object MethodToFixCurrentRentsACourt extends MethodToFixCurrentRents {
-  override def name: String = "aCourt"
-}
+  case MethodToFixCurrentRentAgreement extends MethodToFixCurrentRent("agreement")
+  case MethodToFixCurrentRentArbitration extends MethodToFixCurrentRent("arbitration")
+  case MethodToFixCurrentRentIndependentExpert extends MethodToFixCurrentRent("independentExpert")
+  case MethodToFixCurrentRentACourt extends MethodToFixCurrentRent("aCourt")
+end MethodToFixCurrentRent
 
-object MethodToFixCurrentRents extends NamedEnumSupport[MethodToFixCurrentRents] {
-  implicit val format: Format[MethodToFixCurrentRents] = EnumFormat(MethodToFixCurrentRents)
-
-  val all = List(
-    MethodToFixCurrentRentsAgreement,
-    MethodToFixCurrentRentsArbitration,
-    MethodToFixCurrentRentIndependentExpert,
-    MethodToFixCurrentRentsACourt
-  )
-  val key = all.head.key
-}
+object MethodToFixCurrentRent:
+  implicit val format: Format[MethodToFixCurrentRent] = Scala3EnumJsonFormat.format
