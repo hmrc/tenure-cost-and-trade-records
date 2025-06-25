@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ case class StillConnectedDetails(
   addressConnectionType: Option[AddressConnectionType] = None,
   connectionToProperty: Option[ConnectionToProperty] = None,
   editAddress: Option[EditTheAddress] = None,
-  vacantProperties: Option[VacantProperties] = None,
+  isPropertyVacant: Option[AnswersYesNo] = None,
   tradingNameOperatingFromProperty: Option[TradingNameOperatingFromProperty] = None,
   tradingNameOwnTheProperty: Option[AnswersYesNo] = None,
   tradingNamePayingRent: Option[AnswersYesNo] = None,
@@ -37,6 +37,5 @@ case class StillConnectedDetails(
   checkYourAnswersConnectionToVacantProperty: Option[CheckYourAnswersConnectionToVacantProperty] = None
 )
 
-object StillConnectedDetails {
+object StillConnectedDetails:
   implicit val format: OFormat[StillConnectedDetails] = Json.format
-}

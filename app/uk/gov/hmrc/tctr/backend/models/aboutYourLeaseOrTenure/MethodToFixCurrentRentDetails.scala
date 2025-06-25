@@ -18,8 +18,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.{Json, OFormat}
 
-case class MethodToFixCurrentRentDetails(methodToFixCurrentRent: MethodToFixCurrentRents)
+case class MethodToFixCurrentRentDetails(methodToFixCurrentRent: MethodToFixCurrentRent)
 
-object MethodToFixCurrentRentDetails {
+object MethodToFixCurrentRentDetails:
   implicit val format: OFormat[MethodToFixCurrentRentDetails] = Json.format
-}

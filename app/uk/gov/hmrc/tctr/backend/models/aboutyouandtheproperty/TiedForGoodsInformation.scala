@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,18 @@
 package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
 import play.api.libs.json.Format
-import uk.gov.hmrc.tctr.backend.models.{EnumFormat, NamedEnum, NamedEnumSupport}
+import uk.gov.hmrc.tctr.backend.models.Scala3EnumJsonFormat
 
-sealed trait TiedForGoodsInformation extends NamedEnum {
-  override def key = "tiedForGoodsDetails"
-}
-object TiedForGoodsInformationDetailsFullTie extends TiedForGoodsInformation {
-  override def name = "fullTie"
-}
-object TiedForGoodsInformationDetailsBeerOnly extends TiedForGoodsInformation {
-  override def name = "beerOnly"
-}
-object TiedForGoodsInformationDetailsPartialTie extends TiedForGoodsInformation {
-  override def name = "partialTie"
-}
+/**
+  * @author Yuriy Tumakha
+  */
+enum TiedForGoodsInformation(tiedForGoodsType: String):
+  override def toString: String = tiedForGoodsType
 
-object TiedForGoodsInformation extends NamedEnumSupport[TiedForGoodsInformation] {
-  implicit val format: Format[TiedForGoodsInformation] = EnumFormat(TiedForGoodsInformation)
+  case TiedForGoodsInformationDetailsFullTie extends TiedForGoodsInformation("fullTie")
+  case TiedForGoodsInformationDetailsBeerOnly extends TiedForGoodsInformation("beerOnly")
+  case TiedForGoodsInformationDetailsPartialTie extends TiedForGoodsInformation("partialTie")
+end TiedForGoodsInformation
 
-  val all = List(
-    TiedForGoodsInformationDetailsFullTie,
-    TiedForGoodsInformationDetailsBeerOnly,
-    TiedForGoodsInformationDetailsPartialTie
-  )
-
-  val key = all.head.key
-}
+object TiedForGoodsInformation:
+  implicit val format: Format[TiedForGoodsInformation] = Scala3EnumJsonFormat.format

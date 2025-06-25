@@ -18,6 +18,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsError, Json}
+import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.TypeOfIncome.*
 import uk.gov.hmrc.tctr.backend.testUtils.FakeObjects
 
 import java.time.LocalDate

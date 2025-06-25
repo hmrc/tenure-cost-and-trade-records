@@ -18,7 +18,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.common.AnswerYes
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo.*
 
 class TouringAndTentingPitchesSpec extends PlaySpec {
   "TouringAndTentingPitches" should {

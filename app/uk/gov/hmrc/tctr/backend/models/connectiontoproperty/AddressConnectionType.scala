@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
+package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 
 import play.api.libs.json.Format
 import uk.gov.hmrc.tctr.backend.models.Scala3EnumJsonFormat
@@ -22,14 +22,13 @@ import uk.gov.hmrc.tctr.backend.models.Scala3EnumJsonFormat
 /**
   * @author Yuriy Tumakha
   */
-enum TypeOfIncome(typeOfIncome: String):
-  override def toString: String = typeOfIncome
+enum AddressConnectionType(connectionType: String):
+  override def toString: String = connectionType
 
-  case TypeFranchise extends TypeOfIncome("typeFranchise")
-  case TypeConcession6015 extends TypeOfIncome("typeConcession6015")
-  case TypeConcession extends TypeOfIncome("typeConcession")
-  case TypeLetting extends TypeOfIncome("typeLetting")
-end TypeOfIncome
+  case AddressConnectionTypeYes extends AddressConnectionType("yes")
+  case AddressConnectionTypeNo extends AddressConnectionType("no")
+  case AddressConnectionTypeYesChangeAddress extends AddressConnectionType("yes-change-address")
+end AddressConnectionType
 
-object TypeOfIncome:
-  implicit val format: Format[TypeOfIncome] = Scala3EnumJsonFormat.format
+object AddressConnectionType:
+  implicit val format: Format[AddressConnectionType] = Scala3EnumJsonFormat.format

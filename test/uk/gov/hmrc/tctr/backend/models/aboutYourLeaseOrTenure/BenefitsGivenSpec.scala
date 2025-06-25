@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,12 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
-import uk.gov.hmrc.tctr.backend.models.common.AnswerYes
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo.*
 
 class BenefitsGivenSpec extends PlaySpec {
   "BenefitsGiven" should {
     "serialize and deserialize correctly" in {
-      val benefitsGiven =
-        BenefitsGiven(AnswerYes)
+      val benefitsGiven = BenefitsGiven(AnswerYes)
 
       val json = Json.toJson(benefitsGiven)
       json.as[BenefitsGiven] mustBe benefitsGiven

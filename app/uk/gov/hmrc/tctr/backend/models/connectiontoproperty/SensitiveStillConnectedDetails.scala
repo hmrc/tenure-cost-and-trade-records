@@ -27,7 +27,7 @@ case class SensitiveStillConnectedDetails(
   addressConnectionType: Option[AddressConnectionType] = None,
   connectionToProperty: Option[ConnectionToProperty] = None,
   editAddress: Option[SensitiveEditTheAddress] = None,
-  vacantProperties: Option[VacantProperties] = None,
+  isPropertyVacant: Option[AnswersYesNo] = None,
   tradingNameOperatingFromProperty: Option[TradingNameOperatingFromProperty] = None,
   tradingNameOwnTheProperty: Option[AnswersYesNo] = None,
   tradingNamePayingRent: Option[AnswersYesNo] = None,
@@ -39,13 +39,13 @@ case class SensitiveStillConnectedDetails(
   lettingPartOfPropertyDetails: IndexedSeq[SensitiveLettingPartOfPropertyDetails] = IndexedSeq.empty,
   checkYourAnswersConnectionToProperty: Option[CheckYourAnswersConnectionToProperty] = None,
   checkYourAnswersConnectionToVacantProperty: Option[CheckYourAnswersConnectionToVacantProperty] = None
-) extends Sensitive[StillConnectedDetails] {
+) extends Sensitive[StillConnectedDetails]:
 
   override def decryptedValue: StillConnectedDetails = StillConnectedDetails(
     addressConnectionType,
     connectionToProperty,
     editAddress.map(_.decryptedValue),
-    vacantProperties,
+    isPropertyVacant,
     tradingNameOperatingFromProperty,
     tradingNameOwnTheProperty,
     tradingNamePayingRent,
@@ -59,9 +59,8 @@ case class SensitiveStillConnectedDetails(
     checkYourAnswersConnectionToVacantProperty
   )
 
-}
+object SensitiveStillConnectedDetails:
 
-object SensitiveStillConnectedDetails {
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveStillConnectedDetails] = Json.format
 
   def apply(stillConnectedDetails: StillConnectedDetails): SensitiveStillConnectedDetails =
@@ -69,7 +68,7 @@ object SensitiveStillConnectedDetails {
       stillConnectedDetails.addressConnectionType,
       stillConnectedDetails.connectionToProperty,
       stillConnectedDetails.editAddress.map(SensitiveEditTheAddress(_)),
-      stillConnectedDetails.vacantProperties,
+      stillConnectedDetails.isPropertyVacant,
       stillConnectedDetails.tradingNameOperatingFromProperty,
       stillConnectedDetails.tradingNameOwnTheProperty,
       stillConnectedDetails.tradingNamePayingRent,
@@ -82,4 +81,3 @@ object SensitiveStillConnectedDetails {
       stillConnectedDetails.checkYourAnswersConnectionToProperty,
       stillConnectedDetails.checkYourAnswersConnectionToVacantProperty
     )
-}

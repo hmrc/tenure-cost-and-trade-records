@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
+import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.TypeOfIncome.*
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 import play.api.libs.json.{JsError, JsObject, JsResult, JsValue, Json, OFormat}
 

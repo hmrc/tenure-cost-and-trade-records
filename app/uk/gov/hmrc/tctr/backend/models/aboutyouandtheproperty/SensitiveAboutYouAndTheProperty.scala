@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class SensitiveAboutYouAndTheProperty(
   customerDetails: Option[SensitiveCustomerDetails] = None,
+  alternativeContactAddress: Option[AlternativeAddress],
   propertyDetails: Option[PropertyDetails] = None,
   websiteForPropertyDetails: Option[WebsiteForPropertyDetails] = None,
   premisesLicenseGrantedDetail: Option[AnswersYesNo] = None,
@@ -45,6 +46,7 @@ case class SensitiveAboutYouAndTheProperty(
 ) extends Sensitive[AboutYouAndTheProperty] {
   override def decryptedValue: AboutYouAndTheProperty = AboutYouAndTheProperty(
     customerDetails.map(_.decryptedValue),
+    alternativeContactAddress,
     propertyDetails,
     websiteForPropertyDetails,
     premisesLicenseGrantedDetail,
@@ -73,6 +75,7 @@ object SensitiveAboutYouAndTheProperty {
   def apply(aboutYouAndTheProperty: AboutYouAndTheProperty): SensitiveAboutYouAndTheProperty =
     SensitiveAboutYouAndTheProperty(
       aboutYouAndTheProperty.customerDetails.map(SensitiveCustomerDetails(_)),
+      aboutYouAndTheProperty.alternativeContactAddress,
       aboutYouAndTheProperty.propertyDetails,
       aboutYouAndTheProperty.websiteForPropertyDetails,
       aboutYouAndTheProperty.premisesLicenseGrantedDetail,

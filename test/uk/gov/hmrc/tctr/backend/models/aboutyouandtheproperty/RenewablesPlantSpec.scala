@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,13 @@ package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsSuccess, Json, Writes}
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.RenewablesPlantDetails.*
 
 class RenewablesPlantSpec extends PlaySpec {
 
   implicit val renewablesPlantDetailsWrites: Writes[RenewablesPlantDetails] = Writes {
     case Intermittent => Json.toJson("intermittent")
-    case BaseLoad     => Json.toJson("baseload")
+    case Baseload     => Json.toJson("baseload")
   }
 
   "RenewablesPlant" should {
@@ -35,7 +36,7 @@ class RenewablesPlantSpec extends PlaySpec {
     }
 
     "serialize and deserialize correctly for BaseLoad" in {
-      val renewablesPlant = RenewablesPlant(renewablesPlant = BaseLoad)
+      val renewablesPlant = RenewablesPlant(renewablesPlant = Baseload)
 
       val json = Json.toJson(renewablesPlant)
       json.as[RenewablesPlant] mustBe renewablesPlant
@@ -50,7 +51,7 @@ class RenewablesPlantSpec extends PlaySpec {
 
     "deserialize from string 'baseload' to BaseLoad" in {
       val json = Json.toJson("baseload")
-      json.validate[RenewablesPlantDetails] mustBe JsSuccess(BaseLoad)
+      json.validate[RenewablesPlantDetails] mustBe JsSuccess(Baseload)
     }
 
     "serialize Intermittent to string 'intermittent'" in {
@@ -58,7 +59,7 @@ class RenewablesPlantSpec extends PlaySpec {
     }
 
     "serialize BaseLoad to string 'baseload'" in {
-      Json.toJson(BaseLoad)(using renewablesPlantDetailsWrites).as[String] mustBe "baseload"
+      Json.toJson(Baseload)(using renewablesPlantDetailsWrites).as[String] mustBe "baseload"
     }
   }
 }

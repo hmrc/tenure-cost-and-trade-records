@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.tctr.backend.controllers
 
-import play.api.{Logger, Logging}
-import play.api.mvc.ControllerComponents
+import play.api.Logging
+import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
@@ -25,7 +25,7 @@ import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.tctr.backend.models.ConnectedSubmission
-import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.VacantPropertiesDetailsYes
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo.*
 import uk.gov.hmrc.tctr.backend.repository.{ConnectedRepository, SubmissionDraftRepo, SubmittedMongoRepo}
 
 import javax.inject.Inject
@@ -45,9 +45,7 @@ class ConnectedSubmissionController @Inject() (
     with InternalAuthAccess
     with Logging {
 
-  val log = Logger(classOf[ConnectedSubmissionController])
-
-  def submit(submissionReference: String) =
+  def submit(submissionReference: String): Action[ConnectedSubmission] =
     auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[ConnectedSubmission]) { implicit request =>
       submittedMongoRepo.hasBeenSubmitted(submissionReference) flatMap {
         case true if tctrConfig.enableDuplicate =>
@@ -55,7 +53,7 @@ class ConnectedSubmissionController @Inject() (
           Future.successful(Created)
         case true                               =>
           metric.failedSubmissions.mark()
-          log.warn(s"Error saving submission $submissionReference. Possible duplicate")
+          logger.warn(s"Error saving submission $submissionReference. Possible duplicate")
           Future.successful(Conflict(s"Error saving submission $submissionReference. Possible duplicate"))
         case false                              =>
           saveSubmission(request.body, submissionReference)
@@ -87,7 +85,7 @@ class ConnectedSubmissionController @Inject() (
 
   private def isVacantPropertySubmission(submission: ConnectedSubmission): Boolean =
     submission.stillConnectedDetails
-      .flatMap(_.vacantProperties)
-      .exists(_.vacantProperties == VacantPropertiesDetailsYes)
+      .flatMap(_.isPropertyVacant)
+      .contains(AnswerYes)
 
 }
