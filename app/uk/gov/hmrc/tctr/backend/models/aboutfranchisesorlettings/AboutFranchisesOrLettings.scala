@@ -22,7 +22,7 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 case class AboutFranchisesOrLettings(
   franchisesOrLettingsTiedToProperty: Option[AnswersYesNo] = None,
   currentMaxOfLetting: Option[Boolean] = None,
-  checkYourAnswersAboutFranchiseOrLettings: Option[CheckYourAnswersAboutFranchiseOrLettings] = None,
+  checkYourAnswersAboutFranchiseOrLettings: Option[AnswersYesNo] = None,
   fromCYA: Option[Boolean] = None,
   lettings: Option[IndexedSeq[LettingPartOfProperty]] = None, // 6020 lettings
   rentalIncome: Option[IndexedSeq[IncomeRecord]] = None,
@@ -31,6 +31,5 @@ case class AboutFranchisesOrLettings(
   rentalIncomeMax: Option[Boolean] = None
 )
 
-object AboutFranchisesOrLettings {
+object AboutFranchisesOrLettings:
   implicit val format: OFormat[AboutFranchisesOrLettings] = Json.format
-}

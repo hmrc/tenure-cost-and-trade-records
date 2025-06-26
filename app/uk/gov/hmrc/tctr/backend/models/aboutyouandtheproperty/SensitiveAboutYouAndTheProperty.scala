@@ -23,29 +23,32 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class SensitiveAboutYouAndTheProperty(
   customerDetails: Option[SensitiveCustomerDetails] = None,
+  altDetailsQuestion: Option[AnswersYesNo] = None,
   alternativeContactAddress: Option[AlternativeAddress],
   propertyDetails: Option[PropertyDetails] = None,
   websiteForPropertyDetails: Option[WebsiteForPropertyDetails] = None,
   premisesLicenseGrantedDetail: Option[AnswersYesNo] = None,
-  premisesLicenseGrantedInformationDetails: Option[PremisesLicenseGrantedInformationDetails] = None,
+  premisesLicenseGrantedInformationDetails: Option[String] = None,
   licensableActivities: Option[AnswersYesNo] = None,
-  licensableActivitiesInformationDetails: Option[LicensableActivitiesInformationDetails] = None,
+  licensableActivitiesInformationDetails: Option[String] = None,
   premisesLicenseConditions: Option[AnswersYesNo] = None,
-  premisesLicenseConditionsDetails: Option[PremisesLicenseConditionsDetails] = None,
+  premisesLicenseConditionsDetails: Option[String] = None,
   enforcementAction: Option[AnswersYesNo] = None,
-  enforcementActionHasBeenTakenInformationDetails: Option[EnforcementActionHasBeenTakenInformationDetails] = None,
+  enforcementActionHasBeenTakenInformationDetails: Option[String] = None,
   tiedForGoods: Option[AnswersYesNo] = None,
   tiedForGoodsDetails: Option[TiedForGoodsInformationDetails] = None,
-  checkYourAnswersAboutTheProperty: Option[CheckYourAnswersAboutYourProperty] = None,
-  propertyDetailsString: Option[PropertyDetailsString] = None,
+  checkYourAnswersAboutTheProperty: Option[AnswersYesNo] = None,
+  propertyDetailsString: Option[String] = None,
   charityQuestion: Option[AnswersYesNo] = None,
   tradingActivity: Option[TradingActivity] = None,
-  renewablesPlant: Option[RenewablesPlant] = None,
+  renewablesPlant: Option[RenewablesPlantType] = None,
   threeYearsConstructed: Option[AnswersYesNo] = None,
   costsBreakdown: Option[String] = None
-) extends Sensitive[AboutYouAndTheProperty] {
+) extends Sensitive[AboutYouAndTheProperty]:
+
   override def decryptedValue: AboutYouAndTheProperty = AboutYouAndTheProperty(
     customerDetails.map(_.decryptedValue),
+    altDetailsQuestion,
     alternativeContactAddress,
     propertyDetails,
     websiteForPropertyDetails,
@@ -67,14 +70,15 @@ case class SensitiveAboutYouAndTheProperty(
     threeYearsConstructed,
     costsBreakdown
   )
-}
 
-object SensitiveAboutYouAndTheProperty {
+object SensitiveAboutYouAndTheProperty:
+
   implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAboutYouAndTheProperty] = Json.format
 
   def apply(aboutYouAndTheProperty: AboutYouAndTheProperty): SensitiveAboutYouAndTheProperty =
     SensitiveAboutYouAndTheProperty(
       aboutYouAndTheProperty.customerDetails.map(SensitiveCustomerDetails(_)),
+      aboutYouAndTheProperty.altDetailsQuestion,
       aboutYouAndTheProperty.alternativeContactAddress,
       aboutYouAndTheProperty.propertyDetails,
       aboutYouAndTheProperty.websiteForPropertyDetails,
@@ -96,4 +100,3 @@ object SensitiveAboutYouAndTheProperty {
       aboutYouAndTheProperty.threeYearsConstructed,
       aboutYouAndTheProperty.costsBreakdown
     )
-}

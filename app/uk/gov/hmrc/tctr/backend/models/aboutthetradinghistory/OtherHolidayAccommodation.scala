@@ -22,9 +22,8 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 case class OtherHolidayAccommodation(
   otherHolidayAccommodation: Option[AnswersYesNo] = None,
   totalSiteCapacity: Option[TotalSiteCapacity] = None,
-  checkYourAnswersOtherHolidayAccommodation: Option[CheckYourAnswersOtherHolidayAccommodation] = None
+  checkYourAnswersOtherHolidayAccommodation: Option[AnswersYesNo] = None
 )
 
-object OtherHolidayAccommodation {
+object OtherHolidayAccommodation:
   implicit val format: OFormat[OtherHolidayAccommodation] = Json.format
-}

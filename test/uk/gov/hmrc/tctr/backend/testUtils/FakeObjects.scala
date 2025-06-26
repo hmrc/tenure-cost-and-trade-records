@@ -28,7 +28,7 @@ import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.*
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.Caravans.CaravansPitchFeeServices.{Electricity, Other, WaterAndDrainage}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.*
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.CurrentPropertyUsed.*
-import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.RenewablesPlantDetails.*
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.RenewablesPlantType.*
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.TiedForGoodsInformation.*
 import uk.gov.hmrc.tctr.backend.models.accommodation.*
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.*
@@ -143,23 +143,20 @@ trait FakeObjects {
     propertyDetails = Some(PropertyDetails(CurrentPropertyHotel, None)),
     websiteForPropertyDetails = Some(WebsiteForPropertyDetails(AnswerYes, Some("webAddress"))),
     premisesLicenseGrantedDetail = Some(AnswerYes),
-    premisesLicenseGrantedInformationDetails =
-      Some(PremisesLicenseGrantedInformationDetails("Premises licence granted details")),
+    premisesLicenseGrantedInformationDetails = Some("Premises licence granted details"),
     licensableActivities = Some(AnswerYes),
-    licensableActivitiesInformationDetails =
-      Some(LicensableActivitiesInformationDetails("Licensable activities details")),
+    licensableActivitiesInformationDetails = Some("Licensable activities details"),
     premisesLicenseConditions = Some(AnswerYes),
-    premisesLicenseConditionsDetails = Some(PremisesLicenseConditionsDetails("Premises license conditions details")),
+    premisesLicenseConditionsDetails = Some("Premises license conditions details"),
     enforcementAction = Some(AnswerYes),
-    enforcementActionHasBeenTakenInformationDetails =
-      Some(EnforcementActionHasBeenTakenInformationDetails("Enforcement action taken details")),
+    enforcementActionHasBeenTakenInformationDetails = Some("Enforcement action taken details"),
     tiedForGoods = Some(AnswerYes),
     tiedForGoodsDetails = Some(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie)),
-    checkYourAnswersAboutTheProperty = Some(CheckYourAnswersAboutYourProperty("test")),
-    propertyDetailsString = Some(PropertyDetailsString("test")),
+    checkYourAnswersAboutTheProperty = Some(AnswerYes),
+    propertyDetailsString = Some("test"),
     charityQuestion = Some(AnswerYes),
     tradingActivity = Some(TradingActivity(AnswerYes, "details")),
-    renewablesPlant = Some(RenewablesPlant(Intermittent)),
+    renewablesPlant = Some(Intermittent),
     threeYearsConstructed = Some(AnswerYes),
     costsBreakdown = Some("test")
   )
@@ -327,7 +324,7 @@ trait FakeObjects {
         rallyAreas = RallyAreasTradingData(Some(20.00), Some(30)),
         additionalShops = AdditionalShops(52, Some(100.00), Some(100.00)),
         additionalCatering = AdditionalCatering(Some(100.00), Some(100.00)),
-        additionalAmusements = AdditionalAmusements(Some(100.00)),
+        additionalAmusements = Some(100.00),
         additionalMisc = AdditionalMisc(Some(100.00), Some(100.00), Some(10), Some(100.00), Some(100.00))
       ),
       TurnoverSection6045(
