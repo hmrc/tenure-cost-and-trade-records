@@ -33,7 +33,7 @@ class OtherHolidayAccommodationSpec extends PlaySpec {
       val otherHolidayAccommodation = OtherHolidayAccommodation(
         Some(AnswerYes),
         Some(TotalSiteCapacity(1, 2, 3)),
-        Some(CheckYourAnswersOtherHolidayAccommodation("no"))
+        Some(AnswerNo)
       )
       val json                      = Json.toJson(otherHolidayAccommodation: OtherHolidayAccommodation)
       json.as[OtherHolidayAccommodation] mustBe otherHolidayAccommodation

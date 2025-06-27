@@ -21,6 +21,7 @@ import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDu
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.*
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.CurrentRentBasedOn.*
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.CurrentRentFixed.*
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.IncludedInYourRentInformation.*
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.MethodToFixCurrentRent.*
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.*
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.TypeOfIncome.*
@@ -28,7 +29,7 @@ import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.*
 import uk.gov.hmrc.tctr.backend.models.aboutthetradinghistory.Caravans.CaravansPitchFeeServices.{Electricity, Other, WaterAndDrainage}
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.*
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.CurrentPropertyUsed.*
-import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.RenewablesPlantDetails.*
+import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.RenewablesPlantType.*
 import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.TiedForGoodsInformation.*
 import uk.gov.hmrc.tctr.backend.models.accommodation.*
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.*
@@ -37,8 +38,8 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.AddressConnectionType.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.ConnectionToProperty.*
-import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.models.lettingHistory.*
+import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.schema.Address
 
 import java.time.temporal.ChronoUnit.MILLIS
@@ -99,9 +100,7 @@ trait FakeObjects {
 
   val hundred: BigDecimal = BigDecimal(100)
 
-  val prefilledTradingNameOperatingFromProperty: TradingNameOperatingFromProperty = TradingNameOperatingFromProperty(
-    "TRADING NAME"
-  )
+  val prefilledTradingNameOperatingFromProperty: String = "TRADING NAME"
 
   val prefilledPropertyUseLeasebackArrangement: PropertyUseLeasebackArrangementDetails =
     PropertyUseLeasebackArrangementDetails(AnswerYes)
@@ -112,15 +111,15 @@ trait FakeObjects {
   val prefilledStillConnectedDetailsYesToAll: StillConnectedDetails = StillConnectedDetails(
     Some(AddressConnectionTypeYes),
     Some(ConnectionToThePropertyOccupierTrustee),
-    Some(EditTheAddress(EditAddress("Street 1", Some("Street 2"), "Town", Some("County"), "BN12 4AX"))),
+    Some(EditAddress("Street 1", Some("Street 2"), "Town", Some("County"), "BN12 4AX")),
     Some(AnswerYes),
-    Some(TradingNameOperatingFromProperty("ABC LTD")),
+    Some("ABC LTD"),
     Some(AnswerYes),
     Some(AnswerYes),
     Some(AnswerYes),
-    Some(StartDateOfVacantProperty(prefilledDateInput)),
+    Some(prefilledDateInput),
     Some(AnswerYes),
-    Some(ProvideContactDetails(YourContactDetails("fullname", prefilledContactDetails, Some("additional info")))),
+    Some(YourContactDetails("fullname", prefilledContactDetails, Some("additional info"))),
     lettingPartOfPropertyDetails = IndexedSeq(
       LettingPartOfPropertyDetails(
         TenantDetails(
@@ -129,12 +128,10 @@ trait FakeObjects {
           CorrespondenceAddress("building", Some("street"), "town", Some("county"), "BN12 4AX")
         ),
         Some(LettingPartOfPropertyRentDetails(2000, prefilledDateInput)),
-        List("Other"),
-        addAnotherLettingToProperty = Some(AnswerYes)
+        List("Other")
       )
     ),
-    checkYourAnswersConnectionToProperty = None,
-    checkYourAnswersConnectionToVacantProperty = None
+    checkYourAnswersConnectionToProperty = None
   )
 
   // About you and the property sessions
@@ -143,23 +140,20 @@ trait FakeObjects {
     propertyDetails = Some(PropertyDetails(CurrentPropertyHotel, None)),
     websiteForPropertyDetails = Some(WebsiteForPropertyDetails(AnswerYes, Some("webAddress"))),
     premisesLicenseGrantedDetail = Some(AnswerYes),
-    premisesLicenseGrantedInformationDetails =
-      Some(PremisesLicenseGrantedInformationDetails("Premises licence granted details")),
+    premisesLicenseGrantedInformationDetails = Some("Premises licence granted details"),
     licensableActivities = Some(AnswerYes),
-    licensableActivitiesInformationDetails =
-      Some(LicensableActivitiesInformationDetails("Licensable activities details")),
+    licensableActivitiesInformationDetails = Some("Licensable activities details"),
     premisesLicenseConditions = Some(AnswerYes),
-    premisesLicenseConditionsDetails = Some(PremisesLicenseConditionsDetails("Premises license conditions details")),
+    premisesLicenseConditionsDetails = Some("Premises license conditions details"),
     enforcementAction = Some(AnswerYes),
-    enforcementActionHasBeenTakenInformationDetails =
-      Some(EnforcementActionHasBeenTakenInformationDetails("Enforcement action taken details")),
+    enforcementActionHasBeenTakenInformationDetails = Some("Enforcement action taken details"),
     tiedForGoods = Some(AnswerYes),
     tiedForGoodsDetails = Some(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie)),
-    checkYourAnswersAboutTheProperty = Some(CheckYourAnswersAboutYourProperty("test")),
-    propertyDetailsString = Some(PropertyDetailsString("test")),
+    checkYourAnswersAboutTheProperty = Some(AnswerYes),
+    propertyDetailsString = Some("test"),
     charityQuestion = Some(AnswerYes),
     tradingActivity = Some(TradingActivity(AnswerYes, "details")),
-    renewablesPlant = Some(RenewablesPlant(Intermittent)),
+    renewablesPlant = Some(Intermittent),
     threeYearsConstructed = Some(AnswerYes),
     costsBreakdown = Some("test")
   )
@@ -327,7 +321,7 @@ trait FakeObjects {
         rallyAreas = RallyAreasTradingData(Some(20.00), Some(30)),
         additionalShops = AdditionalShops(52, Some(100.00), Some(100.00)),
         additionalCatering = AdditionalCatering(Some(100.00), Some(100.00)),
-        additionalAmusements = AdditionalAmusements(Some(100.00)),
+        additionalAmusements = Some(100.00),
         additionalMisc = AdditionalMisc(Some(100.00), Some(100.00), Some(10), Some(100.00), Some(100.00))
       ),
       TurnoverSection6045(
@@ -528,8 +522,7 @@ trait FakeObjects {
               dateInput = LocalDate.of(2023, 1, 1)
             )
           ),
-          itemsIncluded = None,
-          addAnotherRecord = None
+          itemsIncluded = None
         ),
         FranchiseIncomeRecord(
           sourceType = TypeFranchise,
@@ -552,8 +545,7 @@ trait FakeObjects {
               dateInput = LocalDate.of(2023, 4, 1)
             )
           ),
-          itemsIncluded = None,
-          addAnotherRecord = None
+          itemsIncluded = None
         )
       )
     ),
@@ -574,7 +566,7 @@ trait FakeObjects {
     currentLeaseOrAgreementBegin = Some(CurrentLeaseOrAgreementBegin(MonthsYearDuration(12, 2022), "test duration")),
     includedInYourRentDetails = Some(
       IncludedInYourRentDetails(
-        includedInYourRent = List("test feature 1", "test feature 2"),
+        includedInYourRent = Seq(IncludedInYourRentInformationVat, IncludedInYourRentInformationWaterCharges),
         vatValue = Some(BigDecimal(200.50))
       )
     ),
@@ -606,11 +598,7 @@ trait FakeObjects {
       )
     ),
     rentIncreasedAnnuallyWithRPIDetails = Some(RentIncreasedAnnuallyWithRPIDetails(AnswerYes)),
-    checkYourAnswersAboutYourLeaseOrTenure = Some(
-      CheckYourAnswersAboutYourLeaseOrTenure(
-        checkYourAnswersAboutYourLeaseOrTenure = "confirmed"
-      )
-    ),
+    checkYourAnswersAboutYourLeaseOrTenure = Some(AnswerYes),
     rentIncludesVat = Some(RentIncludesVatDetails(AnswerYes))
   )
 
@@ -675,8 +663,8 @@ trait FakeObjects {
 
   // Additional information
   val prefilledAdditionalInformation: AdditionalInformation = AdditionalInformation(
-    Some(FurtherInformationOrRemarksDetails("Further information or remarks details")),
-    Some(CheckYourAnswersAdditionalInformation("CYA"))
+    Some("Further information or remarks details"),
+    Some(AnswerYes)
   )
 
   val prefilledAccommodationDetails: AccommodationDetails = AccommodationDetails(

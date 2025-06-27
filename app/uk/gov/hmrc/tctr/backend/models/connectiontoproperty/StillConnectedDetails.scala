@@ -19,22 +19,23 @@ package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
+import java.time.LocalDate
+
 case class StillConnectedDetails(
   addressConnectionType: Option[AddressConnectionType] = None,
   connectionToProperty: Option[ConnectionToProperty] = None,
-  editAddress: Option[EditTheAddress] = None,
+  editAddress: Option[EditAddress] = None,
   isPropertyVacant: Option[AnswersYesNo] = None,
-  tradingNameOperatingFromProperty: Option[TradingNameOperatingFromProperty] = None,
+  tradingNameOperatingFromProperty: Option[String] = None,
   tradingNameOwnTheProperty: Option[AnswersYesNo] = None,
   tradingNamePayingRent: Option[AnswersYesNo] = None,
   areYouThirdParty: Option[AnswersYesNo] = None,
-  vacantPropertyStartDate: Option[StartDateOfVacantProperty] = None,
+  vacantPropertyStartDate: Option[LocalDate] = None,
   isAnyRentReceived: Option[AnswersYesNo] = None,
-  provideContactDetails: Option[ProvideContactDetails] = None,
+  provideContactDetails: Option[YourContactDetails] = None,
   lettingPartOfPropertyDetailsIndex: Int = 0,
   lettingPartOfPropertyDetails: IndexedSeq[LettingPartOfPropertyDetails] = IndexedSeq.empty,
-  checkYourAnswersConnectionToProperty: Option[CheckYourAnswersConnectionToProperty] = None,
-  checkYourAnswersConnectionToVacantProperty: Option[CheckYourAnswersConnectionToVacantProperty] = None
+  checkYourAnswersConnectionToProperty: Option[CheckYourAnswersConnectionToProperty] = None
 )
 
 object StillConnectedDetails:

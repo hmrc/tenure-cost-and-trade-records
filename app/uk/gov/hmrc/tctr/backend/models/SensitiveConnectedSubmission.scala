@@ -26,7 +26,6 @@ import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.{AboutYouAndThePro
 import uk.gov.hmrc.tctr.backend.models.accommodation.AccommodationDetails
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.SensitiveStillConnectedDetails
-import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
 import uk.gov.hmrc.tctr.backend.models.notconnected.SensitiveRemoveConnectionDetails
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.SensitiveRequestReferenceNumber
 import uk.gov.hmrc.tctr.backend.models.lettingHistory.SensitiveLettingHistory
@@ -55,10 +54,9 @@ case class SensitiveConnectedSubmission(
   saveAsDraftPassword: Option[String] = None,
   lastCYAPageUrl: Option[String] = None,
   requestReferenceNumberDetails: Option[SensitiveRequestReferenceNumber] = None,
-  downloadPDFDetails: Option[DownloadPDFDetails] = None,
   lettingHistory: Option[SensitiveLettingHistory] = None,
   accommodationDetails: Option[AccommodationDetails] = None
-) extends Sensitive[ConnectedSubmission] {
+) extends Sensitive[ConnectedSubmission]:
 
   override def decryptedValue: ConnectedSubmission = ConnectedSubmission(
     referenceNumber,
@@ -81,13 +79,12 @@ case class SensitiveConnectedSubmission(
     saveAsDraftPassword,
     lastCYAPageUrl,
     requestReferenceNumberDetails.map(_.decryptedValue),
-    downloadPDFDetails,
     lettingHistory.map(_.decryptedValue),
     accommodationDetails
   )
-}
 
-object SensitiveConnectedSubmission {
+object SensitiveConnectedSubmission:
+
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveConnectedSubmission] = Json.format
 
   def apply(connectedSubmission: ConnectedSubmission): SensitiveConnectedSubmission = SensitiveConnectedSubmission(
@@ -111,9 +108,6 @@ object SensitiveConnectedSubmission {
     connectedSubmission.saveAsDraftPassword,
     connectedSubmission.lastCYAPageUrl,
     connectedSubmission.requestReferenceNumberDetails.map(SensitiveRequestReferenceNumber(_)),
-    connectedSubmission.downloadPDFDetails,
     connectedSubmission.lettingHistory.map(SensitiveLettingHistory(_)),
     connectedSubmission.accommodationDetails
   )
-
-}

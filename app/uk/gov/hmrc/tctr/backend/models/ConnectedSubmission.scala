@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty.{AboutYouAndThePro
 import uk.gov.hmrc.tctr.backend.models.accommodation.AccommodationDetails
 import uk.gov.hmrc.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.StillConnectedDetails
-import uk.gov.hmrc.tctr.backend.models.downloadFORTypeForm.DownloadPDFDetails
 import uk.gov.hmrc.tctr.backend.models.notconnected.RemoveConnectionDetails
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.RequestReferenceNumberDetails
 import uk.gov.hmrc.tctr.backend.models.lettingHistory.*
@@ -53,10 +52,9 @@ case class ConnectedSubmission(
   saveAsDraftPassword: Option[String] = None,
   lastCYAPageUrl: Option[String] = None,
   requestReferenceNumberDetails: Option[RequestReferenceNumberDetails] = None,
-  downloadPDFDetails: Option[DownloadPDFDetails] = None,
   lettingHistory: Option[LettingHistory] = None,
   accommodationDetails: Option[AccommodationDetails] = None
 )
-object ConnectedSubmission {
+
+object ConnectedSubmission:
   implicit val format: OFormat[ConnectedSubmission] = Json.format
-}
