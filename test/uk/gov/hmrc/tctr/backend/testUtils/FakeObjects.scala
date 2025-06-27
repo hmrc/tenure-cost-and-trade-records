@@ -100,9 +100,7 @@ trait FakeObjects {
 
   val hundred: BigDecimal = BigDecimal(100)
 
-  val prefilledTradingNameOperatingFromProperty: TradingNameOperatingFromProperty = TradingNameOperatingFromProperty(
-    "TRADING NAME"
-  )
+  val prefilledTradingNameOperatingFromProperty: String = "TRADING NAME"
 
   val prefilledPropertyUseLeasebackArrangement: PropertyUseLeasebackArrangementDetails =
     PropertyUseLeasebackArrangementDetails(AnswerYes)
@@ -113,15 +111,15 @@ trait FakeObjects {
   val prefilledStillConnectedDetailsYesToAll: StillConnectedDetails = StillConnectedDetails(
     Some(AddressConnectionTypeYes),
     Some(ConnectionToThePropertyOccupierTrustee),
-    Some(EditTheAddress(EditAddress("Street 1", Some("Street 2"), "Town", Some("County"), "BN12 4AX"))),
+    Some(EditAddress("Street 1", Some("Street 2"), "Town", Some("County"), "BN12 4AX")),
     Some(AnswerYes),
-    Some(TradingNameOperatingFromProperty("ABC LTD")),
+    Some("ABC LTD"),
     Some(AnswerYes),
     Some(AnswerYes),
     Some(AnswerYes),
-    Some(StartDateOfVacantProperty(prefilledDateInput)),
+    Some(prefilledDateInput),
     Some(AnswerYes),
-    Some(ProvideContactDetails(YourContactDetails("fullname", prefilledContactDetails, Some("additional info")))),
+    Some(YourContactDetails("fullname", prefilledContactDetails, Some("additional info"))),
     lettingPartOfPropertyDetails = IndexedSeq(
       LettingPartOfPropertyDetails(
         TenantDetails(

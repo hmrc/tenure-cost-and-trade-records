@@ -29,7 +29,7 @@ case class SensitiveEditAddress(
   town: SensitiveString,
   county: Option[SensitiveString],
   postcode: SensitiveString
-) extends Sensitive[EditAddress] {
+) extends Sensitive[EditAddress]:
 
   override def decryptedValue: EditAddress = EditAddress(
     buildingNameNumber.decryptedValue,
@@ -38,10 +38,11 @@ case class SensitiveEditAddress(
     county.map(_.decryptedValue),
     postcode.decryptedValue
   )
-}
 
-object SensitiveEditAddress {
+object SensitiveEditAddress:
+
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
+
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveEditAddress] = Json.format
 
   def apply(editAddress: EditAddress): SensitiveEditAddress = SensitiveEditAddress(
@@ -51,4 +52,3 @@ object SensitiveEditAddress {
     editAddress.county.map(SensitiveString(_)),
     SensitiveString(editAddress.postcode)
   )
-}

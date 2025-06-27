@@ -67,7 +67,6 @@ class ConnectedSubmissionController @Inject() (
     if isVacantPropertySubmission(submission) then
       submission.stillConnectedDetails
         .flatMap(_.provideContactDetails)
-        .map(_.yourContactDetails)
         .fold {
           logger.warn(s"Send email to user canceled. Contact details not found.")
         } { contact =>
