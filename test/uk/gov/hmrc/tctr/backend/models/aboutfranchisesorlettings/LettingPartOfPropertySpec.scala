@@ -18,7 +18,6 @@ package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json._
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo.*
 
 import java.time.LocalDate
 
@@ -28,7 +27,7 @@ class LettingPartOfPropertySpec extends PlaySpec {
 
     "serialize and deserialize ATMLetting correctly" in {
       val atmLetting =
-        ATMLetting(Some("HSBC"), None, Some(RentDetails(1000, LocalDate.of(2021, 1, 1))), Some(AnswerYes))
+        ATMLetting(Some("HSBC"), None, Some(RentDetails(1000, LocalDate.of(2021, 1, 1))))
       val json       = Json.toJson(atmLetting: LettingPartOfProperty)
 
       (json \ "type").as[String] mustBe "ATMLetting"
@@ -36,7 +35,7 @@ class LettingPartOfPropertySpec extends PlaySpec {
     }
 
     "serialize and deserialize TelecomMastLetting correctly" in {
-      val telecomLetting = TelecomMastLetting(Some("Vodafone"), Some("Top of the Hill"), None, None, Some(AnswerNo))
+      val telecomLetting = TelecomMastLetting(Some("Vodafone"), Some("Top of the Hill"), None, None)
       val json           = Json.toJson(telecomLetting: LettingPartOfProperty)
 
       (json \ "type").as[String] mustBe "TelecomMastLetting"
@@ -57,8 +56,7 @@ class LettingPartOfPropertySpec extends PlaySpec {
         Some("Billboard on Main St"),
         Some("AdCo"),
         Some(LettingAddress("1", Some("Main St"), "Anytown", Some("Anyshire"), "A1 2BC")),
-        Some(RentDetails(5000, LocalDate.of(2022, 5, 15))),
-        Some(AnswerYes)
+        Some(RentDetails(5000, LocalDate.of(2022, 5, 15)))
       )
       val json                    = Json.toJson(advertisingRightLetting: LettingPartOfProperty)
 
@@ -71,8 +69,7 @@ class LettingPartOfPropertySpec extends PlaySpec {
         Some("Office Space"),
         Some("XYZ Corp"),
         Some(LettingAddress("123", None, "Tech Park", None, "TP 456")),
-        Some(RentDetails(2500, LocalDate.of(2023, 3, 10))),
-        Some(AnswerNo)
+        Some(RentDetails(2500, LocalDate.of(2023, 3, 10)))
       )
       val json         = Json.toJson(otherLetting: LettingPartOfProperty)
 

@@ -21,6 +21,7 @@ import uk.gov.hmrc.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDu
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.*
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.CurrentRentBasedOn.*
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.CurrentRentFixed.*
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.IncludedInYourRentInformation.*
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.MethodToFixCurrentRent.*
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.*
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.TypeOfIncome.*
@@ -37,8 +38,8 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.AddressConnectionType.*
 import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.ConnectionToProperty.*
-import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.models.lettingHistory.*
+import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.schema.Address
 
 import java.time.temporal.ChronoUnit.MILLIS
@@ -129,8 +130,7 @@ trait FakeObjects {
           CorrespondenceAddress("building", Some("street"), "town", Some("county"), "BN12 4AX")
         ),
         Some(LettingPartOfPropertyRentDetails(2000, prefilledDateInput)),
-        List("Other"),
-        addAnotherLettingToProperty = Some(AnswerYes)
+        List("Other")
       )
     ),
     checkYourAnswersConnectionToProperty = None,
@@ -525,8 +525,7 @@ trait FakeObjects {
               dateInput = LocalDate.of(2023, 1, 1)
             )
           ),
-          itemsIncluded = None,
-          addAnotherRecord = None
+          itemsIncluded = None
         ),
         FranchiseIncomeRecord(
           sourceType = TypeFranchise,
@@ -549,8 +548,7 @@ trait FakeObjects {
               dateInput = LocalDate.of(2023, 4, 1)
             )
           ),
-          itemsIncluded = None,
-          addAnotherRecord = None
+          itemsIncluded = None
         )
       )
     ),
@@ -571,7 +569,7 @@ trait FakeObjects {
     currentLeaseOrAgreementBegin = Some(CurrentLeaseOrAgreementBegin(MonthsYearDuration(12, 2022), "test duration")),
     includedInYourRentDetails = Some(
       IncludedInYourRentDetails(
-        includedInYourRent = List("test feature 1", "test feature 2"),
+        includedInYourRent = Seq(IncludedInYourRentInformationVat, IncludedInYourRentInformationWaterCharges),
         vatValue = Some(BigDecimal(200.50))
       )
     ),

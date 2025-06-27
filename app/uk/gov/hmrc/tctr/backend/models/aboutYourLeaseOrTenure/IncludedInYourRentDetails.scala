@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,12 @@
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.IncludedInYourRentInformation
 
-case class IncludedInYourRentDetails(includedInYourRent: List[String] = List.empty, vatValue: Option[BigDecimal] = None)
+case class IncludedInYourRentDetails(
+  includedInYourRent: Seq[IncludedInYourRentInformation] = Seq.empty,
+  vatValue: Option[BigDecimal] = None
+)
 
-object IncludedInYourRentDetails {
+object IncludedInYourRentDetails:
   implicit val format: OFormat[IncludedInYourRentDetails] = Json.format
-}

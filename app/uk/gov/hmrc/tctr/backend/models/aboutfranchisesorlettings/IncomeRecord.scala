@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,13 @@
 package uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings
 
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.TypeOfIncome.*
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 import play.api.libs.json.{JsError, JsObject, JsResult, JsValue, Json, OFormat}
 
-sealed trait IncomeRecord {
+sealed trait IncomeRecord:
   def sourceType: TypeOfIncome
 
-  def addAnotherRecord: Option[AnswersYesNo]
+object IncomeRecord:
 
-}
-
-object IncomeRecord {
   implicit val format: OFormat[IncomeRecord] = {
     val franchiseFormat      = Json.format[FranchiseIncomeRecord]
     val concession6015Format = Json.format[Concession6015IncomeRecord]
@@ -54,52 +50,43 @@ object IncomeRecord {
         }
     }
   }
-}
 
 case class FranchiseIncomeRecord(
   sourceType: TypeOfIncome = TypeFranchise,
   businessDetails: Option[BusinessDetails] = None,
   rent: Option[PropertyRentDetails] = None,
-  itemsIncluded: Option[List[String]] = None,
-  addAnotherRecord: Option[AnswersYesNo] = None
+  itemsIncluded: Option[List[String]] = None
 ) extends IncomeRecord
 
-object FranchiseIncomeRecord {
+object FranchiseIncomeRecord:
   implicit val format: OFormat[FranchiseIncomeRecord] = Json.format
-}
 
 case class Concession6015IncomeRecord(
   sourceType: TypeOfIncome = TypeConcession6015,
   businessDetails: Option[BusinessDetails] = None,
   rent: Option[RentReceivedFrom] = None,
   calculatingTheRent: Option[CalculatingTheRent] = None,
-  itemsIncluded: Option[List[String]] = None,
-  addAnotherRecord: Option[AnswersYesNo] = None
+  itemsIncluded: Option[List[String]] = None
 ) extends IncomeRecord
 
-object Concession6015IncomeRecord {
+object Concession6015IncomeRecord:
   implicit val format: OFormat[Concession6015IncomeRecord] = Json.format
-}
 
 case class ConcessionIncomeRecord(
   sourceType: TypeOfIncome = TypeConcession,
   businessDetails: Option[ConcessionBusinessDetails] = None,
-  feeReceived: Option[FeeReceived] = None,
-  addAnotherRecord: Option[AnswersYesNo] = None
+  feeReceived: Option[FeeReceived] = None
 ) extends IncomeRecord
 
-object ConcessionIncomeRecord {
+object ConcessionIncomeRecord:
   implicit val format: OFormat[ConcessionIncomeRecord] = Json.format
-}
 
 case class LettingIncomeRecord(
   sourceType: TypeOfIncome = TypeLetting,
   operatorDetails: Option[OperatorDetails] = None,
   rent: Option[PropertyRentDetails] = None,
-  itemsIncluded: Option[List[String]] = None,
-  addAnotherRecord: Option[AnswersYesNo] = None
+  itemsIncluded: Option[List[String]] = None
 ) extends IncomeRecord
 
-object LettingIncomeRecord {
+object LettingIncomeRecord:
   implicit val format: OFormat[LettingIncomeRecord] = Json.format
-}
