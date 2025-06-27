@@ -40,10 +40,9 @@ case class AboutLeaseOrAgreementPartOne(
   rentOpenMarketValueDetails: Option[RentOpenMarketValueDetails] = None,
   whatIsYourCurrentRentBasedOnDetails: Option[WhatIsYourCurrentRentBasedOnDetails] = None,
   rentIncreasedAnnuallyWithRPIDetails: Option[RentIncreasedAnnuallyWithRPIDetails] = None,
-  checkYourAnswersAboutYourLeaseOrTenure: Option[CheckYourAnswersAboutYourLeaseOrTenure] = None,
+  checkYourAnswersAboutYourLeaseOrTenure: Option[AnswersYesNo] = None,
   rentIncludesVat: Option[RentIncludesVatDetails] = None
 )
 
-object AboutLeaseOrAgreementPartOne {
+object AboutLeaseOrAgreementPartOne:
   implicit val format: OFormat[AboutLeaseOrAgreementPartOne] = Json.format
-}

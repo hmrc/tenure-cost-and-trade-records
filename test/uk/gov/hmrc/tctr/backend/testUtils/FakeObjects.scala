@@ -670,8 +670,8 @@ trait FakeObjects {
 
   // Additional information
   val prefilledAdditionalInformation: AdditionalInformation = AdditionalInformation(
-    Some(FurtherInformationOrRemarksDetails("Further information or remarks details")),
-    Some(CheckYourAnswersAdditionalInformation("CYA"))
+    Some("Further information or remarks details"),
+    Some(AnswerYes)
   )
 
   val prefilledAccommodationDetails: AccommodationDetails = AccommodationDetails(

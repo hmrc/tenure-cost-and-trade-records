@@ -41,8 +41,8 @@ case class SensitiveAboutLeaseOrAgreementPartOne(
   rentOpenMarketValueDetails: Option[RentOpenMarketValueDetails] = None,
   whatIsYourCurrentRentBasedOnDetails: Option[WhatIsYourCurrentRentBasedOnDetails] = None,
   rentIncreasedAnnuallyWithRPIDetails: Option[RentIncreasedAnnuallyWithRPIDetails] = None,
-  checkYourAnswersAboutYourLeaseOrTenure: Option[CheckYourAnswersAboutYourLeaseOrTenure] = None
-) extends Sensitive[AboutLeaseOrAgreementPartOne] {
+  checkYourAnswersAboutYourLeaseOrTenure: Option[AnswersYesNo] = None
+) extends Sensitive[AboutLeaseOrAgreementPartOne]:
   override def decryptedValue: AboutLeaseOrAgreementPartOne = AboutLeaseOrAgreementPartOne(
     aboutTheLandlord.map(_.decryptedValue),
     connectedToLandlord,
@@ -65,9 +65,9 @@ case class SensitiveAboutLeaseOrAgreementPartOne(
     rentIncreasedAnnuallyWithRPIDetails,
     checkYourAnswersAboutYourLeaseOrTenure
   )
-}
 
-object SensitiveAboutLeaseOrAgreementPartOne {
+object SensitiveAboutLeaseOrAgreementPartOne:
+
   implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAboutLeaseOrAgreementPartOne] = Json.format
 
   def apply(aboutLeaseOrAgreementPartOne: AboutLeaseOrAgreementPartOne): SensitiveAboutLeaseOrAgreementPartOne =
@@ -93,4 +93,3 @@ object SensitiveAboutLeaseOrAgreementPartOne {
       aboutLeaseOrAgreementPartOne.rentIncreasedAnnuallyWithRPIDetails,
       aboutLeaseOrAgreementPartOne.checkYourAnswersAboutYourLeaseOrTenure
     )
-}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class CheckYourAnswersConnectionToProperty(
-  checkYourAnswersConnectionToProperty: String
+  checkYourAnswersConnectionToProperty: AnswersYesNo,
+  confirmAnswersAreCorrect: Option[Boolean] = None
 )
 
-object CheckYourAnswersConnectionToProperty {
-  implicit val format: OFormat[CheckYourAnswersConnectionToProperty] = Json.format
-}
+object CheckYourAnswersConnectionToProperty:
+  implicit val format: Format[CheckYourAnswersConnectionToProperty] = Json.format
