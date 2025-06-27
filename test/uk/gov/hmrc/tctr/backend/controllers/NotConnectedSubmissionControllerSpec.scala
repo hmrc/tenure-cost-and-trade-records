@@ -58,7 +58,7 @@ class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec {
   val submission             = NotConnectedSubmissionForm(
     "2222",
     "FOR6010",
-    Address("10", Some("BarringtonRoad road"), None, "BN12 4AX"),
+    Address("10", Some("BarringtonRoad road"), "town", None, "BN12 4AX"),
     "fullName",
     Option("john@example.com"),
     Option("01234567890"),

@@ -73,7 +73,8 @@ class TestDataImporter @Inject() (
         val address = Address(
           s"$n2",
           Some("GORING ROAD"),
-          Some("GORING-BY-SEA, WORTHING"),
+          "GORING-BY-SEA, WORTHING",
+          Some("WEST SUSSEX"),
           "BN12 4AX"
         )
         val baCode  = if n % 2 == 0 then "BA3835" else "BA6815"

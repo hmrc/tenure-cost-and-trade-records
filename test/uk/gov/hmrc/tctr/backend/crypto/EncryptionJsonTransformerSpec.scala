@@ -41,7 +41,7 @@ class EncryptionJsonTransformerSpec extends AnyFlatAppSpec with BeEncryptedMatch
     (encryptedJson \ "session" \ "userLoginDetails" \ "token")                                   shouldBe encrypted
     (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "buildingNameNumber")          shouldBe encrypted
     (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "street1")                     shouldBe encrypted
-    (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "street2")                     shouldBe encrypted
+    (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "town")                        shouldBe encrypted
     (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "postcode")                    shouldBe encrypted
     (encryptedJson \ "session" \ "aboutYou" \ "customerDetails" \ "fullName")                    shouldBe encrypted
     (encryptedJson \ "session" \ "aboutYou" \ "customerDetails" \ "contactDetails" \ "phone")    shouldBe encrypted

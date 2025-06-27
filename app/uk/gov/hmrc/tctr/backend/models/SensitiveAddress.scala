@@ -30,17 +30,18 @@ import scala.language.implicitConversions
 case class SensitiveAddress(
   buildingNameNumber: SensitiveString,
   street1: Option[SensitiveString],
-  street2: Option[SensitiveString],
+  town: SensitiveString,
+  county: Option[SensitiveString],
   postcode: SensitiveString
 ) extends Sensitive[Address] {
 
   def decryptedValue: Address = Address(
     buildingNameNumber.decryptedValue,
     street1.map(_.decryptedValue),
-    street2.map(_.decryptedValue),
+    town.decryptedValue,
+    county.map(_.decryptedValue),
     postcode.decryptedValue
   )
-
 }
 
 object SensitiveAddress {
@@ -52,7 +53,8 @@ object SensitiveAddress {
   def apply(address: Address): SensitiveAddress = SensitiveAddress(
     SensitiveString(address.buildingNameNumber),
     address.street1.map(SensitiveString.apply),
-    address.street2.map(SensitiveString.apply),
+    SensitiveString(address.town),
+    address.county.map(SensitiveString.apply),
     SensitiveString(address.postcode)
   )
 

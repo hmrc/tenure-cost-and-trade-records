@@ -34,6 +34,7 @@ class ForCredentialsSpec extends AnyFlatSpec with Matchers with SensitiveTestHel
     new SensitiveAddress(
       SensitiveString("001"),
       Some(SensitiveString("GORING ROAD")),
+      SensitiveString("TOWN"),
       Some(SensitiveString("GORING-BY-SEA, WORTHING")),
       SensitiveString("BN12 4AX")
     ),

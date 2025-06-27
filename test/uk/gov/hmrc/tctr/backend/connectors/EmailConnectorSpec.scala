@@ -39,7 +39,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
   private val dateUtilLocalised            = inject[DateUtilLocalised]
   implicit val hc: HeaderCarrier           = HeaderCarrier()
   private val email                        = "customer@email.com"
-  private val testAddress                  = Address("001", Some("GORING ROAD"), Some("WEST SUSSEX"), "BN12 4AX")
+  private val testAddress                  = Address("001", Some("GORING ROAD"), "WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
   private val testNotConnectedSubmission   = NotConnectedSubmission(
     "1213",
     "FOR6010",

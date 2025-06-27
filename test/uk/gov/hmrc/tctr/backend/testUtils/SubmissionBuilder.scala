@@ -32,7 +32,7 @@ object SubmissionBuilder {
     NotConnectedSubmission(
       s"9999000$submissionSuffix",
       "FOR6010",
-      Address("10", Some("xxxx"), None, "BN12 4AX"),
+      Address("10", Some("xxxx"), "town", None, "BN12 4AX"),
       "Full Name",
       None,
       Some("012345678999"),

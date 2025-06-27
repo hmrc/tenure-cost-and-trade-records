@@ -100,8 +100,10 @@ class AuthControllerSpec extends AnyWordAppSpec with OptionValues {
   }
 
   trait ValidCredentialsFixture(val billingAuthorityCode: String):
-    val sensitiveAddress                  = SensitiveAddress(Address("buildingNameNumber", Some("street1"), Some("street2"), "postcode"))
+    val sensitiveAddress                  = SensitiveAddress(
+      Address("buildingNameNumber", Some("street1"), "town", Some("county"), "postcode")
+    )
     val forCredentials                    = FORCredentials("forNumber", billingAuthorityCode, "forType", sensitiveAddress, "_id")
     def expectedContent(isWelsh: Boolean) =
-      s"""{"forAuthToken":"Basic Zm9yTnVtYmVyOlNlbnNpdGl2ZSguLi4p","forType":"forType","address":{"buildingNameNumber":"buildingNameNumber","postcode":"postcode","street1":"street1","street2":"street2"},"isWelsh":$isWelsh}"""
+      s"""{"forAuthToken":"Basic Zm9yTnVtYmVyOlNlbnNpdGl2ZSguLi4p","forType":"forType","address":{"postcode":"postcode","street1":"street1","county":"county","buildingNameNumber":"buildingNameNumber","town":"town"},"isWelsh":$isWelsh}"""
 }

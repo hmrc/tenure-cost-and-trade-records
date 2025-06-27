@@ -16,14 +16,19 @@
 
 package uk.gov.hmrc.tctr.backend.schema
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, Json}
 
-case class Address(buildingNameNumber: String, street1: Option[String], street2: Option[String], postcode: String) {
+case class Address(
+  buildingNameNumber: String,
+  street1: Option[String],
+  town: String,
+  county: Option[String],
+  postcode: String
+) {
+
   def singleLine: String =
-    List(Some(buildingNameNumber), street1, street2, Some(postcode)).flatten.mkString(", ")
-
+    List(Some(buildingNameNumber), street1, Some(town), county, Some(postcode)).flatten.mkString(", ")
 }
 
-object Address {
-  implicit val addressFormat: OFormat[Address] = Json.format
-}
+object Address:
+  given Format[Address] = Json.format

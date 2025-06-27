@@ -92,7 +92,7 @@ class NotConnectedRepositorySpec
   def aSubmission(): NotConnectedSubmission = NotConnectedSubmission(
     "9999000111",
     "FOR6010",
-    Address("10", Some("BarringtonRoad road"), None, "BN12 4AX"),
+    Address("10", Some("BarringtonRoad road"), "Town", None, "BN12 4AX"),
     "Full Name",
     Option("john@example.com"),
     Option("233222123"),
