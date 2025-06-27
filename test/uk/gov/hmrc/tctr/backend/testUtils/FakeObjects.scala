@@ -133,8 +133,7 @@ trait FakeObjects {
         List("Other")
       )
     ),
-    checkYourAnswersConnectionToProperty = None,
-    checkYourAnswersConnectionToVacantProperty = None
+    checkYourAnswersConnectionToProperty = None
   )
 
   // About you and the property sessions
@@ -601,11 +600,7 @@ trait FakeObjects {
       )
     ),
     rentIncreasedAnnuallyWithRPIDetails = Some(RentIncreasedAnnuallyWithRPIDetails(AnswerYes)),
-    checkYourAnswersAboutYourLeaseOrTenure = Some(
-      CheckYourAnswersAboutYourLeaseOrTenure(
-        checkYourAnswersAboutYourLeaseOrTenure = "confirmed"
-      )
-    ),
+    checkYourAnswersAboutYourLeaseOrTenure = Some(AnswerYes),
     rentIncludesVat = Some(RentIncludesVatDetails(AnswerYes))
   )
 
