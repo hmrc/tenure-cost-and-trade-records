@@ -71,7 +71,7 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
                                        |        "address":  {
                                        |                        "buildingNameNumber":  "1 Building",
                                        |                        "street1":  "123 Netfield street",
-                                       |                        "street2":  "London",
+                                       |                        "town":  "London",
                                        |                        "postcode":  "EC1 4GW"
                                        |                    },
                                        |        "CreatedAt":  "2023-02-16T12:42:45.418Z"

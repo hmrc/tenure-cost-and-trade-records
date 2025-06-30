@@ -86,7 +86,13 @@ class IPBlockingCredentialsVerifier @Inject() (
       case true                      => AlreadySubmitted(referenceNum)
     }
 
-  def testAddress(postcode: String) = Address("1 Test House", Some("Test Street"), Some("Test City"), postcode)
+  def testAddress(postcode: String) = Address(
+    "1 Test House",
+    Some("Test Street"),
+    "Test Town",
+    Some("Test County"),
+    postcode
+  )
 
   private def findMatchingCredentials(
     referenceNum: String,
