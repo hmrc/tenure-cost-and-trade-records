@@ -609,24 +609,24 @@ trait FakeObjects {
     rentPayableVaryOnQuantityOfBeersInformationDetails =
       Some(RentPayableVaryOnQuantityOfBeersInformationDetails("test description")),
     howIsCurrentRentFixed = Some(HowIsCurrentRentFixed(CurrentRentFixedNewLeaseAgreement, LocalDate.now)),
-    methodToFixCurrentRentDetails = Some(MethodToFixCurrentRentDetails(MethodToFixCurrentRentAgreement)),
+    methodToFixCurrentRentDetails = Some(MethodToFixCurrentRentAgreement),
     intervalsOfRentReview = Some(IntervalsOfRentReview(Some("test description"), Some(LocalDate.now))),
     canRentBeReducedOnReview = Some(AnswerYes),
     incentivesPaymentsConditionsDetails = Some(AnswerYes),
     tenantAdditionsDisregardedDetails = Some(TenantAdditionsDisregardedDetails(AnswerYes)),
     tenantsAdditionsDisregardedDetails = Some(TenantsAdditionsDisregardedDetails("test description.")),
-    payACapitalSumDetails = Some(PayACapitalSumDetails(AnswerYes)),
+    payACapitalSumOrPremium = Some(AnswerYes),
     capitalSumDescription = Some("test description"),
-    paymentWhenLeaseIsGrantedDetails = Some(PaymentWhenLeaseIsGrantedDetails(AnswerYes)),
+    receivePaymentWhenLeaseGranted = Some(AnswerYes),
     tenancyLeaseAgreementExpire = Some(TenancyLeaseAgreementExpire(LocalDate.now.plusYears(5))),
-    legalOrPlanningRestrictions = Some(LegalOrPlanningRestrictions(AnswerYes)),
-    legalOrPlanningRestrictionsDetails = Some(LegalOrPlanningRestrictionsDetails("test description."))
+    legalOrPlanningRestrictions = Some(AnswerYes),
+    legalOrPlanningRestrictionsDetails = Some("test description.")
   )
 
   val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
     tradeServices = IndexedSeq(TradeServices(TradeServicesDetails("description"))),
     servicesPaid = IndexedSeq(ServicesPaid(ServicePaidSeparately("description"))),
-    paymentForTradeServices = PaymentForTradeServices(AnswerYes),
+    paymentForTradeServices = AnswerYes,
     provideDetailsOfYourLease = None,
     throughputAffectsRent = ThroughputAffectsRent(AnswerYes, "Throughput affects rent details"),
     isVATPayableForWholeProperty = AnswerYes,
@@ -640,7 +640,7 @@ trait FakeObjects {
       )
     ),
     propertyUpdates = Some(PropertyUpdates(AnswerYes)),
-    leaseSurrenderedEarly = Some(LeaseSurrenderedEarly(AnswerYes)),
+    leaseSurrenderedEarly = Some(AnswerYes),
     benefitsGiven = Some(AnswerNo),
     benefitsGivenDetails = Some("details"),
     workCarriedOutDetails = Some(WorkCarriedOutDetails("workCarriedOutDetails")),
