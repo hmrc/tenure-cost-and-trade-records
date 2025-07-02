@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutLeaseOrAgreementPartTwo(
   rentPayableVaryAccordingToGrossOrNetDetails: Option[RentPayableVaryAccordingToGrossOrNetDetails] = None,
@@ -28,20 +29,22 @@ case class AboutLeaseOrAgreementPartTwo(
   howIsCurrentRentFixed: Option[HowIsCurrentRentFixed] = None,
   methodToFixCurrentRentDetails: Option[MethodToFixCurrentRentDetails] = None,
   intervalsOfRentReview: Option[IntervalsOfRentReview] = None,
-  canRentBeReducedOnReviewDetails: Option[CanRentBeReducedOnReviewDetails] = None,
-  incentivesPaymentsConditionsDetails: Option[IncentivesPaymentsConditionsDetails] = None,
+  canRentBeReducedOnReview: Option[AnswersYesNo] = None,
+  incentivesPaymentsConditionsDetails: Option[AnswersYesNo] = None,
   tenantAdditionsDisregardedDetails: Option[TenantAdditionsDisregardedDetails] = None,
   tenantsAdditionsDisregardedDetails: Option[TenantsAdditionsDisregardedDetails] = None,
   payACapitalSumDetails: Option[PayACapitalSumDetails] = None,
+  payACapitalSumInformationDetails: Option[PayACapitalSumInformationDetails] = None, // Added Feb 2024 - 6030 Journey
   payACapitalSumAmountDetails: Option[PayACapitalSumAmountDetails] = None, // Added Nov 2024 - 6048 Journey
-  capitalSumDescription: Option[CapitalSumDescription] = None,
+  capitalSumDescription: Option[String] = None,
   paymentWhenLeaseIsGrantedDetails: Option[PaymentWhenLeaseIsGrantedDetails] = None,
   tenancyLeaseAgreementExpire: Option[TenancyLeaseAgreementExpire] = None,
-  tenancyLeaseAgreementDetails: Option[TenancyLeaseAgreementDetails] = None,
   legalOrPlanningRestrictions: Option[LegalOrPlanningRestrictions] = None,
-  legalOrPlanningRestrictionsDetails: Option[LegalOrPlanningRestrictionsDetails] = None
+  legalOrPlanningRestrictionsDetails: Option[LegalOrPlanningRestrictionsDetails] = None,
+  ultimatelyResponsibleInsideRepairs: Option[UltimatelyResponsibleInsideRepairs] = None,
+  ultimatelyResponsibleOutsideRepairs: Option[UltimatelyResponsibleOutsideRepairs] = None,
+  ultimatelyResponsibleBuildingInsurance: Option[UltimatelyResponsibleBuildingInsurance] = None
 )
 
-object AboutLeaseOrAgreementPartTwo {
+object AboutLeaseOrAgreementPartTwo:
   implicit val format: OFormat[AboutLeaseOrAgreementPartTwo] = Json.format
-}

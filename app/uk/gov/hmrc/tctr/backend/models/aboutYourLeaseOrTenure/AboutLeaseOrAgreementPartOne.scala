@@ -19,11 +19,10 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-//There are now 22 attributes in this case class, so no more can be added
 case class AboutLeaseOrAgreementPartOne(
   aboutTheLandlord: Option[AboutTheLandlord] = None,
   connectedToLandlord: Option[AnswersYesNo] = None,
-  connectedToLandlordDetails: Option[ConnectedToLandlordInformationDetails] = None,
+  connectedToLandlordDetails: Option[String] = None,
   leaseOrAgreementYearsDetails: Option[LeaseOrAgreementYearsDetails] = None,
   currentRentPayableWithin12Months: Option[CurrentRentPayableWithin12Months] = None,
   propertyUseLeasebackAgreement: Option[PropertyUseLeasebackArrangementDetails] = None,

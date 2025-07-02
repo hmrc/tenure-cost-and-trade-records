@@ -549,7 +549,6 @@ trait FakeObjects {
         )
       )
     ),
-    rentalIncomeIndex = 1,
     rentalIncomeMax = Some(false)
   )
 
@@ -557,7 +556,7 @@ trait FakeObjects {
   val prefilledAboutLeaseOrAgreementPartOne: AboutLeaseOrAgreementPartOne = AboutLeaseOrAgreementPartOne(
     aboutTheLandlord = Some(AboutTheLandlord(prefilledFakeName, prefilledLandlordAddress)),
     connectedToLandlord = Some(AnswerYes),
-    connectedToLandlordDetails = Some(ConnectedToLandlordInformationDetails("Test")),
+    connectedToLandlordDetails = Some("Test"),
     leaseOrAgreementYearsDetails = Some(LeaseOrAgreementYearsDetails(AnswerYes, AnswerYes, AnswerYes)),
     currentRentPayableWithin12Months = Some(CurrentRentPayableWithin12Months(AnswerYes, Some(prefilledDateInput))),
     propertyUseLeasebackAgreement = Some(prefilledPropertyUseLeasebackArrangement),
@@ -612,15 +611,14 @@ trait FakeObjects {
     howIsCurrentRentFixed = Some(HowIsCurrentRentFixed(CurrentRentFixedNewLeaseAgreement, LocalDate.now)),
     methodToFixCurrentRentDetails = Some(MethodToFixCurrentRentDetails(MethodToFixCurrentRentAgreement)),
     intervalsOfRentReview = Some(IntervalsOfRentReview(Some("test description"), Some(LocalDate.now))),
-    canRentBeReducedOnReviewDetails = Some(CanRentBeReducedOnReviewDetails(AnswerYes)),
-    incentivesPaymentsConditionsDetails = Some(IncentivesPaymentsConditionsDetails(AnswerYes)),
+    canRentBeReducedOnReview = Some(AnswerYes),
+    incentivesPaymentsConditionsDetails = Some(AnswerYes),
     tenantAdditionsDisregardedDetails = Some(TenantAdditionsDisregardedDetails(AnswerYes)),
     tenantsAdditionsDisregardedDetails = Some(TenantsAdditionsDisregardedDetails("test description.")),
     payACapitalSumDetails = Some(PayACapitalSumDetails(AnswerYes)),
-    capitalSumDescription = Some(CapitalSumDescription("test description")),
+    capitalSumDescription = Some("test description"),
     paymentWhenLeaseIsGrantedDetails = Some(PaymentWhenLeaseIsGrantedDetails(AnswerYes)),
     tenancyLeaseAgreementExpire = Some(TenancyLeaseAgreementExpire(LocalDate.now.plusYears(5))),
-    tenancyLeaseAgreementDetails = Some(TenancyLeaseAgreementDetails(AnswerYes)),
     legalOrPlanningRestrictions = Some(LegalOrPlanningRestrictions(AnswerYes)),
     legalOrPlanningRestrictionsDetails = Some(LegalOrPlanningRestrictionsDetails("test description."))
   )
@@ -643,8 +641,8 @@ trait FakeObjects {
     ),
     propertyUpdates = Some(PropertyUpdates(AnswerYes)),
     leaseSurrenderedEarly = Some(LeaseSurrenderedEarly(AnswerYes)),
-    benefitsGiven = Some(BenefitsGiven(AnswerNo)),
-    benefitsGivenDetails = Some(BenefitsGivenDetails("details")),
+    benefitsGiven = Some(AnswerNo),
+    benefitsGivenDetails = Some("details"),
     workCarriedOutDetails = Some(WorkCarriedOutDetails("workCarriedOutDetails")),
     workCarriedOutCondition = Some(WorkCarriedOutCondition(AnswerYes)),
     rentIncludeTradeServicesDetailsTextArea = Some("details"),

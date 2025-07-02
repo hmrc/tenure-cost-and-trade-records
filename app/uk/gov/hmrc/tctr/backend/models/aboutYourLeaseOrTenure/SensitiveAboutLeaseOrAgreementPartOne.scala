@@ -24,7 +24,7 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 case class SensitiveAboutLeaseOrAgreementPartOne(
   aboutTheLandlord: Option[SensitiveAboutTheLandlord] = None,
   connectedToLandlord: Option[AnswersYesNo] = None,
-  connectedToLandlordDetails: Option[ConnectedToLandlordInformationDetails] = None,
+  connectedToLandlordDetails: Option[String] = None,
   leaseOrAgreementYearsDetails: Option[LeaseOrAgreementYearsDetails] = None,
   currentRentPayableWithin12Months: Option[CurrentRentPayableWithin12Months] = None,
   propertyUseLeasebackAgreement: Option[PropertyUseLeasebackArrangementDetails] = None,

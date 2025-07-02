@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@
 package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class BenefitsGiven(
-  benefitsGiven: AnswersYesNo
+import java.time.LocalDate
+
+case class PayACapitalSumInformationDetails(
+  capitalSumPaidDetails: Option[BigDecimal],
+  capitalSumPaidDetailsDateInput: Option[LocalDate]
 )
 
-object BenefitsGiven {
-  implicit val format: OFormat[BenefitsGiven] = Json.format
-}
+object PayACapitalSumInformationDetails:
+  implicit val format: OFormat[PayACapitalSumInformationDetails] = Json.format
