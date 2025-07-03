@@ -20,12 +20,10 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutLeaseOrAgreementPartTwo(
-  rentPayableVaryAccordingToGrossOrNetDetails: Option[RentPayableVaryAccordingToGrossOrNetDetails] = None,
-  rentPayableVaryAccordingToGrossOrNetInformationDetails: Option[
-    RentPayableVaryAccordingToGrossOrNetInformationDetails
-  ] = None,
-  rentPayableVaryOnQuantityOfBeersDetails: Option[RentPayableVaryOnQuantityOfBeersDetails] = None,
-  rentPayableVaryOnQuantityOfBeersInformationDetails: Option[RentPayableVaryOnQuantityOfBeersInformationDetails] = None,
+  rentPayableVaryAccordingToGrossOrNet: Option[AnswersYesNo] = None,
+  rentPayableVaryAccordingToGrossOrNetDetails: Option[String] = None,
+  rentPayableVaryOnQuantityOfBeers: Option[AnswersYesNo] = None,
+  rentPayableVaryOnQuantityOfBeersDetails: Option[String] = None,
   howIsCurrentRentFixed: Option[HowIsCurrentRentFixed] = None,
   methodToFixCurrentRentDetails: Option[MethodToFixCurrentRent] = None,
   intervalsOfRentReview: Option[IntervalsOfRentReview] = None,

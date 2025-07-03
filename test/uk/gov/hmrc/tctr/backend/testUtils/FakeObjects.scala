@@ -102,9 +102,6 @@ trait FakeObjects {
 
   val prefilledTradingNameOperatingFromProperty: String = "TRADING NAME"
 
-  val prefilledPropertyUseLeasebackArrangement: PropertyUseLeasebackArrangementDetails =
-    PropertyUseLeasebackArrangementDetails(AnswerYes)
-
   val baseFilledConnectedSubmission: ConnectedSubmission =
     ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token, Instant.now())
 
@@ -559,7 +556,7 @@ trait FakeObjects {
     connectedToLandlordDetails = Some("Test"),
     leaseOrAgreementYearsDetails = Some(LeaseOrAgreementYearsDetails(AnswerYes, AnswerYes, AnswerYes)),
     currentRentPayableWithin12Months = Some(CurrentRentPayableWithin12Months(AnswerYes, Some(prefilledDateInput))),
-    propertyUseLeasebackAgreement = Some(prefilledPropertyUseLeasebackArrangement),
+    propertyUseLeasebackAgreement = Some(AnswerYes),
     annualRent = Some(BigDecimal(1000.00)),
     currentRentFirstPaid = Some(CurrentRentFirstPaid(prefilledDateInput)),
     currentLeaseOrAgreementBegin = Some(CurrentLeaseOrAgreementBegin(MonthsYearDuration(12, 2022), "test duration")),
@@ -576,38 +573,32 @@ trait FakeObjects {
       )
     ),
     sharedResponsibilitiesDetails = Some(SharedResponsibilitiesDetails("test")),
-    rentIncludeTradeServicesDetails = Some(RentIncludeTradeServicesDetails(AnswerYes)),
+    rentIncludeTradeServicesDetails = Some(AnswerYes),
     rentIncludeTradeServicesInformation = Some(
       RentIncludeTradeServicesInformationDetails(
         sumIncludedInRent = Some(BigDecimal(5000)),
         describeTheServices = "test"
       )
     ),
-    rentIncludeFixturesAndFittingsDetails = Some(RentIncludeFixturesAndFittingsDetails(AnswerYes)),
-    rentIncludeFixtureAndFittingsDetails = Some(
-      RentIncludeFixturesOrFittingsInformationDetails(
-        sumIncludedInRent = Some(BigDecimal(1200))
-      )
-    ),
-    rentOpenMarketValueDetails = Some(RentOpenMarketValueDetails(AnswerYes)),
+    rentIncludeFixturesAndFittings = Some(AnswerYes),
+    rentIncludeFixturesAndFittingsAmount = Some(BigDecimal(1200)),
+    rentOpenMarketValue = Some(AnswerYes),
     whatIsYourCurrentRentBasedOnDetails = Some(
       WhatIsYourCurrentRentBasedOnDetails(
         currentRentBasedOn = CurrentRentBasedOnPercentageOpenMarket,
         describe = Some("test")
       )
     ),
-    rentIncreasedAnnuallyWithRPIDetails = Some(RentIncreasedAnnuallyWithRPIDetails(AnswerYes)),
+    rentIncreasedAnnuallyWithRPIDetails = Some(AnswerYes),
     checkYourAnswersAboutYourLeaseOrTenure = Some(AnswerYes),
-    rentIncludesVat = Some(RentIncludesVatDetails(AnswerYes))
+    rentIncludesVat = Some(AnswerYes)
   )
 
   val prefilledAboutLeaseOrAgreementPartTwo: AboutLeaseOrAgreementPartTwo = AboutLeaseOrAgreementPartTwo(
-    rentPayableVaryAccordingToGrossOrNetDetails = Some(RentPayableVaryAccordingToGrossOrNetDetails(AnswerYes)),
-    rentPayableVaryAccordingToGrossOrNetInformationDetails =
-      Some(RentPayableVaryAccordingToGrossOrNetInformationDetails("test description")),
-    rentPayableVaryOnQuantityOfBeersDetails = Some(RentPayableVaryOnQuantityOfBeersDetails(AnswerYes)),
-    rentPayableVaryOnQuantityOfBeersInformationDetails =
-      Some(RentPayableVaryOnQuantityOfBeersInformationDetails("test description")),
+    rentPayableVaryAccordingToGrossOrNet = Some(AnswerYes),
+    rentPayableVaryAccordingToGrossOrNetDetails = Some("test description"),
+    rentPayableVaryOnQuantityOfBeers = Some(AnswerYes),
+    rentPayableVaryOnQuantityOfBeersDetails = Some("test description"),
     howIsCurrentRentFixed = Some(HowIsCurrentRentFixed(CurrentRentFixedNewLeaseAgreement, LocalDate.now)),
     methodToFixCurrentRentDetails = Some(MethodToFixCurrentRentAgreement),
     intervalsOfRentReview = Some(IntervalsOfRentReview(Some("test description"), Some(LocalDate.now))),
@@ -639,7 +630,7 @@ trait FakeObjects {
         typeOfTenureDetails = Some("details")
       )
     ),
-    propertyUpdates = Some(PropertyUpdates(AnswerYes)),
+    propertyUpdates = Some(AnswerYes),
     leaseSurrenderedEarly = Some(AnswerYes),
     benefitsGiven = Some(AnswerNo),
     benefitsGivenDetails = Some("details"),

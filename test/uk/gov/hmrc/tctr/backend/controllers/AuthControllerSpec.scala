@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,5 +105,5 @@ class AuthControllerSpec extends AnyWordAppSpec with OptionValues {
     )
     val forCredentials                    = FORCredentials("forNumber", billingAuthorityCode, "forType", sensitiveAddress, "_id")
     def expectedContent(isWelsh: Boolean) =
-      s"""{"forAuthToken":"Basic Zm9yTnVtYmVyOlNlbnNpdGl2ZSguLi4p","forType":"forType","address":{"postcode":"postcode","street1":"street1","county":"county","buildingNameNumber":"buildingNameNumber","town":"town"},"isWelsh":$isWelsh}"""
+      s"""{"forAuthToken":"Basic Zm9yTnVtYmVyOlNlbnNpdGl2ZSguLi4p","forType":"forType","address":{"buildingNameNumber":"buildingNameNumber","street1":"street1","town":"town","county":"county","postcode":"postcode"},"isWelsh":$isWelsh}"""
 }

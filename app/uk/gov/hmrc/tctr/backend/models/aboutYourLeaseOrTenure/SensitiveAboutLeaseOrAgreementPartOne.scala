@@ -27,21 +27,22 @@ case class SensitiveAboutLeaseOrAgreementPartOne(
   connectedToLandlordDetails: Option[String] = None,
   leaseOrAgreementYearsDetails: Option[LeaseOrAgreementYearsDetails] = None,
   currentRentPayableWithin12Months: Option[CurrentRentPayableWithin12Months] = None,
-  propertyUseLeasebackAgreement: Option[PropertyUseLeasebackArrangementDetails] = None,
+  propertyUseLeasebackAgreement: Option[AnswersYesNo] = None,
   annualRent: Option[BigDecimal] = None,
   currentRentFirstPaid: Option[CurrentRentFirstPaid] = None,
   currentLeaseOrAgreementBegin: Option[CurrentLeaseOrAgreementBegin] = None,
   includedInYourRentDetails: Option[IncludedInYourRentDetails] = None,
   doesTheRentPayable: Option[DoesTheRentPayable] = None,
   sharedResponsibilitiesDetails: Option[SharedResponsibilitiesDetails] = None,
-  rentIncludeTradeServicesDetails: Option[RentIncludeTradeServicesDetails] = None,
+  rentIncludeTradeServicesDetails: Option[AnswersYesNo] = None,
   rentIncludeTradeServicesInformation: Option[RentIncludeTradeServicesInformationDetails] = None,
-  rentIncludeFixturesAndFittingsDetails: Option[RentIncludeFixturesAndFittingsDetails] = None,
-  rentIncludeFixtureAndFittingsDetails: Option[RentIncludeFixturesOrFittingsInformationDetails] = None,
-  rentOpenMarketValueDetails: Option[RentOpenMarketValueDetails] = None,
+  rentIncludeFixturesAndFittings: Option[AnswersYesNo] = None,
+  rentIncludeFixturesAndFittingsAmount: Option[BigDecimal] = None,
+  rentOpenMarketValue: Option[AnswersYesNo] = None,
   whatIsYourCurrentRentBasedOnDetails: Option[WhatIsYourCurrentRentBasedOnDetails] = None,
-  rentIncreasedAnnuallyWithRPIDetails: Option[RentIncreasedAnnuallyWithRPIDetails] = None,
-  checkYourAnswersAboutYourLeaseOrTenure: Option[AnswersYesNo] = None
+  rentIncreasedAnnuallyWithRPIDetails: Option[AnswersYesNo] = None,
+  checkYourAnswersAboutYourLeaseOrTenure: Option[AnswersYesNo] = None,
+  rentIncludesVat: Option[AnswersYesNo] = None
 ) extends Sensitive[AboutLeaseOrAgreementPartOne]:
   override def decryptedValue: AboutLeaseOrAgreementPartOne = AboutLeaseOrAgreementPartOne(
     aboutTheLandlord.map(_.decryptedValue),
@@ -58,12 +59,13 @@ case class SensitiveAboutLeaseOrAgreementPartOne(
     sharedResponsibilitiesDetails,
     rentIncludeTradeServicesDetails,
     rentIncludeTradeServicesInformation,
-    rentIncludeFixturesAndFittingsDetails,
-    rentIncludeFixtureAndFittingsDetails,
-    rentOpenMarketValueDetails,
+    rentIncludeFixturesAndFittings,
+    rentIncludeFixturesAndFittingsAmount,
+    rentOpenMarketValue,
     whatIsYourCurrentRentBasedOnDetails,
     rentIncreasedAnnuallyWithRPIDetails,
-    checkYourAnswersAboutYourLeaseOrTenure
+    checkYourAnswersAboutYourLeaseOrTenure,
+    rentIncludesVat
   )
 
 object SensitiveAboutLeaseOrAgreementPartOne:
@@ -86,9 +88,9 @@ object SensitiveAboutLeaseOrAgreementPartOne:
       aboutLeaseOrAgreementPartOne.sharedResponsibilitiesDetails,
       aboutLeaseOrAgreementPartOne.rentIncludeTradeServicesDetails,
       aboutLeaseOrAgreementPartOne.rentIncludeTradeServicesInformation,
-      aboutLeaseOrAgreementPartOne.rentIncludeFixturesAndFittingsDetails,
-      aboutLeaseOrAgreementPartOne.rentIncludeFixtureAndFittingsDetails,
-      aboutLeaseOrAgreementPartOne.rentOpenMarketValueDetails,
+      aboutLeaseOrAgreementPartOne.rentIncludeFixturesAndFittings,
+      aboutLeaseOrAgreementPartOne.rentIncludeFixturesAndFittingsAmount,
+      aboutLeaseOrAgreementPartOne.rentOpenMarketValue,
       aboutLeaseOrAgreementPartOne.whatIsYourCurrentRentBasedOnDetails,
       aboutLeaseOrAgreementPartOne.rentIncreasedAnnuallyWithRPIDetails,
       aboutLeaseOrAgreementPartOne.checkYourAnswersAboutYourLeaseOrTenure

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ class CaravansAnnualPitchFeeSpec extends AnyFlatSpec with Matchers with FakeObje
 
   "CaravansAnnualPitchFee" should "be serialized to json" in {
     val expectedJson =
-      """{"servicesIncludedInPitchFee":["waterAndDrainage","gas","electricity","other"],"gas":200,"otherPitchFeeDetails":"food - 200, cleaning - 200","waterAndDrainage":100,"electricity":300,"totalPitchFee":1000}"""
+      """{"totalPitchFee":1000,"servicesIncludedInPitchFee":["waterAndDrainage","gas","electricity","other"],"waterAndDrainage":100,"gas":200,"electricity":300,"otherPitchFeeDetails":"food - 200, cleaning - 200"}"""
 
     val json = Json.toJson(caravansAnnualPitchFee)
     json.as[CaravansAnnualPitchFee] shouldBe caravansAnnualPitchFee
