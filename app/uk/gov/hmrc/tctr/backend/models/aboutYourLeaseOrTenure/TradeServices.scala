@@ -19,7 +19,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 import play.api.libs.json.{Json, OFormat}
 
 case class TradeServices(
-  details: TradeServicesDetails
+  details: String
 )
 
 object TradeServices:

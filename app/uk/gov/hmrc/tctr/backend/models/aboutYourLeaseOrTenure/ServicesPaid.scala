@@ -19,8 +19,8 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 import play.api.libs.json.{Json, OFormat}
 
 case class ServicesPaid(
-  details: ServicePaidSeparately,
-  annualCharge: Option[ServicePaidSeparatelyCharge] = None
+  details: String,
+  annualCharge: Option[BigDecimal] = None
 )
 
 object ServicesPaid:

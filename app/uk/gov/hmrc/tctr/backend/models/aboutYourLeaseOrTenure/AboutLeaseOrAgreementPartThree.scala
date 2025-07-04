@@ -33,8 +33,8 @@ case class AboutLeaseOrAgreementPartThree(
   leaseSurrenderedEarly: Option[AnswersYesNo] = None,
   benefitsGiven: Option[AnswersYesNo] = None,
   benefitsGivenDetails: Option[String] = None,
-  workCarriedOutDetails: Option[WorkCarriedOutDetails] = None,
-  workCarriedOutCondition: Option[WorkCarriedOutCondition] = None,
+  workCarriedOut: Option[AnswersYesNo] = None,
+  workCarriedOutDetails: Option[String] = None,
   provideDetailsOfYourLease: Option[String] = None,
   rentIncludeTradeServicesDetailsTextArea: Option[String] = None, // Added Aug 2024 for 6045/46
   rentIncludeFixtureAndFittingsDetailsTextArea: Option[String] = None, // Added Aug 2024 for 6045/46

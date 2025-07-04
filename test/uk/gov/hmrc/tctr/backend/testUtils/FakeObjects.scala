@@ -572,7 +572,6 @@ trait FakeObjects {
         detailsToQuestions = "Some details"
       )
     ),
-    sharedResponsibilitiesDetails = Some(SharedResponsibilitiesDetails("test")),
     rentIncludeTradeServicesDetails = Some(AnswerYes),
     rentIncludeTradeServicesInformation = Some(
       RentIncludeTradeServicesInformationDetails(
@@ -604,19 +603,19 @@ trait FakeObjects {
     intervalsOfRentReview = Some(IntervalsOfRentReview(Some("test description"), Some(LocalDate.now))),
     canRentBeReducedOnReview = Some(AnswerYes),
     incentivesPaymentsConditionsDetails = Some(AnswerYes),
-    tenantAdditionsDisregardedDetails = Some(TenantAdditionsDisregardedDetails(AnswerYes)),
-    tenantsAdditionsDisregardedDetails = Some(TenantsAdditionsDisregardedDetails("test description.")),
+    tenantAdditionsDisregarded = Some(AnswerYes),
+    tenantAdditionsDisregardedDetails = Some("test description."),
     payACapitalSumOrPremium = Some(AnswerYes),
     capitalSumDescription = Some("test description"),
     receivePaymentWhenLeaseGranted = Some(AnswerYes),
-    tenancyLeaseAgreementExpire = Some(TenancyLeaseAgreementExpire(LocalDate.now.plusYears(5))),
+    tenancyLeaseAgreementExpire = Some(LocalDate.now.plusYears(5)),
     legalOrPlanningRestrictions = Some(AnswerYes),
     legalOrPlanningRestrictionsDetails = Some("test description.")
   )
 
   val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
-    tradeServices = IndexedSeq(TradeServices(TradeServicesDetails("description"))),
-    servicesPaid = IndexedSeq(ServicesPaid(ServicePaidSeparately("description"))),
+    tradeServices = IndexedSeq(TradeServices("description")),
+    servicesPaid = IndexedSeq(ServicesPaid("description")),
     paymentForTradeServices = AnswerYes,
     provideDetailsOfYourLease = None,
     throughputAffectsRent = ThroughputAffectsRent(AnswerYes, "Throughput affects rent details"),
@@ -634,8 +633,8 @@ trait FakeObjects {
     leaseSurrenderedEarly = Some(AnswerYes),
     benefitsGiven = Some(AnswerNo),
     benefitsGivenDetails = Some("details"),
-    workCarriedOutDetails = Some(WorkCarriedOutDetails("workCarriedOutDetails")),
-    workCarriedOutCondition = Some(WorkCarriedOutCondition(AnswerYes)),
+    workCarriedOut = Some(AnswerYes),
+    workCarriedOutDetails = Some("workCarriedOutDetails"),
     rentIncludeTradeServicesDetailsTextArea = Some("details"),
     rentIncludeFixtureAndFittingsDetailsTextArea = Some("details"),
     rentDevelopedLand = Some(AnswerYes),
