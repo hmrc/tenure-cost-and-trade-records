@@ -558,7 +558,7 @@ trait FakeObjects {
     currentRentPayableWithin12Months = Some(CurrentRentPayableWithin12Months(AnswerYes, Some(prefilledDateInput))),
     propertyUseLeasebackAgreement = Some(AnswerYes),
     annualRent = Some(BigDecimal(1000.00)),
-    currentRentFirstPaid = Some(CurrentRentFirstPaid(prefilledDateInput)),
+    currentRentFirstPaid = Some(prefilledDateInput),
     currentLeaseOrAgreementBegin = Some(CurrentLeaseOrAgreementBegin(MonthsYearDuration(12, 2022), "test duration")),
     includedInYourRentDetails = Some(
       IncludedInYourRentDetails(

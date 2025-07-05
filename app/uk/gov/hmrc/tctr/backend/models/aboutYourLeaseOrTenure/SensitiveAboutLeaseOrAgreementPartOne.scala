@@ -21,6 +21,8 @@ import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
+import java.time.LocalDate
+
 case class SensitiveAboutLeaseOrAgreementPartOne(
   aboutTheLandlord: Option[SensitiveAboutTheLandlord] = None,
   connectedToLandlord: Option[AnswersYesNo] = None,
@@ -29,7 +31,7 @@ case class SensitiveAboutLeaseOrAgreementPartOne(
   currentRentPayableWithin12Months: Option[CurrentRentPayableWithin12Months] = None,
   propertyUseLeasebackAgreement: Option[AnswersYesNo] = None,
   annualRent: Option[BigDecimal] = None,
-  currentRentFirstPaid: Option[CurrentRentFirstPaid] = None,
+  currentRentFirstPaid: Option[LocalDate] = None,
   currentLeaseOrAgreementBegin: Option[CurrentLeaseOrAgreementBegin] = None,
   includedInYourRentDetails: Option[IncludedInYourRentDetails] = None,
   doesTheRentPayable: Option[DoesTheRentPayable] = None,
