@@ -33,7 +33,6 @@ case class StillConnectedDetails(
   vacantPropertyStartDate: Option[LocalDate] = None,
   isAnyRentReceived: Option[AnswersYesNo] = None,
   provideContactDetails: Option[YourContactDetails] = None,
-  lettingPartOfPropertyDetailsIndex: Int = 0,
   lettingPartOfPropertyDetails: IndexedSeq[LettingPartOfPropertyDetails] = IndexedSeq.empty,
   checkYourAnswersConnectionToProperty: Option[CheckYourAnswersConnectionToProperty] = None
 )

@@ -21,27 +21,29 @@ import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
+import java.time.LocalDate
+
 case class SensitiveAboutLeaseOrAgreementPartOne(
   aboutTheLandlord: Option[SensitiveAboutTheLandlord] = None,
   connectedToLandlord: Option[AnswersYesNo] = None,
-  connectedToLandlordDetails: Option[ConnectedToLandlordInformationDetails] = None,
+  connectedToLandlordDetails: Option[String] = None,
   leaseOrAgreementYearsDetails: Option[LeaseOrAgreementYearsDetails] = None,
   currentRentPayableWithin12Months: Option[CurrentRentPayableWithin12Months] = None,
-  propertyUseLeasebackAgreement: Option[PropertyUseLeasebackArrangementDetails] = None,
+  propertyUseLeasebackAgreement: Option[AnswersYesNo] = None,
   annualRent: Option[BigDecimal] = None,
-  currentRentFirstPaid: Option[CurrentRentFirstPaid] = None,
+  currentRentFirstPaid: Option[LocalDate] = None,
   currentLeaseOrAgreementBegin: Option[CurrentLeaseOrAgreementBegin] = None,
   includedInYourRentDetails: Option[IncludedInYourRentDetails] = None,
   doesTheRentPayable: Option[DoesTheRentPayable] = None,
-  sharedResponsibilitiesDetails: Option[SharedResponsibilitiesDetails] = None,
-  rentIncludeTradeServicesDetails: Option[RentIncludeTradeServicesDetails] = None,
+  rentIncludeTradeServicesDetails: Option[AnswersYesNo] = None,
   rentIncludeTradeServicesInformation: Option[RentIncludeTradeServicesInformationDetails] = None,
-  rentIncludeFixturesAndFittingsDetails: Option[RentIncludeFixturesAndFittingsDetails] = None,
-  rentIncludeFixtureAndFittingsDetails: Option[RentIncludeFixturesOrFittingsInformationDetails] = None,
-  rentOpenMarketValueDetails: Option[RentOpenMarketValueDetails] = None,
+  rentIncludeFixturesAndFittings: Option[AnswersYesNo] = None,
+  rentIncludeFixturesAndFittingsAmount: Option[BigDecimal] = None,
+  rentOpenMarketValue: Option[AnswersYesNo] = None,
   whatIsYourCurrentRentBasedOnDetails: Option[WhatIsYourCurrentRentBasedOnDetails] = None,
-  rentIncreasedAnnuallyWithRPIDetails: Option[RentIncreasedAnnuallyWithRPIDetails] = None,
-  checkYourAnswersAboutYourLeaseOrTenure: Option[AnswersYesNo] = None
+  rentIncreasedAnnuallyWithRPIDetails: Option[AnswersYesNo] = None,
+  checkYourAnswersAboutYourLeaseOrTenure: Option[AnswersYesNo] = None,
+  rentIncludesVat: Option[AnswersYesNo] = None
 ) extends Sensitive[AboutLeaseOrAgreementPartOne]:
   override def decryptedValue: AboutLeaseOrAgreementPartOne = AboutLeaseOrAgreementPartOne(
     aboutTheLandlord.map(_.decryptedValue),
@@ -55,15 +57,15 @@ case class SensitiveAboutLeaseOrAgreementPartOne(
     currentLeaseOrAgreementBegin,
     includedInYourRentDetails,
     doesTheRentPayable,
-    sharedResponsibilitiesDetails,
     rentIncludeTradeServicesDetails,
     rentIncludeTradeServicesInformation,
-    rentIncludeFixturesAndFittingsDetails,
-    rentIncludeFixtureAndFittingsDetails,
-    rentOpenMarketValueDetails,
+    rentIncludeFixturesAndFittings,
+    rentIncludeFixturesAndFittingsAmount,
+    rentOpenMarketValue,
     whatIsYourCurrentRentBasedOnDetails,
     rentIncreasedAnnuallyWithRPIDetails,
-    checkYourAnswersAboutYourLeaseOrTenure
+    checkYourAnswersAboutYourLeaseOrTenure,
+    rentIncludesVat
   )
 
 object SensitiveAboutLeaseOrAgreementPartOne:
@@ -83,12 +85,11 @@ object SensitiveAboutLeaseOrAgreementPartOne:
       aboutLeaseOrAgreementPartOne.currentLeaseOrAgreementBegin,
       aboutLeaseOrAgreementPartOne.includedInYourRentDetails,
       aboutLeaseOrAgreementPartOne.doesTheRentPayable,
-      aboutLeaseOrAgreementPartOne.sharedResponsibilitiesDetails,
       aboutLeaseOrAgreementPartOne.rentIncludeTradeServicesDetails,
       aboutLeaseOrAgreementPartOne.rentIncludeTradeServicesInformation,
-      aboutLeaseOrAgreementPartOne.rentIncludeFixturesAndFittingsDetails,
-      aboutLeaseOrAgreementPartOne.rentIncludeFixtureAndFittingsDetails,
-      aboutLeaseOrAgreementPartOne.rentOpenMarketValueDetails,
+      aboutLeaseOrAgreementPartOne.rentIncludeFixturesAndFittings,
+      aboutLeaseOrAgreementPartOne.rentIncludeFixturesAndFittingsAmount,
+      aboutLeaseOrAgreementPartOne.rentOpenMarketValue,
       aboutLeaseOrAgreementPartOne.whatIsYourCurrentRentBasedOnDetails,
       aboutLeaseOrAgreementPartOne.rentIncreasedAnnuallyWithRPIDetails,
       aboutLeaseOrAgreementPartOne.checkYourAnswersAboutYourLeaseOrTenure

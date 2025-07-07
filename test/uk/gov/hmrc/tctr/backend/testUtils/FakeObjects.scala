@@ -102,9 +102,6 @@ trait FakeObjects {
 
   val prefilledTradingNameOperatingFromProperty: String = "TRADING NAME"
 
-  val prefilledPropertyUseLeasebackArrangement: PropertyUseLeasebackArrangementDetails =
-    PropertyUseLeasebackArrangementDetails(AnswerYes)
-
   val baseFilledConnectedSubmission: ConnectedSubmission =
     ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token, Instant.now())
 
@@ -549,7 +546,6 @@ trait FakeObjects {
         )
       )
     ),
-    rentalIncomeIndex = 1,
     rentalIncomeMax = Some(false)
   )
 
@@ -557,12 +553,12 @@ trait FakeObjects {
   val prefilledAboutLeaseOrAgreementPartOne: AboutLeaseOrAgreementPartOne = AboutLeaseOrAgreementPartOne(
     aboutTheLandlord = Some(AboutTheLandlord(prefilledFakeName, prefilledLandlordAddress)),
     connectedToLandlord = Some(AnswerYes),
-    connectedToLandlordDetails = Some(ConnectedToLandlordInformationDetails("Test")),
+    connectedToLandlordDetails = Some("Test"),
     leaseOrAgreementYearsDetails = Some(LeaseOrAgreementYearsDetails(AnswerYes, AnswerYes, AnswerYes)),
     currentRentPayableWithin12Months = Some(CurrentRentPayableWithin12Months(AnswerYes, Some(prefilledDateInput))),
-    propertyUseLeasebackAgreement = Some(prefilledPropertyUseLeasebackArrangement),
+    propertyUseLeasebackAgreement = Some(AnswerYes),
     annualRent = Some(BigDecimal(1000.00)),
-    currentRentFirstPaid = Some(CurrentRentFirstPaid(prefilledDateInput)),
+    currentRentFirstPaid = Some(prefilledDateInput),
     currentLeaseOrAgreementBegin = Some(CurrentLeaseOrAgreementBegin(MonthsYearDuration(12, 2022), "test duration")),
     includedInYourRentDetails = Some(
       IncludedInYourRentDetails(
@@ -576,59 +572,51 @@ trait FakeObjects {
         detailsToQuestions = "Some details"
       )
     ),
-    sharedResponsibilitiesDetails = Some(SharedResponsibilitiesDetails("test")),
-    rentIncludeTradeServicesDetails = Some(RentIncludeTradeServicesDetails(AnswerYes)),
+    rentIncludeTradeServicesDetails = Some(AnswerYes),
     rentIncludeTradeServicesInformation = Some(
       RentIncludeTradeServicesInformationDetails(
         sumIncludedInRent = Some(BigDecimal(5000)),
         describeTheServices = "test"
       )
     ),
-    rentIncludeFixturesAndFittingsDetails = Some(RentIncludeFixturesAndFittingsDetails(AnswerYes)),
-    rentIncludeFixtureAndFittingsDetails = Some(
-      RentIncludeFixturesOrFittingsInformationDetails(
-        sumIncludedInRent = Some(BigDecimal(1200))
-      )
-    ),
-    rentOpenMarketValueDetails = Some(RentOpenMarketValueDetails(AnswerYes)),
+    rentIncludeFixturesAndFittings = Some(AnswerYes),
+    rentIncludeFixturesAndFittingsAmount = Some(BigDecimal(1200)),
+    rentOpenMarketValue = Some(AnswerYes),
     whatIsYourCurrentRentBasedOnDetails = Some(
       WhatIsYourCurrentRentBasedOnDetails(
         currentRentBasedOn = CurrentRentBasedOnPercentageOpenMarket,
         describe = Some("test")
       )
     ),
-    rentIncreasedAnnuallyWithRPIDetails = Some(RentIncreasedAnnuallyWithRPIDetails(AnswerYes)),
+    rentIncreasedAnnuallyWithRPIDetails = Some(AnswerYes),
     checkYourAnswersAboutYourLeaseOrTenure = Some(AnswerYes),
-    rentIncludesVat = Some(RentIncludesVatDetails(AnswerYes))
+    rentIncludesVat = Some(AnswerYes)
   )
 
   val prefilledAboutLeaseOrAgreementPartTwo: AboutLeaseOrAgreementPartTwo = AboutLeaseOrAgreementPartTwo(
-    rentPayableVaryAccordingToGrossOrNetDetails = Some(RentPayableVaryAccordingToGrossOrNetDetails(AnswerYes)),
-    rentPayableVaryAccordingToGrossOrNetInformationDetails =
-      Some(RentPayableVaryAccordingToGrossOrNetInformationDetails("test description")),
-    rentPayableVaryOnQuantityOfBeersDetails = Some(RentPayableVaryOnQuantityOfBeersDetails(AnswerYes)),
-    rentPayableVaryOnQuantityOfBeersInformationDetails =
-      Some(RentPayableVaryOnQuantityOfBeersInformationDetails("test description")),
+    rentPayableVaryAccordingToGrossOrNet = Some(AnswerYes),
+    rentPayableVaryAccordingToGrossOrNetDetails = Some("test description"),
+    rentPayableVaryOnQuantityOfBeers = Some(AnswerYes),
+    rentPayableVaryOnQuantityOfBeersDetails = Some("test description"),
     howIsCurrentRentFixed = Some(HowIsCurrentRentFixed(CurrentRentFixedNewLeaseAgreement, LocalDate.now)),
-    methodToFixCurrentRentDetails = Some(MethodToFixCurrentRentDetails(MethodToFixCurrentRentAgreement)),
+    methodToFixCurrentRentDetails = Some(MethodToFixCurrentRentAgreement),
     intervalsOfRentReview = Some(IntervalsOfRentReview(Some("test description"), Some(LocalDate.now))),
-    canRentBeReducedOnReviewDetails = Some(CanRentBeReducedOnReviewDetails(AnswerYes)),
-    incentivesPaymentsConditionsDetails = Some(IncentivesPaymentsConditionsDetails(AnswerYes)),
-    tenantAdditionsDisregardedDetails = Some(TenantAdditionsDisregardedDetails(AnswerYes)),
-    tenantsAdditionsDisregardedDetails = Some(TenantsAdditionsDisregardedDetails("test description.")),
-    payACapitalSumDetails = Some(PayACapitalSumDetails(AnswerYes)),
-    capitalSumDescription = Some(CapitalSumDescription("test description")),
-    paymentWhenLeaseIsGrantedDetails = Some(PaymentWhenLeaseIsGrantedDetails(AnswerYes)),
-    tenancyLeaseAgreementExpire = Some(TenancyLeaseAgreementExpire(LocalDate.now.plusYears(5))),
-    tenancyLeaseAgreementDetails = Some(TenancyLeaseAgreementDetails(AnswerYes)),
-    legalOrPlanningRestrictions = Some(LegalOrPlanningRestrictions(AnswerYes)),
-    legalOrPlanningRestrictionsDetails = Some(LegalOrPlanningRestrictionsDetails("test description."))
+    canRentBeReducedOnReview = Some(AnswerYes),
+    incentivesPaymentsConditionsDetails = Some(AnswerYes),
+    tenantAdditionsDisregarded = Some(AnswerYes),
+    tenantAdditionsDisregardedDetails = Some("test description."),
+    payACapitalSumOrPremium = Some(AnswerYes),
+    capitalSumDescription = Some("test description"),
+    receivePaymentWhenLeaseGranted = Some(AnswerYes),
+    tenancyLeaseAgreementExpire = Some(LocalDate.now.plusYears(5)),
+    legalOrPlanningRestrictions = Some(AnswerYes),
+    legalOrPlanningRestrictionsDetails = Some("test description.")
   )
 
   val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
-    tradeServices = IndexedSeq(TradeServices(TradeServicesDetails("description"))),
-    servicesPaid = IndexedSeq(ServicesPaid(ServicePaidSeparately("description"))),
-    paymentForTradeServices = PaymentForTradeServices(AnswerYes),
+    tradeServices = IndexedSeq(TradeServices("description")),
+    servicesPaid = IndexedSeq(ServicesPaid("description")),
+    paymentForTradeServices = AnswerYes,
     provideDetailsOfYourLease = None,
     throughputAffectsRent = ThroughputAffectsRent(AnswerYes, "Throughput affects rent details"),
     isVATPayableForWholeProperty = AnswerYes,
@@ -641,12 +629,12 @@ trait FakeObjects {
         typeOfTenureDetails = Some("details")
       )
     ),
-    propertyUpdates = Some(PropertyUpdates(AnswerYes)),
-    leaseSurrenderedEarly = Some(LeaseSurrenderedEarly(AnswerYes)),
-    benefitsGiven = Some(BenefitsGiven(AnswerNo)),
-    benefitsGivenDetails = Some(BenefitsGivenDetails("details")),
-    workCarriedOutDetails = Some(WorkCarriedOutDetails("workCarriedOutDetails")),
-    workCarriedOutCondition = Some(WorkCarriedOutCondition(AnswerYes)),
+    propertyUpdates = Some(AnswerYes),
+    leaseSurrenderedEarly = Some(AnswerYes),
+    benefitsGiven = Some(AnswerNo),
+    benefitsGivenDetails = Some("details"),
+    workCarriedOut = Some(AnswerYes),
+    workCarriedOutDetails = Some("workCarriedOutDetails"),
     rentIncludeTradeServicesDetailsTextArea = Some("details"),
     rentIncludeFixtureAndFittingsDetailsTextArea = Some("details"),
     rentDevelopedLand = Some(AnswerYes),

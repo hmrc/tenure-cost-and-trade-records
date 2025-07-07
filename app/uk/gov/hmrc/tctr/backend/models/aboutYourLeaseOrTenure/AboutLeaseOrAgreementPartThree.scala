@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,26 +22,25 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 case class AboutLeaseOrAgreementPartThree(
   tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
   servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
-  paymentForTradeServices: Option[PaymentForTradeServices] = None,
-  provideDetailsOfYourLease: Option[String] = None,
   throughputAffectsRent: Option[ThroughputAffectsRent] = None,
   isVATPayableForWholeProperty: Option[AnswersYesNo] = None,
   isRentUnderReview: Option[AnswersYesNo] = None,
   carParking: Option[CarParking] = None,
   rentedEquipmentDetails: Option[String] = None,
+  paymentForTradeServices: Option[AnswersYesNo] = None,
   typeOfTenure: Option[TypeOfTenure] = None, // Add March 2024 for 6020
-  propertyUpdates: Option[PropertyUpdates] = None,
-  leaseSurrenderedEarly: Option[LeaseSurrenderedEarly] = None,
-  benefitsGiven: Option[BenefitsGiven] = None,
-  benefitsGivenDetails: Option[BenefitsGivenDetails] = None,
-  workCarriedOutDetails: Option[WorkCarriedOutDetails] = None,
-  workCarriedOutCondition: Option[WorkCarriedOutCondition] = None,
+  propertyUpdates: Option[AnswersYesNo] = None,
+  leaseSurrenderedEarly: Option[AnswersYesNo] = None,
+  benefitsGiven: Option[AnswersYesNo] = None,
+  benefitsGivenDetails: Option[String] = None,
+  workCarriedOut: Option[AnswersYesNo] = None,
+  workCarriedOutDetails: Option[String] = None,
+  provideDetailsOfYourLease: Option[String] = None,
   rentIncludeTradeServicesDetailsTextArea: Option[String] = None, // Added Aug 2024 for 6045/46
   rentIncludeFixtureAndFittingsDetailsTextArea: Option[String] = None, // Added Aug 2024 for 6045/46
   rentDevelopedLand: Option[AnswersYesNo] = None, // Added Aug 2024 for 6045/46
   rentDevelopedLandDetails: Option[String] = None // Added Aug 2024 for 6045/46
 )
 
-object AboutLeaseOrAgreementPartThree {
+object AboutLeaseOrAgreementPartThree:
   implicit val format: OFormat[AboutLeaseOrAgreementPartThree] = Json.format
-}

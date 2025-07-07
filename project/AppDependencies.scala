@@ -3,14 +3,14 @@ import sbt.*
 
 private object AppDependencies {
 
-  val bootstrapVersion          = "9.13.0"
+  val bootstrapVersion          = "9.14.0"
   val hmrcMongoVersion          = "2.6.0"
   val cryptoJsonVersion         = "8.2.0"
   val playLanguageVersion       = "9.1.0"
   val internalAuthClientVersion = "3.1.0"
 
   // Test dependencies
-  val scalatestPlusPlayVersion    = "7.0.1"
+  val scalatestPlusPlayVersion    = "7.0.2"
   val scalatestVersion            = "3.2.19"
   val scalaTestPlusMockitoVersion = "3.2.19.0"
   val flexMarkVersion             = "0.64.8"

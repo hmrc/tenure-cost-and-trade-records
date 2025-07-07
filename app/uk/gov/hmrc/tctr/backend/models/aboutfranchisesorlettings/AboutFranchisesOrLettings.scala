@@ -26,8 +26,6 @@ case class AboutFranchisesOrLettings(
   fromCYA: Option[Boolean] = None,
   lettings: Option[IndexedSeq[LettingPartOfProperty]] = None, // 6020 lettings
   rentalIncome: Option[IndexedSeq[IncomeRecord]] = None,
-  rentalIncomeIndex: Int = 0,
-  lettingCurrentIndex: Int = 0,
   rentalIncomeMax: Option[Boolean] = None
 )
 

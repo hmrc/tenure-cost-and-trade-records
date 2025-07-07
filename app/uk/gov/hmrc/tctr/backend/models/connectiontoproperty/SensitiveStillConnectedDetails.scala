@@ -36,7 +36,6 @@ case class SensitiveStillConnectedDetails(
   vacantPropertyStartDate: Option[LocalDate] = None,
   isAnyRentReceived: Option[AnswersYesNo] = None,
   provideContactDetails: Option[SensitiveYourContactDetails] = None,
-  lettingPartOfPropertyDetailsIndex: Int = 0,
   lettingPartOfPropertyDetails: IndexedSeq[SensitiveLettingPartOfPropertyDetails] = IndexedSeq.empty,
   checkYourAnswersConnectionToProperty: Option[CheckYourAnswersConnectionToProperty] = None
 ) extends Sensitive[StillConnectedDetails]:
@@ -53,7 +52,6 @@ case class SensitiveStillConnectedDetails(
     vacantPropertyStartDate,
     isAnyRentReceived,
     provideContactDetails.map(_.decryptedValue),
-    lettingPartOfPropertyDetailsIndex,
     lettingPartOfPropertyDetails.map(_.decryptedValue),
     checkYourAnswersConnectionToProperty
   )
@@ -75,7 +73,6 @@ object SensitiveStillConnectedDetails:
       stillConnectedDetails.vacantPropertyStartDate,
       stillConnectedDetails.isAnyRentReceived,
       stillConnectedDetails.provideContactDetails.map(SensitiveYourContactDetails(_)),
-      stillConnectedDetails.lettingPartOfPropertyDetailsIndex,
       stillConnectedDetails.lettingPartOfPropertyDetails.map(SensitiveLettingPartOfPropertyDetails(_)),
       stillConnectedDetails.checkYourAnswersConnectionToProperty
     )
