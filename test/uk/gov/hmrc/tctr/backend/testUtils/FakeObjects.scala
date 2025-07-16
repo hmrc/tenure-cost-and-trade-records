@@ -600,6 +600,7 @@ trait FakeObjects {
     rentPayableVaryOnQuantityOfBeersDetails = Some("test description"),
     howIsCurrentRentFixed = Some(HowIsCurrentRentFixed(CurrentRentFixedNewLeaseAgreement, LocalDate.now)),
     methodToFixCurrentRentDetails = Some(MethodToFixCurrentRentAgreement),
+    isRentReviewPlanned = Some(AnswerYes),
     intervalsOfRentReview = Some(IntervalsOfRentReview(Some("test description"), Some(LocalDate.now))),
     canRentBeReducedOnReview = Some(AnswerYes),
     incentivesPaymentsConditionsDetails = Some(AnswerYes),
