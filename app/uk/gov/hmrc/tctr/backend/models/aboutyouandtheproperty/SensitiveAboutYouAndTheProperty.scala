@@ -20,6 +20,7 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
+import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.CheckYourAnswersAndConfirm
 
 case class SensitiveAboutYouAndTheProperty(
   customerDetails: Option[SensitiveCustomerDetails] = None,
@@ -37,7 +38,7 @@ case class SensitiveAboutYouAndTheProperty(
   enforcementActionHasBeenTakenInformationDetails: Option[String] = None,
   tiedForGoods: Option[AnswersYesNo] = None,
   tiedForGoodsDetails: Option[TiedForGoodsInformationDetails] = None,
-  checkYourAnswersAboutTheProperty: Option[AnswersYesNo] = None,
+  checkYourAnswersAboutTheProperty: Option[CheckYourAnswersAndConfirm] = None,
   propertyDetailsString: Option[String] = None,
   charityQuestion: Option[AnswersYesNo] = None,
   tradingActivity: Option[TradingActivity] = None,

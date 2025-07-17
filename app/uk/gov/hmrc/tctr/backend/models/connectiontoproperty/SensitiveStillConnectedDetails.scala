@@ -37,7 +37,7 @@ case class SensitiveStillConnectedDetails(
   isAnyRentReceived: Option[AnswersYesNo] = None,
   provideContactDetails: Option[SensitiveYourContactDetails] = None,
   lettingPartOfPropertyDetails: IndexedSeq[SensitiveLettingPartOfPropertyDetails] = IndexedSeq.empty,
-  checkYourAnswersConnectionToProperty: Option[CheckYourAnswersConnectionToProperty] = None
+  checkYourAnswersConnectionToProperty: Option[CheckYourAnswersAndConfirm] = None
 ) extends Sensitive[StillConnectedDetails]:
 
   override def decryptedValue: StillConnectedDetails = StillConnectedDetails(

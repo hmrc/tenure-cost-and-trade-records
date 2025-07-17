@@ -34,7 +34,7 @@ case class StillConnectedDetails(
   isAnyRentReceived: Option[AnswersYesNo] = None,
   provideContactDetails: Option[YourContactDetails] = None,
   lettingPartOfPropertyDetails: IndexedSeq[LettingPartOfPropertyDetails] = IndexedSeq.empty,
-  checkYourAnswersConnectionToProperty: Option[CheckYourAnswersConnectionToProperty] = None
+  checkYourAnswersConnectionToProperty: Option[CheckYourAnswersAndConfirm] = None
 )
 
 object StillConnectedDetails:

@@ -18,6 +18,7 @@ package uk.gov.hmrc.tctr.backend.models.aboutyouandtheproperty
 
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
+import uk.gov.hmrc.tctr.backend.models.connectiontoproperty.CheckYourAnswersAndConfirm
 
 case class AboutYouAndTheProperty(
   customerDetails: Option[CustomerDetails] = None,
@@ -35,7 +36,7 @@ case class AboutYouAndTheProperty(
   enforcementActionHasBeenTakenInformationDetails: Option[String] = None,
   tiedForGoods: Option[AnswersYesNo] = None,
   tiedForGoodsDetails: Option[TiedForGoodsInformationDetails] = None,
-  checkYourAnswersAboutTheProperty: Option[AnswersYesNo] = None,
+  checkYourAnswersAboutTheProperty: Option[CheckYourAnswersAndConfirm] = None,
   propertyDetailsString: Option[String] = None, // added for 6030 - February 2024
   charityQuestion: Option[AnswersYesNo] = None, // 6030
   tradingActivity: Option[TradingActivity] = None, // 6030
