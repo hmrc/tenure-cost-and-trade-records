@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.tctr.backend.models.connectiontoproperty
 
-import play.api.libs.json.{Format, Json, OFormat}
+import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
-case class CheckYourAnswersConnectionToProperty(
-  checkYourAnswersConnectionToProperty: AnswersYesNo,
-  confirmAnswersAreCorrect: Option[Boolean] = None
+case class CheckYourAnswersAndConfirm(
+  answersChecked: AnswersYesNo,
+  answersConfirmed: Option[Boolean] = None
 )
 
-object CheckYourAnswersConnectionToProperty:
-  implicit val format: Format[CheckYourAnswersConnectionToProperty] = Json.format
+object CheckYourAnswersAndConfirm:
+  given Format[CheckYourAnswersAndConfirm] = Json.format

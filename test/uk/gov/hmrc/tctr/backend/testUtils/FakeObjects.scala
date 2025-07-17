@@ -146,7 +146,7 @@ trait FakeObjects {
     enforcementActionHasBeenTakenInformationDetails = Some("Enforcement action taken details"),
     tiedForGoods = Some(AnswerYes),
     tiedForGoodsDetails = Some(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie)),
-    checkYourAnswersAboutTheProperty = Some(AnswerYes),
+    checkYourAnswersAboutTheProperty = Some(CheckYourAnswersAndConfirm(AnswerYes, Some(true))),
     propertyDetailsString = Some("test"),
     charityQuestion = Some(AnswerYes),
     tradingActivity = Some(TradingActivity(AnswerYes, "details")),
