@@ -28,6 +28,7 @@ case class AboutLeaseOrAgreementPartTwo(
   rentPayableVaryOnQuantityOfBeersDetails: Option[String] = None,
   howIsCurrentRentFixed: Option[HowIsCurrentRentFixed] = None,
   methodToFixCurrentRentDetails: Option[MethodToFixCurrentRent] = None,
+  isRentReviewPlanned: Option[AnswersYesNo] = None,
   intervalsOfRentReview: Option[IntervalsOfRentReview] = None,
   canRentBeReducedOnReview: Option[AnswersYesNo] = None,
   incentivesPaymentsConditionsDetails: Option[AnswersYesNo] = None,
