@@ -22,7 +22,8 @@ import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model._
 import org.mongodb.scala.result.InsertOneResult
 import uk.gov.hmrc.mongo.MongoComponent
-import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
+import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.tctr.backend.config.AppConfig
 import uk.gov.hmrc.tctr.backend.models.RefNum
 
@@ -50,7 +51,8 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)
         )
       ),
       extraCodecs = Seq(
-        new ObjectIdCodec
+        new ObjectIdCodec,
+        Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
       )
     ) {
 

@@ -97,13 +97,14 @@ trait FakeObjects {
   val prefilledDateInput: LocalDate               = LocalDate.of(2022, 6, 1)
   val today: LocalDate                            = LocalDate.now
   val prefilledMonthYearInput: MonthsYearDuration = MonthsYearDuration(6, 2000)
+  val prefilledCreatedAt: Instant                 = Instant.parse("2007-12-03T10:15:30.00Z")
 
   val hundred: BigDecimal = BigDecimal(100)
 
   val prefilledTradingNameOperatingFromProperty: String = "TRADING NAME"
 
   val baseFilledConnectedSubmission: ConnectedSubmission =
-    ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token, Instant.now())
+    ConnectedSubmission(referenceNumber, forType6010, prefilledAddress, token, prefilledCreatedAt)
 
   val prefilledStillConnectedDetailsYesToAll: StillConnectedDetails = StillConnectedDetails(
     Some(AddressConnectionTypeYes),
@@ -692,7 +693,7 @@ trait FakeObjects {
         "BN12 4AX"
       ), //  Address,
       token = "dummyToken",
-      createdAt = Instant.now(),
+      createdAt = prefilledCreatedAt,
       stillConnectedDetails = Some(prefilledStillConnectedDetailsYesToAll),
       aboutYouAndTheProperty = Some(prefilledAboutYouAndTheProperty),
       aboutYouAndThePropertyPartTwo = Some(prefilledAboutYouAndThePropertyPartTwo),
@@ -716,7 +717,7 @@ trait FakeObjects {
     Some("test@test.com"),
     Some("12312312312"),
     Some("additional info"),
-    Instant.now.truncatedTo(MILLIS),
+    prefilledCreatedAt,
     false
   )
 
@@ -727,7 +728,7 @@ trait FakeObjects {
     "fullName",
     ContactDetails("john@example.com", "01234567890"),
     Option("some other information"),
-    Instant.now(),
+    prefilledCreatedAt,
     "en"
   )
 
@@ -740,7 +741,7 @@ trait FakeObjects {
       fullName = "Full Name",
       contactDetails = prefilledContactDetails,
       additionalInformation = Some("Additional information"),
-      createdAt = Instant.now(),
+      createdAt = prefilledCreatedAt,
       lang = Some("en")
     )
 }
