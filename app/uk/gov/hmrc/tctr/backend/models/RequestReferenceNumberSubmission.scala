@@ -34,5 +34,6 @@ case class RequestReferenceNumberSubmission(
 )
 
 object RequestReferenceNumberSubmission {
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
   implicit val format: OFormat[RequestReferenceNumberSubmission] = Json.format
 }

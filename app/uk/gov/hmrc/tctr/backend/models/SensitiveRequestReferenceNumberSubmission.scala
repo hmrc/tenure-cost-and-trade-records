@@ -55,6 +55,8 @@ case class SensitiveRequestReferenceNumberSubmission(
 
 object SensitiveRequestReferenceNumberSubmission {
   import uk.gov.hmrc.tctr.backend.crypto.SensitiveFormats._
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
+  
   @nowarn
   implicit def format(using crypto: MongoCrypto): Format[SensitiveRequestReferenceNumberSubmission] = mongoEntity {
     Json.format
