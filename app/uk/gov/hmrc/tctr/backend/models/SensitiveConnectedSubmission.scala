@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.tctr.backend.models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure.*
 import uk.gov.hmrc.tctr.backend.models.aboutfranchisesorlettings.AboutFranchisesOrLettings
@@ -84,7 +85,7 @@ case class SensitiveConnectedSubmission(
   )
 
 object SensitiveConnectedSubmission:
-
+  implicit val formatInstant: Format[Instant]                                           = MongoJavatimeFormats.instantFormat
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveConnectedSubmission] = Json.format
 
   def apply(connectedSubmission: ConnectedSubmission): SensitiveConnectedSubmission = SensitiveConnectedSubmission(

@@ -17,7 +17,8 @@
 package uk.gov.hmrc.tctr.backend.models
 
 import org.mongodb.scala.bson.ObjectId
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, Json, OFormat}
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 import java.time.Instant
 
@@ -25,6 +26,6 @@ case class RefNum(referenceNumber: String, createdAt: Instant, _id: Option[Objec
 
 object RefNum {
   import uk.gov.hmrc.mongo.play.json.formats.MongoFormats.Implicits._
-
+  implicit val formatInstant: Format[Instant] = MongoJavatimeFormats.instantFormat
   implicit val format: OFormat[RefNum] = Json.format
 }
