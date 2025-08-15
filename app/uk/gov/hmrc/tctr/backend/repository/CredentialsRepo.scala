@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.mongodb.scala.bson.{BsonDateTime, BsonDocument, Document}
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model._
 import org.mongodb.scala.result.{DeleteResult, InsertManyResult}
-import org.mongodb.scala.{BulkWriteResult, MongoBulkWriteException, ObservableFuture, SingleObservableFuture, ToSingleObservablePublisher}
+import org.mongodb.scala.{BulkWriteResult, MongoBulkWriteException, ToSingleObservablePublisher}
 import play.api.libs.json._
 import play.api.{Configuration, Logging}
 import uk.gov.hmrc.mongo.MongoComponent

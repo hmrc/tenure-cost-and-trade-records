@@ -21,6 +21,7 @@ import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutLeaseOrAgreementPartThree(
   tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
+  exceededMaxTradeServices: Option[Boolean] = None,
   servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
   throughputAffectsRent: Option[ThroughputAffectsRent] = None,
   isVATPayableForWholeProperty: Option[AnswersYesNo] = None,
