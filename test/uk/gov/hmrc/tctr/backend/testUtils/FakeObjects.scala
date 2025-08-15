@@ -42,7 +42,6 @@ import uk.gov.hmrc.tctr.backend.models.lettingHistory.*
 import uk.gov.hmrc.tctr.backend.models.requestReferenceNumber.*
 import uk.gov.hmrc.tctr.backend.schema.Address
 
-import java.time.temporal.ChronoUnit.MILLIS
 import java.time.{Instant, LocalDate}
 
 trait FakeObjects {
@@ -617,6 +616,7 @@ trait FakeObjects {
 
   val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
     tradeServices = IndexedSeq(TradeServices("description")),
+    exceededMaxTradeServices = false,
     servicesPaid = IndexedSeq(ServicesPaid("description")),
     paymentForTradeServices = AnswerYes,
     provideDetailsOfYourLease = None,
