@@ -18,9 +18,9 @@ package uk.gov.hmrc.tctr.backend.models.aboutYourLeaseOrTenure
 
 import play.api.libs.json.{Json, OFormat}
 
-case class TradeServices(
+case class TradeService(
   details: String
 )
 
-object TradeServices:
-  implicit val format: OFormat[TradeServices] = Json.format
+object TradeService:
+  implicit val format: OFormat[TradeService] = Json.format
