@@ -615,9 +615,10 @@ trait FakeObjects {
   )
 
   val prefilledAboutLeaseOrAgreementPartThree: AboutLeaseOrAgreementPartThree = AboutLeaseOrAgreementPartThree(
-    tradeServices = IndexedSeq(TradeServices("description")),
+    tradeServices = IndexedSeq(TradeService("description")),
     exceededMaxTradeServices = false,
     servicesPaid = IndexedSeq(ServicesPaid("description")),
+    exceededMaxServicesPaid = false,
     paymentForTradeServices = AnswerYes,
     provideDetailsOfYourLease = None,
     throughputAffectsRent = ThroughputAffectsRent(AnswerYes, "Throughput affects rent details"),

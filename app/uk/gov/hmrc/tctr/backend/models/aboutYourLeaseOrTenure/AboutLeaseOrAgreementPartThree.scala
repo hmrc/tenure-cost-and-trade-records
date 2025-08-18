@@ -20,9 +20,10 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.tctr.backend.models.common.AnswersYesNo
 
 case class AboutLeaseOrAgreementPartThree(
-  tradeServices: IndexedSeq[TradeServices] = IndexedSeq.empty,
+  tradeServices: IndexedSeq[TradeService] = IndexedSeq.empty,
   exceededMaxTradeServices: Option[Boolean] = None,
   servicesPaid: IndexedSeq[ServicesPaid] = IndexedSeq.empty,
+  exceededMaxServicesPaid: Option[Boolean] = None,
   throughputAffectsRent: Option[ThroughputAffectsRent] = None,
   isVATPayableForWholeProperty: Option[AnswersYesNo] = None,
   isRentUnderReview: Option[AnswersYesNo] = None,
