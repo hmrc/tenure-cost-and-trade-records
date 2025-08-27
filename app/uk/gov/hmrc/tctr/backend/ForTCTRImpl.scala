@@ -19,9 +19,9 @@ package uk.gov.hmrc.tctr.backend
 import org.apache.pekko.actor.ActorSystem
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
-import uk.gov.hmrc.tctr.backend.infrastructure.{RegularSchedule, TestDataImporter}
-import uk.gov.hmrc.tctr.backend.repository._
-import uk.gov.hmrc.tctr.backend.submissionExport._
+import uk.gov.hmrc.tctr.backend.infrastructure.{DataCleaner, RegularSchedule, TestDataImporter}
+import uk.gov.hmrc.tctr.backend.repository.*
+import uk.gov.hmrc.tctr.backend.submissionExport.*
 
 import java.time.Clock
 import javax.inject.{Inject, Singleton}
@@ -39,7 +39,8 @@ class ForTCTRImpl @Inject() (
   requestReferenceNumberMongoRepository: RequestReferenceNumberMongoRepository,
   testDataImporter: TestDataImporter,
   implicit val ec: ExecutionContext,
-  mongoLockRepository: MongoLockRepository
+  mongoLockRepository: MongoLockRepository,
+  dataCleaner: DataCleaner,
 ) {
 
   import tctrConfig._
@@ -70,4 +71,7 @@ class ForTCTRImpl @Inject() (
 
   if importTestData then testDataImporter.importValidations(credentialsMongoRepo)
 
+
+  // Apply data cleaning to fix various data issues
+  dataCleaner.`BST-140686`()
 }
