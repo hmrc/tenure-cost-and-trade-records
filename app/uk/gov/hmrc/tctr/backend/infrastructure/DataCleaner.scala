@@ -29,31 +29,33 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.*
 
 @Singleton
-class DataCleaner @Inject()(
+class DataCleaner @Inject() (
   mongoLockRepository: MongoLockRepository,
   submittedMongoRepo: SubmittedMongoRepo
-
-)(using ec: ExecutionContext) extends Logging:
+)(using ec: ExecutionContext)
+    extends Logging:
 
   /**
-   * Clean the `submitted` collection so that all `createdAt` properties which were wrongly
-   * stored as strings are finally converted to dates. This data cleaning guarantees that the
-   * MongoDB TTL index will work correctly.
-   */
-  def `BST-140686`() = {
+    * Clean the `submitted` collection so that all `createdAt` properties which were wrongly
+    * stored as strings are finally converted to dates. This data cleaning guarantees that the
+    * MongoDB TTL index will work correctly.
+    */
+  def `BST-140686`(): Future[Option[Unit]] =
     withLock {
-      submittedMongoRepo.collection.updateMany(
-        filter = Filters.`type`("createdAt", BsonType.STRING),
-        update = Seq(
-          Document("""{ $set: { createdAt: { $toDate: "$createdAt" } } }""")
+      submittedMongoRepo.collection
+        .updateMany(
+          filter = Filters.`type`("createdAt", BsonType.STRING),
+          update = Seq(
+            Document("""{ $set: { createdAt: { $toDate: "$createdAt" } } }""")
+          )
         )
-      )
-      .toFuture()
-      .map { result =>
-        logger.info(s"Cleaned 'submitted' collection: ${result.getModifiedCount} documents had their createdAt converted to dates")
-      }
+        .toFuture()
+        .map { result =>
+          logger.info(
+            s"Cleaned 'submitted' collection: ${result.getModifiedCount} documents had their createdAt converted to dates"
+          )
+        }
     }
-  }
 
   private def withLock[T](body: => Future[T]) =
     LockService(mongoLockRepository, "DataCleaner", 1.hour).withLock(body)
