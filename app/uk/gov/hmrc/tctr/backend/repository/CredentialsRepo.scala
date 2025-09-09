@@ -125,7 +125,7 @@ class CredentialsMongoRepo @Inject() (mongo: MongoComponent, configuration: Conf
     def toBson(doc: JsObject): BsonDocument = {
       val withLastModified = doc + ("LastModified" -> JsString(Instant.now().toString))
       val setData          = BsonDocument("$set" -> BsonDocument(Json.stringify(withLastModified)))
-      setData.append("$setOnInsert", BsonDocument("createdAt" -> BsonDateTime(Instant.now().toEpochMilli)))
+      setData.append("$set", BsonDocument("createdAt" -> BsonDateTime(Instant.now().toEpochMilli)))
     }
 
     val bulkOps: Seq[WriteModel[? <: FORCredentials]] = credentialsSeq.map { cred =>

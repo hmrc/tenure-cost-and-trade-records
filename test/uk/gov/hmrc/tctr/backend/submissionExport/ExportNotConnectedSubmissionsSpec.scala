@@ -32,7 +32,7 @@ import uk.gov.hmrc.tctr.backend.repository.NotConnectedMongoRepository
 import uk.gov.hmrc.tctr.backend.testUtils.{ScheduleThatSchedulesImmediately5Times, SubmissionBuilder}
 
 import java.time.Clock
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.language.postfixOps
 
@@ -71,7 +71,9 @@ class ExportNotConnectedSubmissionsSpec
 
       "It deletes each submission so that it is not submitted again" in
         submissions.take(batchSize).foreach { s =>
-          verify(repo).removeById(same(s.id))
+          val id = s.id
+          println(s"$id $batchSize")
+          verify(repo).removeById(same(id))
         }
     }
   }

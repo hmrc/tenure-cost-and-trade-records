@@ -40,7 +40,7 @@ class ForTCTRImpl @Inject() (
   testDataImporter: TestDataImporter,
   implicit val ec: ExecutionContext,
   mongoLockRepository: MongoLockRepository,
-  dataCleaner: DataCleaner,
+  dataCleaner: DataCleaner
 ) {
 
   import tctrConfig._
@@ -70,7 +70,6 @@ class ForTCTRImpl @Inject() (
     ).start()
 
   if importTestData then testDataImporter.importValidations(credentialsMongoRepo)
-
 
   // Apply data cleaning to fix various data issues
   dataCleaner.`BST-140686`()
