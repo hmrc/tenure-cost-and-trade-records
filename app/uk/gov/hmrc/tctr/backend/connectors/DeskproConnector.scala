@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ class HmrcDeskproConnector @Inject() (
 
   override def createTicket(ticket: DeskproTicket): Future[Long] = {
 
-    implicit val hc = HeaderCarrier(requestId = Some(RequestId(ticket.sessionId)))
+    given HeaderCarrier = HeaderCarrier(requestId = Some(RequestId(ticket.sessionId)))
 
     httpClientV2
       .post(deskproURL)

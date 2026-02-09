@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package uk.gov.hmrc.tctr.backend.controllers
 
 import play.api.libs.json.{Format, Json}
-import play.api.mvc.ControllerComponents
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderNames.trueClientIp
 import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
@@ -26,11 +26,11 @@ import uk.gov.hmrc.tctr.backend.infrastructure.Clock
 import uk.gov.hmrc.tctr.backend.models.BillingAuthority
 import uk.gov.hmrc.tctr.backend.repository.{CredentialsMongoRepo, SubmittedMongoRepo}
 import uk.gov.hmrc.tctr.backend.schema.Address
-import uk.gov.hmrc.tctr.backend.security._
+import uk.gov.hmrc.tctr.backend.security.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.language.postfixOps
 
 @Singleton
@@ -46,12 +46,12 @@ class AuthController @Inject() (
     extends BackendController(cc)
     with InternalAuthAccess {
 
-  val credsRepo             = credentialsMongoRepo
-  val submittedRepo         = submittedMongoRepo
-  val loginsRepo            = failedLoginsMongoRepo
-  lazy val enableDuplicates = tctrConfig.enableDuplicate
+  private val credsRepo: CredentialsMongoRepo = credentialsMongoRepo
+  private val submittedRepo: SubmittedMongoRepo = submittedMongoRepo
+  private val loginsRepo: FailedLoginsMongoRepo = failedLoginsMongoRepo
+  private val enableDuplicates: Boolean = tctrConfig.enableDuplicate
 
-  lazy val verifier = {
+  private val verifier: IPBlockingCredentialsVerifier = {
     // hack required for override parameters on MDTP - it parses them all as strings
     val authReq          = tctrConfig.authenticationRequired
     val loginAttempts    = tctrConfig.authMaxFailedLogin
@@ -63,7 +63,7 @@ class AuthController @Inject() (
     new IPBlockingCredentialsVerifier(credsRepo, submittedRepo, loginsRepo, authReq, config, clock, enableDuplicates)
   }
 
-  def authenticate =
+  def authenticate: Action[Credentials] =
     auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[Credentials]) { implicit request =>
       val credentials = request.body
       val ip          = request.headers.get(trueClientIp)
@@ -86,7 +86,7 @@ class AuthController @Inject() (
       }
     }
 
-  def retrieveFORType(referenceNum: String) =
+  def retrieveFORType(referenceNum: String): Action[AnyContent] =
     auth.authorizedAction[Unit](permission).compose(Action).async {
       credsRepo.findById(referenceNum).map {
         case Some(credentials) => Ok(Json.toJson(ValidForTypeResponse(credentials.forType)))

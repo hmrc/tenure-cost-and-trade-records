@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,18 @@ package uk.gov.hmrc.tctr.backend.util
 
 import play.api.i18n.Lang
 
+import java.time.*
 import java.time.format.DateTimeFormatter
-import java.time._
 import java.util.{Date, Locale}
 
 /**
   * @author Yuriy Tumakha
   */
-object DateUtil {
+object DateUtil:
 
   val ukTimezone: ZoneId = ZoneId.of("Europe/London")
   val en: Lang           = Lang(Locale.UK)
-  val cy: Lang           = Lang(new Locale("cy")) // TODO: use Locale.of when JDK21 become available in sm2 on Jenkins
+  val cy: Lang           = Lang(Locale.of("cy"))
 
   val shortDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.UK)
   val timeFormatter: DateTimeFormatter      = DateTimeFormatter.ofPattern("HH:mm", Locale.UK)
@@ -44,5 +44,3 @@ object DateUtil {
     case "cy" => cy
     case _    => en
   }
-
-}

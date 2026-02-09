@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,15 @@ import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult.acknowledged
 import org.apache.pekko.util.Timeout
 import org.bson.BsonBoolean.TRUE
+import play.api.Application
 import play.api.http.Status.{CONFLICT, CREATED}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc._
+import play.api.mvc.*
 import play.api.test.Helpers.{POST, status}
-import play.api.test._
-import uk.gov.hmrc.internalauth.client._
+import play.api.test.*
+import uk.gov.hmrc.internalauth.client.*
 import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
 import uk.gov.hmrc.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.tctr.backend.connectors.EmailConnector
@@ -49,13 +50,13 @@ class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec {
   protected val backendAuthComponentsStub: BackendAuthComponents =
     BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), Implicits.global)
 
-  val mockRepository         = mock[NotConnectedRepository]
-  val mockSubmittedMongoRepo = mock[SubmittedMongoRepo]
-  val mockEmailConnector     = mock[EmailConnector]
-  val mockMetricsHandler     = mock[MetricsHandler]
-  val meter                  = mock[Meter]
+  private val mockRepository         = mock[NotConnectedRepository]
+  private val mockSubmittedMongoRepo = mock[SubmittedMongoRepo]
+  private val mockEmailConnector     = mock[EmailConnector]
+  private val mockMetricsHandler     = mock[MetricsHandler]
+  private val meter                  = mock[Meter]
   // Stub a submission
-  val submission             = NotConnectedSubmissionForm(
+  private val submission             = NotConnectedSubmissionForm(
     "2222",
     "FOR6010",
     Address("10", Some("BarringtonRoad road"), "town", None, "BN12 4AX"),
@@ -67,7 +68,7 @@ class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec {
     false
   )
 
-  override def fakeApplication() = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .overrides(
       bind[NotConnectedRepository].toInstance(mockRepository),
       bind[SubmittedMongoRepo].toInstance(mockSubmittedMongoRepo),

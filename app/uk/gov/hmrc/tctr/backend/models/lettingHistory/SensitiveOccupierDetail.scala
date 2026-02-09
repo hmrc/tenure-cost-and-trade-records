@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package uk.gov.hmrc.tctr.backend.models.lettingHistory
 import uk.gov.hmrc.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
+
+import scala.language.implicitConversions
 
 case class SensitiveOccupierDetail(
   name: SensitiveString,

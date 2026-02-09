@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package uk.gov.hmrc.tctr.backend.controllers
 
 import play.api.libs.json.Json
-import play.api.mvc.ControllerComponents
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.internalauth.client.BackendAuthComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.tctr.backend.repository.SubmissionDraftRepo
@@ -38,21 +38,21 @@ class SaveAsDraftController @Inject() (
 ) extends BackendController(cc)
     with InternalAuthAccess {
 
-  def get(referenceNumber: String) = auth.authorizedAction[Unit](permission).compose(Action).async {
+  def get(referenceNumber: String): Action[AnyContent] = auth.authorizedAction[Unit](permission).compose(Action).async {
     repo.find(referenceNumber) map {
       case Some(submissionDraftJson) => Ok(submissionDraftJson)
       case None                      => NotFound(Json.obj("status" -> "NotFound"))
     }
   }
 
-  def put(referenceNumber: String) = auth.authorizedAction[Unit](permission).compose(Action).async { request =>
+  def put(referenceNumber: String): Action[AnyContent] = auth.authorizedAction[Unit](permission).compose(Action).async { request =>
     request.body.asJson match {
       case Some(submissionDraftJson) => repo.save(referenceNumber, submissionDraftJson) map { _ => Created }
       case _                         => BadRequest(Json.obj("statusCode" -> BAD_REQUEST, "message" -> "JSON body is expected in request"))
     }
   }
 
-  def delete(referenceNumber: String) = auth.authorizedAction[Unit](permission).compose(Action).async {
+  def delete(referenceNumber: String): Action[AnyContent] = auth.authorizedAction[Unit](permission).compose(Action).async {
     repo.delete(referenceNumber) map { res => Ok(Json.obj("deletedCount" -> res.getDeletedCount)) }
   }
 

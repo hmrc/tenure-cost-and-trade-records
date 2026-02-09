@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,35 +21,31 @@ import play.api.Configuration
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AppConfig @Inject() (runModeConfiguration: Configuration) {
+class AppConfig @Inject() (configuration: Configuration):
 
-  lazy val authenticationRequired  = runModeConfiguration.get[Boolean]("authenticationRequired")
-  lazy val submissionExportEnabled = runModeConfiguration.get[Boolean]("submissionExport.enabled")
-  lazy val exportBatchSize         = runModeConfiguration.get[Int]("submissionExport.batchSize")
-  lazy val testAccountPrefix       = runModeConfiguration.get[String]("submissionExport.testAccountPrefix")
-  lazy val retryWindow             = runModeConfiguration.get[Int]("submissionExport.retryWindowHours")
-  lazy val enableDuplicate         = runModeConfiguration.get[Boolean]("submissionExport.enableDuplicateSubmissions")
-  lazy val exportFrequency         = runModeConfiguration.get[Int]("submissionExport.frequencySeconds")
-  lazy val enablePublishing        = runModeConfiguration.get[Boolean]("submissionExport.publishingEnabled")
+  val authenticationRequired: Boolean  = configuration.get[Boolean]("authenticationRequired")
+  val submissionExportEnabled: Boolean = configuration.get[Boolean]("submissionExport.enabled")
+  val exportBatchSize: Int             = configuration.get[Int]("submissionExport.batchSize")
+  val testAccountPrefix: String        = configuration.get[String]("submissionExport.testAccountPrefix")
+  val retryWindow: Int                 = configuration.get[Int]("submissionExport.retryWindowHours")
+  val enableDuplicate: Boolean         = configuration.get[Boolean]("submissionExport.enableDuplicateSubmissions")
+  val exportFrequency: Int             = configuration.get[Int]("submissionExport.frequencySeconds")
+  val enablePublishing: Boolean        = configuration.get[Boolean]("submissionExport.publishingEnabled")
 
-  lazy val requestRefNumExportEnabled     =
-    runModeConfiguration.get[Boolean]("RequestReferenceNumberSubmissionExport.enabled")
-  lazy val requestRefNumExportBatchSize   =
-    runModeConfiguration.get[Int]("RequestReferenceNumberSubmissionExport.batchSize")
-  lazy val requestRefNumExportRetryWindow =
-    runModeConfiguration.get[Int]("RequestReferenceNumberSubmissionExport.retryWindowHours")
+  val requestRefNumExportEnabled: Boolean = configuration.get[Boolean]("RequestReferenceNumberSubmissionExport.enabled")
+  val requestRefNumExportBatchSize: Int   = configuration.get[Int]("RequestReferenceNumberSubmissionExport.batchSize")
+  val requestRefNumExportRetryWindow: Int =
+    configuration.get[Int]("RequestReferenceNumberSubmissionExport.retryWindowHours")
 
-  lazy val importTestData = runModeConfiguration.get[Boolean]("validationImport.importTestData")
+  val importTestData: Boolean = configuration.get[Boolean]("validationImport.importTestData")
 
-  lazy val authMaxFailedLogin = runModeConfiguration.get[Int]("authentication.maxFailedLogins")
-  lazy val lockoutWindow      = runModeConfiguration.get[Int]("authentication.lockoutDurationHours")
-  lazy val sessionWindow      = runModeConfiguration.get[Int]("authentication.loginSessionDurationHours")
-  lazy val ipLockoutEnabled   = runModeConfiguration.get[Boolean]("authentication.ipLockoutEnabled")
-  lazy val voaIPAddress       = runModeConfiguration.get[String]("authentication.voaIPAddress")
+  val authMaxFailedLogin: Int   = configuration.get[Int]("authentication.maxFailedLogins")
+  val lockoutWindow: Int        = configuration.get[Int]("authentication.lockoutDurationHours")
+  val sessionWindow: Int        = configuration.get[Int]("authentication.loginSessionDurationHours")
+  val ipLockoutEnabled: Boolean = configuration.get[Boolean]("authentication.ipLockoutEnabled")
+  val voaIPAddress: String      = configuration.get[String]("authentication.voaIPAddress")
 
-  lazy val notConnectedSubmissionTTL = runModeConfiguration.get[Long]("notConnectedSubmissionTTL")
-  lazy val connectedSubmissionTTL    = runModeConfiguration.get[Long]("connectedSubmissionTTL")
-  lazy val requestReferenceNumberTTL = runModeConfiguration.get[Long]("requestReferenceNumberTTL")
-  lazy val submittedTTL              = runModeConfiguration.get[Long]("submittedTTL")
-
-}
+  val notConnectedSubmissionTTL: Long = configuration.get[Long]("notConnectedSubmissionTTL")
+  val connectedSubmissionTTL: Long    = configuration.get[Long]("connectedSubmissionTTL")
+  val requestReferenceNumberTTL: Long = configuration.get[Long]("requestReferenceNumberTTL")
+  val submittedTTL: Long              = configuration.get[Long]("submittedTTL")

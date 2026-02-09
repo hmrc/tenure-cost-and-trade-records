@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ class ExportRequestReferenceNumberSubmissionsVOA @Inject() (
   def isTooLongInQueue(submission: RequestReferenceNumberSubmission): Boolean =
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.requestRefNumExportRetryWindow, ChronoUnit.HOURS))
 
-  private def auditSubmissionEvent(eventType: String, submission: RequestReferenceNumberSubmission) =
+  private def auditSubmissionEvent(eventType: String, submission: RequestReferenceNumberSubmission): Unit =
     audit(
       eventType,
       Json.obj(

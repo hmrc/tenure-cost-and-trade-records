@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.tctr.backend.security
 
-import org.scalatest.prop.TableDrivenPropertyChecks
+import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1}
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.tctr.backend.base.AnyFlatAppSpec
 import uk.gov.hmrc.tctr.backend.config.AppConfig
-import uk.gov.hmrc.tctr.backend.infrastructure._
-import uk.gov.hmrc.tctr.backend.testUtils._
+import uk.gov.hmrc.tctr.backend.infrastructure.*
+import uk.gov.hmrc.tctr.backend.testUtils.*
 import uk.gov.hmrc.tctr.backend.util.DateUtil.nowInUK
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.language.postfixOps
 
 class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChecks {
@@ -115,13 +115,13 @@ class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChe
 
   object TestData {
 
-    val loginAttemptLengths = Table("attempts", 1, 2, 5, 10, 20, 100)
+    val loginAttemptLengths: TableFor1[Int] = Table("attempts", 1, 2, 5, 10, 20, 100)
     val refNum              = "1234567358"
     val ip                  = "192.168.44.66"
     val postcode            = "CF32 4RT"
     val voaIP               = "192.168.44.67"
 
-    def verifierWith(config: VerifierConfig, clock: Clock) = {
+    def verifierWith(config: VerifierConfig, clock: Clock): IPBlockingCredentialsVerifier = {
       import scala.concurrent.ExecutionContext.Implicits.global
       val emptyCreds     = new StubCredentialsRepository()
       val emptySubmitted = new StubSubmittedRepository(mongo, appConfig)

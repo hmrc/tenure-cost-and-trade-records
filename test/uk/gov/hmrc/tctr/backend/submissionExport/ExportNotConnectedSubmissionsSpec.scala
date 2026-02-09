@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import org.apache.pekko.testkit.{ImplicitSender, TestKit}
 import com.mongodb.client.result.DeleteResult
 import com.typesafe.config.ConfigFactory
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.compatible.Assertion
 import org.scalatest.matchers.should
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.Configuration
@@ -100,7 +101,7 @@ class StubDeskproConnector extends DeskproConnector with should.Matchers {
     Future.successful(10)
   }
 
-  def verifyReceived(s: Seq[DeskproTicket]) =
+  def verifyReceived(s: Seq[DeskproTicket]): Assertion =
     assert(receivedTickets === s)
 
 }
