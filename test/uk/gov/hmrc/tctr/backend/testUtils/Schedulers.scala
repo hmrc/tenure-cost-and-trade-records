@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import scala.language.postfixOps
 
 class ScheduleThatSchedulesImmediately5Times extends Schedule {
   var times              = 1
-  def timeUntilNextRun() =
+  def timeUntilNextRun(): FiniteDuration =
     if times == 5 then 30 seconds
     else
       times = times + 1
@@ -33,7 +33,7 @@ class ScheduleThatSchedulesImmediately5Times extends Schedule {
 class ScheduleOnce extends Schedule {
   var times = 1
 
-  def timeUntilNextRun() =
+  def timeUntilNextRun(): FiniteDuration =
     if times == 1 then
       times = times + 1
       0 seconds
@@ -43,7 +43,7 @@ class ScheduleOnce extends Schedule {
 case class ScheduleNTimes(n: Int) extends Schedule {
   var times = 1
 
-  def timeUntilNextRun() =
+  def timeUntilNextRun(): FiniteDuration =
     if times <= n then
       times = times + 1
       0 seconds

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.time.Instant
 
 object SubmissionBuilder {
 
-  def createNotConnectedSubmission(n: Int) = {
+  def createNotConnectedSubmission(n: Int): NotConnectedSubmission = {
     val submissionSuffix = n match {
       case n: Int if n < 9  => s"00$n"
       case n: Int if n < 99 => s"0$n"

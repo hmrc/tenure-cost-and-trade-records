@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, OFormat}
 import java.time.YearMonth
 
 case class MonthsYearDuration(months: Int, years: Int) {
-  def toYearMonth = YearMonth.of(years, months)
+  def toYearMonth: YearMonth = YearMonth.of(years, months)
 }
 
 object MonthsYearDuration {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ class NotConnectedRepositorySpec
 
   def mongo: MongoComponent = inject[MongoComponent]
 
-  def repository = inject[NotConnectedMongoRepository]
+  private def repository = inject[NotConnectedMongoRepository]
 
   "NotConnectedRepository" should {
     "save NotConnectedSubmission to mongo" in {
@@ -87,7 +87,7 @@ class NotConnectedRepositorySpec
 
   }
 
-  val testingDate = Instant.ofEpochMilli(Instant.now.toEpochMilli)
+  private val testingDate = Instant.ofEpochMilli(Instant.now.toEpochMilli)
 
   def aSubmission(): NotConnectedSubmission = NotConnectedSubmission(
     "9999000111",

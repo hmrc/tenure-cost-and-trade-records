@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,5 +30,5 @@ class MockMetrics @Inject() (metric: MetricRegistry) extends MetricsHandler(metr
   //  override lazy val exportedSubmissions = meter
   //  override lazy val rejectedExports = meter
   //  override lazy val queuedSubmissions = new Counter()
-  override lazy val importedCredentials = meter
+  override lazy val importedCredentials: Meter = meter
 }

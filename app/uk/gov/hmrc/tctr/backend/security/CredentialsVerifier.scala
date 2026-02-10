@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ class IPBlockingCredentialsVerifier @Inject() (
   implicit def toDuration(d: Instant): Duration = d.toEpochMilli millis
 
   implicit object DateOrdering extends Ordering[Instant] {
-    def compare(a: Instant, b: Instant) = if a.isBefore(b) then -1 else if (b.isBefore(a)) 1 else 0
+    def compare(a: Instant, b: Instant): Int = if a.isBefore(b) then -1 else if (b.isBefore(a)) 1 else 0
   }
 
   def verify(referenceNum: String, postcode: String, ipAddress: Option[String]): Future[VerificationResult] =

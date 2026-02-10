@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ class NotConnectedSubmissionExporterProvider @Inject() (
   implicit val ec: ExecutionContext
 ) extends Provider[NotConnectedSubmissionExporter] {
 
-  val batchSize = configuration
+  private val batchSize = configuration
     .getOptional[Int]("notConnectedSubmissionExport.batchSize")
     .getOrElse(throw new RuntimeException("Missing configuration for notConnectedSubmissionExport.batchSize"))
 

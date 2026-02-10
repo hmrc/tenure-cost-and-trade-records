@@ -3,10 +3,10 @@ import sbt.*
 
 private object AppDependencies {
 
-  val bootstrapVersion          = "10.1.0"
-  val hmrcMongoVersion          = "2.7.0"
-  val cryptoJsonVersion         = "8.3.0"
-  val playLanguageVersion       = "9.1.0"
+  val bootstrapVersion          = "10.5.0"
+  val hmrcMongoVersion          = "2.12.0"
+  val cryptoJsonVersion         = "8.4.0"
+  val playLanguageVersion       = "9.5.0"
   val internalAuthClientVersion = "3.1.0"
 
   // Test dependencies
@@ -33,7 +33,7 @@ private object AppDependencies {
   )
 
   private val testOnly = Seq(
-    "org.scalatestplus" %% "mockito-5-12" % scalaTestPlusMockitoVersion % Test
+    "org.scalatestplus" %% "mockito-5-21" % scalaTestPlusMockitoVersion % Test
   )
 
   val appDependencies: Seq[ModuleID] = compile ++ commonTests ++ testOnly
