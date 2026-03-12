@@ -21,8 +21,8 @@ private object AppDependencies {
   )
 
   private val commonTests = Seq(
-    "uk.gov.hmrc"            %% "bootstrap-test-play-30" % bootstrapVersion         % Test,
-    "org.apache.pekko"       %% "pekko-testkit"          % PlayVersion.pekkoVersion % Test
+    "uk.gov.hmrc"      %% "bootstrap-test-play-30" % bootstrapVersion         % Test,
+    "org.apache.pekko" %% "pekko-testkit"          % PlayVersion.pekkoVersion % Test
   )
 
   private val testOnly = Seq(

@@ -19,7 +19,7 @@ val microservice = Project(appName, file("."))
     PlayKeys.playDefaultPort := defaultPort,
     libraryDependencies ++= AppDependencies.appDependencies,
     Test / fork := true, // must be true for Service Provider Interface
-    buildInfoPackage := "uk.gov.hmrc.tctr.backend",
+    buildInfoPackage := "uk.gov.hmrc.vo.tctr.backend",
     maintainer := "voa.service.optimisation@digital.hmrc.gov.uk",
     scalacOptions += "-Wconf:src=routes/.*:s",
     scalacOptions += "-feature",
