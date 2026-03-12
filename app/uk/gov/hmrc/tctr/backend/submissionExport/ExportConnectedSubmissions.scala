@@ -28,35 +28,34 @@ import java.time.{Clock, Instant}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-@ImplementedBy(classOf[ExportConnectedSubmissionsVOA])
-trait ExportConnectedSubmissions {
-  def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit]
-}
+@ImplementedBy(classOf[ExportConnectedSubmissionsVO])
+trait ExportConnectedSubmissions:
+  def exportNow(size: Int)(using ec: ExecutionContext): Future[Unit]
 
 @Singleton
-class ExportConnectedSubmissionsVOA @Inject() (
+class ExportConnectedSubmissionsVO @Inject() (
   connectedMongoRepository: ConnectedMongoRepository,
   //// TODO Add email connector here
   clock: Clock,
   audit: ForTCTRAudit,
   forConfig: AppConfig
 ) extends ExportConnectedSubmissions
-    with Logging {
+    with Logging:
 
-  override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
+  override def exportNow(size: Int)(using ec: ExecutionContext): Future[Unit] =
     connectedMongoRepository.getSubmissions(size).flatMap { submissions =>
       if submissions.nonEmpty then logger.warn(s"Found ${submissions.length} connected submissions to export")
       processSequentially(submissions)
       Future.unit
     }
 
-  def processSequentially(submission: Seq[ConnectedSubmission])(implicit ec: ExecutionContext): Future[Unit] =
+  def processSequentially(submission: Seq[ConnectedSubmission])(using ec: ExecutionContext): Future[Unit] =
     if submission.isEmpty then Future.unit
     else processNext(submission.head).flatMap(_ => processSequentially(submission.tail))
 
   private def processNext(
     submission: ConnectedSubmission
-  )(implicit executionContext: ExecutionContext): Future[Unit] =
+  )(using executionContext: ExecutionContext): Future[Unit] =
     if isTooLongInQueue(submission) then
       logger.warn(
         s"Unable to export connected journey, ref: ${submission.referenceNumber}. MANUAL INTERVENTION REQUIRED"
@@ -65,10 +64,10 @@ class ExportConnectedSubmissionsVOA @Inject() (
       connectedMongoRepository.removeById(submission.referenceNumber).map(_ => ())
       Future.unit
     else
-      logger.info(s"Connected submission exported to VOA, submissionID: ${submission.referenceNumber} NOT IMPLEMENTED")
-      // auditEvent - "ConnectedSubmissionToVOA" - field statusCode = 200, responseMessage = unmodified response body
+      logger.info(s"Connected submission exported to VO, submissionID: ${submission.referenceNumber} NOT IMPLEMENTED")
+      // auditEvent - "ConnectedSubmissionToVO" - field statusCode = 200, responseMessage = unmodified response body
       // TODO Add email connector here - not added as not required for this PR
-      // auditEvent - "ConnectedSubmissionToVOA" - field statusCode = 500 etc, responseMessage = unmodified response body
+      // auditEvent - "ConnectedSubmissionToVO" - field statusCode = 500 etc, responseMessage = unmodified response body
       Future.unit
 
   def isTooLongInQueue(submission: ConnectedSubmission): Boolean =
@@ -84,5 +83,3 @@ class ExportConnectedSubmissionsVOA @Inject() (
       ),
       Map.empty[String, String]
     )
-
-}

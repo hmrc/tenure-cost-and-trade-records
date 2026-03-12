@@ -25,11 +25,11 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.tctr.backend.base.AppSuiteBase
 import uk.gov.hmrc.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import uk.gov.hmrc.tctr.backend.models.RequestReferenceNumberSubmission
-import uk.gov.hmrc.tctr.backend.repository._
+import uk.gov.hmrc.tctr.backend.repository.*
 import uk.gov.hmrc.tctr.backend.testUtils.ScheduleThatSchedulesImmediately5Times
 
 import java.time.{Clock, Instant}
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.language.postfixOps
 
@@ -39,14 +39,14 @@ class ExportRequestReferenceNumberSubmissionSpec
     with AnyWordSpecLike
     with BeforeAndAfterAll
     with GuiceOneAppPerSuite
-    with AppSuiteBase {
+    with AppSuiteBase:
 
   def audit: ForTCTRAudit      = inject[ForTCTRAudit]
   def configuration: AppConfig = inject[AppConfig]
 
-  implicit val ec: ExecutionContext = system.dispatcher
+  given ExecutionContext = system.dispatcher
 
-  import TestData._
+  import TestData.*
 
   "Given there are submissions to be exported" when {
     val submissions = (1 to 200).map(createRequestRefNumSubmission).toList
@@ -60,7 +60,7 @@ class ExportRequestReferenceNumberSubmissionSpec
     "the exporter is told to export the latest submission it does the following before publishing a completed event" should {
       system.eventStream.subscribe(self, classOf[SubmissionExportComplete])
       Await.result(
-        new ExportRequestReferenceNumberSubmissionsVOA(
+        ExportRequestReferenceNumberSubmissionsVO(
           repo,
           Clock.systemDefaultZone(),
           mock[ForTCTRAudit],
@@ -78,7 +78,7 @@ class ExportRequestReferenceNumberSubmissionSpec
         when(repo.getSubmissions(eqTo(batchSize))).thenReturn(Future.successful(List(submission)))
         when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.acknowledged(1)))
         Await.result(
-          new ExportRequestReferenceNumberSubmissionsVOA(repo, Clock.systemDefaultZone(), audit, configuration)
+          ExportRequestReferenceNumberSubmissionsVO(repo, Clock.systemDefaultZone(), audit, configuration)
             .exportNow(batchSize),
           5 seconds
         )
@@ -89,9 +89,7 @@ class ExportRequestReferenceNumberSubmissionSpec
 
   override def afterAll(): Unit = Await.ready(system.terminate(), 5 seconds)
 
-  object TestData {
+  object TestData:
     lazy val repo: RequestReferenceNumberMongoRepository = mock[RequestReferenceNumberMongoRepository]
     lazy val batchSize                                   = 50
-    lazy val scheduler                                   = new ScheduleThatSchedulesImmediately5Times
-  }
-}
+    lazy val scheduler                                   = ScheduleThatSchedulesImmediately5Times()

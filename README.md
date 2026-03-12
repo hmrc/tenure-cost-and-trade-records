@@ -1,9 +1,9 @@
 
 # tenure-cost-and-trade-records
 
-This is service provides backend services between the frontend service and sending submitted data to the VOA.
+This is service provides backend services between the frontend service and sending submitted data to the VO.
 
-This service is still under development but hoping to move to a limited private beta in November 2023. This is a limited private beta as we are not able to integrate with the new VOA systems until late 2024.
+This service is still under development but hoping to move to a limited private beta in November 2023. This is a limited private beta as we are not able to integrate with the new VO systems until late 2024.
 
 ## Rules to update SubmissionDraft DB model
 

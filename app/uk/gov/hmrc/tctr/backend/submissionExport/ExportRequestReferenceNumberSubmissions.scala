@@ -28,21 +28,20 @@ import java.time.{Clock, Instant}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-@ImplementedBy(classOf[ExportRequestReferenceNumberSubmissionsVOA])
-trait ExportRequestReferenceNumberSubmissions {
-  def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit]
-}
+@ImplementedBy(classOf[ExportRequestReferenceNumberSubmissionsVO])
+trait ExportRequestReferenceNumberSubmissions:
+  def exportNow(size: Int)(using ec: ExecutionContext): Future[Unit]
 
 @Singleton
-class ExportRequestReferenceNumberSubmissionsVOA @Inject() (
+class ExportRequestReferenceNumberSubmissionsVO @Inject() (
   requestRefNumMongoRepository: RequestReferenceNumberMongoRepository,
   clock: Clock,
   audit: ForTCTRAudit,
   forConfig: AppConfig
 ) extends ExportRequestReferenceNumberSubmissions
-    with Logging {
+    with Logging:
 
-  override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
+  override def exportNow(size: Int)(using ec: ExecutionContext): Future[Unit] =
     requestRefNumMongoRepository.getSubmissions(size).flatMap { submissions =>
       if submissions.nonEmpty then
         logger.warn(s"Found ${submissions.length} Request reference number submissions to export")
@@ -50,25 +49,23 @@ class ExportRequestReferenceNumberSubmissionsVOA @Inject() (
       Future.unit
     }
 
-  def processSequentially(
+  private def processSequentially(
     submission: Seq[RequestReferenceNumberSubmission]
-  )(implicit ec: ExecutionContext): Future[Unit] =
+  )(using ec: ExecutionContext): Future[Unit] =
     if submission.isEmpty then Future.unit
     else processNext(submission.head).flatMap(_ => processSequentially(submission.tail))
 
   private def processNext(
     submission: RequestReferenceNumberSubmission
-  )(implicit executionContext: ExecutionContext): Future[Unit] =
+  )(using executionContext: ExecutionContext): Future[Unit] =
     if isTooLongInQueue(submission) then
-      logger.warn(
-        s"Unable to export request reference number, id: ${submission.id}. MANUAL INTERVENTION REQUIRED"
-      ) // Restore to error when the data is sent to BST
+      logger.warn(s"Unable to export request reference number, id: ${submission.id}. MANUAL INTERVENTION REQUIRED") // Restore to error when the data is sent to BST
       auditSubmissionEvent("RequestRefNumSubmissionRemovedByTCTR", submission)
       requestRefNumMongoRepository.removeById(submission.id).map(_ => ())
       Future.unit
     else Future.unit
 
-  def isTooLongInQueue(submission: RequestReferenceNumberSubmission): Boolean =
+  private def isTooLongInQueue(submission: RequestReferenceNumberSubmission): Boolean =
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.requestRefNumExportRetryWindow, ChronoUnit.HOURS))
 
   private def auditSubmissionEvent(eventType: String, submission: RequestReferenceNumberSubmission): Unit =
@@ -80,5 +77,3 @@ class ExportRequestReferenceNumberSubmissionsVOA @Inject() (
       ),
       Map.empty[String, String]
     )
-
-}

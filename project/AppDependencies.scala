@@ -3,17 +3,14 @@ import sbt.*
 
 private object AppDependencies {
 
-  val bootstrapVersion          = "10.5.0"
+  val bootstrapVersion          = "10.7.0"
   val hmrcMongoVersion          = "2.12.0"
   val cryptoJsonVersion         = "8.4.0"
-  val playLanguageVersion       = "9.5.0"
+  val playLanguageVersion       = "9.6.0"
   val internalAuthClientVersion = "3.1.0"
 
   // Test dependencies
-  val scalatestPlusPlayVersion    = "7.0.2"
-  val scalatestVersion            = "3.2.19"
   val scalaTestPlusMockitoVersion = "3.2.19.0"
-  val flexMarkVersion             = "0.64.8"
 
   private val compile = Seq(
     "uk.gov.hmrc"       %% "bootstrap-backend-play-30"    % bootstrapVersion,
@@ -25,11 +22,7 @@ private object AppDependencies {
 
   private val commonTests = Seq(
     "uk.gov.hmrc"            %% "bootstrap-test-play-30" % bootstrapVersion         % Test,
-    "org.playframework"      %% "play-test"              % PlayVersion.current      % Test,
-    "org.apache.pekko"       %% "pekko-testkit"          % PlayVersion.pekkoVersion % Test,
-    "org.scalatest"          %% "scalatest"              % scalatestVersion         % Test,
-    "org.scalatestplus.play" %% "scalatestplus-play"     % scalatestPlusPlayVersion % Test,
-    "com.vladsch.flexmark"    % "flexmark-all"           % flexMarkVersion          % Test // for scalatest 3.2.x
+    "org.apache.pekko"       %% "pekko-testkit"          % PlayVersion.pekkoVersion % Test
   )
 
   private val testOnly = Seq(

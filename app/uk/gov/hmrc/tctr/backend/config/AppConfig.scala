@@ -43,7 +43,7 @@ class AppConfig @Inject() (configuration: Configuration):
   val lockoutWindow: Int        = configuration.get[Int]("authentication.lockoutDurationHours")
   val sessionWindow: Int        = configuration.get[Int]("authentication.loginSessionDurationHours")
   val ipLockoutEnabled: Boolean = configuration.get[Boolean]("authentication.ipLockoutEnabled")
-  val voaIPAddress: String      = configuration.get[String]("authentication.voaIPAddress")
+  val voIPAddress: String      = configuration.get[String]("authentication.voaIPAddress")
 
   val notConnectedSubmissionTTL: Long = configuration.get[Long]("notConnectedSubmissionTTL")
   val connectedSubmissionTTL: Long    = configuration.get[Long]("connectedSubmissionTTL")

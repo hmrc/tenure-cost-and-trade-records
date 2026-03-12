@@ -41,14 +41,14 @@ class ForTCTRImpl @Inject() (
   implicit val ec: ExecutionContext,
   mongoLockRepository: MongoLockRepository,
   dataCleaner: DataCleaner
-) {
+):
 
-  import tctrConfig._
+  import tctrConfig.*
 
   if requestRefNumExportEnabled then
     val repo     = requestReferenceNumberMongoRepository
-    val exporter = new ExportRequestReferenceNumberSubmissionsVOA(repo, systemClock, audit, tctrConfig)
-    new RequestReferenceNumberSubmissionExporter(
+    val exporter = ExportRequestReferenceNumberSubmissionsVO(repo, systemClock, audit, tctrConfig)
+    RequestReferenceNumberSubmissionExporter(
       mongoLockRepository,
       exporter,
       requestRefNumExportBatchSize,
@@ -59,8 +59,8 @@ class ForTCTRImpl @Inject() (
 
   if submissionExportEnabled then
     val repo     = connectedMongoRepository
-    val exporter = new ExportConnectedSubmissionsVOA(repo, systemClock, audit, tctrConfig)
-    new ConnectedSubmissionExporter(
+    val exporter = ExportConnectedSubmissionsVO(repo, systemClock, audit, tctrConfig)
+    ConnectedSubmissionExporter(
       mongoLockRepository,
       exporter,
       exportBatchSize,
@@ -73,4 +73,3 @@ class ForTCTRImpl @Inject() (
 
   // Apply data cleaning to fix various data issues
   dataCleaner.`BST-140686`()
-}

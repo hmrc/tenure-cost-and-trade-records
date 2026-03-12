@@ -42,26 +42,25 @@ class AuthController @Inject() (
   auth: BackendAuthComponents,
   clock: Clock,
   cc: ControllerComponents
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends BackendController(cc)
-    with InternalAuthAccess {
+    with InternalAuthAccess:
 
   private val credsRepo: CredentialsMongoRepo = credentialsMongoRepo
   private val submittedRepo: SubmittedMongoRepo = submittedMongoRepo
   private val loginsRepo: FailedLoginsMongoRepo = failedLoginsMongoRepo
   private val enableDuplicates: Boolean = tctrConfig.enableDuplicate
 
-  private val verifier: IPBlockingCredentialsVerifier = {
+  private val verifier: IPBlockingCredentialsVerifier =
     // hack required for override parameters on MDTP - it parses them all as strings
     val authReq          = tctrConfig.authenticationRequired
     val loginAttempts    = tctrConfig.authMaxFailedLogin
     val lockoutWindow    = tctrConfig.lockoutWindow
     val sessionWindow    = tctrConfig.sessionWindow
     val ipLockoutEnabled = tctrConfig.ipLockoutEnabled
-    val voaIPAddress     = tctrConfig.voaIPAddress
-    val config           = VerifierConfig(loginAttempts, lockoutWindow hours, sessionWindow hours, ipLockoutEnabled, voaIPAddress)
-    new IPBlockingCredentialsVerifier(credsRepo, submittedRepo, loginsRepo, authReq, config, clock, enableDuplicates)
-  }
+    val voIPAddress      = tctrConfig.voIPAddress
+    val config           = VerifierConfig(loginAttempts, lockoutWindow hours, sessionWindow hours, ipLockoutEnabled, voIPAddress)
+    IPBlockingCredentialsVerifier(credsRepo, submittedRepo, loginsRepo, authReq, config, clock, enableDuplicates)
 
   def authenticate: Action[Credentials] =
     auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[Credentials]) { implicit request =>
@@ -93,19 +92,18 @@ class AuthController @Inject() (
         case None              => NotFound
       }
     }
-}
 
-object ValidLoginResponse {
+object ValidLoginResponse:
   implicit val f: Format[ValidLoginResponse] = Json.format
-}
+
 case class ValidLoginResponse(forAuthToken: String, forType: String, address: Address, isWelsh: Boolean)
 
-object FailedLoginResponse {
+object FailedLoginResponse:
   implicit val f: Format[FailedLoginResponse] = Json.format
-}
+
 case class FailedLoginResponse(numberOfRemainingTriesUntilIPLockout: Int)
 
-object ValidForTypeResponse {
+object ValidForTypeResponse:
   implicit val f: Format[ValidForTypeResponse] = Json.format
-}
+
 case class ValidForTypeResponse(FORType: String)

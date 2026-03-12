@@ -37,21 +37,20 @@ class IPBlockingCredentialsVerifier @Inject() (
   config: VerifierConfig,
   clock: Clock,
   duplicatesEnabled: Boolean
-)(implicit ec: ExecutionContext) {
+)(using ec: ExecutionContext
+):
 
   implicit def toDuration(d: Instant): Duration = d.toEpochMilli millis
 
-  implicit object DateOrdering extends Ordering[Instant] {
+  implicit object DateOrdering extends Ordering[Instant]:
     def compare(a: Instant, b: Instant): Int = if a.isBefore(b) then -1 else if (b.isBefore(a)) 1 else 0
-  }
 
   def verify(referenceNum: String, postcode: String, ipAddress: Option[String]): Future[VerificationResult] =
-    (config.ipLockoutEnabled, ipAddress) match {
-      case (true, None)               => MissingIPAddress
-      case (true, Some(config.voaIP)) => verifyCredentials(referenceNum, postcode, 0)
-      case (true, Some(ip))           => verifyIPAndCredentials(ip, referenceNum, postcode)
-      case (false, _)                 => verifyCredentials(referenceNum, postcode, 0)
-    }
+    (config.ipLockoutEnabled, ipAddress) match
+      case (true, None)              => MissingIPAddress
+      case (true, Some(config.voIP)) => verifyCredentials(referenceNum, postcode, 0)
+      case (true, Some(ip))          => verifyIPAndCredentials(ip, referenceNum, postcode)
+      case (false, _)                => verifyCredentials(referenceNum, postcode, 0)
 
   private def verifyIPAndCredentials(ip: String, referenceNum: String, postcode: String): Future[VerificationResult] =
     isLockedOut(ip) flatMap {
@@ -79,9 +78,7 @@ class IPBlockingCredentialsVerifier @Inject() (
 
   private def verifyCredentials(referenceNum: String, postcode: String, attemptsMade: Int, ip: Option[String] = None) =
     submittedRepo.hasBeenSubmitted(referenceNum) flatMap {
-      case false =>
-        findMatchingCredentials(referenceNum, postcode, attemptsMade, ip)
-
+      case false                     => findMatchingCredentials(referenceNum, postcode, attemptsMade, ip)
       case true if duplicatesEnabled => findMatchingCredentials(referenceNum, postcode, attemptsMade, ip)
       case true                      => AlreadySubmitted(referenceNum)
     }
@@ -108,18 +105,14 @@ class IPBlockingCredentialsVerifier @Inject() (
           InvalidCredentials(config.maxFailedLoginAttempts - (attemptsMade + 1))
       }
     else
-      ValidCredentials(
-        FORCredentials(referenceNum, "", "", SensitiveAddress(testAddress(postcode.replace("+", ""))), "")
-      )
-
-}
+      ValidCredentials(FORCredentials(referenceNum, "", "", SensitiveAddress(testAddress(postcode.replace("+", ""))), ""))
 
 case class VerifierConfig(
   maxFailedLoginAttempts: Int,
   lockoutWindow: Duration,
   sessionWindow: Duration,
   ipLockoutEnabled: Boolean,
-  voaIP: String
+  voIP: String
 )
 
 sealed trait VerificationResult

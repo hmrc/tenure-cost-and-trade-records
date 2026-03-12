@@ -32,9 +32,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[ExportNotConnectedSubmissionsDeskpro])
-trait ExportNotConnectedSubmissions {
-  def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit]
-}
+trait ExportNotConnectedSubmissions:
+  def exportNow(size: Int)(using ec: ExecutionContext): Future[Unit]
 
 @Singleton
 class ExportNotConnectedSubmissionsDeskpro @Inject() (
@@ -45,22 +44,23 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
   clock: Clock,
   forConfig: AppConfig
 ) extends ExportNotConnectedSubmissions
-    with Logging {
+    with Logging:
+
   val requestId = "X-Request-ID"
 
-  override def exportNow(size: Int)(implicit ec: ExecutionContext): Future[Unit] =
+  override def exportNow(size: Int)(using ec: ExecutionContext): Future[Unit] =
     repository.getSubmissions(size).flatMap { submissions =>
       if submissions.nonEmpty then logger.warn(s"Found ${submissions.length} not connected submissions to export")
       processSequentially(submissions)
     }
 
-  def processSequentially(submission: Seq[NotConnectedSubmission])(implicit ec: ExecutionContext): Future[Unit] =
+  private def processSequentially(submission: Seq[NotConnectedSubmission])(using ec: ExecutionContext): Future[Unit] =
     if submission.isEmpty then Future.unit
     else processNext(submission.head).flatMap(_ => processSequentially(submission.tail))
 
   private def processNext(
     submission: NotConnectedSubmission
-  )(implicit executionContext: ExecutionContext): Future[Unit] =
+  )(using executionContext: ExecutionContext): Future[Unit] =
     if isTooLongInQueue(submission) then
       logger.error(s"Unable to export not connected journey, ref: ${submission.id}. MANUAL INTERVENTION REQUIRED")
       logBrokenSubmissionToSplunk(submission)
@@ -100,16 +100,14 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
           }
       Future.unit
 
-  private def handle400BadRequest(exception: UpstreamErrorResponse, submission: NotConnectedSubmission): Unit = {
-    val invalidField = exception.message match {
+  private def handle400BadRequest(exception: UpstreamErrorResponse, submission: NotConnectedSubmission): Unit =
+    val invalidField = exception.message match
       case msg if msg.contains("Invalid email") => "email"
       case msg if msg.contains("Invalid name")  => "name"
       case _                                    => "data"
-    }
     logBrokenSubmissionToSplunk(submission)
     repository.removeById(submission.id)
     logger.warn(s"Removed submission with invalid $invalidField : ${submission.id}", exception)
-  }
 
   private def logBrokenSubmissionToSplunk(submission: NotConnectedSubmission): Unit =
     audit(
@@ -122,10 +120,10 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
       Map.empty[String, String]
     )
 
-  def isTooLongInQueue(submission: NotConnectedSubmission): Boolean =
+  private def isTooLongInQueue(submission: NotConnectedSubmission): Boolean =
     submission.createdAt.isBefore(Instant.now(clock).minus(forConfig.retryWindow, ChronoUnit.HOURS))
 
-  def auditAccepted(referenceNumber: String, deskproTicketId: Long, tags: Map[String, String]): Unit = {
+  private def auditAccepted(referenceNumber: String, deskproTicketId: Long, tags: Map[String, String]): Unit =
     val outcome = Json.obj("isSuccessful" -> true)
     audit(
       "SubmissionToHmrcDeskpro",
@@ -137,14 +135,12 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
       tags
     )
 
-  }
-
-  def auditRejected(
+  private def auditRejected(
     referenceNumber: String,
     failureCategory: String,
     failureReason: String,
     tags: Map[String, String]
-  ): Unit = {
+  ): Unit =
     val outcome = Json.obj(
       "isSuccessful"    -> false,
       "failureCategory" -> failureCategory,
@@ -158,9 +154,8 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
       ),
       tags
     )
-  }
 
-  private def createDeskproTicket(submission: NotConnectedSubmission): DeskproTicket = {
+  private def createDeskproTicket(submission: NotConnectedSubmission): DeskproTicket =
     val message =
       s"""
          |Reference number : ${submission.id}
@@ -183,16 +178,13 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
     // Replacing by dots all chars not matched NameValidator regexp """^[A-Za-z\-.,()'"\s]+$"""
     DeskproTicket(
       submission.fullName.replaceAll("""[^A-Za-z\-.,()'"\s]""", "."),
-      submission.emailAddress.getOrElse("noreply@voa.gov.uk"),
+      submission.emailAddress.getOrElse("noreplyvo@hmrc.gov.uk"),
       s"${submission.forType} - Not connected property",
       message,
       "https://www.tax.service.gov.uk/send-trade-and-cost-information/not-connected",
       "false",
       "-",
       "-",
-      "VOA",
-      s"govuk-tax-${UUID.randomUUID().toString}"
+      "VO",
+      s"govuk-tax-${UUID.randomUUID}"
     )
-  }
-
-}
