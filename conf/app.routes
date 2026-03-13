@@ -1,19 +1,19 @@
-POST          /authenticate                                     uk.gov.hmrc.tctr.backend.controllers.AuthController.authenticate
+POST          /authenticate                                     uk.gov.hmrc.vo.tctr.backend.controllers.AuthController.authenticate
 
-GET           /:refNum/forType                                  uk.gov.hmrc.tctr.backend.controllers.AuthController.retrieveFORType(refNum)
+GET           /:refNum/forType                                  uk.gov.hmrc.vo.tctr.backend.controllers.AuthController.retrieveFORType(refNum)
 
-GET           /saveAsDraft/:refNum                              uk.gov.hmrc.tctr.backend.controllers.SaveAsDraftController.get(refNum)
-PUT           /saveAsDraft/:refNum                              uk.gov.hmrc.tctr.backend.controllers.SaveAsDraftController.put(refNum)
-DELETE        /saveAsDraft/:refNum                              uk.gov.hmrc.tctr.backend.controllers.SaveAsDraftController.delete(refNum)
+GET           /saveAsDraft/:refNum                              uk.gov.hmrc.vo.tctr.backend.controllers.SaveAsDraftController.get(refNum)
+PUT           /saveAsDraft/:refNum                              uk.gov.hmrc.vo.tctr.backend.controllers.SaveAsDraftController.put(refNum)
+DELETE        /saveAsDraft/:refNum                              uk.gov.hmrc.vo.tctr.backend.controllers.SaveAsDraftController.delete(refNum)
 
-PUT           /submissions/notConnected/:referenceNumber        uk.gov.hmrc.tctr.backend.controllers.NotConnectedSubmissionController.submit(referenceNumber: String)
+PUT           /submissions/notConnected/:referenceNumber        uk.gov.hmrc.vo.tctr.backend.controllers.NotConnectedSubmissionController.submit(referenceNumber: String)
 
-PUT           /submissions/connected/:referenceNumber           uk.gov.hmrc.tctr.backend.controllers.ConnectedSubmissionController.submit(referenceNumber: String)
+PUT           /submissions/connected/:referenceNumber           uk.gov.hmrc.vo.tctr.backend.controllers.ConnectedSubmissionController.submit(referenceNumber: String)
 
-PUT           /submissions/requestRefNum                        uk.gov.hmrc.tctr.backend.controllers.RequestRefNumSubmissionController.submit
+PUT           /submissions/requestRefNum                        uk.gov.hmrc.vo.tctr.backend.controllers.RequestRefNumSubmissionController.submit
 
-GET           /stats/drafts-per-version                         uk.gov.hmrc.tctr.backend.controllers.StatsController.draftsPerVersion
-GET           /stats/drafts-expiration-queue                    uk.gov.hmrc.tctr.backend.controllers.StatsController.draftsExpirationQueue
+GET           /stats/drafts-per-version                         uk.gov.hmrc.vo.tctr.backend.controllers.StatsController.draftsPerVersion
+GET           /stats/drafts-expiration-queue                    uk.gov.hmrc.vo.tctr.backend.controllers.StatsController.draftsExpirationQueue
 
 +nocsrf
-POST          /upscan/callback                                  uk.gov.hmrc.tctr.backend.controllers.UpscanCallbackController.callback
+POST          /upscan/callback                                  uk.gov.hmrc.vo.tctr.backend.controllers.UpscanCallbackController.callback
