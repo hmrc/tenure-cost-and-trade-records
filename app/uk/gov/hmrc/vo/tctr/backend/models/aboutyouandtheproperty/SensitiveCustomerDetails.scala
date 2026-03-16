@@ -36,7 +36,7 @@ case class SensitiveCustomerDetails(
 
 object SensitiveCustomerDetails {
   import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveCustomerDetails] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveCustomerDetails] = Json.format
 
   def apply(customerDetails: CustomerDetails): SensitiveCustomerDetails = SensitiveCustomerDetails(
     SensitiveString(customerDetails.fullName),

@@ -40,7 +40,7 @@ class ConnectedSubmissionExporter(
 
   override val name: String = "ConnectedPropertyScheduler"
 
-  override def runJob()(implicit ec: ExecutionContext): Future[SubmissionExportComplete] =
+  override def runJob()(using ec: ExecutionContext): Future[SubmissionExportComplete] =
     exporter.exportNow(exportBatchSize).map(_ => SubmissionExportComplete("ConnectedPropertyScheduler finished"))
 
 }

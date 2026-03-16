@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.vo.tctr.backend.controllers
 
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.{JsError, JsSuccess, JsValue}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -40,51 +40,44 @@ class NotConnectedSubmissionController @Inject() (
   auth: BackendAuthComponents,
   metric: MetricsHandler,
   cc: ControllerComponents
-)(implicit ec: ExecutionContext
-) extends BackendController(cc)
-  with InternalAuthAccess {
-
-  val log: Logger = Logger(classOf[NotConnectedSubmissionController])
+)(using ec: ExecutionContext
+) extends BackendController(cc) with InternalAuthAccess with Logging:
 
   def submit(submissionReference: String): Action[JsValue] =
     auth.authorizedAction[Unit](permission).compose(Action).async(parse.json) { implicit request =>
-      request.body.validate[NotConnectedSubmissionForm] match {
+      request.body.validate[NotConnectedSubmissionForm] match
         case JsSuccess(form, _) =>
           submittedMongoRepo.hasBeenSubmitted(submissionReference).flatMap {
             case true if tctrConfig.enableDuplicate =>
-              saveNotConnectedSubmission(convertFormToEntity(form), submissionReference)
+              saveNotConnectedSubmission(extractEntity(form), submissionReference)
               Created
             case true                               =>
               metric.failedSubmissions.mark()
-              log.warn(s"Error saving submission $submissionReference. Possible duplicate")
+              logger.warn(s"Error saving submission $submissionReference. Possible duplicate")
               Conflict(s"Error saving submission $submissionReference. Possible duplicate")
             case false                              =>
-              saveNotConnectedSubmission(convertFormToEntity(form), submissionReference)
+              saveNotConnectedSubmission(extractEntity(form), submissionReference)
               Created
           }
-
         case JsError(errors) =>
-          log.error(errors.mkString(","))
+          logger.error(errors.mkString(","))
           BadRequest
-      }
     }
 
-  def saveNotConnectedSubmission(
+  private def saveNotConnectedSubmission(
     notConnectedSubmission: NotConnectedSubmission,
     submissionReference: String
-  )(implicit
+  )(using
     hc: HeaderCarrier
-  ): Unit = {
+  ): Unit =
     repository.insert(notConnectedSubmission)
     emailConnector.sendConnectionRemoved(notConnectedSubmission)
     submittedMongoRepo.insertIfUnique(submissionReference)
 
     submissionDraftRepo.delete(submissionReference)
-
     metric.okSubmissions.mark()
-  }
 
-  private def convertFormToEntity(form: NotConnectedSubmissionForm) = NotConnectedSubmission(
+  private def extractEntity(form: NotConnectedSubmissionForm) = NotConnectedSubmission(
     form.id,
     form.forType,
     form.address,
@@ -96,5 +89,3 @@ class NotConnectedSubmissionController @Inject() (
     form.previouslyConnected,
     form.lang
   )
-
-}

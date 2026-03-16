@@ -26,7 +26,7 @@ import java.util.Date
 
 class DateUtilLocalisedSpec extends AnyWordAppSpec {
 
-  private val testDate: Date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2025-04-17 12:34:56")
+  private val testDate: Date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2025-04-17 12:34:56")
   private val dateEN         = "17 April 2025"
   private val dateCY         = "17 Ebrill 2025"
 

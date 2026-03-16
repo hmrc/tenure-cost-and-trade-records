@@ -44,7 +44,7 @@ abstract class MongoSpecBase extends AnyFlatSpec with BeforeAndAfterAll with Gui
     mongo.client.close()
   }
 
-  final override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  final override def fakeApplication(): Application = GuiceApplicationBuilder()
     .configure(
       "mongodb.uri"      -> testDbUri,
       "auditing.enabled" -> false,

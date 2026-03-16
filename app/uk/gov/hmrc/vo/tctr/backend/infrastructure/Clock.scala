@@ -23,11 +23,9 @@ import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.nowInUK
 import javax.inject.{Inject, Singleton}
 
 @ImplementedBy(classOf[SystemClock])
-trait Clock {
+trait Clock:
   def now(): ZonedDateTime
-}
 
 @Singleton
-class SystemClock @Inject() extends Clock {
+class SystemClock @Inject() extends Clock:
   def now(): ZonedDateTime = nowInUK
-}

@@ -34,28 +34,23 @@ class RequestRefNumSubmissionController @Inject() (
   cc: ControllerComponents
 ) extends BackendController(cc)
   with InternalAuthAccess
-  with Logging {
+  with Logging:
 
   val log: Logger = Logger(classOf[RequestRefNumSubmissionController])
 
   def submit: Action[JsValue] =
     auth.authorizedAction[Unit](permission).compose(Action).async(parse.json) { implicit request =>
-      request.body.validate[RequestReferenceNumberSubmission] match {
+      request.body.validate[RequestReferenceNumberSubmission] match
         case JsSuccess(form, _) =>
           saveRequestReferenceNumberSubmission(form)
           Created
         case JsError(errors)    =>
           log.error(errors.mkString(","))
           BadRequest
-      }
     }
 
   private def saveRequestReferenceNumberSubmission(
     requestReferenceNumberSubmission: RequestReferenceNumberSubmission
-  ): Unit = {
+  ): Unit =
     repository.insert(requestReferenceNumberSubmission)
-
-    //    emailConnector.sendConnectionRemoved(requestReferenceNumberSubmission)
     metric.requestRefNumSubmissions.mark()
-  }
-}

@@ -21,10 +21,8 @@ import play.api.libs.json.{JsValue, Json}
 import scala.concurrent.Future
 import scala.language.implicitConversions
 
-package object controllers {
+package object controllers:
   implicit def toFuture[A](a: A): Future[A] = Future.successful(a)
   implicit def toOpt[A](a: A): Option[A]    = Some(a)
 
   def error(msg: String): JsValue = Json.toJson("error" -> msg)
-
-}

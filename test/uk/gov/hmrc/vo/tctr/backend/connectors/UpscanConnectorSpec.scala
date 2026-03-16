@@ -48,7 +48,7 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoExtended
 
     val httpClient = httpGetMock(Right(OK))
 
-    val connector = new UpscanConnector(httpClient)
+    val connector = UpscanConnector(httpClient)
     val result    = connector.download(testUrl).futureValue
 
     result match {
@@ -61,9 +61,9 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoExtended
 
     val testUrl = "http://test.url"
 
-    val httpClient = httpGetMock(Left(new RuntimeException("Test exception")))
+    val httpClient = httpGetMock(Left(RuntimeException("Test exception")))
 
-    val connector = new UpscanConnector(httpClient)
+    val connector = UpscanConnector(httpClient)
     val result    = connector.download(testUrl).futureValue
 
     result match {

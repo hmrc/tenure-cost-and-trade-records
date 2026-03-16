@@ -45,7 +45,7 @@ class AuthControllerSpec extends AnyWordAppSpec with OptionValues {
   protected val backendAuthComponentsStub: BackendAuthComponents =
     BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ec)
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .overrides(
       bind[CredentialsMongoRepo].toInstance(mockCredentialsRepo),
       bind[BackendAuthComponents].toInstance(backendAuthComponentsStub)

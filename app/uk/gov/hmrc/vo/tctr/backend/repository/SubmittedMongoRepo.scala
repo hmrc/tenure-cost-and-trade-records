@@ -32,7 +32,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)(implicit ec: ExecutionContext)
+class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)(using ec: ExecutionContext)
   extends PlayMongoRepository[RefNum](
     collectionName = "submitted",
     mongoComponent = mongo,
@@ -50,7 +50,7 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)
       )
     ),
     extraCodecs = Seq(
-      new ObjectIdCodec,
+      ObjectIdCodec(),
       Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
     )
   ) {
@@ -58,7 +58,7 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)
   def insertIfUnique(refNum: String): Future[InsertOneResult] =
     collection.find(equal("referenceNumber", refNum)).toFuture().flatMap {
       case Nil => collection.insertOne(RefNum(refNum, Instant.now())).toFuture()
-      case seq => Future.failed(new Exception(s"Duplicate reference number: $seq"))
+      case seq => Future.failed(Exception(s"Duplicate reference number: $seq"))
     }
 
   def hasBeenSubmitted(refNum: String): Future[Boolean] =

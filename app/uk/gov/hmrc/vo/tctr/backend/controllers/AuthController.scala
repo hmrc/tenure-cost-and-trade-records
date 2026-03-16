@@ -35,7 +35,7 @@ import scala.language.postfixOps
 
 @Singleton
 class AuthController @Inject() (
-  tctrConfig: AppConfig,
+  appConfig: AppConfig,
   credentialsMongoRepo: CredentialsMongoRepo,
   submittedMongoRepo: SubmittedMongoRepo,
   failedLoginsMongoRepo: FailedLoginsMongoRepo,
@@ -46,21 +46,21 @@ class AuthController @Inject() (
 ) extends BackendController(cc)
   with InternalAuthAccess:
 
-  private val credsRepo: CredentialsMongoRepo   = credentialsMongoRepo
-  private val submittedRepo: SubmittedMongoRepo = submittedMongoRepo
-  private val loginsRepo: FailedLoginsMongoRepo = failedLoginsMongoRepo
-  private val enableDuplicates: Boolean         = tctrConfig.enableDuplicate
+  private val credentialsRepo: CredentialsMongoRepo = credentialsMongoRepo
+  private val submittedRepo: SubmittedMongoRepo     = submittedMongoRepo
+  private val loginsRepo: FailedLoginsMongoRepo     = failedLoginsMongoRepo
+  private val enableDuplicates: Boolean             = appConfig.enableDuplicate
 
   private val verifier: IPBlockingCredentialsVerifier =
     // hack required for override parameters on MDTP - it parses them all as strings
-    val authReq          = tctrConfig.authenticationRequired
-    val loginAttempts    = tctrConfig.authMaxFailedLogin
-    val lockoutWindow    = tctrConfig.lockoutWindow
-    val sessionWindow    = tctrConfig.sessionWindow
-    val ipLockoutEnabled = tctrConfig.ipLockoutEnabled
-    val voIPAddress      = tctrConfig.voIPAddress
+    val authReq          = appConfig.authenticationRequired
+    val loginAttempts    = appConfig.authMaxFailedLogin
+    val lockoutWindow    = appConfig.lockoutWindow
+    val sessionWindow    = appConfig.sessionWindow
+    val ipLockoutEnabled = appConfig.ipLockoutEnabled
+    val voIPAddress      = appConfig.voIPAddress
     val config           = VerifierConfig(loginAttempts, lockoutWindow hours, sessionWindow hours, ipLockoutEnabled, voIPAddress)
-    IPBlockingCredentialsVerifier(credsRepo, submittedRepo, loginsRepo, authReq, config, clock, enableDuplicates)
+    IPBlockingCredentialsVerifier(credentialsRepo, submittedRepo, loginsRepo, authReq, config, clock, enableDuplicates)
 
   def authenticate: Action[Credentials] =
     auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[Credentials]) { implicit request =>
@@ -87,7 +87,7 @@ class AuthController @Inject() (
 
   def retrieveFORType(referenceNum: String): Action[AnyContent] =
     auth.authorizedAction[Unit](permission).compose(Action).async {
-      credsRepo.findById(referenceNum).map {
+      credentialsRepo.findById(referenceNum).map {
         case Some(credentials) => Ok(Json.toJson(ValidForTypeResponse(credentials.forType)))
         case None              => NotFound
       }

@@ -49,7 +49,7 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
   val mockBulkWriteResult: BulkWriteResult = mock[BulkWriteResult]
 
   val controller =
-    new UpscanCallbackController(mockUpscanConnector, stubControllerComponents(), mockCredentialsRepo, mockMongoCrypto)
+    UpscanCallbackController(mockUpscanConnector, stubControllerComponents(), mockCredentialsRepo, mockMongoCrypto)
 
   "UpscanCallbackController" should "handle successful callbacks" in {
 

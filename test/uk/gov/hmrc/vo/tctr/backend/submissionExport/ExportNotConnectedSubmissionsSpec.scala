@@ -52,7 +52,7 @@ class ExportNotConnectedSubmissionsSpec
   def config(): AppConfig = {
     val config        = ConfigFactory.load("application.conf")
     val configuration = Configuration(config)
-    new AppConfig(configuration)
+    AppConfig(configuration)
   }
 
   "Given there are submissions to be exported" when {
@@ -65,7 +65,7 @@ class ExportNotConnectedSubmissionsSpec
     "the exporter is told to export the latest submission it does the following before publishing a completed event" should {
       system.eventStream.subscribe(self, classOf[SubmissionExportComplete])
       Await.result(
-        new ExportNotConnectedSubmissionsDeskpro(repo, deskproConnector, audit, Clock.systemDefaultZone(), config())
+        ExportNotConnectedSubmissionsDeskpro(repo, deskproConnector, audit, Clock.systemDefaultZone(), config())
           .exportNow(batchSize),
         5 second
       )
@@ -84,9 +84,9 @@ class ExportNotConnectedSubmissionsSpec
 
   object TestData {
     lazy val repo: NotConnectedMongoRepository = mock[NotConnectedMongoRepository]
-    lazy val deskproConnector                  = new StubDeskproConnector()
+    lazy val deskproConnector                  = StubDeskproConnector()
     lazy val batchSize                         = 1
-    lazy val scheduler                         = new ScheduleThatSchedulesImmediately5Times
+    lazy val scheduler                         = ScheduleThatSchedulesImmediately5Times()
     lazy val audit: ForTCTRAudit               = mock[ForTCTRAudit]
   }
 

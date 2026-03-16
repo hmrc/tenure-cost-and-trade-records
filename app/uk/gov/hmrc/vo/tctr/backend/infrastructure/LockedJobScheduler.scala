@@ -22,7 +22,7 @@ import org.apache.pekko.util.Timeout
 import play.api.Logging
 import uk.gov.hmrc.mongo.lock.LockService
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 
@@ -30,17 +30,17 @@ abstract class LockedJobScheduler[Event <: AnyRef](
   lockService: LockService,
   scheduler: Scheduler,
   eventStream: EventStream
-) extends Logging {
+) extends Logging:
   implicit val t: Timeout = 1 hour
 
   val name: String
   val schedule: Schedule
-  def runJob()(implicit ec: ExecutionContext): Future[Event]
+  def runJob()(using ec: ExecutionContext): Future[Event]
 
-  def start()(implicit ec: ExecutionContext): Unit =
+  def start()(using ec: ExecutionContext): Unit =
     scheduleNextImport()
 
-  private def run()(implicit ec: ExecutionContext) = {
+  private def run()(using ec: ExecutionContext) =
     logger.info(s"Starting job: $name")
     runJob().map {
       eventStream.publish
@@ -48,14 +48,10 @@ abstract class LockedJobScheduler[Event <: AnyRef](
       logger.error(s"Error running job: $name", e)
       Future.failed(e)
     }
-  }
 
-  private def scheduleNextImport()(implicit ec: ExecutionContext): Unit = {
+  private def scheduleNextImport()(using ec: ExecutionContext): Unit =
     val t = schedule.timeUntilNextRun()
     logger.info(s"Scheduling $name to run in: $t")
     scheduler.scheduleOnce(t) {
       lockService.withLock(run()) onComplete { _ => scheduleNextImport() }
     }
-  }
-
-}

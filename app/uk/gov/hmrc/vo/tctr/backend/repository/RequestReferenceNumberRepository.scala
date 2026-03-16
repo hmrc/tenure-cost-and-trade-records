@@ -53,7 +53,7 @@ trait RequestReferenceNumberRepository {
 class RequestReferenceNumberMongoRepository @Inject() (
   mongoComponent: MongoComponent,
   appConfig: AppConfig
-)(implicit
+)(using
   ec: ExecutionContext,
   crypto: MongoCrypto
 ) extends PlayMongoRepository[SensitiveRequestReferenceNumberSubmission](

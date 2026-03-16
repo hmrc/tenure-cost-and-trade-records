@@ -19,19 +19,16 @@ package uk.gov.hmrc.vo.tctr.backend.infrastructure
 import uk.gov.hmrc.vo.tctr.backend.config.AppConfig
 import javax.inject.{Inject, Singleton}
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
 import scala.language.postfixOps
 
-trait Schedule {
+trait Schedule:
   def timeUntilNextRun(): FiniteDuration
-}
 
-trait RegularSchedule extends Schedule {
+trait RegularSchedule extends Schedule:
   def timeUntilNextRun(): FiniteDuration
-}
 
 @Singleton
-class DefaultRegularSchedule @Inject() (tctrConfig: AppConfig) extends RegularSchedule {
-  override def timeUntilNextRun(): FiniteDuration = tctrConfig.exportFrequency seconds
-}
+class DefaultRegularSchedule @Inject() (appConfig: AppConfig) extends RegularSchedule:
+  override def timeUntilNextRun(): FiniteDuration = appConfig.exportFrequency seconds

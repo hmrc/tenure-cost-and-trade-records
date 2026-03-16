@@ -41,7 +41,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class MongoSubmissionDraftRepo @Inject() (
   mongo: MongoComponent,
   encryptionJsonTransformer: EncryptionJsonTransformer
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends PlayMongoRepository[SubmissionDraftWrapper](
     collectionName = "submissionDraft",
     mongoComponent = mongo,

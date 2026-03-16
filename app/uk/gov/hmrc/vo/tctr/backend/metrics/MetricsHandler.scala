@@ -20,13 +20,9 @@ import javax.inject.{Inject, Singleton}
 import com.codahale.metrics.{Meter, MetricRegistry}
 
 @Singleton
-class MetricsHandler @Inject() (registry: MetricRegistry) {
+class MetricsHandler @Inject() (registry: MetricRegistry):
 
-  lazy val failedSubmissions: Meter        = registry.meter("failedforsubmissions")
-  lazy val okSubmissions: Meter            = registry.meter("okforsubmissions")
-  lazy val requestRefNumSubmissions: Meter = registry.meter("requestRefNumSubmissions")
-  //  lazy val exportedSubmissions = registry.meter("exportedsubmissions")
-  //  lazy val rejectedExports = registry.meter("rejectedexports")
-  //  lazy val queuedSubmissions = registry.counter("queuedsubmissions")
-  lazy val importedCredentials: Meter      = registry.meter("importedcredentials")
-}
+  val failedSubmissions: Meter        = registry.meter("failedforsubmissions")
+  val okSubmissions: Meter            = registry.meter("okforsubmissions")
+  val requestRefNumSubmissions: Meter = registry.meter("requestRefNumSubmissions")
+  val importedCredentials: Meter      = registry.meter("importedcredentials")

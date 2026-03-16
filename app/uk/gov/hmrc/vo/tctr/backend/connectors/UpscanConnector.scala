@@ -25,9 +25,9 @@ import uk.gov.hmrc.vo.tctr.backend.models.UnknownError
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpscanConnector @Inject() (httpClientV2: HttpClientV2)(implicit ec: ExecutionContext) extends Logging {
+class UpscanConnector @Inject() (httpClientV2: HttpClientV2)(using ec: ExecutionContext) extends Logging:
 
-  def download(url: String)(implicit hc: HeaderCarrier): Future[Either[UnknownError, String]] =
+  def download(url: String)(using hc: HeaderCarrier): Future[Either[UnknownError, String]] =
     httpClientV2
       .get(url"$url")
       .execute[HttpResponse]
@@ -36,5 +36,3 @@ class UpscanConnector @Inject() (httpClientV2: HttpClientV2)(implicit ec: Execut
         logger.warn("Unable to download file from Upscan", e)
         Left(UnknownError("Unable to download file, please try again later"))
       }
-
-}

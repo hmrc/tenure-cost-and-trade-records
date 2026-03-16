@@ -75,10 +75,10 @@ trait CustomMatchers {
   }
 
   def beEqualToIgnoringMillis(expected: Option[NotConnectedSubmission]): BeOptionEqualToIgnoringMillis =
-    new BeOptionEqualToIgnoringMillis(expected)
+    BeOptionEqualToIgnoringMillis(expected)
 
   def beEqualToIgnoringMillis(expected: Option[RequestReferenceNumberSubmission]): BeOptionEqualToIgnoringMillis2 =
-    new BeOptionEqualToIgnoringMillis2(expected)
+    BeOptionEqualToIgnoringMillis2(expected)
 
   class BeSeqEqualToIgnoringMillisInSeq(expected: NotConnectedSubmission) extends Matcher[Seq[NotConnectedSubmission]] {
 
@@ -118,9 +118,9 @@ trait CustomMatchers {
         )
   }
 
-  def beSeqEqualToIgnoringMillisSeq(expected: NotConnectedSubmission) = new BeSeqEqualToIgnoringMillisInSeq(expected)
+  def beSeqEqualToIgnoringMillisSeq(expected: NotConnectedSubmission) = BeSeqEqualToIgnoringMillisInSeq(expected)
 
-  def beSeqEqualToIgnoringMillisSeq(expected: RequestReferenceNumberSubmission) = new BeSeqEqualToIgnoringMillisInSeq2(
+  def beSeqEqualToIgnoringMillisSeq(expected: RequestReferenceNumberSubmission) = BeSeqEqualToIgnoringMillisInSeq2(
     expected
   )
 }

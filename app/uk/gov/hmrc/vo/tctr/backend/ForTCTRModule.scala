@@ -63,10 +63,10 @@ class NotConnectedSubmissionExporterProvider @Inject() (
 
   private val batchSize = configuration
     .getOptional[Int]("notConnectedSubmissionExport.batchSize")
-    .getOrElse(throw new RuntimeException("Missing configuration for notConnectedSubmissionExport.batchSize"))
+    .getOrElse(throw RuntimeException("Missing configuration for notConnectedSubmissionExport.batchSize"))
 
   override def get(): NotConnectedSubmissionExporter = {
-    val exporter = new NotConnectedSubmissionExporter(
+    val exporter = NotConnectedSubmissionExporter(
       mongoLockRepository,
       exportNotConnectedSubmissions,
       batchSize,

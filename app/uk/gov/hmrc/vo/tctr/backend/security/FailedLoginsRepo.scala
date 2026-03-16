@@ -41,7 +41,7 @@ object FailedLoginsMongoRepo {
 }
 
 @Singleton
-class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(using ec: ExecutionContext)
   extends PlayMongoRepository[FailedLoginsMongoSchema](
     collectionName = "failedLogins",
     mongoComponent = mongo,

@@ -47,7 +47,7 @@ trait CredentialsRepo {
 
   def removeAll(): Future[DeleteResult]
 
-  def bulkUpsert(credentialsSeq: Seq[FORCredentials])(implicit writes: OWrites[FORCredentials]): Future[BulkWriteResult]
+  def bulkUpsert(credentialsSeq: Seq[FORCredentials])(using writes: OWrites[FORCredentials]): Future[BulkWriteResult]
 }
 
 object CredentialsMongoRepo {
@@ -72,7 +72,7 @@ object CredentialsMongoRepo {
 class CredentialsMongoRepo @Inject() (
   mongo: MongoComponent,
   configuration: Configuration
-)(implicit
+)(using
   ec: ExecutionContext,
   crypto: MongoCrypto
 ) extends PlayMongoRepository[FORCredentials](
@@ -120,7 +120,7 @@ class CredentialsMongoRepo @Inject() (
 
   def bulkUpsert(
     credentialsSeq: Seq[FORCredentials]
-  )(implicit writes: OWrites[FORCredentials]
+  )(using writes: OWrites[FORCredentials]
   ): Future[BulkWriteResult] = {
 
     def toJson(cred: FORCredentials): JsObject =
@@ -136,7 +136,7 @@ class CredentialsMongoRepo @Inject() (
 
     val bulkOps: Seq[WriteModel[? <: FORCredentials]] = credentialsSeq.map { cred =>
       val filter   = Filters.eq("_id", cred._id)
-      val update   = new UpdateOptions().upsert(true)
+      val update   = UpdateOptions().upsert(true)
       val document = toBson(toJson(cred))
 
       new UpdateOneModel[FORCredentials](filter, document, update)
@@ -147,7 +147,7 @@ class CredentialsMongoRepo @Inject() (
         e.getWriteErrors.forEach { error =>
           logger.error(s"Error writing document at index ${error.getIndex}: ${error.getMessage}")
         }
-        Future.failed(new Exception("Error during bulk upsert.", e))
+        Future.failed(Exception("Error during bulk upsert.", e))
 
       case e: Exception =>
         logger.error("Unexpected error during bulk upsert.", e)

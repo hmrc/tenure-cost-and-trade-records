@@ -59,12 +59,12 @@ class StubCredentialsRepository extends CredentialsRepo {
 
   override def bulkUpsert(
     credentialsSeq: Seq[FORCredentials]
-  )(implicit
+  )(using
     writes: OWrites[FORCredentials]
   ): Future[BulkWriteResult] = ???
 }
 
-class StubSubmittedRepository @Inject() (mongo: MongoComponent, appConfig: AppConfig)(implicit ec: ExecutionContext) extends SubmittedMongoRepo(mongo, appConfig) {
+class StubSubmittedRepository @Inject() (mongo: MongoComponent, appConfig: AppConfig)(using ec: ExecutionContext) extends SubmittedMongoRepo(mongo, appConfig) {
 
   override def insertIfUnique(refNum: String): Future[InsertOneResult] = ???
 

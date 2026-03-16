@@ -53,7 +53,7 @@ trait NotConnectedRepository {
 class NotConnectedMongoRepository @Inject() (
   mongoComponent: MongoComponent,
   appConfig: AppConfig
-)(implicit
+)(using
   ec: ExecutionContext,
   crypto: MongoCrypto
 ) extends PlayMongoRepository[SensitiveNotConnectedSubmission](

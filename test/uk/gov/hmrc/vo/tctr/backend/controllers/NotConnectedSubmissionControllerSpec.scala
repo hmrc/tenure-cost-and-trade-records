@@ -69,7 +69,7 @@ class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec {
     false
   )
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .overrides(
       bind[NotConnectedRepository].toInstance(mockRepository),
       bind[SubmittedMongoRepo].toInstance(mockSubmittedMongoRepo),

@@ -21,18 +21,14 @@ import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.nowInUK
 
 import java.time.ZonedDateTime
 
-object StubClock {
+object StubClock:
 
-  def apply(): StubClock = new StubClock()
+  def withNow(d: ZonedDateTime): StubClock =
+    val clock = StubClock()
+    clock.setNow(d)
+    clock
 
-  def withNow(d: ZonedDateTime): StubClock = {
-    val c = new StubClock()
-    c.setNow(d)
-    c
-  }
-}
-
-class StubClock extends Clock {
+class StubClock extends Clock:
 
   private var _now: ZonedDateTime = nowInUK
 
@@ -40,4 +36,3 @@ class StubClock extends Clock {
     _now = d
 
   def now(): ZonedDateTime = _now
-}

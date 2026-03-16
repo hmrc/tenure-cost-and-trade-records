@@ -51,7 +51,7 @@ class RequestRefNumSubmissionControllerSpec extends AnyWordAppSpec {
   val mockMetricsHandler: MetricsHandler               = mock[MetricsHandler]
   val meter: Meter                                     = mock[Meter]
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .overrides(
       bind[RequestReferenceNumberRepository].toInstance(mockRepository),
       bind[MetricsHandler].toInstance(mockMetricsHandler),

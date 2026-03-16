@@ -44,7 +44,7 @@ class NotConnectedRepositorySpec
 
   val testDbUri = s"mongodb://localhost:27017/$dbName"
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .configure("mongodb.uri" -> testDbUri)
     .build()
 

@@ -25,13 +25,13 @@ import uk.gov.hmrc.vo.tctr.backend.testUtils.SensitiveTestHelper
 
 class ForCredentialsSpec extends AnyFlatSpec with Matchers with SensitiveTestHelper:
 
-  implicit val crypto: MongoCrypto = new TestMongoCrypto(loadTestConfig())
+  implicit val crypto: MongoCrypto = TestMongoCrypto(loadTestConfig())
 
   val credentials: FORCredentials = FORCredentials(
     "9999601001",
     "BA3615",
     "FOR6010",
-    new SensitiveAddress(
+    SensitiveAddress(
       SensitiveString("001"),
       Some(SensitiveString("GORING ROAD")),
       SensitiveString("TOWN"),

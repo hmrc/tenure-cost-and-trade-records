@@ -27,7 +27,7 @@ import java.util.Date
 class DateUtilSpec extends PlaySpec {
 
   val ukTimezone: ZoneId = ZoneId.of("Europe/London")
-  val testDate: Date     = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-02-12 12:34:56")
+  val testDate: Date     = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-02-12 12:34:56")
 
   "dateOps" should {
     "convert Date to ZonedDateTime using ukTimezone" in {

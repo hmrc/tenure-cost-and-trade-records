@@ -34,7 +34,7 @@ case class SensitiveAboutTheLandlord(
 
 object SensitiveAboutTheLandlord {
   import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAboutTheLandlord] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveAboutTheLandlord] = Json.format
 
   def apply(aboutTheLandlord: AboutTheLandlord): SensitiveAboutTheLandlord = SensitiveAboutTheLandlord(
     SensitiveString(aboutTheLandlord.landlordFullName),

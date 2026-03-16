@@ -25,7 +25,7 @@ import uk.gov.hmrc.vo.tctr.backend.testUtils.SensitiveTestHelper
 
 class SensitiveRequestAddressSpec extends AnyWordSpecLike with Matchers with SensitiveTestHelper {
   val testConfig: Configuration    = loadTestConfig()
-  implicit val crypto: MongoCrypto = new TestMongoCrypto(testConfig)
+  implicit val crypto: MongoCrypto = TestMongoCrypto(testConfig)
 
   "SensitiveAddress" should {
 

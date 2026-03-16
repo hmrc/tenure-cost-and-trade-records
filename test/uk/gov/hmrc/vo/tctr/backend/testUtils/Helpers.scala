@@ -39,5 +39,5 @@ trait SensitiveTestHelper {
   }
 
   def createTestMongoCrypto(configuration: Configuration): MongoCrypto =
-    new TestMongoCrypto(configuration)
+    TestMongoCrypto(configuration)
 }

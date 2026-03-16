@@ -18,8 +18,8 @@ package uk.gov.hmrc.vo.tctr.backend.controllers
 
 import play.api.Logging
 import play.api.libs.json.Format.GenericFormat
-import play.api.libs.json._
-import play.api.mvc._
+import play.api.libs.json.*
+import play.api.mvc.*
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.vo.tctr.backend.repository.MongoSubmissionDraftRepo
 
@@ -32,9 +32,9 @@ import scala.concurrent.ExecutionContext
 class StatsController @Inject() (
   submissionDraftRepo: MongoSubmissionDraftRepo,
   cc: ControllerComponents
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends BackendController(cc)
-  with Logging {
+  with Logging:
 
   def draftsPerVersion: Action[AnyContent] = Action.async {
     submissionDraftRepo.getDraftsPerVersion.map { draftsPerVersion =>
@@ -47,5 +47,3 @@ class StatsController @Inject() (
       Ok(Json.toJson(draftsExpirationQueue))
     }
   }
-
-}

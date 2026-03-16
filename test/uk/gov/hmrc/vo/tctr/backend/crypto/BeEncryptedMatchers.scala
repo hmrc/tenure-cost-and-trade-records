@@ -45,7 +45,7 @@ trait BeEncryptedMatchers {
 
   }
 
-  val encrypted = new BeEncryptedMatcher
+  val encrypted = BeEncryptedMatcher()
 }
 
 object BeEncryptedMatchers extends BeEncryptedMatchers

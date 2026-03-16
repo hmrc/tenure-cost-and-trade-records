@@ -52,7 +52,7 @@ class ConnectedSubmissionControllerSpec extends AnyWordAppSpec {
   val meter: Meter                                   = mock[Meter]
   val fakeControllerComponents: ControllerComponents = stubControllerComponents()
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .overrides(
       bind[ConnectedRepository].toInstance(mockRepository),
       bind[SubmittedMongoRepo].toInstance(mockSubmittedRepo),

@@ -39,7 +39,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
     BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), Implicits.global)
 
   def controller =
-    new SaveAsDraftController(StubSubmissionDraftRepo, backendAuthComponentsStub, stubControllerComponents())
+    SaveAsDraftController(StubSubmissionDraftRepo, backendAuthComponentsStub, stubControllerComponents())
 
   "SaveAsDraftController" should "return 200 for get by correct SubmissionDraft.id" in
     controller
@@ -98,7 +98,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
 
     override def save(id: String, submissionDraft: JsValue): Future[JsValue] =
       if id == correctDbId then Future.successful(submissionDraft)
-      else Future.failed(new RuntimeException("SubmissionDraft wasn't found"))
+      else Future.failed(RuntimeException("SubmissionDraft wasn't found"))
 
     override def delete(id: String): Future[DeleteResult] = {
       val deletedCount = id match {

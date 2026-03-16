@@ -50,18 +50,16 @@ object UpScanRequests {
     val fileStatus: String
   }
 
-  object UploadConfirmation {
+  object UploadConfirmation:
 
-    implicit val format: OFormat[UploadConfirmation] = new OFormat[UploadConfirmation] {
-      override def writes(o: UploadConfirmation): JsObject = o match {
-        case x: UploadConfirmationError   => uploadConfirmationError.writes(x)
-        case x: UploadConfirmationSuccess => uploadConfirmationSucess.writes(x)
-      }
-
-      override def reads(json: JsValue): JsResult[UploadConfirmation] =
-        uploadConfirmationSucess.reads(json).orElse(uploadConfirmationError.reads(json))
-    }
-  }
+    implicit val format: OFormat[UploadConfirmation] =
+      new OFormat[UploadConfirmation]:
+        override def writes(o: UploadConfirmation): JsObject = o match
+          case x: UploadConfirmationError   => uploadConfirmationError.writes(x)
+          case x: UploadConfirmationSuccess => uploadConfirmationSucess.writes(x)
+  
+        override def reads(json: JsValue): JsResult[UploadConfirmation] =
+          uploadConfirmationSucess.reads(json).orElse(uploadConfirmationError.reads(json))
 
   case class UploadConfirmationSuccess(
     reference: String,
