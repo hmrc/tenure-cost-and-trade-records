@@ -20,6 +20,8 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
+import scala.language.implicitConversions
+
 case class SensitiveRequestReferenceNumber(
   requestReferenceNumberAddress: Option[SensitiveRequestReferenceNumberAddress] = None,
   requestReferenceContactDetails: Option[RequestReferenceNumberContactDetails] = None

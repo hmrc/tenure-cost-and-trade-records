@@ -21,6 +21,8 @@ import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
+import scala.language.implicitConversions
+
 case class SensitiveLandlordAddress(
   buildingNameNumber: SensitiveString,
   street1: Option[SensitiveString],
