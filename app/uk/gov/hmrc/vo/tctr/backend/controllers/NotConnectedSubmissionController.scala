@@ -41,7 +41,9 @@ class NotConnectedSubmissionController @Inject() (
   metric: MetricsHandler,
   cc: ControllerComponents
 )(using ec: ExecutionContext
-) extends BackendController(cc) with InternalAuthAccess with Logging:
+) extends BackendController(cc)
+  with InternalAuthAccess
+  with Logging:
 
   def submit(submissionReference: String): Action[JsValue] =
     auth.authorizedAction[Unit](permission).compose(Action).async(parse.json) { implicit request =>
@@ -59,7 +61,7 @@ class NotConnectedSubmissionController @Inject() (
               saveNotConnectedSubmission(extractEntity(form), submissionReference)
               Created
           }
-        case JsError(errors) =>
+        case JsError(errors)    =>
           logger.error(errors.mkString(","))
           BadRequest
     }

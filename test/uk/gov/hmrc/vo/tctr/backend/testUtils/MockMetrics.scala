@@ -22,6 +22,6 @@ import uk.gov.hmrc.vo.tctr.backend.metrics.MetricsHandler
 import javax.inject.Inject
 
 class MockMetrics @Inject() (metric: MetricRegistry) extends MetricsHandler(metric):
-  val meter                                    = Meter()
+  val meter = Meter()
 
   override val importedCredentials: Meter = meter

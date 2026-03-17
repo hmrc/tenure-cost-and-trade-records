@@ -18,7 +18,7 @@ package uk.gov.hmrc.vo.tctr.backend.repository
 
 import org.bson.codecs.ObjectIdCodec
 import org.mongodb.scala.model.Filters.equal
-import org.mongodb.scala.model._
+import org.mongodb.scala.model.*
 import org.mongodb.scala.result.InsertOneResult
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
@@ -46,14 +46,14 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)
         Indexes.ascending("createdAt"),
         IndexOptions()
           .name("createdAtTTL")
-          .expireAfter(appConfig.submittedTTL, TimeUnit.DAYS) // Set the TTL
+          .expireAfter(appConfig.submittedTTL, TimeUnit.DAYS)
       )
     ),
     extraCodecs = Seq(
       ObjectIdCodec(),
       Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
     )
-  ) {
+  ):
 
   def insertIfUnique(refNum: String): Future[InsertOneResult] =
     collection.find(equal("referenceNumber", refNum)).toFuture().flatMap {
@@ -66,4 +66,3 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)
       .find(equal("referenceNumber", refNum))
       .toFuture()
       .map(_.nonEmpty)
-}

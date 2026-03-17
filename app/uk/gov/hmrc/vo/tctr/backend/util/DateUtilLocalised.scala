@@ -25,7 +25,7 @@ import java.util.Date
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DateUtilLocalised @Inject() (langUtil: LanguageUtils, messagesApi: MessagesApi) {
+class DateUtilLocalised @Inject() (langUtil: LanguageUtils, messagesApi: MessagesApi):
 
   def formatDate(localDate: LocalDate)(using messages: Messages): String =
     langUtil.Dates.formatDate(localDate)
@@ -46,5 +46,3 @@ class DateUtilLocalised @Inject() (langUtil: LanguageUtils, messagesApi: Message
     formatDate(date)(using messagesByLang(lang))
 
   private def messagesByLang(lang: Lang): Messages = messagesApi.preferred(Seq(lang))
-
-}

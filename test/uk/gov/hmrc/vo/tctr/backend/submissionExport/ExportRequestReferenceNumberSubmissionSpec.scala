@@ -90,6 +90,6 @@ class ExportRequestReferenceNumberSubmissionSpec
   override def afterAll(): Unit = Await.ready(system.terminate(), 5 seconds)
 
   object TestData:
-    lazy val repo: RequestReferenceNumberMongoRepository = mock[RequestReferenceNumberMongoRepository]
-    lazy val batchSize                                   = 50
-    lazy val scheduler                                   = ScheduleThatSchedulesImmediately5Times()
+    val repo: RequestReferenceNumberMongoRepository = mock[RequestReferenceNumberMongoRepository]
+    val batchSize                                   = 50
+    val scheduler                                   = ScheduleThatSchedulesImmediately5Times()

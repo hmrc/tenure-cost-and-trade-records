@@ -57,7 +57,7 @@ object UpScanRequests {
         override def writes(o: UploadConfirmation): JsObject = o match
           case x: UploadConfirmationError   => uploadConfirmationError.writes(x)
           case x: UploadConfirmationSuccess => uploadConfirmationSucess.writes(x)
-  
+
         override def reads(json: JsValue): JsResult[UploadConfirmation] =
           uploadConfirmationSucess.reads(json).orElse(uploadConfirmationError.reads(json))
 

@@ -22,10 +22,11 @@ import play.api.Application
 import play.api.http.Status
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.Result
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
-import uk.gov.hmrc.internalauth.client._
+import uk.gov.hmrc.internalauth.client.*
 import uk.gov.hmrc.vo.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.vo.tctr.backend.models.{FORCredentials, SensitiveAddress}
 import uk.gov.hmrc.vo.tctr.backend.repository.CredentialsMongoRepo
@@ -35,10 +36,9 @@ import uk.gov.hmrc.vo.tctr.backend.testUtils.AuthStubBehaviour
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthControllerSpec extends AnyWordAppSpec with OptionValues {
+class AuthControllerSpec extends AnyWordAppSpec with OptionValues:
 
-  implicit val ec: ExecutionContext            = ExecutionContext.Implicits.global
-  implicit lazy val materializer: Materializer = app.materializer
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   val mockCredentialsRepo: CredentialsMongoRepo = mock[CredentialsMongoRepo]
 
@@ -68,14 +68,16 @@ class AuthControllerSpec extends AnyWordAppSpec with OptionValues {
     "return 200 for valid credentials and it" should {
       "set the isWelsh flag" in new ValidCredentialsFixture(billingAuthorityCode = "BA6810") {
         when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(Some(forCredentials)))
-        val result = controller.authenticate(fakeRequest)
+        val result: Future[Result] = controller.authenticate(fakeRequest)
+
         status(result)            shouldBe Status.OK
         contentType(result).value shouldBe "application/json"
         contentAsString(result)   shouldBe expectedContent(isWelsh = true)
       }
       "unset the isWelsh flag" in new ValidCredentialsFixture(billingAuthorityCode = "SM14BX") {
         when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(Some(forCredentials)))
-        val result = controller.authenticate(fakeRequest)
+        val result: Future[Result] = controller.authenticate(fakeRequest)
+
         status(result)            shouldBe Status.OK
         contentType(result).value shouldBe "application/json"
         contentAsString(result)   shouldBe expectedContent(isWelsh = false)
@@ -93,6 +95,8 @@ class AuthControllerSpec extends AnyWordAppSpec with OptionValues {
       // Mock the repository to return None when findById is called
       when(mockCredentialsRepo.findById(referenceNum)).thenReturn(Future.successful(None))
 
+      given Materializer = app.materializer
+
       val controller = inject[AuthController]
       val result     = controller.retrieveFORType(referenceNum)(fakeRequest)
       status(result) shouldBe Status.NOT_FOUND
@@ -108,4 +112,3 @@ class AuthControllerSpec extends AnyWordAppSpec with OptionValues {
 
     def expectedContent(isWelsh: Boolean) =
       s"""{"forAuthToken":"Basic Zm9yTnVtYmVyOlNlbnNpdGl2ZSguLi4p","forType":"forType","address":{"buildingNameNumber":"buildingNameNumber","street1":"street1","town":"town","county":"county","postcode":"postcode"},"isWelsh":$isWelsh}"""
-}

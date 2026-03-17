@@ -25,6 +25,7 @@ case class Address(
   county: Option[String],
   postcode: String
 ):
+
   def singleLine: String =
     List(Some(buildingNameNumber), street1, Some(town), county, Some(postcode)).flatten.mkString(", ")
 

@@ -40,7 +40,7 @@ class NotConnectedRepositorySpec
   with GuiceOneAppPerSuite
   with AppSuiteBase {
 
-  val dbName = s"notConnectedRepositorySpec${UUID.randomUUID().toString.replaceAll("-", "")}"
+  val dbName = s"notConnectedRepositorySpec${UUID.randomUUID.toString.replaceAll("-", "")}"
 
   val testDbUri = s"mongodb://localhost:27017/$dbName"
 

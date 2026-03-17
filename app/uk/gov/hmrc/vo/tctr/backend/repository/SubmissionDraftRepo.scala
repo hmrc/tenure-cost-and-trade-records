@@ -18,7 +18,7 @@ package uk.gov.hmrc.vo.tctr.backend.repository
 
 import com.google.inject.ImplementedBy
 import org.mongodb.scala.bson.conversions.Bson
-import org.mongodb.scala.model._
+import org.mongodb.scala.model.*
 import org.mongodb.scala.result.DeleteResult
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.mongo.MongoComponent
@@ -57,7 +57,7 @@ class MongoSubmissionDraftRepo @Inject() (
       Codecs.playFormatCodec(DraftsAggregate.format)
     )
   )
-  with SubmissionDraftRepo {
+  with SubmissionDraftRepo:
 
   private val _id = "_id"
 
@@ -105,19 +105,14 @@ class MongoSubmissionDraftRepo @Inject() (
         _.map(_.toDraftsPerVersion)
       }
 
-}
-
-object MongoSubmissionDraftRepo {
+object MongoSubmissionDraftRepo:
   val saveForDays = 90L
-}
 
 @ImplementedBy(classOf[MongoSubmissionDraftRepo])
-trait SubmissionDraftRepo {
+trait SubmissionDraftRepo:
 
   def find(id: String): Future[Option[JsValue]]
 
   def save(id: String, submissionDraft: JsValue): Future[JsValue]
 
   def delete(id: String): Future[DeleteResult]
-
-}

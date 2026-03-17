@@ -19,7 +19,7 @@ package uk.gov.hmrc.vo.tctr.backend.repository
 import com.google.inject.ImplementedBy
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.Sorts.ascending
-import org.mongodb.scala.model._
+import org.mongodb.scala.model.*
 import org.mongodb.scala.result.{DeleteResult, InsertOneResult}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
@@ -33,7 +33,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[NotConnectedMongoRepository])
-trait NotConnectedRepository {
+trait NotConnectedRepository:
 
   val defaultBatchSize = 10
 
@@ -46,8 +46,6 @@ trait NotConnectedRepository {
   def getSubmissions(batchSize: Int = defaultBatchSize): Future[Seq[NotConnectedSubmission]]
 
   def count: Future[Long]
-
-}
 
 @Singleton
 class NotConnectedMongoRepository @Inject() (
@@ -72,7 +70,7 @@ class NotConnectedMongoRepository @Inject() (
       Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
     )
   )
-  with NotConnectedRepository {
+  with NotConnectedRepository:
 
   def insert(notConnectedSubmission: NotConnectedSubmission): Future[InsertOneResult] =
     collection.insertOne(SensitiveNotConnectedSubmission(notConnectedSubmission)).toFuture()
@@ -96,5 +94,3 @@ class NotConnectedMongoRepository @Inject() (
 
   def count: Future[Long] =
     collection.countDocuments().toFuture()
-
-}

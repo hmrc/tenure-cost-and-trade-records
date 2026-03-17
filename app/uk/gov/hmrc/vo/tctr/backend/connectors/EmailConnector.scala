@@ -41,7 +41,8 @@ class EmailConnector @Inject() (
   servicesConfig: ServicesConfig,
   httpClientV2: HttpClientV2,
   dateUtilLocalised: DateUtilLocalised
-)(using  ec: ExecutionContext) extends Logging:
+)(using ec: ExecutionContext
+) extends Logging:
 
   private val emailServiceBaseUrl = servicesConfig.baseUrl("email")
   private val sendEmailURL        = url"$emailServiceBaseUrl/hmrc/email"
@@ -77,17 +78,17 @@ class EmailConnector @Inject() (
   ): Future[HttpResponse] =
     given Lang = englishLang
 
-    val parameters          = customerSubmissionParams(fullName)
+    val parameters = customerSubmissionParams(fullName)
     sendEmail(email, tctr_vacant_submission_confirmation, parameters)
-  
+
   def sendConnectionRemoved(
     notConnectedSubmission: NotConnectedSubmission
   )(using hc: HeaderCarrier
   ): Future[HttpResponse] =
     given Lang = notConnectedSubmission.lang.fold(englishLang)(langMap)
 
-    val templateId          = getTemplatePerLang(tctr_connection_removed, tctr_connection_removed_cy)
-    val parameters          = customerSubmissionParams(notConnectedSubmission.fullName)
+    val templateId = getTemplatePerLang(tctr_connection_removed, tctr_connection_removed_cy)
+    val parameters = customerSubmissionParams(notConnectedSubmission.fullName)
 
     notConnectedSubmission.emailAddress.fold {
       logger.warn(s"Send email to user canceled: 404 Email not found")

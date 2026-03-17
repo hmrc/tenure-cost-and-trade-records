@@ -36,13 +36,11 @@ class ConnectedSubmissionExporter(
     LockService(mongoLockRepository, "ConnectedSubmissionExporterLock", 1 hour),
     scheduler,
     eventStream
-  ) {
+  ):
 
   override val name: String = "ConnectedPropertyScheduler"
 
   override def runJob()(using ec: ExecutionContext): Future[SubmissionExportComplete] =
     exporter.exportNow(exportBatchSize).map(_ => SubmissionExportComplete("ConnectedPropertyScheduler finished"))
-
-}
 
 case class SubmissionExportComplete(msg: String)

@@ -34,13 +34,15 @@ object DateUtil:
   val shortDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.UK)
   val timeFormatter: DateTimeFormatter      = DateTimeFormatter.ofPattern("HH:mm", Locale.UK)
 
-  extension (instant: Instant) def toLocalDate: LocalDate = instant.atZone(ZoneOffset.UTC).toLocalDate
+  extension (instant: Instant)
+    def toLocalDate: LocalDate = instant.atZone(ZoneOffset.UTC).toLocalDate
 
-  extension (date: Date) def asZonedDateTime: ZonedDateTime = date.toInstant.atZone(ukTimezone)
+  extension (date: Date)
+    def asZonedDateTime: ZonedDateTime = date.toInstant.atZone(ukTimezone)
 
   def nowInUK: ZonedDateTime = ZonedDateTime.now(ukTimezone)
 
-  def langByCode(langCode: String): Lang = langCode match {
-    case "cy" => cy
-    case _    => en
-  }
+  def langByCode(langCode: String): Lang =
+    langCode match
+      case "cy" => cy
+      case _    => en

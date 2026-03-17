@@ -39,7 +39,6 @@ trait ExportNotConnectedSubmissions:
 class ExportNotConnectedSubmissionsDeskpro @Inject() (
   repository: NotConnectedRepository,
   deskproConnector: DeskproConnector,
-  //// TODO Add email connector here
   audit: ForTCTRAudit,
   clock: Clock,
   forConfig: AppConfig
@@ -83,7 +82,6 @@ class ExportNotConnectedSubmissionsDeskpro @Inject() (
               s"Not connected submission exported to deskpro, deskproID: $deskproTicketId, submissionID: ${submission.id}"
             )
             auditAccepted(submission.id, deskproTicketId, Map(requestId -> deskproTicket.sessionId))
-            /// TODO Add email connector here - not added as not required for this PR
             repository.removeById(submission.id).map(_ => ())
           }
           .recover {

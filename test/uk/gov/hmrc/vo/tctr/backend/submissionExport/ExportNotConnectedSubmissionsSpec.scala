@@ -83,11 +83,11 @@ class ExportNotConnectedSubmissionsSpec
     Await.ready(system.terminate(), 2 seconds)
 
   object TestData {
-    lazy val repo: NotConnectedMongoRepository = mock[NotConnectedMongoRepository]
-    lazy val deskproConnector                  = StubDeskproConnector()
-    lazy val batchSize                         = 1
-    lazy val scheduler                         = ScheduleThatSchedulesImmediately5Times()
-    lazy val audit: ForTCTRAudit               = mock[ForTCTRAudit]
+    val repo: NotConnectedMongoRepository = mock[NotConnectedMongoRepository]
+    val deskproConnector                  = StubDeskproConnector()
+    val batchSize                         = 1
+    val scheduler                         = ScheduleThatSchedulesImmediately5Times()
+    val audit: ForTCTRAudit               = mock[ForTCTRAudit]
   }
 
 }

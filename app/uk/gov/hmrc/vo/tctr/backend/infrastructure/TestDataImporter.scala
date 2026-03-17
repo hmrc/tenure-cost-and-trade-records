@@ -67,7 +67,7 @@ class TestDataImporter @Inject() (
 
     for
       f4 <- forTypes
-      n <- 0 to 999
+      n  <- 0 to 999
     yield
       val n3      = f"$n%03d"
       val address = Address(
