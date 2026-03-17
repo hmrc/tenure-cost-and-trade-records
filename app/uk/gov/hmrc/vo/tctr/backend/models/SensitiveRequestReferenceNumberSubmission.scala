@@ -37,7 +37,7 @@ case class SensitiveRequestReferenceNumberSubmission(
   additionalInformation: Option[String],
   createdAt: Instant,
   lang: Option[String] = None
-) extends Sensitive[RequestReferenceNumberSubmission] {
+) extends Sensitive[RequestReferenceNumberSubmission]:
 
   override def decryptedValue: RequestReferenceNumberSubmission =
     RequestReferenceNumberSubmission(
@@ -51,10 +51,9 @@ case class SensitiveRequestReferenceNumberSubmission(
       lang
     )
 
-}
 
-object SensitiveRequestReferenceNumberSubmission {
-  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
+object SensitiveRequestReferenceNumberSubmission:
+  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
 
   @nowarn
   implicit def format(using crypto: MongoCrypto): Format[SensitiveRequestReferenceNumberSubmission] = mongoEntity {
@@ -72,5 +71,3 @@ object SensitiveRequestReferenceNumberSubmission {
       submission.createdAt,
       submission.lang
     )
-
-}

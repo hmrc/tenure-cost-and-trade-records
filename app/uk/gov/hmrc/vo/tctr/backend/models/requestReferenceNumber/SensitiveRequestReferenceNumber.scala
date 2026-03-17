@@ -25,16 +25,14 @@ import scala.language.implicitConversions
 case class SensitiveRequestReferenceNumber(
   requestReferenceNumberAddress: Option[SensitiveRequestReferenceNumberAddress] = None,
   requestReferenceContactDetails: Option[RequestReferenceNumberContactDetails] = None
-) extends Sensitive[RequestReferenceNumberDetails] {
+) extends Sensitive[RequestReferenceNumberDetails]:
 
   override def decryptedValue: RequestReferenceNumberDetails = RequestReferenceNumberDetails(
     requestReferenceNumberAddress.map(_.decryptedValue),
     requestReferenceContactDetails
   )
-}
 
-object SensitiveRequestReferenceNumber {
-
+object SensitiveRequestReferenceNumber:
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveRequestReferenceNumber] = Json.format
 
   def apply(requestReferenceNumber: RequestReferenceNumberDetails): SensitiveRequestReferenceNumber =
@@ -42,4 +40,3 @@ object SensitiveRequestReferenceNumber {
       requestReferenceNumber.requestReferenceNumberAddress.map(SensitiveRequestReferenceNumberAddress(_)),
       requestReferenceNumber.requestReferenceContactDetails
     )
-}

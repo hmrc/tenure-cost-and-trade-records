@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models
 
-object BillingAuthority {
+object BillingAuthority:
 
   private val welshBillingAuthorities = Map(
     "BA6805" -> "Ynys Môn/Isle of Anglesey",
@@ -48,4 +48,3 @@ object BillingAuthority {
   )
 
   def isWelsh(code: String): Boolean = welshBillingAuthorities.isDefinedAt(code)
-}

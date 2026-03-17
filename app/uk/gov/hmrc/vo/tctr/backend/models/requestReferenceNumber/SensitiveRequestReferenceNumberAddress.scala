@@ -26,16 +26,16 @@ import scala.language.implicitConversions
 case class SensitiveRequestReferenceNumberAddress(
   noReferenceNumberBusinessTradingName: SensitiveString,
   noReferenceNumberAddress: SensitiveRequestAddress
-) extends Sensitive[RequestReferenceNumber] {
+) extends Sensitive[RequestReferenceNumber]:
 
   override def decryptedValue: RequestReferenceNumber = RequestReferenceNumber(
     noReferenceNumberBusinessTradingName.decryptedValue,
     noReferenceNumberAddress.decryptedValue
   )
-}
 
-object SensitiveRequestReferenceNumberAddress {
-  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
+object SensitiveRequestReferenceNumberAddress:
+  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
+
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveRequestReferenceNumberAddress] = Json.format
 
   def apply(noReferenceNumber: RequestReferenceNumber): SensitiveRequestReferenceNumberAddress =
@@ -43,4 +43,3 @@ object SensitiveRequestReferenceNumberAddress {
       SensitiveString(noReferenceNumber.requestReferenceNumberBusinessTradingName),
       SensitiveRequestAddress(noReferenceNumber.requestReferenceNumberAddress)
     )
-}

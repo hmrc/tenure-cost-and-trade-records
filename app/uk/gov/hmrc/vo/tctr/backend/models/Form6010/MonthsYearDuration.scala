@@ -20,10 +20,8 @@ import play.api.libs.json.{Json, OFormat}
 
 import java.time.YearMonth
 
-case class MonthsYearDuration(months: Int, years: Int) {
+case class MonthsYearDuration(months: Int, years: Int):
   def toYearMonth: YearMonth = YearMonth.of(years, months)
-}
 
-object MonthsYearDuration {
+object MonthsYearDuration:
   implicit val format: OFormat[MonthsYearDuration] = Json.format
-}

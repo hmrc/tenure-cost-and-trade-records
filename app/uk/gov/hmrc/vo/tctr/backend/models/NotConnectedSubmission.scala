@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models
 
-import play.api.libs.json._
+import play.api.libs.json.*
 import uk.gov.hmrc.mongo.play.json.formats.MongoFormats.mongoEntity
 import uk.gov.hmrc.vo.tctr.backend.schema.Address
 
@@ -36,12 +36,10 @@ case class NotConnectedSubmission(
   lang: Option[String] = None
 )
 
-object NotConnectedSubmission {
-  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
+object NotConnectedSubmission:
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits.*
 
   @nowarn
   implicit val format: Format[NotConnectedSubmission] = mongoEntity {
     Json.format
   }
-
-}

@@ -26,7 +26,7 @@ case class SensitiveTenantDetails(
   name: String,
   descriptionOfLetting: String,
   sensitiveCorrespondenceAddress: SensitiveCorrespondenceAddress
-) extends Sensitive[TenantDetails] {
+) extends Sensitive[TenantDetails]:
 
   override def decryptedValue: TenantDetails = TenantDetails(
     name,
@@ -34,9 +34,7 @@ case class SensitiveTenantDetails(
     sensitiveCorrespondenceAddress.decryptedValue
   )
 
-}
-
-object SensitiveTenantDetails {
+object SensitiveTenantDetails:
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveTenantDetails] = Json.format
 
   def apply(tenantDetails: TenantDetails): SensitiveTenantDetails = SensitiveTenantDetails(
@@ -44,4 +42,3 @@ object SensitiveTenantDetails {
     tenantDetails.descriptionOfLetting,
     SensitiveCorrespondenceAddress(tenantDetails.correspondenceAddress)
   )
-}

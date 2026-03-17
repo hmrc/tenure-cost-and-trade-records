@@ -28,12 +28,11 @@ case class FORCredentials(
   forType: String,
   address: SensitiveAddress,
   _id: String
-) {
+):
   def basicAuthString: String = "Basic " + encodedAuth
 
-  def encodedAuth: String = Base64.getEncoder.encodeToString(s"$forNumber:${address.postcode}".getBytes)
-}
+  private def encodedAuth: String = Base64.getEncoder.encodeToString(s"$forNumber:${address.postcode}".getBytes)
 
-object FORCredentials {
+
+object FORCredentials:
   implicit def format(using crypto: MongoCrypto): OFormat[FORCredentials] = Json.format
-}

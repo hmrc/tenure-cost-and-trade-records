@@ -26,6 +26,5 @@ case class RequestReferenceNumberAddress(
   postcode: String
 )
 
-object RequestReferenceNumberAddress {
+object RequestReferenceNumberAddress:
   implicit val format: OFormat[RequestReferenceNumberAddress] = Json.format
-}

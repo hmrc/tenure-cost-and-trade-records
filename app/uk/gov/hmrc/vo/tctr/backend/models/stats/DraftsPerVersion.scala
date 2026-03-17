@@ -25,6 +25,5 @@ import java.time.LocalDate
   */
 case class DraftsPerVersion(version: String, drafts: Long, expireOn: LocalDate)
 
-object DraftsPerVersion {
+object DraftsPerVersion:
   implicit val format: OFormat[DraftsPerVersion] = Json.format
-}

@@ -29,7 +29,7 @@ case class SensitiveRequestAddress(
   town: SensitiveString,
   county: Option[SensitiveString],
   postcode: SensitiveString
-) extends Sensitive[RequestReferenceNumberAddress] {
+) extends Sensitive[RequestReferenceNumberAddress]:
 
   override def decryptedValue: RequestReferenceNumberAddress = RequestReferenceNumberAddress(
     buildingNameNumber.decryptedValue,
@@ -38,10 +38,10 @@ case class SensitiveRequestAddress(
     county.map(_.decryptedValue),
     postcode.decryptedValue
   )
-}
 
-object SensitiveRequestAddress {
-  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
+object SensitiveRequestAddress:
+  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
+
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveRequestAddress] = Json.format
 
   def apply(requestAddress: RequestReferenceNumberAddress): SensitiveRequestAddress = SensitiveRequestAddress(
@@ -51,4 +51,3 @@ object SensitiveRequestAddress {
     requestAddress.county.map(SensitiveString(_)),
     SensitiveString(requestAddress.postcode)
   )
-}

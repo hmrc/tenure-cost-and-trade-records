@@ -28,7 +28,7 @@ case class SensitiveYourContactDetails(
   fullName: SensitiveString,
   contactDetails: SensitiveContactDetails,
   additionalInformation: Option[String]
-) extends Sensitive[YourContactDetails] {
+) extends Sensitive[YourContactDetails]:
 
   override def decryptedValue: YourContactDetails = YourContactDetails(
     fullName.decryptedValue,
@@ -36,10 +36,8 @@ case class SensitiveYourContactDetails(
     additionalInformation
   )
 
-}
-
-object SensitiveYourContactDetails {
-  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
+object SensitiveYourContactDetails:
+  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
 
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveYourContactDetails] = Json.format
 
@@ -48,4 +46,3 @@ object SensitiveYourContactDetails {
     SensitiveContactDetails(yourContactDetails.contactDetails),
     yourContactDetails.additionalInformation
   )
-}

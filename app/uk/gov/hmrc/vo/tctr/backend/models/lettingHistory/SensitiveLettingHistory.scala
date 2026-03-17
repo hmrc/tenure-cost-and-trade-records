@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.lettingHistory
 
+import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.crypto.Sensitive
 
 import scala.language.implicitConversions
@@ -42,7 +43,6 @@ case class SensitiveLettingHistory(
     )
 
 object SensitiveLettingHistory:
-  import play.api.libs.json.{Format, Json}
   import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
   implicit def format(using crypto: MongoCrypto): Format[SensitiveLettingHistory] = Json.format

@@ -26,16 +26,14 @@ import scala.language.implicitConversions
 case class SensitiveRemoveConnectionDetails(
   removeConnectionDetails: Option[SensitiveRemoveConnectionsDetails] = None,
   pastConnectionType: Option[AnswersYesNo] = None
-) extends Sensitive[RemoveConnectionDetails] {
+) extends Sensitive[RemoveConnectionDetails]:
 
   override def decryptedValue: RemoveConnectionDetails = RemoveConnectionDetails(
     removeConnectionDetails.map(_.decryptedValue),
     pastConnectionType
   )
-}
 
 object SensitiveRemoveConnectionDetails:
-
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveRemoveConnectionDetails] = Json.format
 
   def apply(removeConnectionDetails: RemoveConnectionDetails): SensitiveRemoveConnectionDetails =
