@@ -34,7 +34,6 @@ case class SensitiveCustomerDetails(
     contactDetails.decryptedValue
   )
 
-
 object SensitiveCustomerDetails:
   import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
 

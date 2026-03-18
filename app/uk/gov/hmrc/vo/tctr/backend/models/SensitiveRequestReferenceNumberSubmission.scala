@@ -51,7 +51,6 @@ case class SensitiveRequestReferenceNumberSubmission(
       lang
     )
 
-
 object SensitiveRequestReferenceNumberSubmission:
   import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
 

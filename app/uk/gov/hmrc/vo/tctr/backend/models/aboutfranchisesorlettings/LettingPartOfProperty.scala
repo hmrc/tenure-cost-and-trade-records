@@ -26,6 +26,7 @@ sealed trait LettingPartOfProperty:
   def rentalDetails: Option[RentDetails]
 
 object LettingPartOfProperty:
+
   private val lettingReads: Reads[LettingPartOfProperty] = (__ \ "type").read[String].flatMap {
     case "ATMLetting"              => implicitly[Reads[ATMLetting]].map(identity)
     case "TelecomMastLetting"      => implicitly[Reads[TelecomMastLetting]].map(identity)

@@ -23,6 +23,7 @@ sealed trait IncomeRecord:
   def sourceType: TypeOfIncome
 
 object IncomeRecord:
+
   implicit val format: OFormat[IncomeRecord] =
     val franchiseFormat      = Json.format[FranchiseIncomeRecord]
     val concession6015Format = Json.format[Concession6015IncomeRecord]

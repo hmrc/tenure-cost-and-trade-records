@@ -29,7 +29,6 @@ class ScheduleThatSchedulesImmediately5Times extends Schedule:
       times = times + 1
       0 seconds
 
-
 class ScheduleOnce extends Schedule:
   var times = 1
 
@@ -38,7 +37,6 @@ class ScheduleOnce extends Schedule:
       times = times + 1
       0 seconds
     else 30 minutes
-
 
 case class ScheduleNTimes(n: Int) extends Schedule:
   var times = 1

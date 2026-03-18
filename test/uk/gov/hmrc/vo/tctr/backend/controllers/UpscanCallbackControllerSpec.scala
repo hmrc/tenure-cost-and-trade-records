@@ -40,7 +40,7 @@ import scala.concurrent.duration.*
 
 class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with MockitoExtendedSugar:
 
-  given Timeout     = 9.seconds
+  given Timeout          = 9.seconds
   given ExecutionContext = ExecutionContext.global
   given HeaderCarrier    = HeaderCarrier()
 

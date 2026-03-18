@@ -41,7 +41,6 @@ class InMemoryFailedLoginsRepo extends FailedLoginsRepo:
     failedLogins = failedLogins.updated(login.ipAddress, attempts :+ login)
     Future.unit
 
-
 class StubCredentialsRepository extends CredentialsRepo:
   override def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] = Future.successful(None)
 
@@ -58,7 +57,6 @@ class StubCredentialsRepository extends CredentialsRepo:
   )(using
     writes: OWrites[FORCredentials]
   ): Future[BulkWriteResult] = ???
-
 
 class StubSubmittedRepository @Inject() (mongo: MongoComponent, appConfig: AppConfig)(using ec: ExecutionContext) extends SubmittedMongoRepo(mongo, appConfig):
 

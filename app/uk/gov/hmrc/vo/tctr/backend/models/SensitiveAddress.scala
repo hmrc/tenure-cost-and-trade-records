@@ -43,7 +43,6 @@ case class SensitiveAddress(
     postcode.decryptedValue
   )
 
-
 object SensitiveAddress:
 
   import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*

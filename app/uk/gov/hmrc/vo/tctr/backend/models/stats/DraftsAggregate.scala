@@ -30,7 +30,6 @@ case class DraftsAggregate(_id: Option[String], count: Long, maxCreatedAt: Insta
   def toDraftsPerVersion: DraftsPerVersion =
     DraftsPerVersion(_id.getOrElse(""), count, maxCreatedAt.toLocalDate.plusDays(saveForDays))
 
-
 object DraftsAggregate:
   import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits.*
 

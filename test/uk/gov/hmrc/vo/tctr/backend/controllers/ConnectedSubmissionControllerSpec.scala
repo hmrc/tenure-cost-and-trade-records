@@ -39,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ConnectedSubmissionControllerSpec extends AnyWordAppSpec:
 
-  given Timeout     = 5.seconds
+  given Timeout = 5.seconds
 
   protected val backendAuthComponentsStub: BackendAuthComponents =
     BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ExecutionContext.Implicits.global)

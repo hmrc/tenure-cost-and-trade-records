@@ -88,7 +88,6 @@ class ExportNotConnectedSubmissionsSpec
     val scheduler                         = ScheduleThatSchedulesImmediately5Times()
     val audit: ForTCTRAudit               = mock[ForTCTRAudit]
 
-
 class StubDeskproConnector extends DeskproConnector with should.Matchers:
 
   private var receivedTickets = Seq.empty[DeskproTicket]

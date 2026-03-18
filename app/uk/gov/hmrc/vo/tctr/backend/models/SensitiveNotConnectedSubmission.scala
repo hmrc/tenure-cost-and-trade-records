@@ -56,12 +56,11 @@ case class SensitiveNotConnectedSubmission(
       lang
     )
 
-
 object SensitiveNotConnectedSubmission:
 
   import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits.*
   import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
-  
+
   @nowarn
   implicit def format(using crypto: MongoCrypto): Format[SensitiveNotConnectedSubmission] = mongoEntity {
     Json.format

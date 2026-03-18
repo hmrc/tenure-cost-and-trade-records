@@ -33,6 +33,5 @@ case class FORCredentials(
 
   private def encodedAuth: String = Base64.getEncoder.encodeToString(s"$forNumber:${address.postcode}".getBytes)
 
-
 object FORCredentials:
   implicit def format(using crypto: MongoCrypto): OFormat[FORCredentials] = Json.format

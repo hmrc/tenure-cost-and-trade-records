@@ -17,7 +17,7 @@
 package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.{JsObject, JsSuccess, Json, OFormat, Writes}
+import play.api.libs.json.{JsObject, JsSuccess, Json, Writes}
 import TiedForGoodsInformation.*
 
 class TiedForGoodsInformationSpec extends PlaySpec:
