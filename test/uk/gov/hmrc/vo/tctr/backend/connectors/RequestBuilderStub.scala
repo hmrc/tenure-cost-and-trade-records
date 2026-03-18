@@ -43,8 +43,7 @@ case class RequestBuilderStub(responseStatusOrFailure: Either[Throwable, Int], r
   override def withProxy: RequestBuilder = this
 
   override def withBody[B: {BodyWritable, Tag}](body: B)(using ec: ExecutionContext): RequestBuilder =
-    val bodyString = body match {
+    val bodyString = body match
       case json: JsValue => Json.stringify(json)
       case b             => b.toString
-    }
-    this.copy(requestBody = bodyString)
+    copy(requestBody = bodyString)

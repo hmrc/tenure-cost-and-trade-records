@@ -20,15 +20,13 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.vo.tctr.backend.models.common.AnswersYesNo.*
 
-class ConnectionToLandlordSpec extends PlaySpec {
+class ConnectionToLandlordSpec extends PlaySpec:
+
   "Connection To Landlord" should {
     "serialize and deserialize correctly" in {
-      val connectionToLandlord =
-        ConnectedToLandlord(Some(AnswerYes))
+      val connectionToLandlord = ConnectedToLandlord(Some(AnswerYes))
 
       val json = Json.toJson(connectionToLandlord)
       json.as[ConnectedToLandlord] mustBe connectionToLandlord
     }
-
   }
-}

@@ -20,12 +20,9 @@ import org.scalatest.flatspec.*
 import org.scalatest.matchers.should.*
 import play.api.libs.json.Json
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
-import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.vo.tctr.backend.testUtils.SensitiveTestHelper
 
 class ForCredentialsSpec extends AnyFlatSpec with Matchers with SensitiveTestHelper:
-
-  implicit val crypto: MongoCrypto = TestMongoCrypto(loadTestConfig())
 
   val credentials: FORCredentials = FORCredentials(
     "9999601001",

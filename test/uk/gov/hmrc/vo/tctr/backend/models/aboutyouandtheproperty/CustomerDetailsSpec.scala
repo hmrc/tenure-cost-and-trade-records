@@ -20,7 +20,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.vo.tctr.backend.models.common.ContactDetails
 
-class CustomerDetailsSpec extends PlaySpec {
+class CustomerDetailsSpec extends PlaySpec:
 
   "CustomerDetails" should {
     "serialize and deserialize correctly" in {
@@ -33,4 +33,3 @@ class CustomerDetailsSpec extends PlaySpec {
       json.as[CustomerDetails] mustBe customerDetails
     }
   }
-}

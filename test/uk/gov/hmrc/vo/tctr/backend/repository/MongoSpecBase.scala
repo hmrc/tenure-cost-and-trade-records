@@ -31,7 +31,7 @@ import scala.concurrent.ExecutionContext
 /**
   * @author Yuriy Tumakha
   */
-abstract class MongoSpecBase extends AnyFlatSpec with BeforeAndAfterAll with GuiceOneAppPerSuite with AppSuiteBase {
+abstract class MongoSpecBase extends AnyFlatSpec with BeforeAndAfterAll with GuiceOneAppPerSuite with AppSuiteBase:
 
   private val testDbName = s"TCTR-${getClass.getSimpleName}"
   private val testDbUri  = s"mongodb://localhost:27017/$testDbName"
@@ -39,10 +39,9 @@ abstract class MongoSpecBase extends AnyFlatSpec with BeforeAndAfterAll with Gui
 
   implicit val ec: ExecutionContext = inject[ExecutionContext]
 
-  override protected def afterAll(): Unit = {
+  override protected def afterAll(): Unit =
     mongo.database.drop().toFutureOption().futureValue // !!! Temporary database MUST be deleted after each test
     mongo.client.close()
-  }
 
   final override def fakeApplication(): Application = GuiceApplicationBuilder()
     .configure(
@@ -52,5 +51,3 @@ abstract class MongoSpecBase extends AnyFlatSpec with BeforeAndAfterAll with Gui
     )
     .bindings(new PlayMongoModule)
     .build()
-
-}

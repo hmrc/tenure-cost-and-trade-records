@@ -24,7 +24,7 @@ import uk.gov.hmrc.vo.tctr.backend.util.{DateUtil, DateUtilLocalised}
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class DateUtilLocalisedSpec extends AnyWordAppSpec {
+class DateUtilLocalisedSpec extends AnyWordAppSpec:
 
   private val testDate: Date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2025-04-17 12:34:56")
   private val dateEN         = "17 April 2025"
@@ -33,7 +33,7 @@ class DateUtilLocalisedSpec extends AnyWordAppSpec {
   private val dateUtilLocalised = inject[DateUtilLocalised]
   private val messagesApi       = inject[MessagesApi]
 
-  implicit val messagesEN: Messages = messagesApi.preferred(Seq(DateUtil.en))
+  given messagesEN: Messages = messagesApi.preferred(Seq(DateUtil.en))
 
   "DateUtilLocalised" must {
     "format Date" in {
@@ -57,5 +57,3 @@ class DateUtilLocalisedSpec extends AnyWordAppSpec {
     }
 
   }
-
-}

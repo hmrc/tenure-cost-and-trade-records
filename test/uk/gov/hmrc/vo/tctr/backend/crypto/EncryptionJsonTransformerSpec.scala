@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.vo.tctr.backend.crypto
 
-import play.api.libs.json._
+import play.api.libs.json.*
 import uk.gov.hmrc.vo.tctr.backend.base.AnyFlatAppSpec
 
 import scala.io.Source
@@ -24,7 +24,7 @@ import scala.io.Source
 /**
   * @author Yuriy Tumakha
   */
-class EncryptionJsonTransformerSpec extends AnyFlatAppSpec with BeEncryptedMatchers {
+class EncryptionJsonTransformerSpec extends AnyFlatAppSpec with BeEncryptedMatchers:
 
   private val encryptionJsonTransformer = inject[EncryptionJsonTransformer]
   private val submissionDraftJson       = Json.parse(Source.fromResource("json/submissionDraft.json").mkString)
@@ -62,5 +62,3 @@ class EncryptionJsonTransformerSpec extends AnyFlatAppSpec with BeEncryptedMatch
     (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "county") shouldBe
       (submissionDraftJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "county")
   }
-
-}

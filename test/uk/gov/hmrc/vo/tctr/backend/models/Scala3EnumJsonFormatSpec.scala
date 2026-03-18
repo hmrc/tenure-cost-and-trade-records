@@ -23,12 +23,12 @@ import play.api.libs.json.{Format, JsError, Json}
 /**
   * @author Yuriy Tumakha
   */
-class Scala3EnumJsonFormatSpec extends AnyFlatSpec with should.Matchers {
+class Scala3EnumJsonFormatSpec extends AnyFlatSpec with should.Matchers:
 
   enum Color:
     case Red, Green, Blue
 
-  implicit val format: Format[Color] = Scala3EnumJsonFormat.format
+  given Format[Color] = Scala3EnumJsonFormat.format
 
   import Color.*
 
@@ -53,5 +53,3 @@ class Scala3EnumJsonFormatSpec extends AnyFlatSpec with should.Matchers {
   it should "return JsError for number" in {
     Json.parse("123").validate[Color] shouldBe JsError("Invalid Json: expected string, got: 123")
   }
-
-}

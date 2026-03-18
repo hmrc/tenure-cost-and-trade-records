@@ -24,7 +24,7 @@ import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
 /**
   * @author Yuriy Tumakha
   */
-class AboutTheTradingHistorySpec extends AnyFlatSpec with Matchers with FakeObjects {
+class AboutTheTradingHistorySpec extends AnyFlatSpec with Matchers with FakeObjects:
 
   "AboutTheTradingHistory" should "handle turnover models" in {
     val tradingHistory = prefilledAboutYourTradingHistory
@@ -38,5 +38,3 @@ class AboutTheTradingHistorySpec extends AnyFlatSpec with Matchers with FakeObje
     val json = Json.toJson(prefilledAboutYourTradingHistory)
     json.as[AboutTheTradingHistory] shouldBe prefilledAboutYourTradingHistory
   }
-
-}

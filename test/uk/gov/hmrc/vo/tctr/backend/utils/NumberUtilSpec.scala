@@ -20,7 +20,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import uk.gov.hmrc.vo.tctr.backend.util.NumberUtil.*
 
-class NumberUtilSpec extends AnyFlatSpec with Matchers {
+class NumberUtilSpec extends AnyFlatSpec with Matchers:
 
   "removeTrailingZeros" should
     "remove zeros from a string" in {
@@ -50,4 +50,3 @@ class NumberUtilSpec extends AnyFlatSpec with Matchers {
       zeroBigDecimal.withScaleFull(2)       should be("0.00")
       BigDecimal("123.45").withScaleFull(2) should be("123.45")
     }
-}

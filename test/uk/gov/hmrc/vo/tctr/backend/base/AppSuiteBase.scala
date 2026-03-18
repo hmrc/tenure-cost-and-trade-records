@@ -32,6 +32,6 @@ trait AppSuiteBase
   with OptionValues
   with ScalaFutures
   with IntegrationPatience
-  with FakeObjects {
+  with FakeObjects:
+
   self: HasApp =>
-}

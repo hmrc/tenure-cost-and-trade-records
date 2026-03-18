@@ -29,25 +29,21 @@ import uk.gov.hmrc.vo.tctr.backend.security.{FailedLogin, FailedLoginsRepo}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class InMemoryFailedLoginsRepo extends FailedLoginsRepo {
+class InMemoryFailedLoginsRepo extends FailedLoginsRepo:
   private var failedLogins: Map[String, Seq[FailedLogin]] = Map.empty
 
   override def mostRecent(ip: String, amount: Int, since: Instant): Future[Seq[FailedLogin]] = Future.successful {
     failedLogins.getOrElse(ip, Seq.empty).filter(_.timestamp.isAfter(since.minusSeconds(1)))
   }
 
-  override def record(login: FailedLogin): Future[Unit] = {
+  override def record(login: FailedLogin): Future[Unit] =
     val attempts = failedLogins.getOrElse(login.ipAddress, Seq.empty)
     failedLogins = failedLogins.updated(login.ipAddress, attempts :+ login)
     Future.unit
-  }
 
-}
 
-class StubCredentialsRepository extends CredentialsRepo {
-
-  override def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] =
-    Future.successful(None)
+class StubCredentialsRepository extends CredentialsRepo:
+  override def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] = Future.successful(None)
 
   override def bulkInsert(fs: Seq[FORCredentials]): Future[InsertManyResult] = ???
 
@@ -62,11 +58,10 @@ class StubCredentialsRepository extends CredentialsRepo {
   )(using
     writes: OWrites[FORCredentials]
   ): Future[BulkWriteResult] = ???
-}
 
-class StubSubmittedRepository @Inject() (mongo: MongoComponent, appConfig: AppConfig)(using ec: ExecutionContext) extends SubmittedMongoRepo(mongo, appConfig) {
+
+class StubSubmittedRepository @Inject() (mongo: MongoComponent, appConfig: AppConfig)(using ec: ExecutionContext) extends SubmittedMongoRepo(mongo, appConfig):
 
   override def insertIfUnique(refNum: String): Future[InsertOneResult] = ???
 
   override def hasBeenSubmitted(refNum: String): Future[Boolean] = Future.successful(false)
-}

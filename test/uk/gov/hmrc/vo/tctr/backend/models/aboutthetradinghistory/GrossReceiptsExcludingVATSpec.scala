@@ -19,7 +19,8 @@ package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 
-class GrossReceiptsExcludingVATSpec extends PlaySpec {
+class GrossReceiptsExcludingVATSpec extends PlaySpec:
+
   "GrossReceiptsExcludingVATSpec" should {
     "serialize and deserialize correctly" in {
       val grossReceiptsExcludingVAT = GrossReceiptsExcludingVAT(
@@ -35,6 +36,7 @@ class GrossReceiptsExcludingVATSpec extends PlaySpec {
       val json                      = Json.toJson(grossReceiptsExcludingVAT: GrossReceiptsExcludingVAT)
       json.as[GrossReceiptsExcludingVAT] mustBe grossReceiptsExcludingVAT
     }
+
     "have correct total value" in {
       val grossReceiptsExcludingVAT = GrossReceiptsExcludingVAT(
         Some(1),
@@ -49,5 +51,3 @@ class GrossReceiptsExcludingVATSpec extends PlaySpec {
       grossReceiptsExcludingVAT.total mustBe 36
     }
   }
-
-}

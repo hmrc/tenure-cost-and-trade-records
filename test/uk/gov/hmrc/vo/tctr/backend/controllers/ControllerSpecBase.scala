@@ -27,8 +27,6 @@ import scala.language.postfixOps
 /**
   * @author Yuriy Tumakha
   */
-abstract class ControllerSpecBase extends AsyncFlatSpec with Matchers with MockitoSugar {
+abstract class ControllerSpecBase extends AsyncFlatSpec with Matchers with MockitoSugar:
 
   implicit val timeout: Timeout = 9 seconds
-
-}

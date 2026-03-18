@@ -21,7 +21,7 @@ import play.api.libs.json.Json
 
 import java.time.LocalDate
 
-class CompletedLettingsSpec extends PlaySpec {
+class CompletedLettingsSpec extends PlaySpec:
 
   "CompletedLettings" should {
     "serialize and deserialize correctly" in {
@@ -34,4 +34,3 @@ class CompletedLettingsSpec extends PlaySpec {
       json.as[CompletedLettings] mustBe completedLettings
     }
   }
-}

@@ -19,9 +19,9 @@ package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 
-class AdditionalCateringSpec extends PlaySpec {
-  "AdditionalCatering" should {
+class AdditionalCateringSpec extends PlaySpec:
 
+  "AdditionalCatering" should {
     "serialize and deserialize correctly with all fields" in {
       val additionalShops = AdditionalCatering(
         grossReceipts = Some(100.00),
@@ -31,4 +31,3 @@ class AdditionalCateringSpec extends PlaySpec {
       json.as[AdditionalCatering] mustBe additionalShops
     }
   }
-}

@@ -17,10 +17,10 @@
 package uk.gov.hmrc.vo.tctr.backend.testUtils
 
 import uk.gov.hmrc.vo.tctr.backend.infrastructure.Schedule
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.language.postfixOps
 
-class ScheduleThatSchedulesImmediately5Times extends Schedule {
+class ScheduleThatSchedulesImmediately5Times extends Schedule:
   var times = 1
 
   def timeUntilNextRun(): FiniteDuration =
@@ -28,9 +28,9 @@ class ScheduleThatSchedulesImmediately5Times extends Schedule {
     else
       times = times + 1
       0 seconds
-}
 
-class ScheduleOnce extends Schedule {
+
+class ScheduleOnce extends Schedule:
   var times = 1
 
   def timeUntilNextRun(): FiniteDuration =
@@ -38,9 +38,9 @@ class ScheduleOnce extends Schedule {
       times = times + 1
       0 seconds
     else 30 minutes
-}
 
-case class ScheduleNTimes(n: Int) extends Schedule {
+
+case class ScheduleNTimes(n: Int) extends Schedule:
   var times = 1
 
   def timeUntilNextRun(): FiniteDuration =
@@ -48,4 +48,3 @@ case class ScheduleNTimes(n: Int) extends Schedule {
       times = times + 1
       0 seconds
     else 30 minutes
-}

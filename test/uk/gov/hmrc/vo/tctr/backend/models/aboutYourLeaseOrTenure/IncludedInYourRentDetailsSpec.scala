@@ -20,17 +20,13 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import IncludedInYourRentInformation.*
 
-class IncludedInYourRentDetailsSpec extends PlaySpec {
+class IncludedInYourRentDetailsSpec extends PlaySpec:
 
   "IncludedInYourRent" should {
     "serialize and deserialize correctly" in {
-      val includedInYourRentDetails =
-        IncludedInYourRentDetails(List(IncludedInYourRentInformationVat), Some(BigDecimal(100.00)))
+      val includedInYourRentDetails = IncludedInYourRentDetails(List(IncludedInYourRentInformationVat), Some(BigDecimal(100.00)))
 
       val json = Json.toJson(includedInYourRentDetails)
       json.as[IncludedInYourRentDetails] mustBe includedInYourRentDetails
     }
-
   }
-
-}

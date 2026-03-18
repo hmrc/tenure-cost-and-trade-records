@@ -19,7 +19,7 @@ package uk.gov.hmrc.vo.tctr.backend.repository
 /**
   * @author Yuriy Tumakha
   */
-class ConnectedMongoRepositorySpec extends MongoSpecBase {
+class ConnectedMongoRepositorySpec extends MongoSpecBase:
 
   private val submissionDraftFindId = "99996010004"
 
@@ -43,5 +43,3 @@ class ConnectedMongoRepositorySpec extends MongoSpecBase {
   it should "return number of ConnectedSubmissions" in {
     repo.count.futureValue shouldBe 1
   }
-
-}

@@ -20,7 +20,8 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.vo.tctr.backend.models.common.AnswersYesNo.*
 
-class OtherHolidayAccommodationSpec extends PlaySpec {
+class OtherHolidayAccommodationSpec extends PlaySpec:
+
   "OtherHolidayAccommodation" should {
     "serialize and deserialize correctly" in {
       val otherHolidayAccommodation = OtherHolidayAccommodation(
@@ -29,6 +30,7 @@ class OtherHolidayAccommodationSpec extends PlaySpec {
       val json                      = Json.toJson(otherHolidayAccommodation: OtherHolidayAccommodation)
       json.as[OtherHolidayAccommodation] mustBe otherHolidayAccommodation
     }
+
     "serialize and deserialize correctly with all fields" in {
       val otherHolidayAccommodation = OtherHolidayAccommodation(
         Some(AnswerYes),
@@ -39,4 +41,3 @@ class OtherHolidayAccommodationSpec extends PlaySpec {
       json.as[OtherHolidayAccommodation] mustBe otherHolidayAccommodation
     }
   }
-}

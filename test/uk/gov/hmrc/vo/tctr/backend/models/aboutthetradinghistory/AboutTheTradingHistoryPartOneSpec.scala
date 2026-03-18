@@ -24,7 +24,7 @@ import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
 /**
   * @author Yuriy Tumakha
   */
-class AboutTheTradingHistoryPartOneSpec extends AnyFlatSpec with Matchers with FakeObjects {
+class AboutTheTradingHistoryPartOneSpec extends AnyFlatSpec with Matchers with FakeObjects:
 
   "AboutTheTradingHistoryPartOne" should "be serialized/deserialized from JSON" in {
     val json = Json.toJson(prefilledAboutTheTradingHistoryPartOne)
@@ -64,5 +64,3 @@ class AboutTheTradingHistoryPartOneSpec extends AnyFlatSpec with Matchers with F
     turnoverSections6048.flatMap(_.administrativeCosts.map(_.total)).sum shouldBe 999
     turnoverSections6048.flatMap(_.operationalCosts.map(_.total)).sum    shouldBe 666
   }
-
-}

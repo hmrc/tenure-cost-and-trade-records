@@ -21,14 +21,11 @@ import uk.gov.hmrc.vo.tctr.backend.schema.Address
 
 import java.time.Instant
 
-object SubmissionBuilder {
+object SubmissionBuilder:
 
-  def createNotConnectedSubmission(n: Int): NotConnectedSubmission = {
-    val submissionSuffix = n match {
-      case n: Int if n < 9  => s"00$n"
-      case n: Int if n < 99 => s"0$n"
-      case n: Int           => n.toString
-    }
+  def createNotConnectedSubmission(n: Int): NotConnectedSubmission =
+    val submissionSuffix = f"$n%03d"
+
     NotConnectedSubmission(
       s"9999000$submissionSuffix",
       "FOR6010",
@@ -37,11 +34,7 @@ object SubmissionBuilder {
       None,
       Some("012345678999"),
       Some("I left property"),
-      Instant.now(),
+      Instant.now,
       Some(false),
       Some("en")
     )
-
-  }
-
-}

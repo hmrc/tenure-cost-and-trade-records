@@ -43,17 +43,16 @@ class ExportNotConnectedSubmissionsSpec
   with AnyWordSpecLike
   with should.Matchers
   with BeforeAndAfterAll
-  with MockitoExtendedSugar {
+  with MockitoExtendedSugar:
 
-  implicit val ec: ExecutionContext = system.dispatcher
-//  private val emailConnector = mock[EmailConnector]
-  import TestData._
+  given ExecutionContext = system.dispatcher
 
-  def config(): AppConfig = {
+  import TestData.*
+
+  def config(): AppConfig =
     val config        = ConfigFactory.load("application.conf")
     val configuration = Configuration(config)
     AppConfig(configuration)
-  }
 
   "Given there are submissions to be exported" when {
     val submissions = (1 to 200).map(SubmissionBuilder.createNotConnectedSubmission).toList
@@ -82,17 +81,15 @@ class ExportNotConnectedSubmissionsSpec
   override def afterAll(): Unit =
     Await.ready(system.terminate(), 2 seconds)
 
-  object TestData {
+  object TestData:
     val repo: NotConnectedMongoRepository = mock[NotConnectedMongoRepository]
     val deskproConnector                  = StubDeskproConnector()
     val batchSize                         = 1
     val scheduler                         = ScheduleThatSchedulesImmediately5Times()
     val audit: ForTCTRAudit               = mock[ForTCTRAudit]
-  }
 
-}
 
-class StubDeskproConnector extends DeskproConnector with should.Matchers {
+class StubDeskproConnector extends DeskproConnector with should.Matchers:
 
   private var receivedTickets = Seq.empty[DeskproTicket]
 
@@ -103,5 +100,3 @@ class StubDeskproConnector extends DeskproConnector with should.Matchers {
 
   def verifyReceived(s: Seq[DeskproTicket]): Assertion =
     assert(receivedTickets === s)
-
-}

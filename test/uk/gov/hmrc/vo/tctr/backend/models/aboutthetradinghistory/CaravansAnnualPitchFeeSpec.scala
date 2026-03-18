@@ -25,7 +25,7 @@ import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
 /**
   * @author Yuriy Tumakha
   */
-class CaravansAnnualPitchFeeSpec extends AnyFlatSpec with Matchers with FakeObjects {
+class CaravansAnnualPitchFeeSpec extends AnyFlatSpec with Matchers with FakeObjects:
 
   private val caravansAnnualPitchFee = CaravansAnnualPitchFee(
     1000,
@@ -50,5 +50,3 @@ class CaravansAnnualPitchFeeSpec extends AnyFlatSpec with Matchers with FakeObje
     val obj        = Json.parse(jsonString).as[CaravansAnnualPitchFee]
     obj shouldBe caravansAnnualPitchFee
   }
-
-}

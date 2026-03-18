@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
+package uk.gov.hmrc.vo.tctr.backend.testUtils
 
-import play.api.libs.json.Json
-import org.scalatestplus.play.PlaySpec
+import play.api.Configuration
+import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
-class GrossReceiptsSubLetUnitsSpec extends PlaySpec:
+trait SensitiveTestHelper:
 
-  "GrossReceiptsSubLetUnits" should {
-    "serialize and deserialize correctly" in {
-      val grossReceiptsSubLetUnits = GrossReceiptsSubLetUnits(
-        Some(100.00),
-        Some(1)
-      )
-      val json                     = Json.toJson(grossReceiptsSubLetUnits)
-      json.as[GrossReceiptsSubLetUnits] mustBe grossReceiptsSubLetUnits
-    }
-  }
+  private val testCryptoConfig: Configuration = Configuration("crypto.key" -> "P5xsJ9Nt+quxGZzB4DeLfw==")
+
+  implicit val crypto: MongoCrypto = MongoCrypto(testCryptoConfig)

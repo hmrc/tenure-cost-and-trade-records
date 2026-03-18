@@ -20,9 +20,9 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.*
 import scala.language.{implicitConversions, postfixOps}
 
-package object testUtils {
+package object testUtils:
+
   def await[A](f: Future[A]): A                              = Await.result(f, 10 seconds)
   implicit def toOpt[A](a: A): Option[A]                     = Some(a)
   implicit def toBigDecimal(num: Int): BigDecimal            = BigDecimal(num)
   implicit def toBigDecimalOpt(num: Int): Option[BigDecimal] = toBigDecimal(num)
-}

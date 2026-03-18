@@ -38,7 +38,7 @@ class NotConnectedRepositorySpec
   with FutureAwaits
   with DefaultAwaitTimeout
   with GuiceOneAppPerSuite
-  with AppSuiteBase {
+  with AppSuiteBase:
 
   val dbName = s"notConnectedRepositorySpec${UUID.randomUUID.toString.replaceAll("-", "")}"
 
@@ -101,9 +101,6 @@ class NotConnectedRepositorySpec
     Option(true)
   )
 
-  override def afterAll(): Unit = {
+  override def afterAll(): Unit =
     await(mongo.database.drop().toFutureOption())
     mongo.client.close()
-  }
-
-}

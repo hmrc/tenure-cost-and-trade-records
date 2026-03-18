@@ -19,7 +19,7 @@ package uk.gov.hmrc.vo.tctr.backend.schema
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class AddressSpec extends AnyFlatSpec with Matchers {
+class AddressSpec extends AnyFlatSpec with Matchers:
 
   val address = Address("001", Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
 
@@ -27,4 +27,3 @@ class AddressSpec extends AnyFlatSpec with Matchers {
     val result = address.singleLine
     result shouldBe "001, GORING ROAD, GORING-BY-SEA, WORTHING, WEST SUSSEX, BN12 4AX"
   }
-}

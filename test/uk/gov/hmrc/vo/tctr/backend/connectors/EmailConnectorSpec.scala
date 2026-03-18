@@ -32,7 +32,7 @@ import java.time.Instant
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class EmailConnectorSpec extends AnyWordAppSpec {
+class EmailConnectorSpec extends AnyWordAppSpec:
 
   private val configuration      = Configuration(ConfigFactory.load("application.conf"))
   private val servicesConfig     = ServicesConfig(configuration)
@@ -153,5 +153,3 @@ class EmailConnectorSpec extends AnyWordAppSpec {
     }
 
   }
-
-}

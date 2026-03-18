@@ -29,10 +29,10 @@ import uk.gov.hmrc.vo.tctr.backend.models.UnknownError
 import java.net.URL
 import scala.concurrent.ExecutionContextExecutor
 
-class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoExtendedSugar with ScalaFutures with EitherValues {
+class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoExtendedSugar with ScalaFutures with EitherValues:
 
-  implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.global
-  implicit val hc: HeaderCarrier            = HeaderCarrier()
+  given ExecutionContextExecutor = scala.concurrent.ExecutionContext.global
+  given HeaderCarrier            = HeaderCarrier()
 
   private def httpGetMock(responseStatusOrFailure: Either[Throwable, Int]): HttpClientV2 =
     val httpClientV2Mock = mock[HttpClientV2]
@@ -51,10 +51,9 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoExtended
     val connector = UpscanConnector(httpClient)
     val result    = connector.download(testUrl).futureValue
 
-    result match {
+    result match
       case Right(body) => body shouldBe requestBody
       case _           => fail("Expected a successful download")
-    }
   }
 
   it should "handle exceptions during the request" in {
@@ -66,10 +65,7 @@ class UpscanConnectorSpec extends AnyFlatSpec with Matchers with MockitoExtended
     val connector = UpscanConnector(httpClient)
     val result    = connector.download(testUrl).futureValue
 
-    result match {
+    result match
       case Left(err) => err shouldBe UnknownError("Unable to download file, please try again later")
       case _         => fail("Expected an error response")
-    }
   }
-
-}

@@ -38,12 +38,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AuthControllerSpec extends AnyWordAppSpec with OptionValues:
 
-  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
-
   val mockCredentialsRepo: CredentialsMongoRepo = mock[CredentialsMongoRepo]
 
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ec)
+    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ExecutionContext.Implicits.global)
 
   override def fakeApplication(): Application = GuiceApplicationBuilder()
     .overrides(
@@ -86,8 +84,6 @@ class AuthControllerSpec extends AnyWordAppSpec with OptionValues:
   }
 
   "GET /retrieve-for-type/{referenceNum}" should {
-    // ...existing test cases
-
     "return 404 if reference number does not exist" in {
       // Define a reference number that does not exist in the mock repository
       val referenceNum = "nonExistentRefNum"
