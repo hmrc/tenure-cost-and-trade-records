@@ -29,7 +29,6 @@ enum MethodToFixCurrentRent(methodUsedToFixCurrentRent: String):
   case MethodToFixCurrentRentArbitration extends MethodToFixCurrentRent("arbitration")
   case MethodToFixCurrentRentIndependentExpert extends MethodToFixCurrentRent("independentExpert")
   case MethodToFixCurrentRentACourt extends MethodToFixCurrentRent("aCourt")
-end MethodToFixCurrentRent
 
 object MethodToFixCurrentRent:
   implicit val format: Format[MethodToFixCurrentRent] = Scala3EnumJsonFormat.format

@@ -24,6 +24,5 @@ case class OperatorDetails(
   lettingAddress: LettingAddress
 )
 
-object OperatorDetails {
+object OperatorDetails:
   implicit val format: OFormat[OperatorDetails] = Json.format
-}

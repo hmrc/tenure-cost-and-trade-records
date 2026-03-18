@@ -28,10 +28,8 @@ case class FixedOperatingExpenses(
   insurance: BigDecimal = zeroBigDecimal,
   loanInterest: BigDecimal = zeroBigDecimal,
   depreciation: BigDecimal = zeroBigDecimal
-) {
+):
   def total: BigDecimal = Seq(rent, businessRates, insurance, loanInterest, depreciation).sum
-}
 
-object FixedOperatingExpenses {
+object FixedOperatingExpenses:
   implicit val format: OFormat[FixedOperatingExpenses] = Json.format
-}

@@ -26,6 +26,5 @@ case class LettingAddress(
   postcode: String
 )
 
-object LettingAddress {
+object LettingAddress:
   implicit val format: OFormat[LettingAddress] = Json.format
-}

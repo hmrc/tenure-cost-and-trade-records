@@ -31,6 +31,5 @@ case class FeeReceivedPerYear(
   concessionOrFranchiseFee: Option[BigDecimal] = None
 )
 
-object FeeReceivedPerYear {
+object FeeReceivedPerYear:
   implicit val format: OFormat[FeeReceivedPerYear] = Json.format
-}

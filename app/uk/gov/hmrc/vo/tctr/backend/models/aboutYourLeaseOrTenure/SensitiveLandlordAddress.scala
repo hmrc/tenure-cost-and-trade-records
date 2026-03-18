@@ -29,7 +29,7 @@ case class SensitiveLandlordAddress(
   town: SensitiveString,
   county: Option[SensitiveString],
   postcode: SensitiveString
-) extends Sensitive[LandlordAddress] {
+) extends Sensitive[LandlordAddress]:
 
   override def decryptedValue: LandlordAddress = LandlordAddress(
     buildingNameNumber.decryptedValue,
@@ -38,10 +38,10 @@ case class SensitiveLandlordAddress(
     county.map(_.decryptedValue),
     postcode.decryptedValue
   )
-}
 
-object SensitiveLandlordAddress {
-  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
+object SensitiveLandlordAddress:
+  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
+
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveLandlordAddress] = Json.format
 
   def apply(landlordAddress: LandlordAddress): SensitiveLandlordAddress = SensitiveLandlordAddress(
@@ -51,4 +51,3 @@ object SensitiveLandlordAddress {
     landlordAddress.county.map(SensitiveString(_)),
     SensitiveString(landlordAddress.postcode)
   )
-}

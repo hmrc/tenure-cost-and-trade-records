@@ -26,6 +26,5 @@ case class TotalPayrollCost(
   directorsRemuneration: Option[BigDecimal]
 )
 
-object TotalPayrollCost {
+object TotalPayrollCost:
   implicit val format: OFormat[TotalPayrollCost] = Json.format
-}

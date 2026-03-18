@@ -29,7 +29,6 @@ enum TypeOfLetting(typeOfLetting: String):
   case TypeOfLettingTelecomMast extends TypeOfLetting("telecomMast")
   case TypeOfLettingAdvertisingRight extends TypeOfLetting("advertisingRight")
   case TypeOfLettingOther extends TypeOfLetting("other")
-end TypeOfLetting
 
 object TypeOfLetting:
   implicit val format: Format[TypeOfLetting] = Scala3EnumJsonFormat.format

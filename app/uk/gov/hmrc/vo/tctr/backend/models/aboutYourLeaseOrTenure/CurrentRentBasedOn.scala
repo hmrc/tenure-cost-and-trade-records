@@ -31,7 +31,6 @@ enum CurrentRentBasedOn(whatIsRentBasedOn: String):
   case CurrentRentBasedOnIndexedToRPI extends CurrentRentBasedOn("indexed")
   case CurrentRentBasedOnSteppedRent extends CurrentRentBasedOn("stepped")
   case CurrentRentBasedOnOther extends CurrentRentBasedOn("other")
-end CurrentRentBasedOn
 
 object CurrentRentBasedOn:
   implicit val format: Format[CurrentRentBasedOn] = Scala3EnumJsonFormat.format

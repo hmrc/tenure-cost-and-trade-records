@@ -40,6 +40,5 @@ case class AboutTheTradingHistoryPartOne(
   areYouVATRegistered: Option[AnswersYesNo] = None
 )
 
-object AboutTheTradingHistoryPartOne {
+object AboutTheTradingHistoryPartOne:
   implicit val format: OFormat[AboutTheTradingHistoryPartOne] = Json.format
-}

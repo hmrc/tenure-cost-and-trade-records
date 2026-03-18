@@ -26,6 +26,5 @@ case class AlternativeAddress(
   postcode: String
 )
 
-object AlternativeAddress {
+object AlternativeAddress:
   implicit val format: OFormat[AlternativeAddress] = Json.format
-}

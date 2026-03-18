@@ -30,7 +30,6 @@ enum CurrentRentFixed(howIsRentFixed: String):
   case CurrentRentFixedRentReview extends CurrentRentFixed("rentReview")
   case CurrentRentFixedRenewalLeaseTenancy extends CurrentRentFixed("renewalLeaseTenancy")
   case CurrentRentFixedSaleLeaseback extends CurrentRentFixed("saleLeaseback")
-end CurrentRentFixed
 
 object CurrentRentFixed:
   implicit val format: Format[CurrentRentFixed] = Scala3EnumJsonFormat.format

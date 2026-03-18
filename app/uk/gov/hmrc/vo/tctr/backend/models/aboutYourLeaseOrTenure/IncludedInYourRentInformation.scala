@@ -29,7 +29,6 @@ enum IncludedInYourRentInformation(includedInRent: String):
   case IncludedInYourRentInformationNonDomesticRates extends IncludedInYourRentInformation("nondomesticRates")
   case IncludedInYourRentInformationWaterCharges extends IncludedInYourRentInformation("waterCharges")
   case IncludedInYourRentInformationNone extends IncludedInYourRentInformation("none")
-end IncludedInYourRentInformation
 
 object IncludedInYourRentInformation:
   implicit val format: Format[IncludedInYourRentInformation] = Scala3EnumJsonFormat.format
