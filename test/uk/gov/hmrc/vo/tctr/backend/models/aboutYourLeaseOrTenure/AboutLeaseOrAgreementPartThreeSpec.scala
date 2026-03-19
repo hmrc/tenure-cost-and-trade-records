@@ -20,7 +20,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
 
-class AboutLeaseOrAgreementPartThreeSpec extends PlaySpec with FakeObjects {
+class AboutLeaseOrAgreementPartThreeSpec extends PlaySpec with FakeObjects:
 
   "AboutLeaseOrAgreementPartThree" should {
     "serialize and deserialize correctly" in {
@@ -28,4 +28,3 @@ class AboutLeaseOrAgreementPartThreeSpec extends PlaySpec with FakeObjects {
       json.as[AboutLeaseOrAgreementPartThree] mustBe prefilledAboutLeaseOrAgreementPartThree
     }
   }
-}

@@ -35,7 +35,6 @@ case class Caravans(
 )
 
 object Caravans:
-
   implicit val format: OFormat[Caravans] = Json.format
 
   enum CaravansPitchFeeServices(siteService: String):
@@ -46,7 +45,6 @@ object Caravans:
     case Gas extends CaravansPitchFeeServices("gas")
     case Electricity extends CaravansPitchFeeServices("electricity")
     case Other extends CaravansPitchFeeServices("other")
-  end CaravansPitchFeeServices
 
   object CaravansPitchFeeServices:
     implicit val format: Format[CaravansPitchFeeServices] = Scala3EnumJsonFormat.format

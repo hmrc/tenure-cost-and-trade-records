@@ -17,10 +17,10 @@
 package uk.gov.hmrc.vo.tctr.backend.models.aboutYourLeaseOrTenure
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json._
+import play.api.libs.json.*
 import IncludedInYourRentInformation.*
 
-class IncludedInYourRentInformationSpec extends PlaySpec {
+class IncludedInYourRentInformationSpec extends PlaySpec:
   "IncludedInYourRentInformation" should {
     "serialize and deserialize correctly" in {
       val values = List(
@@ -36,4 +36,3 @@ class IncludedInYourRentInformationSpec extends PlaySpec {
       }
     }
   }
-}

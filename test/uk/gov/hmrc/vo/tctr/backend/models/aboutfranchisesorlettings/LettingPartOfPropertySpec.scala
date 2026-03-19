@@ -17,11 +17,11 @@
 package uk.gov.hmrc.vo.tctr.backend.models.aboutfranchisesorlettings
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json._
+import play.api.libs.json.*
 
 import java.time.LocalDate
 
-class LettingPartOfPropertySpec extends PlaySpec {
+class LettingPartOfPropertySpec extends PlaySpec:
 
   "LettingPartOfProperty" should {
 
@@ -71,7 +71,7 @@ class LettingPartOfPropertySpec extends PlaySpec {
         Some(LettingAddress("123", None, "Tech Park", None, "TP 456")),
         Some(RentDetails(2500, LocalDate.of(2023, 3, 10)))
       )
-      val json         = Json.toJson(otherLetting: LettingPartOfProperty)
+      val json         = Json.toJson[LettingPartOfProperty](otherLetting)
 
       (json \ "type").as[String] mustBe "OtherLetting"
       json.as[LettingPartOfProperty] mustBe otherLetting
@@ -84,4 +84,3 @@ class LettingPartOfPropertySpec extends PlaySpec {
       json.validate[LettingPartOfProperty] mustBe a[JsError]
     }
   }
-}

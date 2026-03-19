@@ -26,6 +26,5 @@ case class ContactDetailsAddress(
   postcode: String
 )
 
-object ContactDetailsAddress {
+object ContactDetailsAddress:
   implicit val format: OFormat[ContactDetailsAddress] = Json.format
-}

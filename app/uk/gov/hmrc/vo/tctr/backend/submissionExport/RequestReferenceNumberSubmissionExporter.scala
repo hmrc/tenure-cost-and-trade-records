@@ -36,11 +36,9 @@ class RequestReferenceNumberSubmissionExporter(
     LockService(mongoLockRepository, "RequestRefNumSubmissionExporterLock", 1 hour),
     scheduler,
     eventStream
-  ) {
+  ):
 
   override val name: String = "RequestReferenceNumberScheduler"
 
-  override def runJob()(implicit ec: ExecutionContext): Future[SubmissionExportComplete] =
+  override def runJob()(using ec: ExecutionContext): Future[SubmissionExportComplete] =
     exporter.exportNow(exportBatchSize).map(_ => SubmissionExportComplete("RequestReferenceNumberScheduler finished"))
-
-}

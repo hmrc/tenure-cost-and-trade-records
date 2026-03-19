@@ -27,13 +27,13 @@ import scala.concurrent.duration.DurationInt
 /**
   * @author Yuriy Tumakha
   */
-class NotConnectedMongoRepositorySpec extends MongoSpecBase with CustomMatchers {
+class NotConnectedMongoRepositorySpec extends MongoSpecBase with CustomMatchers:
 
   private val submissionDraftFindId = referenceNumberNotConnected
 
   private val repo = inject[NotConnectedMongoRepository]
 
-  override def beforeAll(): Unit = {
+  override def beforeAll(): Unit =
     super.beforeAll()
     Await.result(
       repo.collection
@@ -45,10 +45,8 @@ class NotConnectedMongoRepositorySpec extends MongoSpecBase with CustomMatchers 
         .toFuture(),
       2.seconds
     )
-  }
 
   "NotConnectedMongoRepository" should "find NotConnectedSubmission by correct id" in {
-
     repo.findById(submissionDraftFindId).futureValue should beEqualToIgnoringMillis(Some(notConnectedSubmission))
   }
 
@@ -63,5 +61,3 @@ class NotConnectedMongoRepositorySpec extends MongoSpecBase with CustomMatchers 
   it should "return number of NotConnectedSubmissions" in {
     repo.count.futureValue shouldBe 1
   }
-
-}

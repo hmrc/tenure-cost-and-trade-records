@@ -24,25 +24,23 @@ import uk.gov.hmrc.vo.tctr.backend.repository.MongoSubmissionDraftRepo
 
 import java.util.UUID
 
-class SaveAsDraftIntegrationSpec extends IntegrationSpecBase with BeforeAndAfterAll with BeforeAndAfterEach {
+class SaveAsDraftIntegrationSpec extends IntegrationSpecBase with BeforeAndAfterAll with BeforeAndAfterEach:
 
   private val submissionDraftFindId       = "SaveAsDraftITestFind"
   private val submissionDraftSaveId       = "SaveAsDraftITestSave"
   private val submissionDraftDeleteId     = "SaveAsDraftITestDelete"
   private val submissionDraftBadRequestId = "SaveAsDraftITestBadRequest"
   private val repo                        = inject[MongoSubmissionDraftRepo]
-  private val clientAuthToken: String     = UUID.randomUUID().toString
+  private val clientAuthToken: String     = UUID.randomUUID.toString
   private val internalAuthBaseUrl: String = "http://localhost:8470"
 
-  override def beforeAll(): Unit = {
+  override def beforeAll(): Unit =
     repo.save(submissionDraftFindId, Json.obj())
     repo.save(submissionDraftDeleteId, Json.obj("a" -> "b"))
-  }
 
-  override def beforeEach(): Unit = {
+  override def beforeEach(): Unit =
     super.beforeEach()
     if !authTokenIsValid(clientAuthToken) then createClientAuthToken()
-  }
 
   "SaveAsDraft GET endpoint" should {
     "return 200 for correct SubmissionDraft.id" in {
@@ -130,16 +128,15 @@ class SaveAsDraftIntegrationSpec extends IntegrationSpecBase with BeforeAndAfter
     }
   }
 
-  private def authTokenIsValid(token: String): Boolean = {
+  private def authTokenIsValid(token: String): Boolean =
     val response = wsClient
       .url(s"$internalAuthBaseUrl/test-only/token")
       .withHttpHeaders("Authorization" -> token)
       .get()
       .futureValue
     response.status == OK
-  }
 
-  private def createClientAuthToken(): Unit = {
+  private def createClientAuthToken(): Unit =
     val response = wsClient
       .url(s"$internalAuthBaseUrl/test-only/token")
       .post(
@@ -157,6 +154,3 @@ class SaveAsDraftIntegrationSpec extends IntegrationSpecBase with BeforeAndAfter
       )
       .futureValue
     response.status shouldBe CREATED
-  }
-
-}

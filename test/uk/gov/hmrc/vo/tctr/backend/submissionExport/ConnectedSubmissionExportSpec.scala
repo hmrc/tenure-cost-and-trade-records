@@ -81,6 +81,6 @@ class ConnectedSubmissionExportSpec
   override def afterAll(): Unit = Await.ready(system.terminate(), 5 seconds)
 
   object TestData:
-    lazy val repo: ConnectedMongoRepository = mock[ConnectedMongoRepository]
-    lazy val batchSize                      = 20
-    lazy val scheduler                      = ScheduleThatSchedulesImmediately5Times()
+    val repo: ConnectedMongoRepository = mock[ConnectedMongoRepository]
+    val batchSize                      = 20
+    val scheduler                      = ScheduleThatSchedulesImmediately5Times()

@@ -23,6 +23,5 @@ case class ConnectedToLandlord(
   connectionToLandlord: Option[AnswersYesNo] = None
 )
 
-object ConnectedToLandlord {
+object ConnectedToLandlord:
   implicit val format: OFormat[ConnectedToLandlord] = Json.format
-}

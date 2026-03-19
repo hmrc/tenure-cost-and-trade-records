@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.vo.tctr.backend.models.requestReferenceNumber
+package uk.gov.hmrc.vo.tctr.backend.testUtils
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.Configuration
+import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
-case class RequestReferenceNumberDetails(
-  requestReferenceNumberAddress: Option[RequestReferenceNumber] = None,
-  requestReferenceContactDetails: Option[RequestReferenceNumberContactDetails] = None
-)
+trait SensitiveTestHelper:
 
-object RequestReferenceNumberDetails:
-  implicit val format: OFormat[RequestReferenceNumberDetails] = Json.format
+  private val testCryptoConfig: Configuration = Configuration("crypto.key" -> "P5xsJ9Nt+quxGZzB4DeLfw==")
+
+  implicit val crypto: MongoCrypto = MongoCrypto(testCryptoConfig)

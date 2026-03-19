@@ -29,7 +29,6 @@ enum TypeOfIncome(typeOfIncome: String):
   case TypeConcession6015 extends TypeOfIncome("typeConcession6015")
   case TypeConcession extends TypeOfIncome("typeConcession")
   case TypeLetting extends TypeOfIncome("typeLetting")
-end TypeOfIncome
 
 object TypeOfIncome:
   implicit val format: Format[TypeOfIncome] = Scala3EnumJsonFormat.format

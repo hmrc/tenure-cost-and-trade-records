@@ -22,7 +22,7 @@ import ResponsibilityParty.InsideRepairs.*
 import ResponsibilityParty.OutsideRepairs.*
 import ResponsibilityParty.BuildingInsurance.*
 
-class ResponsiblePartySpec extends AnyWordSpecLike with Matchers {
+class ResponsiblePartySpec extends AnyWordSpecLike with Matchers:
 
   "OutsideRepairs" should {
     "Return values" in {
@@ -47,5 +47,3 @@ class ResponsiblePartySpec extends AnyWordSpecLike with Matchers {
       BuildingInsuranceBoth.toString     shouldBe "both"
     }
   }
-
-}

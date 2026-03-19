@@ -40,10 +40,10 @@ class ConnectedSubmissionController @Inject() (
   auth: BackendAuthComponents,
   metric: MetricsHandler,
   cc: ControllerComponents
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends BackendController(cc)
   with InternalAuthAccess
-  with Logging {
+  with Logging:
 
   def submit(submissionReference: String): Action[ConnectedSubmission] =
     auth.authorizedAction[Unit](permission).compose(Action).async(parse.json[ConnectedSubmission]) { implicit request =>
@@ -61,7 +61,7 @@ class ConnectedSubmissionController @Inject() (
       }
     }
 
-  def saveSubmission(submission: ConnectedSubmission, submissionReference: String)(implicit hc: HeaderCarrier): Unit = {
+  private def saveSubmission(submission: ConnectedSubmission, submissionReference: String)(using hc: HeaderCarrier): Unit =
     repository.insert(submission)
 
     if isVacantPropertySubmission(submission) then
@@ -78,13 +78,9 @@ class ConnectedSubmissionController @Inject() (
     submittedMongoRepo.insertIfUnique(submissionReference)
 
     submissionDraftRepo.delete(submissionReference)
-
     metric.okSubmissions.mark()
-  }
 
   private def isVacantPropertySubmission(submission: ConnectedSubmission): Boolean =
     submission.stillConnectedDetails
       .flatMap(_.isPropertyVacant)
       .contains(AnswerYes)
-
-}

@@ -6,9 +6,9 @@ GET           /saveAsDraft/:refNum                              uk.gov.hmrc.vo.t
 PUT           /saveAsDraft/:refNum                              uk.gov.hmrc.vo.tctr.backend.controllers.SaveAsDraftController.put(refNum)
 DELETE        /saveAsDraft/:refNum                              uk.gov.hmrc.vo.tctr.backend.controllers.SaveAsDraftController.delete(refNum)
 
-PUT           /submissions/notConnected/:referenceNumber        uk.gov.hmrc.vo.tctr.backend.controllers.NotConnectedSubmissionController.submit(referenceNumber: String)
+PUT           /submissions/notConnected/:refNum                 uk.gov.hmrc.vo.tctr.backend.controllers.NotConnectedSubmissionController.submit(refNum: String)
 
-PUT           /submissions/connected/:referenceNumber           uk.gov.hmrc.vo.tctr.backend.controllers.ConnectedSubmissionController.submit(referenceNumber: String)
+PUT           /submissions/connected/:refNum                    uk.gov.hmrc.vo.tctr.backend.controllers.ConnectedSubmissionController.submit(refNum: String)
 
 PUT           /submissions/requestRefNum                        uk.gov.hmrc.vo.tctr.backend.controllers.RequestRefNumSubmissionController.submit
 

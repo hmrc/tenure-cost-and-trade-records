@@ -39,16 +39,16 @@ import uk.gov.hmrc.vo.tctr.backend.schema.Address
 import uk.gov.hmrc.vo.tctr.backend.testUtils.AuthStubBehaviour
 
 import java.time.Instant
-import scala.concurrent.ExecutionContext.Implicits
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 
-class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec {
+class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec:
 
-  implicit val timeout: Timeout = 5.seconds
+  given Timeout = 5.seconds
 
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), Implicits.global)
+    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ExecutionContext.Implicits.global)
 
   private val mockRepository         = mock[NotConnectedRepository]
   private val mockSubmittedMongoRepo = mock[SubmittedMongoRepo]
@@ -69,7 +69,7 @@ class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec {
     false
   )
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .overrides(
       bind[NotConnectedRepository].toInstance(mockRepository),
       bind[SubmittedMongoRepo].toInstance(mockSubmittedMongoRepo),
@@ -113,4 +113,3 @@ class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec {
     }
 
   }
-}

@@ -34,7 +34,6 @@ object ResponsibilityParty:
     case OutsideRepairsLandlord extends OutsideRepairs("landlord")
     case OutsideRepairsTenant extends OutsideRepairs("tenant")
     case OutsideRepairsBoth extends OutsideRepairs("both")
-  end OutsideRepairs
 
   object OutsideRepairs:
     implicit val format: Format[OutsideRepairs] = Scala3EnumJsonFormat.format
@@ -47,7 +46,6 @@ object ResponsibilityParty:
     case InsideRepairsLandlord extends InsideRepairs("landlord")
     case InsideRepairsTenant extends InsideRepairs("tenant")
     case InsideRepairsBoth extends InsideRepairs("both")
-  end InsideRepairs
 
   object InsideRepairs:
     implicit val format: Format[InsideRepairs] = Scala3EnumJsonFormat.format
@@ -60,7 +58,6 @@ object ResponsibilityParty:
     case BuildingInsuranceLandlord extends BuildingInsurance("landlord")
     case BuildingInsuranceTenant extends BuildingInsurance("tenant")
     case BuildingInsuranceBoth extends BuildingInsurance("both")
-  end BuildingInsurance
 
   object BuildingInsurance:
     implicit val format: Format[BuildingInsurance] = Scala3EnumJsonFormat.format

@@ -17,10 +17,10 @@
 package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.{JsObject, JsSuccess, Json, OFormat, Writes}
+import play.api.libs.json.{JsObject, JsSuccess, Json, Writes}
 import TiedForGoodsInformation.*
 
-class TiedForGoodsInformationSpec extends PlaySpec {
+class TiedForGoodsInformationSpec extends PlaySpec:
 
   // Writes for TiedForGoodsInformation to handle the string serialization
   implicit val tiedForGoodsInformationWrites: Writes[TiedForGoodsInformation] = Writes {
@@ -28,10 +28,6 @@ class TiedForGoodsInformationSpec extends PlaySpec {
     case TiedForGoodsInformationDetailsBeerOnly   => Json.toJson("beerOnly")
     case TiedForGoodsInformationDetailsPartialTie => Json.toJson("partialTie")
   }
-
-  // Format for TiedForGoodsInformationDetails with proper serialization and deserialization
-  implicit val tiedForGoodsInformationDetailsFormat: OFormat[TiedForGoodsInformationDetails] =
-    Json.format[TiedForGoodsInformationDetails]
 
   "TiedForGoodsInformation" should {
     "serialize and deserialize correctly for TiedForGoodsInformationDetailsFullTie" in {
@@ -96,4 +92,3 @@ class TiedForGoodsInformationSpec extends PlaySpec {
         .as[JsObject] mustBe Json.obj("tiedGoodsDetails" -> "partialTie")
     }
   }
-}

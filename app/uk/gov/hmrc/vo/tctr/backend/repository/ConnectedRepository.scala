@@ -19,7 +19,7 @@ package uk.gov.hmrc.vo.tctr.backend.repository
 import com.google.inject.ImplementedBy
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.Sorts.ascending
-import org.mongodb.scala.model._
+import org.mongodb.scala.model.*
 import org.mongodb.scala.result.{DeleteResult, InsertOneResult}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
@@ -33,7 +33,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[ConnectedMongoRepository])
-trait ConnectedRepository {
+trait ConnectedRepository:
 
   val defaultBatchSize = 10
 
@@ -47,13 +47,11 @@ trait ConnectedRepository {
 
   def removeById(id: String): Future[DeleteResult]
 
-}
-
 @Singleton
 class ConnectedMongoRepository @Inject() (
   mongoComponent: MongoComponent,
   appConfig: AppConfig
-)(implicit
+)(using
   ec: ExecutionContext,
   crypto: MongoCrypto
 ) extends PlayMongoRepository[SensitiveConnectedSubmission](
@@ -70,7 +68,7 @@ class ConnectedMongoRepository @Inject() (
       Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
     )
   )
-  with ConnectedRepository {
+  with ConnectedRepository:
 
   def insert(connectedSubmission: ConnectedSubmission): Future[InsertOneResult] =
     collection.insertOne(SensitiveConnectedSubmission(connectedSubmission)).toFuture()
@@ -94,5 +92,3 @@ class ConnectedMongoRepository @Inject() (
 
   def removeById(refNum: String): Future[DeleteResult] =
     collection.deleteOne(equal("referenceNumber", refNum)).toFuture()
-
-}

@@ -23,30 +23,24 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class AppConfig @Inject() (configuration: Configuration):
 
-  val authenticationRequired: Boolean  = configuration.get[Boolean]("authenticationRequired")
-  val submissionExportEnabled: Boolean = configuration.get[Boolean]("submissionExport.enabled")
-  val exportBatchSize: Int             = configuration.get[Int]("submissionExport.batchSize")
-  val testAccountPrefix: String        = configuration.get[String]("submissionExport.testAccountPrefix")
-  val retryWindow: Int                 = configuration.get[Int]("submissionExport.retryWindowHours")
-  val enableDuplicate: Boolean         = configuration.get[Boolean]("submissionExport.enableDuplicateSubmissions")
-  val exportFrequency: Int             = configuration.get[Int]("submissionExport.frequencySeconds")
-  val enablePublishing: Boolean        = configuration.get[Boolean]("submissionExport.publishingEnabled")
-
+  val authenticationRequired: Boolean     = configuration.get[Boolean]("authenticationRequired")
+  val submissionExportEnabled: Boolean    = configuration.get[Boolean]("submissionExport.enabled")
+  val exportBatchSize: Int                = configuration.get[Int]("submissionExport.batchSize")
+  val testAccountPrefix: String           = configuration.get[String]("submissionExport.testAccountPrefix")
+  val retryWindow: Int                    = configuration.get[Int]("submissionExport.retryWindowHours")
+  val enableDuplicate: Boolean            = configuration.get[Boolean]("submissionExport.enableDuplicateSubmissions")
+  val exportFrequency: Int                = configuration.get[Int]("submissionExport.frequencySeconds")
+  val enablePublishing: Boolean           = configuration.get[Boolean]("submissionExport.publishingEnabled")
   val requestRefNumExportEnabled: Boolean = configuration.get[Boolean]("RequestReferenceNumberSubmissionExport.enabled")
   val requestRefNumExportBatchSize: Int   = configuration.get[Int]("RequestReferenceNumberSubmissionExport.batchSize")
-
-  val requestRefNumExportRetryWindow: Int =
-    configuration.get[Int]("RequestReferenceNumberSubmissionExport.retryWindowHours")
-
-  val importTestData: Boolean = configuration.get[Boolean]("validationImport.importTestData")
-
-  val authMaxFailedLogin: Int   = configuration.get[Int]("authentication.maxFailedLogins")
-  val lockoutWindow: Int        = configuration.get[Int]("authentication.lockoutDurationHours")
-  val sessionWindow: Int        = configuration.get[Int]("authentication.loginSessionDurationHours")
-  val ipLockoutEnabled: Boolean = configuration.get[Boolean]("authentication.ipLockoutEnabled")
-  val voIPAddress: String       = configuration.get[String]("authentication.voaIPAddress")
-
-  val notConnectedSubmissionTTL: Long = configuration.get[Long]("notConnectedSubmissionTTL")
-  val connectedSubmissionTTL: Long    = configuration.get[Long]("connectedSubmissionTTL")
-  val requestReferenceNumberTTL: Long = configuration.get[Long]("requestReferenceNumberTTL")
-  val submittedTTL: Long              = configuration.get[Long]("submittedTTL")
+  val requestRefNumExportRetryWindow: Int = configuration.get[Int]("RequestReferenceNumberSubmissionExport.retryWindowHours")
+  val importTestData: Boolean             = configuration.get[Boolean]("validationImport.importTestData")
+  val authMaxFailedLogin: Int             = configuration.get[Int]("authentication.maxFailedLogins")
+  val lockoutWindow: Int                  = configuration.get[Int]("authentication.lockoutDurationHours")
+  val sessionWindow: Int                  = configuration.get[Int]("authentication.loginSessionDurationHours")
+  val ipLockoutEnabled: Boolean           = configuration.get[Boolean]("authentication.ipLockoutEnabled")
+  val voIPAddress: String                 = configuration.get[String]("authentication.voaIPAddress")
+  val notConnectedSubmissionTTL: Long     = configuration.get[Long]("notConnectedSubmissionTTL")
+  val connectedSubmissionTTL: Long        = configuration.get[Long]("connectedSubmissionTTL")
+  val requestReferenceNumberTTL: Long     = configuration.get[Long]("requestReferenceNumberTTL")
+  val submittedTTL: Long                  = configuration.get[Long]("submittedTTL")

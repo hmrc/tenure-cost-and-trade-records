@@ -33,6 +33,5 @@ case class NotConnectedSubmissionForm(
   lang: Option[String] = None
 )
 
-object NotConnectedSubmissionForm {
+object NotConnectedSubmissionForm:
   implicit val format: OFormat[NotConnectedSubmissionForm] = Json.format
-}

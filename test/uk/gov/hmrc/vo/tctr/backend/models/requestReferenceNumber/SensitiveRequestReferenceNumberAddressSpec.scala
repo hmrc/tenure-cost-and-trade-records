@@ -18,14 +18,10 @@ package uk.gov.hmrc.vo.tctr.backend.models.requestReferenceNumber
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import play.api.Configuration
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
-import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.vo.tctr.backend.testUtils.SensitiveTestHelper
 
-class SensitiveRequestReferenceNumberAddressSpec extends AnyWordSpecLike with Matchers with SensitiveTestHelper {
-  val testConfig: Configuration    = loadTestConfig()
-  implicit val crypto: MongoCrypto = new TestMongoCrypto(testConfig)
+class SensitiveRequestReferenceNumberAddressSpec extends AnyWordSpecLike with Matchers with SensitiveTestHelper:
 
   "SensitiveReferenceNumber" should {
 
@@ -53,4 +49,3 @@ class SensitiveRequestReferenceNumberAddressSpec extends AnyWordSpecLike with Ma
     }
 
   }
-}

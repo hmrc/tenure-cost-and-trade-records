@@ -22,6 +22,7 @@ import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.vo.tctr.backend.models.common.AnswersYesNo
 
 import java.time.LocalDate
+import scala.language.implicitConversions
 
 case class SensitiveAboutLeaseOrAgreementPartOne(
   aboutTheLandlord: Option[SensitiveAboutTheLandlord] = None,
@@ -71,7 +72,7 @@ case class SensitiveAboutLeaseOrAgreementPartOne(
 
 object SensitiveAboutLeaseOrAgreementPartOne:
 
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAboutLeaseOrAgreementPartOne] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveAboutLeaseOrAgreementPartOne] = Json.format
 
   def apply(aboutLeaseOrAgreementPartOne: AboutLeaseOrAgreementPartOne): SensitiveAboutLeaseOrAgreementPartOne =
     SensitiveAboutLeaseOrAgreementPartOne(

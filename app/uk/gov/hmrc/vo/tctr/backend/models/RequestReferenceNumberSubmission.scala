@@ -33,6 +33,5 @@ case class RequestReferenceNumberSubmission(
   lang: Option[String] = None
 )
 
-object RequestReferenceNumberSubmission {
+object RequestReferenceNumberSubmission:
   implicit val format: OFormat[RequestReferenceNumberSubmission] = Json.format
-}

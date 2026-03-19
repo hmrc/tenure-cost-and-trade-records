@@ -24,6 +24,5 @@ case class TentingPitchesTradingData(
   numberOfPitches: Option[Int] = None
 )
 
-object TentingPitchesTradingData {
+object TentingPitchesTradingData:
   implicit val format: OFormat[TentingPitchesTradingData] = Json.format
-}

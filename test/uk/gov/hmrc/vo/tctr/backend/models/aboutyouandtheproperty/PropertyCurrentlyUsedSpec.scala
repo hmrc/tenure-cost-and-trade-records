@@ -19,7 +19,8 @@ package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 
-class PropertyCurrentlyUsedSpec extends PlaySpec {
+class PropertyCurrentlyUsedSpec extends PlaySpec:
+
   "PropertyCurrentlyUsed" should {
     "serialize and deserialize correctly" in {
       val propertyCurrentlyUsed =
@@ -29,4 +30,3 @@ class PropertyCurrentlyUsedSpec extends PlaySpec {
       json.as[PropertyCurrentlyUsed] mustBe propertyCurrentlyUsed
     }
   }
-}

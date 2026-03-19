@@ -33,10 +33,10 @@ class SaveAsDraftController @Inject() (
   repo: SubmissionDraftRepo,
   auth: BackendAuthComponents,
   cc: ControllerComponents
-)(implicit
+)(using
   ec: ExecutionContext
 ) extends BackendController(cc)
-  with InternalAuthAccess {
+  with InternalAuthAccess:
 
   def get(referenceNumber: String): Action[AnyContent] = auth.authorizedAction[Unit](permission).compose(Action).async {
     repo.find(referenceNumber) map {
@@ -46,14 +46,11 @@ class SaveAsDraftController @Inject() (
   }
 
   def put(referenceNumber: String): Action[AnyContent] = auth.authorizedAction[Unit](permission).compose(Action).async { request =>
-    request.body.asJson match {
+    request.body.asJson match
       case Some(submissionDraftJson) => repo.save(referenceNumber, submissionDraftJson) map { _ => Created }
       case _                         => BadRequest(Json.obj("statusCode" -> BAD_REQUEST, "message" -> "JSON body is expected in request"))
-    }
   }
 
   def delete(referenceNumber: String): Action[AnyContent] = auth.authorizedAction[Unit](permission).compose(Action).async {
     repo.delete(referenceNumber) map { res => Ok(Json.obj("deletedCount" -> res.getDeletedCount)) }
   }
-
-}

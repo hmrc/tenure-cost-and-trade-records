@@ -29,12 +29,11 @@ enum AnswersYesNo(answer: String):
 
   case AnswerYes extends AnswersYesNo("yes")
   case AnswerNo extends AnswersYesNo("no")
-end AnswersYesNo
 
 object AnswersYesNo:
-
   implicit val format: Format[AnswersYesNo] = Scala3EnumJsonFormat.format
 
   def apply(answerYes: Boolean): AnswersYesNo = if (answerYes) AnswerYes else AnswerNo
 
-  extension (boolean: Boolean) def toAnswer: AnswersYesNo = AnswersYesNo(boolean)
+  extension (boolean: Boolean)
+    def toAnswer: AnswersYesNo = AnswersYesNo(boolean)

@@ -19,7 +19,7 @@ package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 
-class AlternativeAddressSpec extends PlaySpec {
+class AlternativeAddressSpec extends PlaySpec:
 
   "AlternativeAddress" should {
     "serialize and deserialize correctly" in {
@@ -48,4 +48,3 @@ class AlternativeAddressSpec extends PlaySpec {
       json.as[AlternativeAddress] mustBe alternativeAddress
     }
   }
-}

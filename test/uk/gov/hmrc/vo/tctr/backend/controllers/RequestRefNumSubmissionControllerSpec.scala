@@ -27,8 +27,8 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import play.api.test.Helpers.{POST, status}
-import play.api.test._
-import uk.gov.hmrc.internalauth.client._
+import play.api.test.*
+import uk.gov.hmrc.internalauth.client.*
 import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
 import uk.gov.hmrc.vo.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.vo.tctr.backend.metrics.MetricsHandler
@@ -36,22 +36,21 @@ import uk.gov.hmrc.vo.tctr.backend.models.RequestReferenceNumberSubmission
 import uk.gov.hmrc.vo.tctr.backend.repository.RequestReferenceNumberRepository
 import uk.gov.hmrc.vo.tctr.backend.testUtils.AuthStubBehaviour
 
-import scala.concurrent.ExecutionContext.Implicits
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.DurationInt
 
-class RequestRefNumSubmissionControllerSpec extends AnyWordAppSpec {
+class RequestRefNumSubmissionControllerSpec extends AnyWordAppSpec:
 
-  implicit val timeout: Timeout = 5.seconds
+  given Timeout = 5.seconds
 
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), Implicits.global)
+    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ExecutionContext.Implicits.global)
 
   val mockRepository: RequestReferenceNumberRepository = mock[RequestReferenceNumberRepository]
   val mockMetricsHandler: MetricsHandler               = mock[MetricsHandler]
   val meter: Meter                                     = mock[Meter]
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .overrides(
       bind[RequestReferenceNumberRepository].toInstance(mockRepository),
       bind[MetricsHandler].toInstance(mockMetricsHandler),
@@ -84,5 +83,3 @@ class RequestRefNumSubmissionControllerSpec extends AnyWordAppSpec {
       status(result) shouldBe BAD_REQUEST
     }
   }
-
-}

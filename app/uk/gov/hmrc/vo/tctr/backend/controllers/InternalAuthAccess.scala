@@ -16,10 +16,9 @@
 
 package uk.gov.hmrc.vo.tctr.backend.controllers
 
-import uk.gov.hmrc.internalauth.client.{IAAction, Predicate, Resource, ResourceLocation, ResourceType}
+import uk.gov.hmrc.internalauth.client.Predicate.Permission
+import uk.gov.hmrc.internalauth.client.{IAAction, Resource, ResourceLocation, ResourceType}
 
-trait InternalAuthAccess {
+trait InternalAuthAccess:
 
-  val permission: Predicate.Permission =
-    Predicate.Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))
-}
+  val permission: Permission = Permission(Resource(ResourceType("tenure-cost-and-trade-records"), ResourceLocation("*")), IAAction("*"))

@@ -27,8 +27,7 @@ import scala.deriving.Mirror
 object Scala3EnumJsonFormat:
 
   inline def format[E](using m: Mirror.SumOf[E]): Format[E] =
-    val enumInstances =
-      summonAll[Tuple.Map[m.MirroredElemTypes, ValueOf]].productIterator.asInstanceOf[Iterator[ValueOf[E]]].map(_.value)
+    val enumInstances = summonAll[Tuple.Map[m.MirroredElemTypes, ValueOf]].productIterator.asInstanceOf[Iterator[ValueOf[E]]].map(_.value)
 
     val enumMap: Map[String, E] = enumInstances.map(o => o.asInstanceOf[Any].toString -> o).toMap
 

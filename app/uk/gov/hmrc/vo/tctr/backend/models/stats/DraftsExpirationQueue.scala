@@ -23,6 +23,5 @@ import play.api.libs.json.{Json, OFormat}
   */
 case class DraftsExpirationQueue(drafts: Seq[Draft], total: Long)
 
-object DraftsExpirationQueue {
+object DraftsExpirationQueue:
   implicit val format: OFormat[DraftsExpirationQueue] = Json.format
-}

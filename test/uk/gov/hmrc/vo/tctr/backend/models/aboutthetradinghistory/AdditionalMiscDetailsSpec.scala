@@ -19,9 +19,9 @@ package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 
-class AdditionalMiscDetailsSpec extends PlaySpec {
-  "AdditionalMiscDetails" should {
+class AdditionalMiscDetailsSpec extends PlaySpec:
 
+  "AdditionalMiscDetails" should {
     "serialize and deserialize correctly with all fields" in {
       val additionalMiscDetails = AdditionalMiscDetails(
         fromLeisureReceiptsDetails = Some("details"),
@@ -31,4 +31,3 @@ class AdditionalMiscDetailsSpec extends PlaySpec {
       json.as[AdditionalMiscDetails] mustBe additionalMiscDetails
     }
   }
-}

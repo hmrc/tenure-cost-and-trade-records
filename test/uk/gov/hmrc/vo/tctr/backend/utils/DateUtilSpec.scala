@@ -24,14 +24,13 @@ import java.text.SimpleDateFormat
 import java.time.{LocalDate, ZoneId, ZoneOffset, ZonedDateTime}
 import java.util.Date
 
-class DateUtilSpec extends PlaySpec {
+class DateUtilSpec extends PlaySpec:
 
-  val ukTimezone: ZoneId = ZoneId.of("Europe/London")
-  val testDate: Date     = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-02-12 12:34:56")
+  private val ukTimezone: ZoneId = ZoneId.of("Europe/London")
+  private val testDate: Date     = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-02-12 12:34:56")
 
   "dateOps" should {
     "convert Date to ZonedDateTime using ukTimezone" in {
-
       val result: ZonedDateTime = testDate.asZonedDateTime
 
       val expected: ZonedDateTime = testDate.toInstant.atZone(ukTimezone)
@@ -42,7 +41,6 @@ class DateUtilSpec extends PlaySpec {
 
   "instantOps" should {
     "convert Instant to LocalDate at zone UTC" in {
-
       val testInstant = testDate.toInstant
 
       val result: LocalDate = testInstant.toLocalDate
@@ -60,5 +58,3 @@ class DateUtilSpec extends PlaySpec {
       DateUtil.langByCode("xx") mustBe DateUtil.en
     }
   }
-
-}

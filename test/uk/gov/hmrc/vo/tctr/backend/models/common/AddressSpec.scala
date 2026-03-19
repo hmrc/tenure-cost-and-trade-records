@@ -20,7 +20,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
 
-class AddressSpec extends AnyWordSpecLike with Matchers with FakeObjects {
+class AddressSpec extends AnyWordSpecLike with Matchers with FakeObjects:
 
   val address = Address("004", Some("GORING ROAD"), "WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
 
@@ -33,5 +33,3 @@ class AddressSpec extends AnyWordSpecLike with Matchers with FakeObjects {
       address.multiLine shouldBe "004<br/> GORING ROAD<br/> WORTHING<br/> WEST SUSSEX<br/> BN12 4AX"
     }
   }
-
-}

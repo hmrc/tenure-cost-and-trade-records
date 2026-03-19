@@ -25,6 +25,5 @@ case class LeaseOrAgreementYearsDetails(
   rentUnderReviewNegotiated: AnswersYesNo
 )
 
-object LeaseOrAgreementYearsDetails {
+object LeaseOrAgreementYearsDetails:
   implicit val format: OFormat[LeaseOrAgreementYearsDetails] = Json.format
-}

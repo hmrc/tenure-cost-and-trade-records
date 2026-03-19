@@ -24,11 +24,10 @@ case class Address(
   town: String,
   county: Option[String],
   postcode: String
-) {
+):
 
   def singleLine: String =
     List(Some(buildingNameNumber), street1, Some(town), county, Some(postcode)).flatten.mkString(", ")
-}
 
 object Address:
   given Format[Address] = Json.format

@@ -22,15 +22,14 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.vo.tctr.backend.models.stats.{DraftsExpirationQueue, DraftsPerVersion}
 import uk.gov.hmrc.vo.tctr.backend.repository.MongoSubmissionDraftRepo
 
-class StatsControllerISpec extends IntegrationSpecBase with BeforeAndAfterAll with BeforeAndAfterEach {
+class StatsControllerISpec extends IntegrationSpecBase with BeforeAndAfterAll with BeforeAndAfterEach:
 
   private val statsIdPrefix = "StatsTestDraft"
   private val repo          = inject[MongoSubmissionDraftRepo]
 
-  override def beforeAll(): Unit = {
+  override def beforeAll(): Unit =
     repo.save(statsIdPrefix + 6015, Json.obj("a" -> "b", "forType" -> "FOR6015"))
     repo.save(statsIdPrefix + 6011, Json.obj("c" -> "d", "forType" -> "FOR6011"))
-  }
 
   "StatsController - SubmissionDraft stats endpoints" should {
     "return consistent stats" in {
@@ -41,6 +40,7 @@ class StatsControllerISpec extends IntegrationSpecBase with BeforeAndAfterAll wi
           .futureValue
 
       response1.status shouldBe OK
+
       val expirationQueue = Json.parse(response1.body).as[DraftsExpirationQueue]
 
       val response2 =
@@ -50,6 +50,7 @@ class StatsControllerISpec extends IntegrationSpecBase with BeforeAndAfterAll wi
           .futureValue
 
       response2.status shouldBe OK
+
       val draftsPerVersion = Json.parse(response2.body).as[Seq[DraftsPerVersion]]
 
       draftsPerVersion.map(_.drafts).sum shouldBe expirationQueue.total
@@ -57,5 +58,3 @@ class StatsControllerISpec extends IntegrationSpecBase with BeforeAndAfterAll wi
       draftsPerVersion.head.expireOn     shouldBe expirationQueue.drafts.head.expireOn
     }
   }
-
-}

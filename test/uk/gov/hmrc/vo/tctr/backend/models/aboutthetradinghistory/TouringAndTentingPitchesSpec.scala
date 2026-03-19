@@ -20,9 +20,9 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.vo.tctr.backend.models.common.AnswersYesNo.*
 
-class TouringAndTentingPitchesSpec extends PlaySpec {
-  "TouringAndTentingPitches" should {
+class TouringAndTentingPitchesSpec extends PlaySpec:
 
+  "TouringAndTentingPitches" should {
     "serialize and deserialize correctly with all fields" in {
       val touringAndTentingPitches = TouringAndTentingPitches(
         tentingPitchesOnSite = Some(AnswerYes),
@@ -34,4 +34,3 @@ class TouringAndTentingPitchesSpec extends PlaySpec {
       json.as[TouringAndTentingPitches] mustBe touringAndTentingPitches
     }
   }
-}

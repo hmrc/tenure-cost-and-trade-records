@@ -27,19 +27,17 @@ import uk.gov.hmrc.vo.tctr.backend.models.SubmissionDraftWrapper
 import uk.gov.hmrc.vo.tctr.backend.repository.SubmissionDraftRepo
 import uk.gov.hmrc.vo.tctr.backend.testUtils.AuthStubBehaviour
 
-import scala.concurrent.ExecutionContext.Implicits
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * @author Yuriy Tumakha
   */
-class SaveAsDraftControllerSpec extends ControllerSpecBase {
+class SaveAsDraftControllerSpec extends ControllerSpecBase:
 
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), Implicits.global)
+    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ExecutionContext.Implicits.global)
 
-  def controller =
-    new SaveAsDraftController(StubSubmissionDraftRepo, backendAuthComponentsStub, stubControllerComponents())
+  def controller = SaveAsDraftController(StubSubmissionDraftRepo, backendAuthComponentsStub, stubControllerComponents())
 
   "SaveAsDraftController" should "return 200 for get by correct SubmissionDraft.id" in
     controller
@@ -83,7 +81,7 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
       contentAsJson(result) shouldBe Json.obj("deletedCount" -> 0)
     }
 
-  object StubSubmissionDraftRepo extends SubmissionDraftRepo {
+  object StubSubmissionDraftRepo extends SubmissionDraftRepo:
 
     val correctDbId = "12345"
 
@@ -98,16 +96,10 @@ class SaveAsDraftControllerSpec extends ControllerSpecBase {
 
     override def save(id: String, submissionDraft: JsValue): Future[JsValue] =
       if id == correctDbId then Future.successful(submissionDraft)
-      else Future.failed(new RuntimeException("SubmissionDraft wasn't found"))
+      else Future.failed(RuntimeException("SubmissionDraft wasn't found"))
 
-    override def delete(id: String): Future[DeleteResult] = {
-      val deletedCount = id match {
+    override def delete(id: String): Future[DeleteResult] =
+      val deletedCount = id match
         case `correctDbId` => 1
         case _             => 0
-      }
       Future.successful(DeleteResult.acknowledged(deletedCount))
-    }
-
-  }
-
-}

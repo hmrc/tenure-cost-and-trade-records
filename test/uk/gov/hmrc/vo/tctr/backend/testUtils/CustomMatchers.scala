@@ -22,13 +22,12 @@ import uk.gov.hmrc.vo.tctr.backend.models.{NotConnectedSubmission, RequestRefere
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-trait CustomMatchers {
+trait CustomMatchers:
 
-  class BeOptionEqualToIgnoringMillis(expected: Option[NotConnectedSubmission]) extends Matcher[Option[NotConnectedSubmission]] {
+  class BeOptionEqualToIgnoringMillis(expected: Option[NotConnectedSubmission]) extends Matcher[Option[NotConnectedSubmission]]:
 
-    override def apply(left: Option[NotConnectedSubmission]): MatchResult = {
-
-      val matches = (left, expected) match {
+    override def apply(left: Option[NotConnectedSubmission]): MatchResult =
+      val matches = (left, expected) match
         case (Some(l), Some(e)) =>
           val timeEqual        = truncateMillis(l.createdAt) == truncateMillis(e.createdAt)
           val lCopy            = l.copy(createdAt = e.createdAt)
@@ -36,24 +35,19 @@ trait CustomMatchers {
           timeEqual && otherFieldsEqual
         case (None, None)       => true
         case _                  => false
-      }
 
       MatchResult(
         matches,
         s"$left did not equal $expected ignoring milliseconds",
         s"$left was equal to $expected ignoring milliseconds"
       )
-    }
 
-    private def truncateMillis(instant: Instant): Instant =
-      instant.truncatedTo(ChronoUnit.SECONDS)
-  }
+    private def truncateMillis(instant: Instant): Instant = instant.truncatedTo(ChronoUnit.SECONDS)
 
-  class BeOptionEqualToIgnoringMillis2(expected: Option[RequestReferenceNumberSubmission]) extends Matcher[Option[RequestReferenceNumberSubmission]] {
+  class BeOptionEqualToIgnoringMillis2(expected: Option[RequestReferenceNumberSubmission]) extends Matcher[Option[RequestReferenceNumberSubmission]]:
 
-    override def apply(left: Option[RequestReferenceNumberSubmission]): MatchResult = {
-
-      val matches = (left, expected) match {
+    override def apply(left: Option[RequestReferenceNumberSubmission]): MatchResult =
+      val matches = (left, expected) match
         case (Some(l), Some(e)) =>
           val timeEqual        = truncateMillis(l.createdAt) == truncateMillis(e.createdAt)
           val lCopy            = l.copy(createdAt = e.createdAt)
@@ -61,26 +55,20 @@ trait CustomMatchers {
           timeEqual && otherFieldsEqual
         case (None, None)       => true
         case _                  => false
-      }
 
       MatchResult(
         matches,
         s"$left did not equal $expected ignoring milliseconds",
         s"$left was equal to $expected ignoring milliseconds"
       )
-    }
 
-    private def truncateMillis(instant: Instant): Instant =
-      instant.truncatedTo(ChronoUnit.SECONDS)
-  }
+    private def truncateMillis(instant: Instant): Instant = instant.truncatedTo(ChronoUnit.SECONDS)
 
-  def beEqualToIgnoringMillis(expected: Option[NotConnectedSubmission]): BeOptionEqualToIgnoringMillis =
-    new BeOptionEqualToIgnoringMillis(expected)
+  def beEqualToIgnoringMillis(expected: Option[NotConnectedSubmission]): BeOptionEqualToIgnoringMillis = BeOptionEqualToIgnoringMillis(expected)
 
-  def beEqualToIgnoringMillis(expected: Option[RequestReferenceNumberSubmission]): BeOptionEqualToIgnoringMillis2 =
-    new BeOptionEqualToIgnoringMillis2(expected)
+  def beEqualToIgnoringMillis(expected: Option[RequestReferenceNumberSubmission]): BeOptionEqualToIgnoringMillis2 = BeOptionEqualToIgnoringMillis2(expected)
 
-  class BeSeqEqualToIgnoringMillisInSeq(expected: NotConnectedSubmission) extends Matcher[Seq[NotConnectedSubmission]] {
+  class BeSeqEqualToIgnoringMillisInSeq(expected: NotConnectedSubmission) extends Matcher[Seq[NotConnectedSubmission]]:
 
     def apply(left: Seq[NotConnectedSubmission]): MatchResult =
       if left.isEmpty then
@@ -97,9 +85,8 @@ trait CustomMatchers {
           s"The first submission $leftFirst did not equal $expected ignoring milliseconds",
           s"The first submission $leftFirst was equal to $expected ignoring milliseconds"
         )
-  }
 
-  class BeSeqEqualToIgnoringMillisInSeq2(expected: RequestReferenceNumberSubmission) extends Matcher[Seq[RequestReferenceNumberSubmission]] {
+  class BeSeqEqualToIgnoringMillisInSeq2(expected: RequestReferenceNumberSubmission) extends Matcher[Seq[RequestReferenceNumberSubmission]]:
 
     def apply(left: Seq[RequestReferenceNumberSubmission]): MatchResult =
       if left.isEmpty then
@@ -116,11 +103,7 @@ trait CustomMatchers {
           s"The first submission $leftFirst did not equal $expected ignoring milliseconds",
           s"The first submission $leftFirst was equal to $expected ignoring milliseconds"
         )
-  }
 
-  def beSeqEqualToIgnoringMillisSeq(expected: NotConnectedSubmission) = new BeSeqEqualToIgnoringMillisInSeq(expected)
+  def beSeqEqualToIgnoringMillisSeq(expected: NotConnectedSubmission) = BeSeqEqualToIgnoringMillisInSeq(expected)
 
-  def beSeqEqualToIgnoringMillisSeq(expected: RequestReferenceNumberSubmission) = new BeSeqEqualToIgnoringMillisInSeq2(
-    expected
-  )
-}
+  def beSeqEqualToIgnoringMillisSeq(expected: RequestReferenceNumberSubmission) = BeSeqEqualToIgnoringMillisInSeq2(expected)

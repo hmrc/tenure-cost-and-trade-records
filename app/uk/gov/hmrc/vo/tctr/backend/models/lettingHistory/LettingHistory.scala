@@ -28,6 +28,5 @@ case class LettingHistory(
   onlineAdvertising: List[AdvertisingDetail] = Nil
 )
 
-object LettingHistory {
+object LettingHistory:
   given Format[LettingHistory] = Json.format
-}

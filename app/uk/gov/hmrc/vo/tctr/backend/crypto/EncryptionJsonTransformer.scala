@@ -17,7 +17,7 @@
 package uk.gov.hmrc.vo.tctr.backend.crypto
 
 import play.api.libs.json.*
-import play.api.libs.json.Reads._
+import play.api.libs.json.Reads.*
 import uk.gov.hmrc.crypto.{Crypted, PlainText}
 
 import javax.inject.{Inject, Singleton}
@@ -26,16 +26,13 @@ import javax.inject.{Inject, Singleton}
   * @author Yuriy Tumakha
   */
 @Singleton
-class EncryptionJsonTransformer @Inject() ()(using crypto: MongoCrypto) {
+class EncryptionJsonTransformer @Inject() ()(using crypto: MongoCrypto):
 
   private val encrypter: String => String = str => crypto.encrypt(PlainText(str)).value
-
   private val decrypter: String => String = str => crypto.decrypt(Crypted(str)).value
 
-  private val sensitiveWords =
-    Set("name", "email", "phone", "address", "building", "street", "town", "postcode", "token")
-
-  private val exclusions = Set("type")
+  private val sensitiveWords = Set("name", "email", "phone", "address", "building", "street", "town", "postcode", "token")
+  private val exclusions     = Set("type")
 
   private def isSensitiveKey(key: String): Boolean =
     sensitiveWords.exists(w => key.toLowerCase.contains(w)) && !exclusions.exists(w => key.toLowerCase.contains(w))
@@ -56,15 +53,15 @@ class EncryptionJsonTransformer @Inject() ()(using crypto: MongoCrypto) {
   private val encryptTransformer = jsonTransformer(encrypter)
   private val decryptTransformer = jsonTransformer(decrypter)
 
-  def encrypt(json: JsValue): JsValue = json
-    .transform(encryptTransformer)
-    .recover { case t =>
-      throw new SecurityException(t.errors.mkString)
-    }
-    .getOrElse(throw new SecurityException("Unable to encrypt value"))
+  def encrypt(json: JsValue): JsValue =
+    json
+      .transform(encryptTransformer)
+      .recover { case t =>
+        throw SecurityException(t.errors.mkString)
+      }
+      .getOrElse(throw SecurityException("Unable to encrypt value"))
 
-  def decrypt(json: JsValue): JsValue = json
-    .transform(decryptTransformer)
-    .getOrElse(throw new SecurityException("Unable to decrypt value"))
-
-}
+  def decrypt(json: JsValue): JsValue =
+    json
+      .transform(decryptTransformer)
+      .getOrElse(throw SecurityException("Unable to decrypt value"))

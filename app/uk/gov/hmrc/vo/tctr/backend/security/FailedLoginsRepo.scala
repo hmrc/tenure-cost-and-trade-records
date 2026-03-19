@@ -18,10 +18,10 @@ package uk.gov.hmrc.vo.tctr.backend.security
 
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.Updates.{push, setOnInsert}
-import org.mongodb.scala.model._
-import play.api.libs.json._
+import org.mongodb.scala.model.*
+import play.api.libs.json.*
 import uk.gov.hmrc.mongo.MongoComponent
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits.*
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import FailedLoginsMongoRepo.expireAfterDays
 
@@ -30,18 +30,17 @@ import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-trait FailedLoginsRepo {
+trait FailedLoginsRepo:
+
   def mostRecent(ipAddress: String, amount: Int, since: Instant): Future[Seq[FailedLogin]]
 
   def record(login: FailedLogin): Future[Unit]
-}
 
-object FailedLoginsMongoRepo {
+object FailedLoginsMongoRepo:
   val expireAfterDays = 7
-}
 
 @Singleton
-class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(using ec: ExecutionContext)
   extends PlayMongoRepository[FailedLoginsMongoSchema](
     collectionName = "failedLogins",
     mongoComponent = mongo,
@@ -56,7 +55,7 @@ class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Execu
       Codecs.playFormatCodec(implicitly[Format[Instant]])
     )
   )
-  with FailedLoginsRepo {
+  with FailedLoginsRepo:
 
   def mostRecent(ipAddress: String, amount: Int, since: Instant): Future[Seq[FailedLogin]] =
     collection
@@ -85,12 +84,9 @@ class FailedLoginsMongoRepo @Inject() (mongo: MongoComponent)(implicit ec: Execu
       .toFuture()
       .map(_ => ())
 
-}
-
 case class FailedLogin(timestamp: Instant, ipAddress: String)
 
 case class FailedLoginsMongoSchema(_id: String, attempts: Seq[Instant])
 
-object FailedLoginsMongoSchema {
+object FailedLoginsMongoSchema:
   implicit val format: Format[FailedLoginsMongoSchema] = Json.format
-}

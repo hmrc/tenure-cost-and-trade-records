@@ -19,7 +19,8 @@ package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 
-class PremisesCostsSpec extends PlaySpec {
+class PremisesCostsSpec extends PlaySpec:
+
   "PremisesCosts" should {
     "serialize and deserialize correctly" in {
       val premisesCosts = PremisesCosts(
@@ -36,4 +37,3 @@ class PremisesCostsSpec extends PlaySpec {
       premisesCosts.total mustBe 21
     }
   }
-}

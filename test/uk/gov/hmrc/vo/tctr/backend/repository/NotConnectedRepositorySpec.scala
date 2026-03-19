@@ -38,13 +38,13 @@ class NotConnectedRepositorySpec
   with FutureAwaits
   with DefaultAwaitTimeout
   with GuiceOneAppPerSuite
-  with AppSuiteBase {
+  with AppSuiteBase:
 
-  val dbName = s"notConnectedRepositorySpec${UUID.randomUUID().toString.replaceAll("-", "")}"
+  val dbName = s"notConnectedRepositorySpec${UUID.randomUUID.toString.replaceAll("-", "")}"
 
   val testDbUri = s"mongodb://localhost:27017/$dbName"
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .configure("mongodb.uri" -> testDbUri)
     .build()
 
@@ -101,9 +101,6 @@ class NotConnectedRepositorySpec
     Option(true)
   )
 
-  override def afterAll(): Unit = {
+  override def afterAll(): Unit =
     await(mongo.database.drop().toFutureOption())
     mongo.client.close()
-  }
-
-}

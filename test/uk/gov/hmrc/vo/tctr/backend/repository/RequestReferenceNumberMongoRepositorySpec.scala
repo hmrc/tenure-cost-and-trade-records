@@ -24,13 +24,13 @@ import uk.gov.hmrc.vo.tctr.backend.testUtils.CustomMatchers
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
-class RequestReferenceNumberMongoRepositorySpec extends MongoSpecBase with CustomMatchers {
+class RequestReferenceNumberMongoRepositorySpec extends MongoSpecBase with CustomMatchers:
 
   private val submissionDraftFindId = "submissionId"
 
   private val repo = inject[RequestReferenceNumberMongoRepository]
 
-  override def beforeAll(): Unit = {
+  override def beforeAll(): Unit =
     super.beforeAll()
     Await.result(
       repo.collection
@@ -42,10 +42,8 @@ class RequestReferenceNumberMongoRepositorySpec extends MongoSpecBase with Custo
         .toFuture(),
       2.seconds
     )
-  }
 
   "RequestReferenceNumberMongoRepository" should "find RequestReferenceNumberSubmission by correct id" in {
-
     repo.findById(submissionDraftFindId).futureValue should beEqualToIgnoringMillis(Some(requestRefNumSubmission))
   }
 
@@ -60,5 +58,3 @@ class RequestReferenceNumberMongoRepositorySpec extends MongoSpecBase with Custo
   it should "return number of RequestReferenceNumberSubmission" in {
     repo.count.futureValue shouldBe 1
   }
-
-}

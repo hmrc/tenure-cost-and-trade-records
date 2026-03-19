@@ -25,14 +25,12 @@ import java.time.Instant
 /**
   * @author Yuriy Tumakha
   */
-case class DraftsAggregate(_id: Option[String], count: Long, maxCreatedAt: Instant) {
+case class DraftsAggregate(_id: Option[String], count: Long, maxCreatedAt: Instant):
 
   def toDraftsPerVersion: DraftsPerVersion =
     DraftsPerVersion(_id.getOrElse(""), count, maxCreatedAt.toLocalDate.plusDays(saveForDays))
-}
 
-object DraftsAggregate {
-  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
+object DraftsAggregate:
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits.*
 
   implicit val format: OFormat[DraftsAggregate] = Json.format
-}

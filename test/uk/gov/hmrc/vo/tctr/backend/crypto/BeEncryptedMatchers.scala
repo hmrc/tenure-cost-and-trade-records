@@ -22,30 +22,23 @@ import play.api.libs.json.JsLookupResult
 /**
   * @author Yuriy Tumakha
   */
-trait BeEncryptedMatchers {
+trait BeEncryptedMatchers:
 
-  class BeEncryptedMatcher extends BeMatcher[JsLookupResult] {
-
+  class BeEncryptedMatcher extends BeMatcher[JsLookupResult]:
     private val encryptedMinLength = 40
+    private val base64RegExp       = """^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}={2})$"""
 
-    private val base64RegExp =
-      """^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}={2})$"""
-
-    def apply(jsLookupResult: JsLookupResult): MatchResult = {
+    def apply(jsLookupResult: JsLookupResult): MatchResult =
       val value = jsLookupResult.toOption.fold("")(_.as[String])
       MatchResult(
         checkValueIsEncrypted(value),
         s"Value `$value` wasn't encrypted",
         s"Value `$value` was encrypted"
       )
-    }
 
     private def checkValueIsEncrypted(str: String): Boolean =
       str.length > encryptedMinLength && str.matches(base64RegExp)
 
-  }
-
-  val encrypted = new BeEncryptedMatcher
-}
+  val encrypted = BeEncryptedMatcher()
 
 object BeEncryptedMatchers extends BeEncryptedMatchers

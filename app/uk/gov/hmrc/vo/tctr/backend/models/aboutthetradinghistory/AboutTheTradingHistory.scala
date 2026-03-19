@@ -47,5 +47,4 @@ case class AboutTheTradingHistory(
 )
 
 object AboutTheTradingHistory:
-
   implicit val format: OFormat[AboutTheTradingHistory] = Json.format

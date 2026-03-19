@@ -28,7 +28,6 @@ enum AddressConnectionType(connectionType: String):
   case AddressConnectionTypeYes extends AddressConnectionType("yes")
   case AddressConnectionTypeNo extends AddressConnectionType("no")
   case AddressConnectionTypeYesChangeAddress extends AddressConnectionType("yes-change-address")
-end AddressConnectionType
 
 object AddressConnectionType:
   implicit val format: Format[AddressConnectionType] = Scala3EnumJsonFormat.format

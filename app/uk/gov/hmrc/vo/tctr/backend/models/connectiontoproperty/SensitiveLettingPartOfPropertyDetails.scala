@@ -20,6 +20,8 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
+import scala.language.implicitConversions
+
 case class SensitiveLettingPartOfPropertyDetails(
   tenantDetails: SensitiveTenantDetails,
   lettingPartOfPropertyRentDetails: Option[LettingPartOfPropertyRentDetails] = None,
@@ -33,8 +35,7 @@ case class SensitiveLettingPartOfPropertyDetails(
   )
 
 object SensitiveLettingPartOfPropertyDetails:
-
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveLettingPartOfPropertyDetails] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveLettingPartOfPropertyDetails] = Json.format
 
   def apply(lettingDetails: LettingPartOfPropertyDetails): SensitiveLettingPartOfPropertyDetails =
     SensitiveLettingPartOfPropertyDetails(

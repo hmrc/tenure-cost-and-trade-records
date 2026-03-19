@@ -36,7 +36,6 @@ enum CurrentPropertyUsed(propertyCurrentlyUsed: String):
   case CurrentPropertyHealthSpa extends CurrentPropertyUsed("healthSpa")
   case CurrentPropertyLodgeAndRestaurant extends CurrentPropertyUsed("lodgeAndRestaurant")
   case CurrentPropertyConferenceCentre extends CurrentPropertyUsed("conferenceCentre")
-end CurrentPropertyUsed
 
 object CurrentPropertyUsed:
   implicit val format: Format[CurrentPropertyUsed] = Scala3EnumJsonFormat.format

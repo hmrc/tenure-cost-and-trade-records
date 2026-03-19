@@ -23,21 +23,19 @@ import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
 import scala.language.implicitConversions
 
-case class SensitiveContactDetails(phone: SensitiveString, email: SensitiveString) extends Sensitive[ContactDetails] {
+case class SensitiveContactDetails(phone: SensitiveString, email: SensitiveString) extends Sensitive[ContactDetails]:
 
   override def decryptedValue: ContactDetails = ContactDetails(
     phone.decryptedValue,
     email.decryptedValue
   )
 
-}
+object SensitiveContactDetails:
+  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
 
-object SensitiveContactDetails {
-  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
   implicit def format(using crypto: MongoCrypto): OFormat[SensitiveContactDetails] = Json.format
 
   def apply(contactDetails: ContactDetails): SensitiveContactDetails = SensitiveContactDetails(
     SensitiveString(contactDetails.phone),
     SensitiveString(contactDetails.email)
   )
-}

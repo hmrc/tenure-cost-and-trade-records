@@ -27,7 +27,6 @@ enum RenewablesPlantType(renewablesPlantDetails: String):
 
   case Intermittent extends RenewablesPlantType("intermittent")
   case Baseload extends RenewablesPlantType("baseload")
-end RenewablesPlantType
 
 object RenewablesPlantType:
   implicit val format: Format[RenewablesPlantType] = Scala3EnumJsonFormat.format

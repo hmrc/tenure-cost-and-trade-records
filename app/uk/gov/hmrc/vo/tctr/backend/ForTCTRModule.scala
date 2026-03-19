@@ -31,7 +31,7 @@ import java.time.Clock
 import javax.inject.Singleton
 
 @Singleton
-class ForTCTRModule extends Module with Logging {
+class ForTCTRModule extends Module with Logging:
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[?]] =
     Seq(
@@ -40,18 +40,14 @@ class ForTCTRModule extends Module with Logging {
       bind[Clock].toProvider[ClockProvider]
     ) ++ notConnectedSubmissionExporter(configuration)
 
-  def notConnectedSubmissionExporter(configuration: Configuration): Seq[Binding[?]] = {
+  private def notConnectedSubmissionExporter(configuration: Configuration): Seq[Binding[?]] =
     val enableNotConnectedExport = configuration.get[Boolean]("notConnectedSubmissionExport.enabled")
     if enableNotConnectedExport then
       Seq(bind[NotConnectedSubmissionExporter].toProvider(classOf[NotConnectedSubmissionExporterProvider]).eagerly())
     else
       logger.warn(s"NotConnectedSubmissionExporter disabled! Testing only.")
       Seq.empty
-  }
 
-}
-
-////TODO - Move closer to NotConnectedSubmissionExporter or maybe move to special module
 class NotConnectedSubmissionExporterProvider @Inject() (
   mongoLockRepository: MongoLockRepository,
   exportNotConnectedSubmissions: ExportNotConnectedSubmissions,
@@ -59,14 +55,14 @@ class NotConnectedSubmissionExporterProvider @Inject() (
   regularSchedule: RegularSchedule,
   configuration: Configuration,
   implicit val ec: ExecutionContext
-) extends Provider[NotConnectedSubmissionExporter] {
+) extends Provider[NotConnectedSubmissionExporter]:
 
   private val batchSize = configuration
     .getOptional[Int]("notConnectedSubmissionExport.batchSize")
-    .getOrElse(throw new RuntimeException("Missing configuration for notConnectedSubmissionExport.batchSize"))
+    .getOrElse(throw RuntimeException("Missing configuration for notConnectedSubmissionExport.batchSize"))
 
-  override def get(): NotConnectedSubmissionExporter = {
-    val exporter = new NotConnectedSubmissionExporter(
+  override def get(): NotConnectedSubmissionExporter =
+    val exporter = NotConnectedSubmissionExporter(
       mongoLockRepository,
       exportNotConnectedSubmissions,
       batchSize,
@@ -76,10 +72,6 @@ class NotConnectedSubmissionExporterProvider @Inject() (
     )
     exporter.start()
     exporter
-  }
 
-}
-
-class ClockProvider() extends Provider[Clock] {
-  override def get(): Clock = Clock.systemUTC()
-}
+class ClockProvider extends Provider[Clock]:
+  override def get(): Clock = Clock.systemUTC

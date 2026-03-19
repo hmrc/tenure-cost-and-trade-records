@@ -21,7 +21,7 @@ import play.api.libs.json.Json
 /**
   * @author Yuriy Tumakha
   */
-class MongoSubmissionDraftRepoSpec extends MongoSpecBase {
+class MongoSubmissionDraftRepoSpec extends MongoSpecBase:
 
   private val submissionDraftFindId   = "SaveAsDraftITestFind"
   private val submissionDraftSaveId   = "SaveAsDraftITestSave"
@@ -53,5 +53,3 @@ class MongoSubmissionDraftRepoSpec extends MongoSpecBase {
   it should "return deletedCount = 0 on delete by unknown id" in {
     repo.delete("UNKNOWN_ID").futureValue.getDeletedCount shouldBe 0
   }
-
-}

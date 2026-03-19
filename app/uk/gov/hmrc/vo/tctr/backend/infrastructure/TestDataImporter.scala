@@ -25,7 +25,7 @@ import uk.gov.hmrc.vo.tctr.backend.repository.CredentialsRepo
 import uk.gov.hmrc.vo.tctr.backend.schema.Address
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 import scala.util.{Failure, Success}
@@ -35,9 +35,9 @@ class TestDataImporter @Inject() (
   mongoLockRepository: MongoLockRepository,
   actorSystem: ActorSystem,
   implicit val mongoCrypto: MongoCrypto
-) extends Logging {
+) extends Logging:
 
-  def importValidations(repo: CredentialsRepo)(implicit ec: ExecutionContext): Unit = {
+  def importValidations(repo: CredentialsRepo)(using ec: ExecutionContext): Unit =
     val lockService = LockService(mongoLockRepository, "TestDataImporterLock", 1 hour)
 
     lockService.withLock {
@@ -53,41 +53,29 @@ class TestDataImporter @Inject() (
       }
       Future.unit
     }
-  }
 
-  private def importNow(repo: CredentialsRepo)(implicit ec: ExecutionContext): Unit = {
+  private def importNow(repo: CredentialsRepo)(using ec: ExecutionContext): Unit =
     val creds = buildTestCredentials()
     logger.info(s"Importing ${creds.length} test validation records")
     repo.bulkUpsert(creds).onComplete {
       case Success(_) => logger.info(s"Test validations successfully stored.")
       case Failure(e) => logger.error(s"Error importing validation test data: ${e.getMessage}")
     }
-  }
 
-  def buildTestCredentials(): Seq[FORCredentials] = {
+  private def buildTestCredentials(): Seq[FORCredentials] =
     val forTypes = Seq("6010", "6011", "6015", "6016", "6020", "6030", "6045", "6046", "6048", "6076")
 
-    forTypes.flatMap(f =>
-      (0 to 999) map
-        (n => {
-          val n2      = padTo3(n)
-          val address = Address(
-            s"$n2",
-            Some("GORING ROAD"),
-            "GORING-BY-SEA, WORTHING",
-            Some("WEST SUSSEX"),
-            "BN12 4AX"
-          )
-          val baCode  = if n % 2 == 0 then "BA3835" else "BA6815"
-          FORCredentials(s"9999$f$n2", baCode, s"FOR$f", SensitiveAddress(address), s"9999$f$n2")
-        })
-    )
-  }
-
-  private def padTo3(n: Int) = n.toString.length match {
-    case 1 => s"00$n"
-    case 2 => s"0$n"
-    case _ => n
-  }
-
-}
+    for
+      f4 <- forTypes
+      n  <- 0 to 999
+    yield
+      val n3      = f"$n%03d"
+      val address = Address(
+        n3,
+        Some("GORING ROAD"),
+        "GORING-BY-SEA, WORTHING",
+        Some("WEST SUSSEX"),
+        "BN12 4AX"
+      )
+      val baCode  = if n % 2 == 0 then "BA3835" else "BA6815"
+      FORCredentials(s"9999$f4$n3", baCode, s"FOR$f4", SensitiveAddress(address), s"9999$f4$n3")

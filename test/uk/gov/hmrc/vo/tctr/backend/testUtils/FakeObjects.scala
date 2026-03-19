@@ -45,7 +45,8 @@ import uk.gov.hmrc.vo.tctr.backend.schema.Address
 
 import java.time.{Instant, LocalDate}
 
-trait FakeObjects {
+trait FakeObjects:
+
   val referenceNumber: String             = "99996010004"
   val referenceNumberNotConnected: String = "99996010005"
   val forType6010: String                 = "FOR6010"
@@ -755,4 +756,3 @@ trait FakeObjects {
       createdAt = prefilledCreatedAt,
       lang = Some("en")
     )
-}

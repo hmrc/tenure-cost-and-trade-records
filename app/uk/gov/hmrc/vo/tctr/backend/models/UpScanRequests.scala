@@ -19,15 +19,15 @@ package uk.gov.hmrc.vo.tctr.backend.models
 import play.api.libs.json.{JsObject, JsResult, JsValue, Json, OFormat}
 import java.time.Instant
 
-object UpScanRequests {
+object UpScanRequests:
 
-  implicit val initiateRequest: OFormat[InitiateRequest]                    = Json.format
-  implicit val uploadRequests: OFormat[UploadRequest]                       = Json.format
-  implicit val initialResponse: OFormat[InitiateResponse]                   = Json.format
-  implicit val uploadDetails: OFormat[UploadDetails]                        = Json.format
-  implicit val uploadConfirmationSucess: OFormat[UploadConfirmationSuccess] = Json.format
-  implicit val failureDetails: OFormat[FailureDetails]                      = Json.format
-  implicit val uploadConfirmationError: OFormat[UploadConfirmationError]    = Json.format
+  implicit val initiateRequest: OFormat[InitiateRequest]                     = Json.format
+  implicit val uploadRequests: OFormat[UploadRequest]                        = Json.format
+  implicit val initialResponse: OFormat[InitiateResponse]                    = Json.format
+  implicit val uploadDetails: OFormat[UploadDetails]                         = Json.format
+  implicit val uploadConfirmationSuccess: OFormat[UploadConfirmationSuccess] = Json.format
+  implicit val failureDetails: OFormat[FailureDetails]                       = Json.format
+  implicit val uploadConfirmationError: OFormat[UploadConfirmationError]     = Json.format
 
   case class InitiateRequest(
     callbackUrl: String,
@@ -45,23 +45,20 @@ object UpScanRequests {
     fields: Map[String, String]
   )
 
-  sealed trait UploadConfirmation {
+  sealed trait UploadConfirmation:
     val reference: String
     val fileStatus: String
-  }
 
-  object UploadConfirmation {
+  object UploadConfirmation:
 
-    implicit val format: OFormat[UploadConfirmation] = new OFormat[UploadConfirmation] {
-      override def writes(o: UploadConfirmation): JsObject = o match {
-        case x: UploadConfirmationError   => uploadConfirmationError.writes(x)
-        case x: UploadConfirmationSuccess => uploadConfirmationSucess.writes(x)
-      }
+    implicit val format: OFormat[UploadConfirmation] =
+      new OFormat[UploadConfirmation]:
+        override def writes(o: UploadConfirmation): JsObject = o match
+          case x: UploadConfirmationError   => uploadConfirmationError.writes(x)
+          case x: UploadConfirmationSuccess => uploadConfirmationSuccess.writes(x)
 
-      override def reads(json: JsValue): JsResult[UploadConfirmation] =
-        uploadConfirmationSucess.reads(json).orElse(uploadConfirmationError.reads(json))
-    }
-  }
+        override def reads(json: JsValue): JsResult[UploadConfirmation] =
+          uploadConfirmationSuccess.reads(json).orElse(uploadConfirmationError.reads(json))
 
   case class UploadConfirmationSuccess(
     reference: String,
@@ -87,5 +84,3 @@ object UpScanRequests {
     fileMimeType: String,
     fileName: String
   )
-
-}

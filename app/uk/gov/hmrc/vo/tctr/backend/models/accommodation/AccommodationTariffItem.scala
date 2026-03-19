@@ -31,7 +31,6 @@ enum AccommodationTariffItem(item: String):
   case Water extends AccommodationTariffItem("water")
   case RoomHeating extends AccommodationTariffItem("roomHeating")
   case None extends AccommodationTariffItem("none")
-end AccommodationTariffItem
 
 object AccommodationTariffItem:
   implicit val format: Format[AccommodationTariffItem] = Scala3EnumJsonFormat.format

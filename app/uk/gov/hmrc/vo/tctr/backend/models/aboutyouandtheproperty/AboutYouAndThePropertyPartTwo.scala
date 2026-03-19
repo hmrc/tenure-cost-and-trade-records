@@ -34,6 +34,5 @@ case class AboutYouAndThePropertyPartTwo(
   occupiersList: IndexedSeq[OccupiersDetails] = IndexedSeq.empty
 )
 
-object AboutYouAndThePropertyPartTwo {
+object AboutYouAndThePropertyPartTwo:
   implicit val format: OFormat[AboutYouAndThePropertyPartTwo] = Json.format
-}

@@ -18,8 +18,8 @@ package uk.gov.hmrc.vo.tctr.backend.controllers
 
 import play.api.Logging
 import play.api.libs.json.Format.GenericFormat
-import play.api.mvc._
-import play.api.libs.json._
+import play.api.mvc.*
+import play.api.libs.json.*
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.vo.tctr.backend.models.UpScanRequests.{UploadConfirmation, UploadConfirmationSuccess}
 import uk.gov.hmrc.vo.tctr.backend.connectors.UpscanConnector
@@ -35,27 +35,27 @@ class UpscanCallbackController @Inject() (
   cc: ControllerComponents,
   credentialsRepo: CredentialsRepo,
   implicit val mongoCrypto: MongoCrypto
-)(implicit ec: ExecutionContext
+)(using ec: ExecutionContext
 ) extends BackendController(cc)
-  with Logging {
+  with Logging:
 
   def callback: Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body
       .validate[UploadConfirmation]
       .fold(
-        errors => {
+        errors =>
           logger.error(s"Failed to parse JSON: $errors")
           Future.successful(BadRequest(Json.obj("status" -> "Invalid JSON")))
-        },
-        uploadConfirmation => {
+        ,
+        uploadConfirmation =>
           logger.info(s"Received callback notification [${Json.stringify(request.body)}]")
 
-          uploadConfirmation match {
+          uploadConfirmation match
             case success: UploadConfirmationSuccess if success.fileStatus == "READY" =>
               Future {
                 upscanConnector.download(success.downloadUrl).onComplete {
                   case Success(Right(fileContentString)) =>
-                    Json.parse(fileContentString).validate[Seq[FORCredentialsPlainText]] match {
+                    Json.parse(fileContentString).validate[Seq[FORCredentialsPlainText]] match
                       case JsSuccess(forAuthTokens, _) =>
                         val forCredentials = forAuthTokens.map(_.toSensitive)
                         credentialsRepo.bulkUpsert(forCredentials).onComplete {
@@ -64,7 +64,6 @@ class UpscanCallbackController @Inject() (
                         }
                       case JsError(errors)             =>
                         logger.error(s"Failed to parse file content to FORCredentials. Errors: ${errors.mkString(",")}")
-                    }
                   case Success(Left(error))              =>
                     logger.error(s"Unknown error while processing FORCredentials ${error.detail}")
                   case Failure(e)                        =>
@@ -76,8 +75,5 @@ class UpscanCallbackController @Inject() (
             case _                                                                   =>
               logger.error("File not ready or confirmation error on Upscan callback")
               Future.successful(Ok(Json.obj("status" -> "File not ready or confirmation error")))
-          }
-        }
       )
   }
-}

@@ -43,17 +43,16 @@ class ExportNotConnectedSubmissionsSpec
   with AnyWordSpecLike
   with should.Matchers
   with BeforeAndAfterAll
-  with MockitoExtendedSugar {
+  with MockitoExtendedSugar:
 
-  implicit val ec: ExecutionContext = system.dispatcher
-//  private val emailConnector = mock[EmailConnector]
-  import TestData._
+  given ExecutionContext = system.dispatcher
 
-  def config(): AppConfig = {
+  import TestData.*
+
+  def config(): AppConfig =
     val config        = ConfigFactory.load("application.conf")
     val configuration = Configuration(config)
-    new AppConfig(configuration)
-  }
+    AppConfig(configuration)
 
   "Given there are submissions to be exported" when {
     val submissions = (1 to 200).map(SubmissionBuilder.createNotConnectedSubmission).toList
@@ -65,7 +64,7 @@ class ExportNotConnectedSubmissionsSpec
     "the exporter is told to export the latest submission it does the following before publishing a completed event" should {
       system.eventStream.subscribe(self, classOf[SubmissionExportComplete])
       Await.result(
-        new ExportNotConnectedSubmissionsDeskpro(repo, deskproConnector, audit, Clock.systemDefaultZone(), config())
+        ExportNotConnectedSubmissionsDeskpro(repo, deskproConnector, audit, Clock.systemDefaultZone(), config())
           .exportNow(batchSize),
         5 second
       )
@@ -82,17 +81,14 @@ class ExportNotConnectedSubmissionsSpec
   override def afterAll(): Unit =
     Await.ready(system.terminate(), 2 seconds)
 
-  object TestData {
-    lazy val repo: NotConnectedMongoRepository = mock[NotConnectedMongoRepository]
-    lazy val deskproConnector                  = new StubDeskproConnector()
-    lazy val batchSize                         = 1
-    lazy val scheduler                         = new ScheduleThatSchedulesImmediately5Times
-    lazy val audit: ForTCTRAudit               = mock[ForTCTRAudit]
-  }
+  object TestData:
+    val repo: NotConnectedMongoRepository = mock[NotConnectedMongoRepository]
+    val deskproConnector                  = StubDeskproConnector()
+    val batchSize                         = 1
+    val scheduler                         = ScheduleThatSchedulesImmediately5Times()
+    val audit: ForTCTRAudit               = mock[ForTCTRAudit]
 
-}
-
-class StubDeskproConnector extends DeskproConnector with should.Matchers {
+class StubDeskproConnector extends DeskproConnector with should.Matchers:
 
   private var receivedTickets = Seq.empty[DeskproTicket]
 
@@ -103,5 +99,3 @@ class StubDeskproConnector extends DeskproConnector with should.Matchers {
 
   def verifyReceived(s: Seq[DeskproTicket]): Assertion =
     assert(receivedTickets === s)
-
-}

@@ -30,9 +30,7 @@ case class SubmissionDraftWrapper(
   createdAt: Instant = Instant.now
 )
 
-object SubmissionDraftWrapper {
-
-  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
+object SubmissionDraftWrapper:
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits.*
 
   implicit val format: OFormat[SubmissionDraftWrapper] = Json.format
-}

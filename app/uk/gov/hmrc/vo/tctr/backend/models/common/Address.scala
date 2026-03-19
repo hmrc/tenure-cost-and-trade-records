@@ -24,7 +24,7 @@ case class Address(
   town: String,
   county: Option[String],
   postcode: String
-) {
+):
 
   def singleLine: String =
     List(
@@ -43,8 +43,6 @@ case class Address(
       county,
       Some(postcode.replaceAll("^(\\S+?)\\s*?(\\d\\w\\w)$", "$1 $2"))
     ).flatten.mkString("<br/> ")
-}
 
-object Address {
+object Address:
   implicit val format: OFormat[Address] = Json.format
-}

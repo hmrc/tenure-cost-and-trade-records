@@ -27,7 +27,7 @@ sealed trait LettingPartOfProperty:
 
 object LettingPartOfProperty:
 
-  implicit val lettingReads: Reads[LettingPartOfProperty] = (__ \ "type").read[String].flatMap {
+  private val lettingReads: Reads[LettingPartOfProperty] = (__ \ "type").read[String].flatMap {
     case "ATMLetting"              => implicitly[Reads[ATMLetting]].map(identity)
     case "TelecomMastLetting"      => implicitly[Reads[TelecomMastLetting]].map(identity)
     case "AdvertisingRightLetting" => implicitly[Reads[AdvertisingRightLetting]].map(identity)
@@ -35,7 +35,7 @@ object LettingPartOfProperty:
     case other                     => Reads(_ => JsError(s"Unknown type: $other"))
   }
 
-  implicit val lettingWrites: Writes[LettingPartOfProperty] = Writes {
+  private val lettingWrites: Writes[LettingPartOfProperty] = Writes {
     case atmLetting: ATMLetting                           =>
       Json.obj("type" -> "ATMLetting") ++ Json.toJson(atmLetting)(using ATMLetting.format).as[JsObject]
     case telecomMastLetting: TelecomMastLetting           =>

@@ -36,7 +36,7 @@ abstract class IntegrationSpecBase
   with ScalaFutures
   with IntegrationPatience
   with GuiceOneServerPerSuite
-  with Injecting {
+  with Injecting:
 
   override def fakeApplication(): Application =
     GuiceApplicationBuilder()
@@ -50,5 +50,3 @@ abstract class IntegrationSpecBase
 
   protected val baseUrl    = s"http://localhost:$port"
   protected val appBaseUrl = s"$baseUrl/${configuration.get[String]("appName")}"
-
-}

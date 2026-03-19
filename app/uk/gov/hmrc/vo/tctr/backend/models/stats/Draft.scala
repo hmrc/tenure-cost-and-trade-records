@@ -18,7 +18,7 @@ package uk.gov.hmrc.vo.tctr.backend.models.stats
 
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.vo.tctr.backend.repository.MongoSubmissionDraftRepo.saveForDays
-import uk.gov.hmrc.vo.tctr.backend.util.DateUtil._
+import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.*
 import uk.gov.hmrc.vo.tctr.backend.models.SubmissionDraftWrapper
 
 import java.time.LocalDate
@@ -29,7 +29,7 @@ import scala.util.Try
   */
 case class Draft(reference: String, forType: String, version: String, expireOn: LocalDate)
 
-object Draft {
+object Draft:
   implicit val format: OFormat[Draft] = Json.format
 
   def apply(sd: SubmissionDraftWrapper): Draft =
@@ -39,5 +39,3 @@ object Draft {
       sd.appVersion.getOrElse(""),
       sd.createdAt.toLocalDate.plusDays(saveForDays)
     )
-
-}

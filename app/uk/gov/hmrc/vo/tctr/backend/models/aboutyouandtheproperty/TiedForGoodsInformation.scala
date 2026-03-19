@@ -28,7 +28,6 @@ enum TiedForGoodsInformation(tiedForGoodsType: String):
   case TiedForGoodsInformationDetailsFullTie extends TiedForGoodsInformation("fullTie")
   case TiedForGoodsInformationDetailsBeerOnly extends TiedForGoodsInformation("beerOnly")
   case TiedForGoodsInformationDetailsPartialTie extends TiedForGoodsInformation("partialTie")
-end TiedForGoodsInformation
 
 object TiedForGoodsInformation:
   implicit val format: Format[TiedForGoodsInformation] = Scala3EnumJsonFormat.format

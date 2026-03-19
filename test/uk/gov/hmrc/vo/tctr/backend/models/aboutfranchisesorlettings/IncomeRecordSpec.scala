@@ -23,7 +23,7 @@ import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
 
 import java.time.LocalDate
 
-class IncomeRecordSpec extends PlaySpec with FakeObjects {
+class IncomeRecordSpec extends PlaySpec with FakeObjects:
 
   "IncomeRecord" should {
     "serialize and deserialize correctly for FranchiseIncomeRecord with complete details" in {
@@ -131,4 +131,3 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects {
       json.validate[IncomeRecord] mustBe a[JsError]
     }
   }
-}

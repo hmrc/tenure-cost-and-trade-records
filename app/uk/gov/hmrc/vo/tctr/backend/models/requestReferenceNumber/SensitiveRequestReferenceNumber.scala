@@ -20,24 +20,23 @@ import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
+import scala.language.implicitConversions
+
 case class SensitiveRequestReferenceNumber(
   requestReferenceNumberAddress: Option[SensitiveRequestReferenceNumberAddress] = None,
   requestReferenceContactDetails: Option[RequestReferenceNumberContactDetails] = None
-) extends Sensitive[RequestReferenceNumberDetails] {
+) extends Sensitive[RequestReferenceNumberDetails]:
 
   override def decryptedValue: RequestReferenceNumberDetails = RequestReferenceNumberDetails(
     requestReferenceNumberAddress.map(_.decryptedValue),
     requestReferenceContactDetails
   )
-}
 
-object SensitiveRequestReferenceNumber {
-
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveRequestReferenceNumber] = Json.format
+object SensitiveRequestReferenceNumber:
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveRequestReferenceNumber] = Json.format
 
   def apply(requestReferenceNumber: RequestReferenceNumberDetails): SensitiveRequestReferenceNumber =
     SensitiveRequestReferenceNumber(
       requestReferenceNumber.requestReferenceNumberAddress.map(SensitiveRequestReferenceNumberAddress(_)),
       requestReferenceNumber.requestReferenceContactDetails
     )
-}

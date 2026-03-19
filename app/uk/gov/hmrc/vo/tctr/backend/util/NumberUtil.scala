@@ -27,10 +27,10 @@ object NumberUtil:
 
   val zeroBigDecimal: BigDecimal = BigDecimal(0)
 
-  extension (str: String) def removedTrailingZeros: String = str.replace(".00", "")
+  extension (str: String)
+    def removedTrailingZeros: String = str.replace(".00", "")
 
   extension (bigDecimal: BigDecimal)
-
     def asMoney: String = asMoneyFull.removedTrailingZeros
 
     def asMoneyFull: String =

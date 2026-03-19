@@ -31,20 +31,19 @@ case class RequestBuilderStub(responseStatusOrFailure: Either[Throwable, Int], r
 
   override def transform(transform: WSRequest => WSRequest): RequestBuilder = this
 
-  override def execute[A: HttpReads](implicit ec: ExecutionContext): Future[A] =
+  override def execute[A: HttpReads](using ec: ExecutionContext): Future[A] =
     responseStatusOrFailure match
       case Right(responseStatus) => Future.successful(HttpResponse(responseStatus, requestBody).asInstanceOf[A])
       case Left(failure)         => Future.failed(failure)
 
-  override def stream[A: StreamHttpReads](implicit ec: ExecutionContext): Future[A] = ???
+  override def stream[A: StreamHttpReads](using ec: ExecutionContext): Future[A] = ???
 
   override def setHeader(header: (String, String)*): RequestBuilder = this
 
   override def withProxy: RequestBuilder = this
 
-  override def withBody[B: {BodyWritable, Tag}](body: B)(implicit ec: ExecutionContext): RequestBuilder =
-    val bodyString = body match {
+  override def withBody[B: {BodyWritable, Tag}](body: B)(using ec: ExecutionContext): RequestBuilder =
+    val bodyString = body match
       case json: JsValue => Json.stringify(json)
       case b             => b.toString
-    }
-    this.copy(requestBody = bodyString)
+    copy(requestBody = bodyString)

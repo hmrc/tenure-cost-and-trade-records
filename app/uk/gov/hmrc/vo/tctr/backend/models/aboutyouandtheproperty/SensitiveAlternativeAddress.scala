@@ -21,13 +21,15 @@ import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
+import scala.language.implicitConversions
+
 case class SensitiveAlternativeAddress(
   buildingNameNumber: SensitiveString,
   street1: Option[SensitiveString],
   town: SensitiveString,
   county: Option[SensitiveString],
   postcode: SensitiveString
-) extends Sensitive[AlternativeAddress] {
+) extends Sensitive[AlternativeAddress]:
 
   override def decryptedValue: AlternativeAddress = AlternativeAddress(
     buildingNameNumber.decryptedValue,
@@ -36,11 +38,11 @@ case class SensitiveAlternativeAddress(
     county.map(_.decryptedValue),
     postcode.decryptedValue
   )
-}
 
-object SensitiveAlternativeAddress {
-  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAlternativeAddress] = Json.format
+object SensitiveAlternativeAddress:
+  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
+
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveAlternativeAddress] = Json.format
 
   def apply(alternativeAddress: AlternativeAddress): SensitiveAlternativeAddress =
     SensitiveAlternativeAddress(
@@ -50,4 +52,3 @@ object SensitiveAlternativeAddress {
       alternativeAddress.county.map(SensitiveString(_)),
       SensitiveString(alternativeAddress.postcode)
     )
-}

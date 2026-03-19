@@ -19,7 +19,7 @@ package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 import play.api.libs.json.Json
 import org.scalatestplus.play.PlaySpec
 
-class GrossReceiptsSubLetUnitsSpec extends PlaySpec {
+class GrossReceiptsSubLetUnitsSpec extends PlaySpec:
 
   "GrossReceiptsSubLetUnits" should {
     "serialize and deserialize correctly" in {
@@ -31,5 +31,3 @@ class GrossReceiptsSubLetUnitsSpec extends PlaySpec {
       json.as[GrossReceiptsSubLetUnits] mustBe grossReceiptsSubLetUnits
     }
   }
-
-}

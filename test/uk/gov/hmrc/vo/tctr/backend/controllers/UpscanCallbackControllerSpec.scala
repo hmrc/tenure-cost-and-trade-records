@@ -38,18 +38,18 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.*
 
-class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with MockitoExtendedSugar {
-  implicit val timeout: Timeout     = 9.seconds
-  implicit val ec: ExecutionContext = ExecutionContext.global
-  implicit val hc: HeaderCarrier    = HeaderCarrier()
+class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with MockitoExtendedSugar:
+
+  given Timeout          = 9.seconds
+  given ExecutionContext = ExecutionContext.global
+  given HeaderCarrier    = HeaderCarrier()
 
   val mockUpscanConnector: UpscanConnector = mock[UpscanConnector]
   val mockCredentialsRepo: CredentialsRepo = mock[CredentialsRepo]
   val mockMongoCrypto: MongoCrypto         = mock[MongoCrypto]
   val mockBulkWriteResult: BulkWriteResult = mock[BulkWriteResult]
 
-  val controller =
-    new UpscanCallbackController(mockUpscanConnector, stubControllerComponents(), mockCredentialsRepo, mockMongoCrypto)
+  val controller = UpscanCallbackController(mockUpscanConnector, stubControllerComponents(), mockCredentialsRepo, mockMongoCrypto)
 
   "UpscanCallbackController" should "handle successful callbacks" in {
 
@@ -85,7 +85,7 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
     val request = FakeRequest().withBody(validUploadConfirmation)
     val result  = controller.callback()(request)
 
-    status(result)(using timeout) shouldBe OK
+    status(result) shouldBe OK
 
     scala.concurrent.blocking {
       Thread.sleep(5000)
@@ -97,4 +97,3 @@ class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with Mock
 
     Future.successful(Succeeded)
   }
-}

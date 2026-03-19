@@ -29,27 +29,23 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[HmrcDeskproConnector])
-trait DeskproConnector {
-
+trait DeskproConnector:
   def createTicket(ticket: DeskproTicket): Future[Long]
-
-}
 
 @Singleton
 class HmrcDeskproConnector @Inject() (
   serviceConfig: ServicesConfig,
   httpClientV2: HttpClientV2
-)(implicit executionContext: ExecutionContext
+)(using executionContext: ExecutionContext
 ) extends DeskproConnector
-  with Logging {
+  with Logging:
 
-  implicit val format: OFormat[DeskproTicket] = Json.format
+  given OFormat[DeskproTicket] = Json.format
 
   private val deskproBaseUrl = serviceConfig.baseUrl("deskpro-ticket-queue")
   private val deskproURL     = url"$deskproBaseUrl/deskpro/ticket"
 
-  override def createTicket(ticket: DeskproTicket): Future[Long] = {
-
+  override def createTicket(ticket: DeskproTicket): Future[Long] =
     given HeaderCarrier = HeaderCarrier(requestId = Some(RequestId(ticket.sessionId)))
 
     httpClientV2
@@ -65,9 +61,6 @@ class HmrcDeskproConnector @Inject() (
         logger.error(s"Creating deskpro ticket FAILED: ${e.getMessage}", e)
         Future.failed(e)
       }
-  }
-
-}
 
 case class DeskproTicket(
   name: String,

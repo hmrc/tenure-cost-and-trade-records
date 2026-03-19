@@ -32,10 +32,10 @@ import java.time.Instant
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class EmailConnectorSpec extends AnyWordAppSpec {
+class EmailConnectorSpec extends AnyWordAppSpec:
 
   private val configuration      = Configuration(ConfigFactory.load("application.conf"))
-  private val servicesConfig     = new ServicesConfig(configuration)
+  private val servicesConfig     = ServicesConfig(configuration)
   private val dateUtilLocalised  = inject[DateUtilLocalised]
   implicit val hc: HeaderCarrier = HeaderCarrier()
   private val email              = "customer@email.com"
@@ -77,7 +77,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
   "EmailConnector" must {
     "verify that the email service is called on send tctr_submission_confirmation" in {
       val httpMock  = httpPostMock(OK)
-      val connector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val connector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val bodyJson =
         """{"to":["test@email.com"],"templateId":"tctr_submission_confirmation","parameters":{"customerName":"Full Name"}}"""
@@ -92,7 +92,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
 
     "send tctr_vacant_submission_confirmation" in {
       val httpMock       = httpPostMock(ACCEPTED)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendVacantSubmissionConfirmation(email, "David Jones").futureValue
       response.status shouldBe ACCEPTED
@@ -104,7 +104,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
 
     "send tctr_connection_removed" in {
       val httpMock       = httpPostMock(ACCEPTED)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmission).futureValue
       response.status shouldBe ACCEPTED
@@ -116,7 +116,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
 
     "send tctr_connection_removed_cy" in {
       val httpMock       = httpPostMock(ACCEPTED)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmissionCy).futureValue
       response.status shouldBe ACCEPTED
@@ -130,7 +130,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
       val body           =
         """{"to":["test@email.com"],"templateId":"tctr_submission_confirmation","parameters":{"customerName":"Full Name"}}"""
       val httpMock       = httpPostMock(BAD_REQUEST)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendSubmissionConfirmation(prefilledConnectedSubmission).futureValue
       response.status shouldBe BAD_REQUEST
@@ -143,7 +143,7 @@ class EmailConnectorSpec extends AnyWordAppSpec {
     "don't send tctr_connection_removed if submission doesn't contain email address" in {
       val httpMock       = mock[HttpClientV2]
       val submission     = testNotConnectedSubmission.copy(emailAddress = None)
-      val emailConnector = new EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendConnectionRemoved(submission).futureValue
       response.status shouldBe NOT_FOUND
@@ -153,5 +153,3 @@ class EmailConnectorSpec extends AnyWordAppSpec {
     }
 
   }
-
-}

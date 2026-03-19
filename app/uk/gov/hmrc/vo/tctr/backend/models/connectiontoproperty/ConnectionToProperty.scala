@@ -29,7 +29,6 @@ enum ConnectionToProperty(connectionType: String):
   case ConnectionToThePropertyOwnerTrustee extends ConnectionToProperty("ownerTrustee")
   case ConnectionToThePropertyOccupierAgent extends ConnectionToProperty("occupierAgent")
   case ConnectionToThePropertyOwnerAgent extends ConnectionToProperty("ownerAgent")
-end ConnectionToProperty
 
 object ConnectionToProperty:
   implicit val format: Format[ConnectionToProperty] = Scala3EnumJsonFormat.format

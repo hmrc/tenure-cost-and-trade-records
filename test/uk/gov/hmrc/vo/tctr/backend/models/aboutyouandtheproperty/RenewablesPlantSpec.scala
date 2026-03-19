@@ -20,7 +20,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsSuccess, Json, Writes}
 import RenewablesPlantType.*
 
-class RenewablesPlantSpec extends PlaySpec {
+class RenewablesPlantSpec extends PlaySpec:
 
   implicit val renewablesPlantDetailsWrites: Writes[RenewablesPlantType] = Writes {
     case Intermittent => Json.toJson("intermittent")
@@ -46,4 +46,3 @@ class RenewablesPlantSpec extends PlaySpec {
       Json.toJson(Baseload)(using renewablesPlantDetailsWrites).as[String] mustBe "baseload"
     }
   }
-}

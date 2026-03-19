@@ -22,4 +22,4 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 /**
   * @author Yuriy Tumakha
   */
-class AnyWordAppSpec extends AnyWordSpec with GuiceOneAppPerSuite with AppSuiteBase {}
+class AnyWordAppSpec extends AnyWordSpec with GuiceOneAppPerSuite with AppSuiteBase

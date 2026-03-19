@@ -19,10 +19,10 @@ package uk.gov.hmrc.vo.tctr.backend.repository
 import com.google.inject.ImplementedBy
 import org.mongodb.scala.bson.{BsonDateTime, BsonDocument, Document}
 import org.mongodb.scala.model.Filters.equal
-import org.mongodb.scala.model._
+import org.mongodb.scala.model.*
 import org.mongodb.scala.result.{DeleteResult, InsertManyResult}
 import org.mongodb.scala.{BulkWriteResult, MongoBulkWriteException, ToSingleObservablePublisher}
-import play.api.libs.json._
+import play.api.libs.json.*
 import play.api.{Configuration, Logging}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
@@ -36,7 +36,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[CredentialsMongoRepo])
-trait CredentialsRepo {
+trait CredentialsRepo:
+
   def validate(refNum: String, postcode: String): Future[Option[FORCredentials]]
 
   def bulkInsert(fs: Seq[FORCredentials]): Future[InsertManyResult]
@@ -47,14 +48,13 @@ trait CredentialsRepo {
 
   def removeAll(): Future[DeleteResult]
 
-  def bulkUpsert(credentialsSeq: Seq[FORCredentials])(implicit writes: OWrites[FORCredentials]): Future[BulkWriteResult]
-}
+  def bulkUpsert(credentialsSeq: Seq[FORCredentials])(using writes: OWrites[FORCredentials]): Future[BulkWriteResult]
 
-object CredentialsMongoRepo {
+object CredentialsMongoRepo:
 
-  val defaultExpireAfterDays = 100
+  private val defaultExpireAfterDays = 100
 
-  def credentialsTtlIndex(configuration: Configuration): Seq[IndexModel] = Seq(
+  private def credentialsTtlIndex(configuration: Configuration): Seq[IndexModel] = Seq(
     IndexModel(
       Indexes.ascending("createdAt"),
       IndexOptions()
@@ -66,13 +66,11 @@ object CredentialsMongoRepo {
     )
   )
 
-}
-
 @Singleton
 class CredentialsMongoRepo @Inject() (
   mongo: MongoComponent,
   configuration: Configuration
-)(implicit
+)(using
   ec: ExecutionContext,
   crypto: MongoCrypto
 ) extends PlayMongoRepository[FORCredentials](
@@ -85,9 +83,9 @@ class CredentialsMongoRepo @Inject() (
     )
   )
   with CredentialsRepo
-  with Logging {
+  with Logging:
 
-  def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] = {
+  def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] =
     val postcode1 = postcode.replace('+', ' ')
     collection
       .find(equal("_id", refNum))
@@ -101,7 +99,6 @@ class CredentialsMongoRepo @Inject() (
             .toFuture()
             .map(_ => None)
       }
-  }
 
   def bulkInsert(credentialsSeq: Seq[FORCredentials]): Future[InsertManyResult] =
     collection.insertMany(credentialsSeq).toFuture()
@@ -120,23 +117,22 @@ class CredentialsMongoRepo @Inject() (
 
   def bulkUpsert(
     credentialsSeq: Seq[FORCredentials]
-  )(implicit writes: OWrites[FORCredentials]
-  ): Future[BulkWriteResult] = {
+  )(using writes: OWrites[FORCredentials]
+  ): Future[BulkWriteResult] =
 
     def toJson(cred: FORCredentials): JsObject =
       Json.toJson(cred).as[JsObject]
 
-    def toBson(doc: JsObject): BsonDocument = {
-      val withLastModified = doc + ("LastModified" -> JsString(Instant.now().toString))
+    def toBson(doc: JsObject): BsonDocument =
+      val withLastModified = doc + ("LastModified" -> JsString(Instant.now.toString))
       BsonDocument(
         "$set" -> BsonDocument(Json.stringify(withLastModified))
-          .append("createdAt", BsonDateTime(Instant.now().toEpochMilli))
+          .append("createdAt", BsonDateTime(Instant.now.toEpochMilli))
       )
-    }
 
     val bulkOps: Seq[WriteModel[? <: FORCredentials]] = credentialsSeq.map { cred =>
       val filter   = Filters.eq("_id", cred._id)
-      val update   = new UpdateOptions().upsert(true)
+      val update   = UpdateOptions().upsert(true)
       val document = toBson(toJson(cred))
 
       new UpdateOneModel[FORCredentials](filter, document, update)
@@ -147,14 +143,10 @@ class CredentialsMongoRepo @Inject() (
         e.getWriteErrors.forEach { error =>
           logger.error(s"Error writing document at index ${error.getIndex}: ${error.getMessage}")
         }
-        Future.failed(new Exception("Error during bulk upsert.", e))
-
-      case e: Exception =>
+        Future.failed(Exception("Error during bulk upsert.", e))
+      case e: Exception               =>
         logger.error("Unexpected error during bulk upsert.", e)
         Future.failed(e)
     }
-  }
 
   private def normalizePostcode(postcode: String) = postcode.toLowerCase.replace(" ", "").replace("+", "")
-
-}

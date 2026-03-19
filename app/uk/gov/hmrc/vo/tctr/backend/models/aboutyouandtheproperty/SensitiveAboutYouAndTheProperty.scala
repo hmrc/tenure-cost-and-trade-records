@@ -22,6 +22,8 @@ import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.vo.tctr.backend.models.common.AnswersYesNo
 import uk.gov.hmrc.vo.tctr.backend.models.connectiontoproperty.CheckYourAnswersAndConfirm
 
+import scala.language.implicitConversions
+
 case class SensitiveAboutYouAndTheProperty(
   customerDetails: Option[SensitiveCustomerDetails] = None,
   altDetailsQuestion: Option[AnswersYesNo] = None,
@@ -73,8 +75,7 @@ case class SensitiveAboutYouAndTheProperty(
   )
 
 object SensitiveAboutYouAndTheProperty:
-
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveAboutYouAndTheProperty] = Json.format
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveAboutYouAndTheProperty] = Json.format
 
   def apply(aboutYouAndTheProperty: AboutYouAndTheProperty): SensitiveAboutYouAndTheProperty =
     SensitiveAboutYouAndTheProperty(

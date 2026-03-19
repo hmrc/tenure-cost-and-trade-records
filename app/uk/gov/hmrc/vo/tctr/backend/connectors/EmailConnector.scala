@@ -41,9 +41,8 @@ class EmailConnector @Inject() (
   servicesConfig: ServicesConfig,
   httpClientV2: HttpClientV2,
   dateUtilLocalised: DateUtilLocalised
-)(implicit
-  ec: ExecutionContext
-) extends Logging {
+)(using ec: ExecutionContext
+) extends Logging:
 
   private val emailServiceBaseUrl = servicesConfig.baseUrl("email")
   private val sendEmailURL        = url"$emailServiceBaseUrl/hmrc/email"
@@ -59,7 +58,7 @@ class EmailConnector @Inject() (
   private val tctr_connection_removed             = "tctr_connection_removed"
   private val tctr_connection_removed_cy          = "tctr_connection_removed_cy"
 
-  def sendSubmissionConfirmation(submission: ConnectedSubmission)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+  def sendSubmissionConfirmation(submission: ConnectedSubmission)(using hc: HeaderCarrier): Future[HttpResponse] =
     submission.aboutYouAndTheProperty
       .flatMap(_.customerDetails)
       .fold {
@@ -74,56 +73,54 @@ class EmailConnector @Inject() (
   def sendVacantSubmissionConfirmation(
     email: String,
     fullName: String
-  )(implicit
+  )(using
     hc: HeaderCarrier
-  ): Future[HttpResponse] = {
-    implicit val lang: Lang = englishLang
-    val parameters          = customerSubmissionParams(fullName)
+  ): Future[HttpResponse] =
+    given Lang = englishLang
 
+    val parameters = customerSubmissionParams(fullName)
     sendEmail(email, tctr_vacant_submission_confirmation, parameters)
-  }
 
   def sendConnectionRemoved(
     notConnectedSubmission: NotConnectedSubmission
-  )(implicit hc: HeaderCarrier
-  ): Future[HttpResponse] = {
-    implicit val lang: Lang = notConnectedSubmission.lang.fold(englishLang)(langMap)
-    val templateId          = getTemplatePerLang(tctr_connection_removed, tctr_connection_removed_cy)
-    val parameters          = customerSubmissionParams(notConnectedSubmission.fullName)
+  )(using hc: HeaderCarrier
+  ): Future[HttpResponse] =
+    given Lang = notConnectedSubmission.lang.fold(englishLang)(langMap)
+
+    val templateId = getTemplatePerLang(tctr_connection_removed, tctr_connection_removed_cy)
+    val parameters = customerSubmissionParams(notConnectedSubmission.fullName)
 
     notConnectedSubmission.emailAddress.fold {
       logger.warn(s"Send email to user canceled: 404 Email not found")
       Future.successful(HttpResponse(404, "Email not found"))
     }(email => sendEmail(email, templateId, parameters))
-  }
 
   private def customerSubmissionParams(
     fullName: String,
     submissionDate: ZonedDateTime = DateUtil.nowInUK
-  )(implicit
+  )(using
     lang: Lang
   ): JsObject =
     Json.obj("recipientName_FullName" -> fullName) ++ submissionDateParams(submissionDate)
 
-  private def submissionDateParams(submissionDate: ZonedDateTime)(implicit lang: Lang): JsObject =
+  private def submissionDateParams(submissionDate: ZonedDateTime)(using lang: Lang): JsObject =
     Json.obj(
       "submissionDate" -> dateUtilLocalised.formatDate(submissionDate, lang),
       "submissionTime" -> submissionDate.format(DateUtil.timeFormatter)
     )
 
-  private def getTemplatePerLang(enTemplateId: String, cyTemplateId: String)(implicit lang: Lang): String =
-    lang.language match {
+  private def getTemplatePerLang(enTemplateId: String, cyTemplateId: String)(using lang: Lang): String =
+    lang.language match
       case "cy" => cyTemplateId
       case _    => enTemplateId
-    }
 
   private def sendEmail(
     email: String,
     templateId: String,
     parametersJson: JsObject
-  )(implicit
+  )(using
     hc: HeaderCarrier
-  ): Future[HttpResponse] = {
+  ): Future[HttpResponse] =
     val json    = Json.obj(
       "to"         -> Seq(email),
       "templateId" -> templateId,
@@ -137,16 +134,12 @@ class EmailConnector @Inject() (
       .setHeader(headers*)
       .execute[HttpResponse]
       .map { res =>
-        res.status match {
+        res.status match
           case OK | ACCEPTED => logger.info(s"Send email to user successful: ${res.status}")
           case _             => logger.error(s"Send email to user FAILED: ${res.status} ${res.body}")
-        }
         res
       }
       .recoverWith { case e: Exception =>
         logger.error(s"Send email to user FAILED: ${e.getMessage}", e)
         Future.failed(e)
       }
-  }
-
-}

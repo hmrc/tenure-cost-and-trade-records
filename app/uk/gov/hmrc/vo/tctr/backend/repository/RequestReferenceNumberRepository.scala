@@ -19,7 +19,7 @@ package uk.gov.hmrc.vo.tctr.backend.repository
 import com.google.inject.ImplementedBy
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.Sorts.ascending
-import org.mongodb.scala.model._
+import org.mongodb.scala.model.*
 import org.mongodb.scala.result.{DeleteResult, InsertOneResult}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
@@ -33,7 +33,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[RequestReferenceNumberMongoRepository])
-trait RequestReferenceNumberRepository {
+trait RequestReferenceNumberRepository:
 
   val defaultBatchSize = 10
 
@@ -47,13 +47,11 @@ trait RequestReferenceNumberRepository {
 
   def count: Future[Long]
 
-}
-
 @Singleton
 class RequestReferenceNumberMongoRepository @Inject() (
   mongoComponent: MongoComponent,
   appConfig: AppConfig
-)(implicit
+)(using
   ec: ExecutionContext,
   crypto: MongoCrypto
 ) extends PlayMongoRepository[SensitiveRequestReferenceNumberSubmission](
@@ -72,7 +70,7 @@ class RequestReferenceNumberMongoRepository @Inject() (
       Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
     )
   )
-  with RequestReferenceNumberRepository {
+  with RequestReferenceNumberRepository:
 
   def insert(requestReferenceNumberSubmission: RequestReferenceNumberSubmission): Future[InsertOneResult] =
     collection.insertOne(SensitiveRequestReferenceNumberSubmission(requestReferenceNumberSubmission)).toFuture()
@@ -96,5 +94,3 @@ class RequestReferenceNumberMongoRepository @Inject() (
 
   def count: Future[Long] =
     collection.countDocuments().toFuture()
-
-}

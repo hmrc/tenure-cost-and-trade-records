@@ -18,7 +18,7 @@ package uk.gov.hmrc.vo.tctr.backend.security
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import uk.gov.hmrc.vo.tctr.backend.controllers.toFuture
 import uk.gov.hmrc.vo.tctr.backend.infrastructure.Clock
 import uk.gov.hmrc.vo.tctr.backend.models.{FORCredentials, SensitiveAddress}
@@ -30,7 +30,7 @@ import scala.language.{implicitConversions, postfixOps}
 
 @Singleton
 class IPBlockingCredentialsVerifier @Inject() (
-  credsRepo: CredentialsRepo,
+  credentialsRepo: CredentialsRepo,
   submittedRepo: SubmittedMongoRepo,
   loginsRepo: FailedLoginsRepo,
   authenticationRequired: Boolean,
@@ -60,14 +60,13 @@ class IPBlockingCredentialsVerifier @Inject() (
 
   private def isLockedOut(ip: String) =
     loginsRepo.mostRecent(ip, config.maxFailedLoginAttempts, lockoutWindow) map { recentAttempts =>
-      lazy val hasExceededLoginAttempts = recentAttempts.length >= config.maxFailedLoginAttempts
-      lazy val sorted                   = recentAttempts.sortBy(_.timestamp)
-      lazy val lastFailedAttempt        = sorted.last
-      lazy val firstFailedAttempt       = sorted.head
-      lazy val lockoutInProgress        = (lastFailedAttempt.timestamp - firstFailedAttempt.timestamp) <= config.sessionWindow
-      lazy val inSession                = recentAttempts filter {
-        _.timestamp.isAfter(startOfLoginSession)
-      }
+      val hasExceededLoginAttempts = recentAttempts.length >= config.maxFailedLoginAttempts
+      val inSession                = recentAttempts.filter(_.timestamp.isAfter(startOfLoginSession))
+      val sorted                   = recentAttempts.sortBy(_.timestamp)
+
+      def lastFailedAttempt  = sorted.last
+      def firstFailedAttempt = sorted.head
+      def lockoutInProgress  = (lastFailedAttempt.timestamp - firstFailedAttempt.timestamp) <= config.sessionWindow
 
       (hasExceededLoginAttempts && lockoutInProgress, inSession.length)
     }
@@ -98,7 +97,7 @@ class IPBlockingCredentialsVerifier @Inject() (
     ip: Option[String]
   ): Future[VerificationResult] =
     if authenticationRequired then
-      credsRepo.validate(referenceNum, postcode).map {
+      credentialsRepo.validate(referenceNum, postcode).map {
         case Some(credentials) => ValidCredentials(credentials)
         case None              =>
           ip map { i => loginsRepo.record(FailedLogin(clock.now().toInstant, i)) }

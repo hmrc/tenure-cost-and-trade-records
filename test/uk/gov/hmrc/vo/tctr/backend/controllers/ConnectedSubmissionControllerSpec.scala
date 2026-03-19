@@ -23,9 +23,9 @@ import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.ControllerComponents
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.internalauth.client._
+import uk.gov.hmrc.internalauth.client.*
 import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
 import uk.gov.hmrc.vo.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.vo.tctr.backend.connectors.EmailConnector
@@ -34,16 +34,15 @@ import uk.gov.hmrc.vo.tctr.backend.models.ConnectedSubmission
 import uk.gov.hmrc.vo.tctr.backend.repository.{ConnectedRepository, SubmittedMongoRepo}
 import uk.gov.hmrc.vo.tctr.backend.testUtils.AuthStubBehaviour
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConnectedSubmissionControllerSpec extends AnyWordAppSpec {
+class ConnectedSubmissionControllerSpec extends AnyWordAppSpec:
 
-  implicit val timeout: Timeout     = 5.seconds
-  implicit val ec: ExecutionContext = ExecutionContext.global
+  given Timeout = 5.seconds
 
   protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ec)
+    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ExecutionContext.Implicits.global)
 
   val mockRepository: ConnectedRepository            = mock[ConnectedRepository]
   val mockSubmittedRepo: SubmittedMongoRepo          = mock[SubmittedMongoRepo]
@@ -52,7 +51,7 @@ class ConnectedSubmissionControllerSpec extends AnyWordAppSpec {
   val meter: Meter                                   = mock[Meter]
   val fakeControllerComponents: ControllerComponents = stubControllerComponents()
 
-  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .overrides(
       bind[ConnectedRepository].toInstance(mockRepository),
       bind[SubmittedMongoRepo].toInstance(mockSubmittedRepo),
@@ -77,7 +76,7 @@ class ConnectedSubmissionControllerSpec extends AnyWordAppSpec {
       val request = FakeRequest().withBody(submission).withHeaders("Authorization" -> "fake-token")
       val result  = controller.submit(submissionReference).apply(request)
 
-      status(result)(using timeout) shouldBe CREATED
+      status(result) shouldBe CREATED
     }
   }
 
@@ -90,8 +89,6 @@ class ConnectedSubmissionControllerSpec extends AnyWordAppSpec {
       val request = FakeRequest().withBody(submission).withHeaders("Authorization" -> "fake-token")
       val result  = controller.submit(submissionReference).apply(request)
 
-      status(result)(using timeout) shouldBe CONFLICT
+      status(result) shouldBe CONFLICT
     }
   }
-
-}

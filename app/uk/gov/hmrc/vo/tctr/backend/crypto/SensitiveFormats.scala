@@ -25,9 +25,7 @@ import scala.language.implicitConversions
 /**
   * @author Yuriy Tumakha
   */
-object SensitiveFormats {
+object SensitiveFormats:
 
   implicit def sensitiveStringFormat(using crypto: MongoCrypto): Format[SensitiveString] =
     JsonEncryption.sensitiveEncrypterDecrypter(SensitiveString.apply)
-
-}

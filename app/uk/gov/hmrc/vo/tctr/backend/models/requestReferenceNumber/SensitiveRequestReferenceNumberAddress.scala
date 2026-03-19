@@ -21,24 +21,25 @@ import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
+import scala.language.implicitConversions
+
 case class SensitiveRequestReferenceNumberAddress(
   noReferenceNumberBusinessTradingName: SensitiveString,
   noReferenceNumberAddress: SensitiveRequestAddress
-) extends Sensitive[RequestReferenceNumber] {
+) extends Sensitive[RequestReferenceNumber]:
 
   override def decryptedValue: RequestReferenceNumber = RequestReferenceNumber(
     noReferenceNumberBusinessTradingName.decryptedValue,
     noReferenceNumberAddress.decryptedValue
   )
-}
 
-object SensitiveRequestReferenceNumberAddress {
-  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
-  implicit def format(implicit crypto: MongoCrypto): OFormat[SensitiveRequestReferenceNumberAddress] = Json.format
+object SensitiveRequestReferenceNumberAddress:
+  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
+
+  implicit def format(using crypto: MongoCrypto): OFormat[SensitiveRequestReferenceNumberAddress] = Json.format
 
   def apply(noReferenceNumber: RequestReferenceNumber): SensitiveRequestReferenceNumberAddress =
     SensitiveRequestReferenceNumberAddress(
       SensitiveString(noReferenceNumber.requestReferenceNumberBusinessTradingName),
       SensitiveRequestAddress(noReferenceNumber.requestReferenceNumberAddress)
     )
-}

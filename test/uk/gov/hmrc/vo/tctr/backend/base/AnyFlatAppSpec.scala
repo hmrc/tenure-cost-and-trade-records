@@ -22,4 +22,4 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 /**
   * @author Yuriy Tumakha
   */
-class AnyFlatAppSpec extends AnyFlatSpec with GuiceOneAppPerSuite with AppSuiteBase {}
+class AnyFlatAppSpec extends AnyFlatSpec with GuiceOneAppPerSuite with AppSuiteBase

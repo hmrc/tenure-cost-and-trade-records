@@ -40,7 +40,7 @@ case class SensitiveNotConnectedSubmission(
   createdAt: Instant,
   previouslyConnected: Option[Boolean],
   lang: Option[String] = None
-) extends Sensitive[NotConnectedSubmission] {
+) extends Sensitive[NotConnectedSubmission]:
 
   override def decryptedValue: NotConnectedSubmission =
     NotConnectedSubmission(
@@ -56,12 +56,10 @@ case class SensitiveNotConnectedSubmission(
       lang
     )
 
-}
+object SensitiveNotConnectedSubmission:
 
-object SensitiveNotConnectedSubmission {
-
-  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits._
-  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats._
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits.*
+  import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
 
   @nowarn
   implicit def format(using crypto: MongoCrypto): Format[SensitiveNotConnectedSubmission] = mongoEntity {
@@ -81,5 +79,3 @@ object SensitiveNotConnectedSubmission {
       submission.previouslyConnected,
       submission.lang
     )
-
-}

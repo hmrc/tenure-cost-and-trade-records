@@ -18,7 +18,7 @@ package uk.gov.hmrc.vo.tctr.backend.repository
 
 import org.bson.codecs.ObjectIdCodec
 import org.mongodb.scala.model.Filters.equal
-import org.mongodb.scala.model._
+import org.mongodb.scala.model.*
 import org.mongodb.scala.result.InsertOneResult
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
@@ -32,7 +32,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)(implicit ec: ExecutionContext)
+class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)(using ec: ExecutionContext)
   extends PlayMongoRepository[RefNum](
     collectionName = "submitted",
     mongoComponent = mongo,
@@ -46,19 +46,19 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)
         Indexes.ascending("createdAt"),
         IndexOptions()
           .name("createdAtTTL")
-          .expireAfter(appConfig.submittedTTL, TimeUnit.DAYS) // Set the TTL
+          .expireAfter(appConfig.submittedTTL, TimeUnit.DAYS)
       )
     ),
     extraCodecs = Seq(
-      new ObjectIdCodec,
+      ObjectIdCodec(),
       Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
     )
-  ) {
+  ):
 
   def insertIfUnique(refNum: String): Future[InsertOneResult] =
     collection.find(equal("referenceNumber", refNum)).toFuture().flatMap {
       case Nil => collection.insertOne(RefNum(refNum, Instant.now())).toFuture()
-      case seq => Future.failed(new Exception(s"Duplicate reference number: $seq"))
+      case seq => Future.failed(Exception(s"Duplicate reference number: $seq"))
     }
 
   def hasBeenSubmitted(refNum: String): Future[Boolean] =
@@ -66,4 +66,3 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)
       .find(equal("referenceNumber", refNum))
       .toFuture()
       .map(_.nonEmpty)
-}
