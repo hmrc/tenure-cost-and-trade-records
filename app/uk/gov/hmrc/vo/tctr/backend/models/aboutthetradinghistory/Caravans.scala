@@ -17,7 +17,7 @@
 package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 
 import play.api.libs.json.{Format, Json, OFormat}
-import uk.gov.hmrc.vo.tctr.backend.models.Scala3EnumJsonFormat
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
 import uk.gov.hmrc.vo.tctr.backend.models.common.AnswersYesNo
 
 /**

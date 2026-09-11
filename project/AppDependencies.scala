@@ -1,36 +1,37 @@
-import play.core.PlayVersion
 import sbt.*
 
 private object AppDependencies {
 
-  val bootstrapVersion          = "10.8.0"
-  val hmrcMongoVersion          = "2.13.0"
-  val cryptoJsonVersion         = "8.4.0"
-  val internalAuthClientVersion = "3.1.0"
-  val ibmICUVersion             = "78.3"
+  private val bootstrapVersion          = "10.8.0"
+  private val voServiceVersion          = "0.12.0"
+  private val hmrcMongoVersion          = "2.13.0"
+  private val cryptoJsonVersion         = "8.4.0"
+  private val internalAuthClientVersion = "3.1.0"
+  private val ibmICUVersion             = "78.3"
 
   // Test dependencies
-  val scalaTestPlusMockitoVersion = "3.2.19.0"
+  private val voTestVersion = "0.6.0"
 
   private val compile = Seq(
     "uk.gov.hmrc"       %% "bootstrap-backend-play-30"    % bootstrapVersion,
+    "uk.gov.hmrc"       %% "vo-backend-service"           % voServiceVersion,
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"           % hmrcMongoVersion,
     "uk.gov.hmrc"       %% "crypto-json-play-30"          % cryptoJsonVersion,
     "uk.gov.hmrc"       %% "internal-auth-client-play-30" % internalAuthClientVersion,
     "com.ibm.icu"        % "icu4j"                        % ibmICUVersion
   )
 
-  private val commonTests = Seq(
-    "uk.gov.hmrc"      %% "bootstrap-test-play-30" % bootstrapVersion         % Test,
-    "org.apache.pekko" %% "pekko-testkit"          % PlayVersion.pekkoVersion % Test
+  private val test = Seq(
+    "uk.gov.hmrc" %% "bootstrap-test-play-30" % bootstrapVersion % Test,
+    "uk.gov.hmrc" %% "vo-unit-test"           % voTestVersion    % Test
   )
 
-  private val testOnly = Seq(
-    "org.scalatestplus" %% "mockito-5-21" % scalaTestPlusMockitoVersion % Test
+  private val integrationTestOnly = Seq(
+    "uk.gov.hmrc" %% "vo-integration-test" % voTestVersion % Test
   )
 
-  val appDependencies: Seq[ModuleID] = compile ++ commonTests ++ testOnly
+  val appDependencies: Seq[ModuleID] = compile ++ test
 
-  val itDependencies: Seq[ModuleID] = commonTests
+  val itDependencies: Seq[ModuleID] = appDependencies ++ integrationTestOnly
 
 }

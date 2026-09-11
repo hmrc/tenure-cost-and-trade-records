@@ -16,38 +16,33 @@
 
 package uk.gov.hmrc.vo.tctr.backend
 
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
-import play.api.http.Status.OK
 import play.api.libs.json.Json
+import play.api.test.Helpers.*
 import uk.gov.hmrc.vo.tctr.backend.models.stats.{DraftsExpirationQueue, DraftsPerVersion}
 import uk.gov.hmrc.vo.tctr.backend.repository.MongoSubmissionDraftRepo
 
-class StatsControllerISpec extends IntegrationSpecBase with BeforeAndAfterAll with BeforeAndAfterEach:
+class StatsControllerSpec extends TCTRServerSpec:
 
-  private val statsIdPrefix = "StatsTestDraft"
-  private val repo          = inject[MongoSubmissionDraftRepo]
+  private val statsIdPrefix       = "StatsTestDraft"
+  private val submissionDraftRepo = inject[MongoSubmissionDraftRepo]
 
   override def beforeAll(): Unit =
-    repo.save(statsIdPrefix + 6015, Json.obj("a" -> "b", "forType" -> "FOR6015"))
-    repo.save(statsIdPrefix + 6011, Json.obj("c" -> "d", "forType" -> "FOR6011"))
+    submissionDraftRepo.save(statsIdPrefix + 6015, Json.obj("a" -> "b", "forType" -> "FOR6015"))
+    submissionDraftRepo.save(statsIdPrefix + 6011, Json.obj("c" -> "d", "forType" -> "FOR6011"))
 
   "StatsController - SubmissionDraft stats endpoints" should {
     "return consistent stats" in {
-      val response1 =
-        wsClient
-          .url(s"$appBaseUrl/stats/drafts-expiration-queue")
-          .get()
-          .futureValue
+      val response1 = wsUrl(s"$backendRoot/stats/drafts-expiration-queue")
+        .get()
+        .futureValue
 
       response1.status shouldBe OK
 
       val expirationQueue = Json.parse(response1.body).as[DraftsExpirationQueue]
 
-      val response2 =
-        wsClient
-          .url(s"$appBaseUrl/stats/drafts-per-version")
-          .get()
-          .futureValue
+      val response2 = wsUrl(s"$backendRoot/stats/drafts-per-version")
+        .get()
+        .futureValue
 
       response2.status shouldBe OK
 

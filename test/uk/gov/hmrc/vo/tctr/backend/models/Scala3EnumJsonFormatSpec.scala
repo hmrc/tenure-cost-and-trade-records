@@ -19,6 +19,7 @@ package uk.gov.hmrc.vo.tctr.backend.models
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 import play.api.libs.json.{Format, JsError, Json}
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
 
 /**
   * @author Yuriy Tumakha

@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
+package uk.gov.hmrc.vo.tctr.backend
 
-import play.api.libs.json.Format
-import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
+class HealthEndpointSpec extends TCTRServerSpec:
 
-/**
-  * @author Yuriy Tumakha
-  */
-enum RenewablesPlantType(renewablesPlantDetails: String):
-  override def toString: String = renewablesPlantDetails
+  "Service health endpoint" should {
+    "respond with 200 status" in {
+      val response = wsUrl("/ping/ping")
+        .get()
+        .futureValue
 
-  case Intermittent extends RenewablesPlantType("intermittent")
-  case Baseload extends RenewablesPlantType("baseload")
-
-object RenewablesPlantType:
-  implicit val format: Format[RenewablesPlantType] = Scala3EnumJsonFormat.format
+      response.status shouldBe 200
+    }
+  }

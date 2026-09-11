@@ -16,16 +16,13 @@
 
 package uk.gov.hmrc.vo.tctr.backend
 
-class HealthEndpointIntegrationSpec extends IntegrationSpecBase:
+import uk.gov.hmrc.vo.integration.test.BaseServerSpec
 
-  "service health endpoint" should {
-    "respond with 200 status" in {
-      val response =
-        wsClient
-          .url(s"$baseUrl/ping/ping")
-          .get()
-          .futureValue
+/**
+  * @author Yuriy Tumakha
+  */
+abstract class TCTRServerSpec extends BaseServerSpec:
 
-      response.status shouldBe 200
-    }
-  }
+  val backendRoot: String = s"/${configuration.get[String]("appName")}"
+
+  val internalAuthBaseUrl: String = "http://localhost:8470"
