@@ -17,7 +17,6 @@
 package uk.gov.hmrc.vo.tctr.backend.util
 
 import play.api.i18n.{Lang, Messages, MessagesApi}
-import uk.gov.hmrc.play.language.LanguageUtils
 import DateUtil.*
 
 import java.time.{LocalDate, ZonedDateTime}
@@ -25,10 +24,10 @@ import java.util.Date
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DateUtilLocalised @Inject() (langUtil: LanguageUtils, messagesApi: MessagesApi):
+class DateUtilLocalised @Inject() (messagesApi: MessagesApi):
 
   def formatDate(localDate: LocalDate)(using messages: Messages): String =
-    langUtil.Dates.formatDate(localDate)
+    LanguageDateUtils.formatDate(localDate)
 
   def formatDate(localDate: LocalDate, lang: Lang): String =
     formatDate(localDate)(using messagesByLang(lang))
