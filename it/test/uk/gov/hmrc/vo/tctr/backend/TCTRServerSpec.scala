@@ -16,6 +16,10 @@
 
 package uk.gov.hmrc.vo.tctr.backend
 
+import org.scalatest.Assertion
+import play.api.libs.json.Json
+import play.api.libs.ws.writeableOf_JsValue
+import play.api.test.Helpers.*
 import uk.gov.hmrc.vo.integration.test.BaseServerSpec
 
 /**
@@ -25,4 +29,31 @@ abstract class TCTRServerSpec extends BaseServerSpec:
 
   val backendRoot: String = s"/${configuration.get[String]("appName")}"
 
-  val internalAuthBaseUrl: String = "http://localhost:8470"
+  private val internalAuthBaseUrl = "http://localhost:8470"
+
+  protected def authTokenIsValid(token: String): Boolean =
+    val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
+      .withHttpHeaders("Authorization" -> token)
+      .get()
+      .futureValue
+
+    response.status == OK
+
+  protected def createClientAuthToken(token: String): Assertion =
+    val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
+      .post(
+        Json.obj(
+          "token" -> token,
+          "principal" -> "test",
+          "permissions" -> Seq(
+            Json.obj(
+              "resourceType" -> "tenure-cost-and-trade-records",
+              "resourceLocation" -> "*",
+              "actions" -> List("*")
+            )
+          )
+        )
+      )
+      .futureValue
+
+    response.status shouldBe CREATED

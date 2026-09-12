@@ -39,7 +39,7 @@ class SaveAsDraftSpec extends TCTRServerSpec:
 
   override def beforeEach(): Unit =
     super.beforeEach()
-    if !authTokenIsValid(clientAuthToken) then createClientAuthToken()
+    if !authTokenIsValid(clientAuthToken) then createClientAuthToken(clientAuthToken)
 
   "SaveAsDraft GET endpoint" should {
     "return 200 for correct SubmissionDraft.id" in {
@@ -112,30 +112,3 @@ class SaveAsDraftSpec extends TCTRServerSpec:
       response.json   shouldBe Json.obj("deletedCount" -> 0)
     }
   }
-
-  private def authTokenIsValid(token: String): Boolean =
-    val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
-      .withHttpHeaders("Authorization" -> token)
-      .get()
-      .futureValue
-
-    response.status == OK
-
-  private def createClientAuthToken(): Assertion =
-    val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
-      .post(
-        Json.obj(
-          "token"       -> clientAuthToken,
-          "principal"   -> "test",
-          "permissions" -> Seq(
-            Json.obj(
-              "resourceType"     -> "tenure-cost-and-trade-records",
-              "resourceLocation" -> "*",
-              "actions"          -> List("*")
-            )
-          )
-        )
-      )
-      .futureValue
-
-    response.status shouldBe CREATED
