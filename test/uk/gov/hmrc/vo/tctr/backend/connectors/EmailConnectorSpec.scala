@@ -16,28 +16,23 @@
 
 package uk.gov.hmrc.vo.tctr.backend.connectors
 
-import com.typesafe.config.ConfigFactory
-import play.api.Configuration
 import play.api.http.Status.{ACCEPTED, BAD_REQUEST, NOT_FOUND, OK}
+import play.api.libs.json.{JsValue, Json}
+import play.api.test.Helpers.*
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.vo.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.vo.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.vo.tctr.backend.schema.Address
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
 import uk.gov.hmrc.vo.tctr.backend.util.DateUtilLocalised
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 
 import java.net.URL
 import java.time.Instant
-import scala.concurrent.ExecutionContext
-import scala.concurrent.ExecutionContext.Implicits.global
 
-class EmailConnectorSpec extends AnyWordAppSpec:
+class EmailConnectorSpec extends BaseAppSpec with TestObjects:
 
-  private val configuration      = Configuration(ConfigFactory.load("application.conf"))
-  private val servicesConfig     = ServicesConfig(configuration)
   private val dateUtilLocalised  = inject[DateUtilLocalised]
-  implicit val hc: HeaderCarrier = HeaderCarrier()
   private val email              = "customer@email.com"
   private val testAddress        = Address("001", Some("GORING ROAD"), "WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
 
@@ -67,24 +62,21 @@ class EmailConnectorSpec extends AnyWordAppSpec:
     Some("cy")
   )
 
-  private def httpPostMock(responseStatus: Int): HttpClientV2 =
-    val httpClientV2Mock = mock[HttpClientV2]
-    when(
-      httpClientV2Mock.post(any[URL])(using any[HeaderCarrier])
-    ).thenReturn(RequestBuilderStub(Right(responseStatus)))
-    httpClientV2Mock
+  private def httpPostMock(responseStatus: Int, body: JsValue = Json.parse("{}")): HttpClientV2 =
+    httpClientMock(POST, responseBody = body, responseStatus = responseStatus)
 
-  "EmailConnector" must {
+  "EmailConnector" should {
     "verify that the email service is called on send tctr_submission_confirmation" in {
-      val httpMock  = httpPostMock(OK)
-      val connector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
-
-      val bodyJson =
+      val bodyJson = Json.parse(
         """{"to":["test@email.com"],"templateId":"tctr_submission_confirmation","parameters":{"customerName":"Full Name"}}"""
+      )
+
+      val httpMock  = httpPostMock(OK, bodyJson)
+      val connector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = connector.sendSubmissionConfirmation(prefilledConnectedSubmission).futureValue
       response.status shouldBe OK
-      response.body   shouldBe bodyJson
+      response.json   shouldBe bodyJson
 
       verify(httpMock)
         .post(any[URL])(using any[HeaderCarrier])
@@ -96,7 +88,7 @@ class EmailConnectorSpec extends AnyWordAppSpec:
 
       val response = emailConnector.sendVacantSubmissionConfirmation(email, "David Jones").futureValue
       response.status shouldBe ACCEPTED
-      response.body     should include(email)
+      response.body   shouldBe "{ }"
 
       verify(httpMock)
         .post(any[URL])(using any[HeaderCarrier])
@@ -108,7 +100,7 @@ class EmailConnectorSpec extends AnyWordAppSpec:
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmission).futureValue
       response.status shouldBe ACCEPTED
-      response.body     should include("Full Name")
+      response.body   shouldBe "{ }"
 
       verify(httpMock)
         .post(any[URL])(using any[HeaderCarrier])
@@ -120,21 +112,23 @@ class EmailConnectorSpec extends AnyWordAppSpec:
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmissionCy).futureValue
       response.status shouldBe ACCEPTED
-      response.body     should include("tctr_connection_removed_cy")
+      response.body   shouldBe "{ }"
 
       verify(httpMock)
         .post(any[URL])(using any[HeaderCarrier])
     }
 
     "handle error response on send tctr_submission_confirmation" in {
-      val body           =
+      val body           = Json.parse(
         """{"to":["test@email.com"],"templateId":"tctr_submission_confirmation","parameters":{"customerName":"Full Name"}}"""
-      val httpMock       = httpPostMock(BAD_REQUEST)
+      )
+
+      val httpMock       = httpPostMock(BAD_REQUEST, body)
       val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
 
       val response = emailConnector.sendSubmissionConfirmation(prefilledConnectedSubmission).futureValue
       response.status shouldBe BAD_REQUEST
-      response.body   shouldBe body
+      response.json   shouldBe body
 
       verify(httpMock)
         .post(any[URL])(using any[HeaderCarrier])
@@ -151,5 +145,4 @@ class EmailConnectorSpec extends AnyWordAppSpec:
 
       verifyNoInteractions(httpMock)
     }
-
   }

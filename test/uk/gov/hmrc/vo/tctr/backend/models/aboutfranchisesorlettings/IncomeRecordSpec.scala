@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutfranchisesorlettings
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsError, Json}
 import TypeOfIncome.*
-import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
 import java.time.LocalDate
 
-class IncomeRecordSpec extends PlaySpec with FakeObjects:
+class IncomeRecordSpec extends BaseSpec with TestObjects:
 
   "IncomeRecord" should {
     "serialize and deserialize correctly for FranchiseIncomeRecord with complete details" in {
@@ -39,7 +39,8 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects:
         itemsIncluded = Some(List("noneOfThese"))
       )
       val json         = Json.toJson(incomeRecord: FranchiseIncomeRecord)
-      json.as[FranchiseIncomeRecord] mustBe incomeRecord
+
+      json.as[FranchiseIncomeRecord] shouldBe incomeRecord
     }
 
     "serialize and deserialize correctly for Concession6015IncomeRecord with complete details" in {
@@ -50,7 +51,8 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects:
         calculatingTheRent = Some(CalculatingTheRent("test", LocalDate.of(2021, 1, 1)))
       )
       val json         = Json.toJson(incomeRecord: Concession6015IncomeRecord)
-      json.as[Concession6015IncomeRecord] mustBe incomeRecord
+
+      json.as[Concession6015IncomeRecord] shouldBe incomeRecord
     }
 
     "serialize and deserialize correctly for ConcessionIncomeRecord with complete details" in {
@@ -65,7 +67,8 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects:
         )
       )
       val json         = Json.toJson(incomeRecord: ConcessionIncomeRecord)
-      json.as[ConcessionIncomeRecord] mustBe incomeRecord
+
+      json.as[ConcessionIncomeRecord] shouldBe incomeRecord
     }
 
     "serialize and deserialize correctly for LettingIncomeRecord with complete details" in {
@@ -93,7 +96,8 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects:
         itemsIncluded = Some(List("noneOfThese"))
       )
       val json         = Json.toJson(incomeRecord: LettingIncomeRecord)
-      json.as[LettingIncomeRecord] mustBe incomeRecord
+
+      json.as[LettingIncomeRecord] shouldBe incomeRecord
     }
 
     "serialize and deserialize correctly for ConcessionIncomeRecord with optional fields missing" in {
@@ -103,7 +107,8 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects:
         feeReceived = None
       )
       val json         = Json.toJson(incomeRecord: IncomeRecord)
-      json.as[IncomeRecord] mustBe incomeRecord
+
+      json.as[IncomeRecord] shouldBe incomeRecord
     }
 
     "serialize and deserialize correctly FranchiseIncomeRecord with optional fields missing" in {
@@ -112,7 +117,8 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects:
         businessDetails = None
       )
       val json         = Json.toJson(incomeRecord: IncomeRecord)
-      json.as[IncomeRecord] mustBe incomeRecord
+
+      json.as[IncomeRecord] shouldBe incomeRecord
     }
 
     "serialize and deserialize correctly for LettingIncomeRecord with optional fields missing" in {
@@ -123,11 +129,13 @@ class IncomeRecordSpec extends PlaySpec with FakeObjects:
         itemsIncluded = None
       )
       val json         = Json.toJson(incomeRecord: IncomeRecord)
-      json.as[IncomeRecord] mustBe incomeRecord
+
+      json.as[IncomeRecord] shouldBe incomeRecord
     }
 
     "fail to deserialize for unknown sourceType" in {
       val json = Json.obj("sourceType" -> "unknownType")
-      json.validate[IncomeRecord] mustBe a[JsError]
+
+      json.validate[IncomeRecord] shouldBe a[JsError]
     }
   }

@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.vo.tctr.backend.schema
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class AddressSpec extends AnyFlatSpec with Matchers:
+class AddressSpec extends BaseSpec:
 
-  val address = Address("001", Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
+  private val address = Address("001", Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
 
-  "Address" should "return the address as a single line" in {
-    val result = address.singleLine
-    result shouldBe "001, GORING ROAD, GORING-BY-SEA, WORTHING, WEST SUSSEX, BN12 4AX"
+  "Address" should {
+    "return the address as a single line" in {
+      val result = address.singleLine
+      result shouldBe "001, GORING ROAD, GORING-BY-SEA, WORTHING, WEST SUSSEX, BN12 4AX"
+    }
   }

@@ -16,20 +16,22 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class TotalSiteCapacitySpec extends PlaySpec:
+class TotalSiteCapacitySpec extends BaseSpec:
 
   "TotalSiteCapacity" should {
     "serialize and deserialize correctly" in {
       val totalSiteCapacity = TotalSiteCapacity(1, 2, 3)
       val json              = Json.toJson(totalSiteCapacity)
-      json.as[TotalSiteCapacity] mustBe totalSiteCapacity
+
+      json.as[TotalSiteCapacity] shouldBe totalSiteCapacity
     }
 
     "Have correct total value" in {
       val totalSiteCapacity = TotalSiteCapacity(1, 2, 3)
-      totalSiteCapacity.total mustBe 6
+
+      totalSiteCapacity.total shouldBe 6
     }
   }

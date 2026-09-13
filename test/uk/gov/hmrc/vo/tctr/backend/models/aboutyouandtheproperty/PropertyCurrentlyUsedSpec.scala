@@ -16,17 +16,16 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class PropertyCurrentlyUsedSpec extends PlaySpec:
+class PropertyCurrentlyUsedSpec extends BaseSpec:
 
   "PropertyCurrentlyUsed" should {
     "serialize and deserialize correctly" in {
-      val propertyCurrentlyUsed =
-        PropertyCurrentlyUsed(List("chaletPark", "touringSite", "other"), Some("anotherUsedDetails"))
-
+      val propertyCurrentlyUsed = PropertyCurrentlyUsed(List("chaletPark", "touringSite", "other"), Some("anotherUsedDetails"))
       val json = Json.toJson(propertyCurrentlyUsed)
-      json.as[PropertyCurrentlyUsed] mustBe propertyCurrentlyUsed
+
+      json.as[PropertyCurrentlyUsed] shouldBe propertyCurrentlyUsed
     }
   }

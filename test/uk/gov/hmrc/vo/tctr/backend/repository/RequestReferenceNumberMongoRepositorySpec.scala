@@ -17,44 +17,37 @@
 package uk.gov.hmrc.vo.tctr.backend.repository
 
 import org.mongodb.scala.SingleObservableFuture
-import org.mongodb.scala.model.{Filters, FindOneAndReplaceOptions}
+import org.mongodb.scala.model.{Filters, ReplaceOptions}
 import uk.gov.hmrc.vo.tctr.backend.models.SensitiveRequestReferenceNumberSubmission
-import uk.gov.hmrc.vo.tctr.backend.testUtils.CustomMatchers
+import uk.gov.hmrc.vo.tctr.backend.testUtils.{CustomMatchers, TestObjects}
+import uk.gov.hmrc.vo.unit.test.db.MongoDBAppSpec
 
-import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
+class RequestReferenceNumberMongoRepositorySpec extends MongoDBAppSpec[SensitiveRequestReferenceNumberSubmission, RequestReferenceNumberMongoRepository]
+  with TestObjects with CustomMatchers:
 
-class RequestReferenceNumberMongoRepositorySpec extends MongoSpecBase with CustomMatchers:
+  override def beforeEach(): Unit =
+    mongoRepository.collection
+      .replaceOne(
+        Filters.equal("_id", requestRefNumSubmission.id),
+        SensitiveRequestReferenceNumberSubmission(requestRefNumSubmission),
+        ReplaceOptions().upsert(true)
+      )
+      .toFuture().futureValue
 
-  private val submissionDraftFindId = "submissionId"
+  "RequestReferenceNumberMongoRepository" should {
+    "find RequestReferenceNumberSubmission by correct id" in {
+      mongoRepository.findById(requestRefNumSubmission.id).futureValue should beEqualToIgnoringMillis(Some(requestRefNumSubmission))
+    }
 
-  private val repo = inject[RequestReferenceNumberMongoRepository]
-
-  override def beforeAll(): Unit =
-    super.beforeAll()
-    Await.result(
-      repo.collection
-        .findOneAndReplace(
-          Filters.equal("_id", submissionDraftFindId),
-          SensitiveRequestReferenceNumberSubmission(requestRefNumSubmission),
-          FindOneAndReplaceOptions().upsert(true)
-        )
-        .toFuture(),
-      2.seconds
-    )
-
-  "RequestReferenceNumberMongoRepository" should "find RequestReferenceNumberSubmission by correct id" in {
-    repo.findById(submissionDraftFindId).futureValue should beEqualToIgnoringMillis(Some(requestRefNumSubmission))
-  }
-
-  it should "return None by unknown id" in {
-    repo.findById("UNKNOWN_ID").futureValue shouldBe None
-  }
-
-  it should "return a sequence of RequestReferenceNumberSubmission" in {
-    repo.getSubmissions(1).futureValue should beSeqEqualToIgnoringMillisSeq(requestRefNumSubmission)
-  }
-
-  it should "return number of RequestReferenceNumberSubmission" in {
-    repo.count.futureValue shouldBe 1
+    "return None by unknown id" in {
+      mongoRepository.findById("UNKNOWN_ID").futureValue shouldBe None
+    }
+  
+    "return a sequence of RequestReferenceNumberSubmission" in {
+      mongoRepository.getSubmissions(1).futureValue should beSeqEqualToIgnoringMillisSeq(requestRefNumSubmission)
+    }
+  
+    "return number of RequestReferenceNumberSubmission" in {
+      mongoRepository.count.futureValue shouldBe 1
+    }
   }

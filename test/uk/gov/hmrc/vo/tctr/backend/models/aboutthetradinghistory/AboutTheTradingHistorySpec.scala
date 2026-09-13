@@ -16,25 +16,28 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json
-import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
 /**
   * @author Yuriy Tumakha
   */
-class AboutTheTradingHistorySpec extends AnyFlatSpec with Matchers with FakeObjects:
+class AboutTheTradingHistorySpec extends BaseSpec with TestObjects:
 
-  "AboutTheTradingHistory" should "handle turnover models" in {
-    val tradingHistory = prefilledAboutYourTradingHistory
-    tradingHistory.costOfSales.map(_.total).sum                                                shouldBe 10
-    tradingHistory.fixedOperatingExpensesSections.map(_.total).sum                             shouldBe 0
-    tradingHistory.otherCosts.map(_.otherCosts.map(_.total).sum)                               shouldBe Some(3)
-    tradingHistory.variableOperatingExpenses.map(_.variableOperatingExpenses.map(_.total).sum) shouldBe Some(0)
+  "AboutTheTradingHistory" should {
+    "handle turnover models" in {
+      val tradingHistory = prefilledAboutYourTradingHistory
+
+      tradingHistory.costOfSales.map(_.total).sum                                                shouldBe 10
+      tradingHistory.fixedOperatingExpensesSections.map(_.total).sum                             shouldBe 0
+      tradingHistory.otherCosts.map(_.otherCosts.map(_.total).sum)                               shouldBe Some(3)
+      tradingHistory.variableOperatingExpenses.map(_.variableOperatingExpenses.map(_.total).sum) shouldBe Some(0)
+    }
+
+    "be serialized/deserialized from JSON" in {
+      val json = Json.toJson(prefilledAboutYourTradingHistory)
+
+      json.as[AboutTheTradingHistory] shouldBe prefilledAboutYourTradingHistory
   }
-
-  it should "be serialized/deserialized from JSON" in {
-    val json = Json.toJson(prefilledAboutYourTradingHistory)
-    json.as[AboutTheTradingHistory] shouldBe prefilledAboutYourTradingHistory
   }

@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.common
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
-import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class AddressSpec extends AnyWordSpecLike with Matchers with FakeObjects:
+class AddressSpec extends BaseSpec with TestObjects:
 
   val address = Address("004", Some("GORING ROAD"), "WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
 

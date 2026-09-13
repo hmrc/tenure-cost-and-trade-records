@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutYourLeaseOrTenure
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import IncludedInYourRentInformation.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class IncludedInYourRentDetailsSpec extends PlaySpec:
+class IncludedInYourRentDetailsSpec extends BaseSpec:
 
   "IncludedInYourRent" should {
     "serialize and deserialize correctly" in {
       val includedInYourRentDetails = IncludedInYourRentDetails(List(IncludedInYourRentInformationVat), Some(BigDecimal(100.00)))
-
       val json = Json.toJson(includedInYourRentDetails)
-      json.as[IncludedInYourRentDetails] mustBe includedInYourRentDetails
+
+      json.as[IncludedInYourRentDetails] shouldBe includedInYourRentDetails
     }
   }

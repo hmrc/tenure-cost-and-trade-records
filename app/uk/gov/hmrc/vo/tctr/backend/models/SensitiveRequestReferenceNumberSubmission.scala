@@ -20,6 +20,7 @@ import play.api.libs.json.{Format, Json}
 import uk.gov.hmrc.crypto.Sensitive
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.mongo.play.json.formats.MongoFormats.mongoEntity
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.vo.tctr.backend.models.common.SensitiveContactDetails
 import uk.gov.hmrc.vo.tctr.backend.models.requestReferenceNumber.SensitiveRequestAddress
@@ -52,7 +53,9 @@ case class SensitiveRequestReferenceNumberSubmission(
     )
 
 object SensitiveRequestReferenceNumberSubmission:
+
   import uk.gov.hmrc.vo.tctr.backend.crypto.SensitiveFormats.*
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits.*
 
   @nowarn
   implicit def format(using crypto: MongoCrypto): Format[SensitiveRequestReferenceNumberSubmission] = mongoEntity {

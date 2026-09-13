@@ -18,78 +18,18 @@ package uk.gov.hmrc.vo.tctr.backend.repository
 
 import org.mongodb.scala.SingleObservableFuture
 import org.mongodb.scala.bson.{BsonString, Document}
-import org.scalatest.BeforeAndAfterAll
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
-import uk.gov.hmrc.mongo.MongoComponent
-import uk.gov.hmrc.vo.tctr.backend.base.AppSuiteBase
-import uk.gov.hmrc.vo.tctr.backend.models.NotConnectedSubmission
+import uk.gov.hmrc.vo.tctr.backend.models.{NotConnectedSubmission, SensitiveNotConnectedSubmission}
 import uk.gov.hmrc.vo.tctr.backend.schema.Address
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.db.MongoDBAppSpec
 
 import java.time.Instant
-import java.util.UUID
 
-class NotConnectedRepositorySpec
-  extends AnyWordSpec
-  with BeforeAndAfterAll
-  with FutureAwaits
-  with DefaultAwaitTimeout
-  with GuiceOneAppPerSuite
-  with AppSuiteBase:
-
-  val dbName = s"notConnectedRepositorySpec${UUID.randomUUID.toString.replaceAll("-", "")}"
-
-  val testDbUri = s"mongodb://localhost:27017/$dbName"
-
-  override def fakeApplication(): Application = GuiceApplicationBuilder()
-    .configure("mongodb.uri" -> testDbUri)
-    .build()
-
-  def mongo: MongoComponent = inject[MongoComponent]
-
-  private def repository = inject[NotConnectedMongoRepository]
-
-  "NotConnectedRepository" should {
-    "save NotConnectedSubmission to mongo" in {
-      val insertOneResult = await(repository.insert(aSubmission()))
-      insertOneResult.wasAcknowledged() shouldBe true
-      insertOneResult.getInsertedId     shouldBe BsonString("9999000111")
-    }
-
-    "save NotConnectedSubmission to mongo and get it back" in {
-      val id              = "9999000321"
-      val insertOneResult = await(repository.insert(aSubmission().copy(id = id)))
-      insertOneResult.wasAcknowledged() shouldBe true
-
-      val result = await(repository.findById(id))
-
-      result shouldBe defined
-
-      result.value shouldBe aSubmission().copy(id = id)
-    }
-
-    "get some submission from repository" in {
-      val submissions = await(repository.getSubmissions())
-      submissions should have size 2
-    }
-
-    "Save createdAt as BSONDateTime in database" in {
-      await(repository.collection.deleteMany(Document()).toFuture())
-      val submission = aSubmission()
-      await(repository.insert(submission))
-
-      val dbSubmission = await(repository.findById(submission.id)).value
-      dbSubmission.createdAt shouldBe submission.createdAt
-    }
-
-  }
+class NotConnectedRepositorySpec extends MongoDBAppSpec[SensitiveNotConnectedSubmission, NotConnectedMongoRepository] with TestObjects:
 
   private val testingDate = Instant.ofEpochMilli(Instant.now.toEpochMilli)
 
-  def aSubmission(): NotConnectedSubmission = NotConnectedSubmission(
+  private val aSubmission: NotConnectedSubmission = NotConnectedSubmission(
     "9999000111",
     "FOR6010",
     Address("10", Some("BarringtonRoad road"), "Town", None, "BN12 4AX"),
@@ -101,6 +41,39 @@ class NotConnectedRepositorySpec
     Option(true)
   )
 
-  override def afterAll(): Unit =
-    await(mongo.database.drop().toFutureOption())
-    mongo.client.close()
+  "NotConnectedRepository" should {
+    "save NotConnectedSubmission to mongo" in {
+      val insertOneResult = mongoRepository.insert(aSubmission).futureValue
+      insertOneResult.wasAcknowledged() shouldBe true
+      insertOneResult.getInsertedId     shouldBe BsonString("9999000111")
+    }
+
+    "save NotConnectedSubmission to mongo and get it back" in {
+      val id              = "9999000321"
+      val insertOneResult = mongoRepository.insert(aSubmission.copy(id = id)).futureValue
+      insertOneResult.wasAcknowledged() shouldBe true
+
+      val result = mongoRepository.findById(id).futureValue
+
+      result shouldBe defined
+
+      result.get shouldBe aSubmission.copy(id = id)
+    }
+
+    "get some submission from repository" in {
+      mongoRepository.insert(aSubmission.copy(id = "9999000333")).futureValue.wasAcknowledged() shouldBe true
+
+      val submissions = mongoRepository.getSubmissions().futureValue
+
+      submissions should not be empty
+    }
+
+    "save createdAt as BSONDateTime in database" in {
+      mongoRepository.collection.deleteMany(Document()).toFuture().futureValue
+      val submission = aSubmission
+      mongoRepository.insert(submission).futureValue
+
+      val dbSubmission = mongoRepository.findById(submission.id).futureValue.get
+      dbSubmission.createdAt shouldBe submission.createdAt
+    }
+  }

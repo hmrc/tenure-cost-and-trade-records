@@ -16,96 +16,90 @@
 
 package uk.gov.hmrc.vo.tctr.backend.security
 
-import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1}
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.mongo.MongoComponent
-import uk.gov.hmrc.vo.tctr.backend.testUtils.*
-import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.nowInUK
-import uk.gov.hmrc.vo.tctr.backend.base.AnyFlatAppSpec
+import org.scalatest.prop.TableFor1
 import uk.gov.hmrc.vo.tctr.backend.config.AppConfig
 import uk.gov.hmrc.vo.tctr.backend.infrastructure.{Clock, SystemClock}
+import uk.gov.hmrc.vo.tctr.backend.models.RefNum
+import uk.gov.hmrc.vo.tctr.backend.repository.SubmittedMongoRepo
+import uk.gov.hmrc.vo.tctr.backend.testUtils.*
+import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.nowInUK
+import uk.gov.hmrc.vo.unit.test.db.MongoDBAppSpec
 
 import scala.concurrent.duration.*
 import scala.language.postfixOps
 
-class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChecks:
+class CredentialsVerifierSpec extends MongoDBAppSpec[RefNum, SubmittedMongoRepo]:
 
   import TestData.*
 
-  override lazy val app: Application = GuiceApplicationBuilder()
-    .configure("mongodb.uri" -> "mongodb://localhost:27017/tenure-cost-and-trade-records")
-    .build()
+  private val appConfig: AppConfig  = inject[AppConfig]
 
-  def mongo: MongoComponent = inject[MongoComponent]
-  def appConfig: AppConfig  = inject[AppConfig]
-
-  behavior of "Credentials Verifier"
-
-  it should "lockout an IP address after the maximum number of failed login attempts is exceeded" in
-    forAll(loginAttemptLengths) { (attempts: Int) =>
-      val config   = VerifierConfig(attempts, 1 hour, 1 hour, true, voIP)
-      val verifier = verifierWith(config, new SystemClock)
-      Range.Int.inclusive(1, attempts, 1).foreach { (n: Int) =>
-        assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(attempts - n))
+  "Credentials Verifier" should {
+    "lockout an IP address after the maximum number of failed login attempts is exceeded" in
+      forAll(loginAttemptLengths) { (attempts: Int) =>
+        val config = VerifierConfig(attempts, 1 hour, 1 hour, true, voIP)
+        val verifier = verifierWith(config, new SystemClock)
+        Range.Int.inclusive(1, attempts, 1).foreach { n =>
+          verifier.verify(refNum, postcode, ip).futureValue shouldBe InvalidCredentials(attempts - n)
+        }
+        verifier.verify(refNum, postcode, ip).futureValue shouldBe IPLockout
       }
-      assert(await(verifier.verify(refNum, postcode, ip)) === IPLockout)
+
+    "allow further login attempts after the lockout timeframe has elapsed" in {
+      val config = VerifierConfig(maxFailedLoginAttempts = 1, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
+      val clock = StubClock()
+      val verifier = verifierWith(config, clock)
+
+      verifier.verify(refNum, postcode, ip).futureValue shouldBe InvalidCredentials(0)
+      verifier.verify(refNum, postcode, ip).futureValue shouldBe IPLockout
+
+      clock.setNow(nowInUK.plusHours(23).plusMinutes(59))
+      verifier.verify(refNum, postcode, ip).futureValue shouldBe IPLockout
+
+      clock.setNow(nowInUK.plusHours(24).plusSeconds(1))
+      verifier.verify(refNum, postcode, ip).futureValue shouldBe InvalidCredentials(0)
     }
 
-  it should "allow further login attempts after the lockout timeframe has elapsed" in {
-    val config   = VerifierConfig(maxFailedLoginAttempts = 1, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
-    val clock    = StubClock()
-    val verifier = verifierWith(config, clock)
+    "not lockout an IP address if the login attempts do not occur within a single session" in {
+      val config = VerifierConfig(maxFailedLoginAttempts = 3, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
+      val clock = StubClock()
+      val verifier = verifierWith(config, clock)
 
-    assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(0))
-    assert(await(verifier.verify(refNum, postcode, ip)) === IPLockout)
+      verifier.verify(refNum, postcode, ip).futureValue
+      verifier.verify(refNum, postcode, ip).futureValue
 
-    clock.setNow(nowInUK.plusHours(23).plusMinutes(59))
-    assert(await(verifier.verify(refNum, postcode, ip)) === IPLockout)
+      clock.setNow(nowInUK.plusHours(1).plusSeconds(1))
+      verifier.verify(refNum, postcode, ip).futureValue shouldBe InvalidCredentials(2)
+      verifier.verify(refNum, postcode, ip).futureValue shouldBe InvalidCredentials(1)
+    }
 
-    clock.setNow(nowInUK.plusHours(24).plusSeconds(1))
-    assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(0))
-  }
+    "fail when the IP address is missing" in {
+      val config = VerifierConfig(maxFailedLoginAttempts = 3, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
+      val clock = StubClock()
+      val verifier = verifierWith(config, clock)
 
-  it should "not lockout an IP address if the login attempts do not occur within a single session" in {
-    val config   = VerifierConfig(maxFailedLoginAttempts = 3, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
-    val clock    = StubClock()
-    val verifier = verifierWith(config, clock)
+      verifier.verify(refNum, postcode, None).futureValue shouldBe MissingIPAddress
+    }
 
-    await(verifier.verify(refNum, postcode, ip))
-    await(verifier.verify(refNum, postcode, ip))
+    "not verify IP addresses when account lockout is disabled" in {
+      val config = VerifierConfig(maxFailedLoginAttempts = 2, lockoutWindow = 24 hours, sessionWindow = 1 hour, false, voIP)
+      val clock = StubClock()
+      val verifier = verifierWith(config, clock)
 
-    clock.setNow(nowInUK.plusHours(1).plusSeconds(1))
-    assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(2))
-    assert(await(verifier.verify(refNum, postcode, ip)) === InvalidCredentials(1))
-  }
+      verifier.verify(refNum, postcode, None).futureValue shouldBe InvalidCredentials(1)
+      verifier.verify(refNum, postcode, None).futureValue shouldBe InvalidCredentials(1)
+      verifier.verify(refNum, postcode, None).futureValue shouldBe InvalidCredentials(1)
+    }
 
-  it should "fail when the IP address is missing" in {
-    val config   = VerifierConfig(maxFailedLoginAttempts = 3, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
-    val clock    = StubClock()
-    val verifier = verifierWith(config, clock)
+    "not apply account lockout to the VO IP address" in {
+      val config = VerifierConfig(maxFailedLoginAttempts = 2, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
+      val clock = StubClock()
+      val verifier = verifierWith(config, clock)
 
-    assert(await(verifier.verify(refNum, postcode, None)) === MissingIPAddress)
-  }
-
-  it should "not verify IP addresses when account lockout is disabled" in {
-    val config   = VerifierConfig(maxFailedLoginAttempts = 2, lockoutWindow = 24 hours, sessionWindow = 1 hour, false, voIP)
-    val clock    = StubClock()
-    val verifier = verifierWith(config, clock)
-
-    assert(await(verifier.verify(refNum, postcode, None)) === InvalidCredentials(1))
-    assert(await(verifier.verify(refNum, postcode, None)) === InvalidCredentials(1))
-    assert(await(verifier.verify(refNum, postcode, None)) === InvalidCredentials(1))
-  }
-
-  it should "not apply account lockout to the VO IP address" in {
-    val config   = VerifierConfig(maxFailedLoginAttempts = 2, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
-    val clock    = StubClock()
-    val verifier = verifierWith(config, clock)
-
-    assert(await(verifier.verify(refNum, postcode, voIP)) === InvalidCredentials(1))
-    assert(await(verifier.verify(refNum, postcode, voIP)) === InvalidCredentials(1))
-    assert(await(verifier.verify(refNum, postcode, voIP)) === InvalidCredentials(1))
+      verifier.verify(refNum, postcode, voIP).futureValue shouldBe InvalidCredentials(1)
+      verifier.verify(refNum, postcode, voIP).futureValue shouldBe InvalidCredentials(1)
+      verifier.verify(refNum, postcode, voIP).futureValue shouldBe InvalidCredentials(1)
+    }
   }
 
   object TestData:
@@ -116,9 +110,7 @@ class CredentialsVerifierSpec extends AnyFlatAppSpec with TableDrivenPropertyChe
     val voIP                                = "192.168.44.67"
 
     def verifierWith(config: VerifierConfig, clock: Clock): IPBlockingCredentialsVerifier =
-      import scala.concurrent.ExecutionContext.Implicits.global
-
-      val emptyCreds     = StubCredentialsRepository()
-      val emptySubmitted = StubSubmittedRepository(mongo, appConfig)
-      val loginsRepo     = InMemoryFailedLoginsRepo()
-      IPBlockingCredentialsVerifier(emptyCreds, emptySubmitted, loginsRepo, true, config, clock, false)
+      val emptyCredentials = StubCredentialsRepository()
+      val emptySubmitted   = StubSubmittedRepository(mongoComponent, appConfig)
+      val loginsRepo       = InMemoryFailedLoginsRepo()
+      IPBlockingCredentialsVerifier(emptyCredentials, emptySubmitted, loginsRepo, true, config, clock, false)

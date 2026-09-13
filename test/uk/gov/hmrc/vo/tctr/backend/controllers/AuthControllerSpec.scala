@@ -17,67 +17,63 @@
 package uk.gov.hmrc.vo.tctr.backend.controllers
 
 import org.apache.pekko.stream.Materializer
-import org.scalatest.OptionValues
-import play.api.Application
 import play.api.http.Status
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Result
-import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}
-import play.api.test.{FakeRequest, Helpers}
+import play.api.test.FakeRequest
+import play.api.test.Helpers.*
 import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
-import uk.gov.hmrc.internalauth.client.*
-import uk.gov.hmrc.vo.tctr.backend.base.AnyWordAppSpec
+import uk.gov.hmrc.vo.tctr.backend.config.AppConfig
+import uk.gov.hmrc.vo.tctr.backend.infrastructure.Clock
 import uk.gov.hmrc.vo.tctr.backend.models.{FORCredentials, SensitiveAddress}
-import uk.gov.hmrc.vo.tctr.backend.repository.CredentialsMongoRepo
+import uk.gov.hmrc.vo.tctr.backend.repository.{CredentialsMongoRepo, SubmittedMongoRepo}
 import uk.gov.hmrc.vo.tctr.backend.schema.Address
-import uk.gov.hmrc.vo.tctr.backend.security.Credentials
+import uk.gov.hmrc.vo.tctr.backend.security.{Credentials, FailedLoginsMongoRepo}
 import uk.gov.hmrc.vo.tctr.backend.testUtils.AuthStubBehaviour
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
-class AuthControllerSpec extends AnyWordAppSpec with OptionValues:
+class AuthControllerSpec extends BaseAppSpec:
 
-  val mockCredentialsRepo: CredentialsMongoRepo = mock[CredentialsMongoRepo]
+  private val mockCredentialsRepo: CredentialsMongoRepo = mock[CredentialsMongoRepo]
 
-  protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ExecutionContext.Implicits.global)
+  private val controller: AuthController = AuthController(
+    inject[AppConfig],
+    mockCredentialsRepo,
+    inject[SubmittedMongoRepo],
+    inject[FailedLoginsMongoRepo],
+    BackendAuthComponentsStub(AuthStubBehaviour)(using stubControllerComponents(), ec),
+    inject[Clock],
+    stubControllerComponents()
+  )
 
-  override def fakeApplication(): Application = GuiceApplicationBuilder()
-    .overrides(
-      bind[CredentialsMongoRepo].toInstance(mockCredentialsRepo),
-      bind[BackendAuthComponents].toInstance(backendAuthComponentsStub)
-    )
-    .build()
-
-  def controller: AuthController = inject[AuthController]
-
-  private val fakeRequest =
-    FakeRequest("POST", "/").withBody(Credentials("refNum", "postcode")).withHeaders("Authorization" -> "fake-token")
+  private val fakeRequest = FakeRequest("POST", "/").withBody(Credentials("refNum", "postcode")).withHeaders("Authorization" -> "fake-token")
 
   "POST /authenticate" should {
     "return 401 for invalid credentials" in {
       when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(None))
       val result = controller.authenticate(fakeRequest)
       status(result)            shouldBe Status.UNAUTHORIZED
-      contentType(result).value shouldBe "application/json"
+      contentType(result).get shouldBe "application/json"
       contentAsString(result)   shouldBe """{"numberOfRemainingTriesUntilIPLockout":4}"""
     }
+
     "return 200 for valid credentials and it" should {
       "set the isWelsh flag" in new ValidCredentialsFixture(billingAuthorityCode = "BA6810") {
         when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(Some(forCredentials)))
         val result: Future[Result] = controller.authenticate(fakeRequest)
 
         status(result)            shouldBe Status.OK
-        contentType(result).value shouldBe "application/json"
+        contentType(result).get shouldBe "application/json"
         contentAsString(result)   shouldBe expectedContent(isWelsh = true)
       }
+
       "unset the isWelsh flag" in new ValidCredentialsFixture(billingAuthorityCode = "SM14BX") {
         when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(Some(forCredentials)))
         val result: Future[Result] = controller.authenticate(fakeRequest)
 
         status(result)            shouldBe Status.OK
-        contentType(result).value shouldBe "application/json"
+        contentType(result).get shouldBe "application/json"
         contentAsString(result)   shouldBe expectedContent(isWelsh = false)
       }
     }
@@ -93,7 +89,6 @@ class AuthControllerSpec extends AnyWordAppSpec with OptionValues:
 
       given Materializer = app.materializer
 
-      val controller = inject[AuthController]
       val result     = controller.retrieveFORType(referenceNum)(fakeRequest)
       status(result) shouldBe Status.NOT_FOUND
     }

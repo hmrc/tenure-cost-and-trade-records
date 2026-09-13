@@ -17,70 +17,51 @@
 package uk.gov.hmrc.vo.tctr.backend.submissionExport
 
 import com.mongodb.client.result.DeleteResult
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.testkit.{ImplicitSender, TestKit}
-import org.scalatest.BeforeAndAfterAll
-import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.vo.tctr.backend.base.AppSuiteBase
 import uk.gov.hmrc.vo.tctr.backend.config.{AppConfig, ForTCTRAudit}
-import uk.gov.hmrc.vo.tctr.backend.models.ConnectedSubmission
 import uk.gov.hmrc.vo.tctr.backend.repository.ConnectedMongoRepository
-import uk.gov.hmrc.vo.tctr.backend.testUtils.ScheduleThatSchedulesImmediately5Times
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 
 import java.time.{Clock, Instant}
-import scala.concurrent.duration.*
-import scala.concurrent.{Await, ExecutionContext, Future}
+import java.util.concurrent.TimeUnit
+import scala.concurrent.Future
 import scala.language.postfixOps
 
-class ConnectedSubmissionExportSpec
-  extends TestKit(ActorSystem.create("submissionExportTest"))
-  with ImplicitSender
-  with AnyWordSpecLike
-  with BeforeAndAfterAll
-  with GuiceOneAppPerSuite
-  with AppSuiteBase:
+class ConnectedSubmissionExportSpec extends BaseAppSpec with TestObjects:
 
-  def audit: ForTCTRAudit      = inject[ForTCTRAudit]
-  def configuration: AppConfig = inject[AppConfig]
+  private val audit: ForTCTRAudit = inject[ForTCTRAudit]
+  private val appConfig           = inject[AppConfig]
 
-  given ExecutionContext = system.dispatcher
+  private val batchSize = 20
 
-  import TestData.*
+  "Export connected submissions" should {
+    "delete each submission so that it is not submitted again" in {
+      val submissions = (1 to batchSize).map(createConnectedSubmission).toList
 
-  "Given there are submissions to be exported" when {
-    val submissions = (1 to 60).map(createConnectedSubmission).toList
-    when(repo.getSubmissions(eqTo(batchSize)))
-      .thenReturn(Future.successful(submissions.take(batchSize)), Future.successful(List.empty[ConnectedSubmission]))
-    when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.acknowledged(1)))
+      val repo = mock[ConnectedMongoRepository]
+      when(repo.getSubmissions(eqTo(batchSize))).thenReturn(Future.successful(submissions.take(batchSize)))
+      when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.acknowledged(1)))
 
-    "the exporter is told to export the latest submission it does the following before publishing a completed event" should {
-      system.eventStream.subscribe(self, classOf[SubmissionExportComplete])
-      Await.result(
-        ExportConnectedSubmissionsVO(repo, Clock.systemDefaultZone(), mock[ForTCTRAudit], mock[AppConfig])
-          .exportNow(batchSize),
-        9 seconds
-      )
+      ExportConnectedSubmissionsVO(repo, Clock.systemDefaultZone(), mock[ForTCTRAudit], mock[AppConfig])
+        .exportNow(batchSize).futureValue
 
-      "It deletes each submission so that it is not submitted again" in
-        submissions.take(batchSize).foreach(s => verify(repo).removeById(same(s.referenceNumber)))
+      TimeUnit.SECONDS.sleep(3) // Wait for all submissions to be removed
 
-      "It deletes a submission that is a permanent failure" in {
-        val submission = createConnectedSubmission(1).copy(createdAt = Instant.ofEpochMilli(0))
-        when(repo.getSubmissions(eqTo(batchSize))).thenReturn(Future.successful(List(submission)))
-        when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.acknowledged(1)))
-        Await.result(
-          ExportConnectedSubmissionsVO(repo, Clock.systemDefaultZone(), audit, configuration).exportNow(batchSize),
-          9 seconds
-        )
-        verify(repo).removeById(same(submission.referenceNumber))
-      }
+      submissions.take(batchSize).foreach(s => verify(repo).removeById(eqTo(s.referenceNumber)))
+    }
+
+    "delete a submission that is a permanent failure" in {
+      val submission = createConnectedSubmission(1).copy(createdAt = Instant.ofEpochMilli(0))
+
+      val repo = mock[ConnectedMongoRepository]
+      when(repo.getSubmissions(eqTo(batchSize))).thenReturn(Future.successful(List(submission)))
+      when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.acknowledged(1)))
+
+      ExportConnectedSubmissionsVO(repo, Clock.systemDefaultZone(), audit, appConfig)
+        .exportNow(batchSize).futureValue
+
+      TimeUnit.SECONDS.sleep(1) // Wait for submission to be removed
+
+      verify(repo).removeById(eqTo(submission.referenceNumber))
     }
   }
-
-  override def afterAll(): Unit = Await.ready(system.terminate(), 5 seconds)
-
-  object TestData:
-    val repo: ConnectedMongoRepository = mock[ConnectedMongoRepository]
-    val batchSize                      = 20
-    val scheduler                      = ScheduleThatSchedulesImmediately5Times()

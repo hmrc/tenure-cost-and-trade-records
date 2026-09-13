@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutYourLeaseOrTenure
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.vo.tctr.backend.models.common.AnswersYesNo.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class ConnectionToLandlordSpec extends PlaySpec:
+class ConnectionToLandlordSpec extends BaseSpec:
 
   "Connection To Landlord" should {
     "serialize and deserialize correctly" in {
       val connectionToLandlord = ConnectedToLandlord(Some(AnswerYes))
-
       val json = Json.toJson(connectionToLandlord)
-      json.as[ConnectedToLandlord] mustBe connectionToLandlord
+
+      json.as[ConnectedToLandlord] shouldBe connectionToLandlord
     }
   }

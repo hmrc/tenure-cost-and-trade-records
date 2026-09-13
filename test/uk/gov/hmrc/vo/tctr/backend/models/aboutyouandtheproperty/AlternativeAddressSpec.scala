@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class AlternativeAddressSpec extends PlaySpec:
+class AlternativeAddressSpec extends BaseSpec:
 
   "AlternativeAddress" should {
     "serialize and deserialize correctly" in {
@@ -30,9 +30,9 @@ class AlternativeAddressSpec extends PlaySpec:
         county = Some("Avon"),
         postcode = "BS1 1AA"
       )
-
       val json = Json.toJson(alternativeAddress)
-      json.as[AlternativeAddress] mustBe alternativeAddress
+
+      json.as[AlternativeAddress] shouldBe alternativeAddress
     }
 
     "serialize and deserialize correctly with minimal data" in {
@@ -43,8 +43,8 @@ class AlternativeAddressSpec extends PlaySpec:
         county = None,
         postcode = "BS2 2BB"
       )
-
       val json = Json.toJson(alternativeAddress)
-      json.as[AlternativeAddress] mustBe alternativeAddress
+
+      json.as[AlternativeAddress] shouldBe alternativeAddress
     }
   }

@@ -16,16 +16,15 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json
 import Caravans.CaravansPitchFeeServices.*
-import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
 /**
   * @author Yuriy Tumakha
   */
-class CaravansAnnualPitchFeeSpec extends AnyFlatSpec with Matchers with FakeObjects:
+class CaravansAnnualPitchFeeSpec extends BaseSpec with TestObjects:
 
   private val caravansAnnualPitchFee = CaravansAnnualPitchFee(
     1000,
@@ -36,17 +35,21 @@ class CaravansAnnualPitchFeeSpec extends AnyFlatSpec with Matchers with FakeObje
     otherPitchFeeDetails = Some("food - 200, cleaning - 200")
   )
 
-  "CaravansAnnualPitchFee" should "be serialized to json" in {
-    val expectedJson =
-      """{"totalPitchFee":1000,"servicesIncludedInPitchFee":["waterAndDrainage","gas","electricity","other"],"waterAndDrainage":100,"gas":200,"electricity":300,"otherPitchFeeDetails":"food - 200, cleaning - 200"}"""
+  "CaravansAnnualPitchFee" should {
+    "be serialized to json" in {
+      val expectedJson =
+        """{"totalPitchFee":1000,"servicesIncludedInPitchFee":["waterAndDrainage","gas","electricity","other"],"waterAndDrainage":100,"gas":200,"electricity":300,"otherPitchFeeDetails":"food - 200, cleaning - 200"}"""
 
-    val json = Json.toJson(caravansAnnualPitchFee)
-    json.as[CaravansAnnualPitchFee] shouldBe caravansAnnualPitchFee
-    Json.stringify(json)            shouldBe expectedJson
-  }
+      val json = Json.toJson(caravansAnnualPitchFee)
 
-  it should "be deserialized from json" in {
-    val jsonString = Json.stringify(Json.toJson(caravansAnnualPitchFee))
-    val obj        = Json.parse(jsonString).as[CaravansAnnualPitchFee]
-    obj shouldBe caravansAnnualPitchFee
+      json.as[CaravansAnnualPitchFee] shouldBe caravansAnnualPitchFee
+      Json.stringify(json)            shouldBe expectedJson
+    }
+
+    "be deserialized from json" in {
+      val jsonString = Json.stringify(Json.toJson(caravansAnnualPitchFee))
+      val obj        = Json.parse(jsonString).as[CaravansAnnualPitchFee]
+
+      obj shouldBe caravansAnnualPitchFee
+    }
   }

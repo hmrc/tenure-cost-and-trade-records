@@ -45,7 +45,7 @@ import uk.gov.hmrc.vo.tctr.backend.schema.Address
 
 import java.time.{Instant, LocalDate}
 
-trait FakeObjects:
+trait TestObjects:
 
   val referenceNumber: String             = "99996010004"
   val referenceNumberNotConnected: String = "99996010005"

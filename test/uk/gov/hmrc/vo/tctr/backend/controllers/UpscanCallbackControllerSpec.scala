@@ -16,84 +16,70 @@
 
 package uk.gov.hmrc.vo.tctr.backend.controllers
 
-import org.apache.pekko.util.Timeout
 import com.mongodb.bulk.BulkWriteResult
-import org.scalatest.flatspec.AsyncFlatSpec
-import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.*
-import play.api.test.Helpers.*
 import play.api.test.*
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.vo.tctr.backend.models.UpScanRequests.*
-
-import java.time.Instant
-import org.scalatest.Succeeded
-import uk.gov.hmrc.vo.tctr.backend.base.MockitoExtendedSugar
+import play.api.test.Helpers.*
 import uk.gov.hmrc.vo.tctr.backend.connectors.UpscanConnector
 import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.vo.tctr.backend.models.FORCredentials
+import uk.gov.hmrc.vo.tctr.backend.models.UpScanRequests.*
 import uk.gov.hmrc.vo.tctr.backend.repository.CredentialsRepo
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 
-import scala.concurrent.ExecutionContext
+import java.time.Instant
+import java.util.concurrent.TimeUnit
 import scala.concurrent.Future
-import scala.concurrent.duration.*
 
-class UpscanCallbackControllerSpec extends AsyncFlatSpec with Matchers with MockitoExtendedSugar:
+class UpscanCallbackControllerSpec extends BaseAppSpec:
 
-  given Timeout          = 9.seconds
-  given ExecutionContext = ExecutionContext.global
-  given HeaderCarrier    = HeaderCarrier()
+  private val mockUpscanConnector: UpscanConnector = mock[UpscanConnector]
+  private val mockCredentialsRepo: CredentialsRepo = mock[CredentialsRepo]
+  private val mockMongoCrypto: MongoCrypto         = mock[MongoCrypto]
+  private val mockBulkWriteResult: BulkWriteResult = mock[BulkWriteResult]
 
-  val mockUpscanConnector: UpscanConnector = mock[UpscanConnector]
-  val mockCredentialsRepo: CredentialsRepo = mock[CredentialsRepo]
-  val mockMongoCrypto: MongoCrypto         = mock[MongoCrypto]
-  val mockBulkWriteResult: BulkWriteResult = mock[BulkWriteResult]
+  private val controller = UpscanCallbackController(mockUpscanConnector, stubControllerComponents(), mockCredentialsRepo, mockMongoCrypto)
 
-  val controller = UpscanCallbackController(mockUpscanConnector, stubControllerComponents(), mockCredentialsRepo, mockMongoCrypto)
-
-  "UpscanCallbackController" should "handle successful callbacks" in {
-
-    val validUploadConfirmation = Json.toJson(
-      UploadConfirmationSuccess(
-        "some-reference",
-        "http://example.com",
-        "READY",
-        UploadDetails(Instant.now(), "checksum", "some-contentType", "some-fileName")
+  "UpscanCallbackController" should {
+    "handle successful callbacks" in {
+      val validUploadConfirmation = Json.toJson(
+        UploadConfirmationSuccess(
+          "some-reference",
+          "http://example.com",
+          "READY",
+          UploadDetails(Instant.now(), "checksum", "some-contentType", "some-fileName")
+        )
       )
-    )
 
-    val forCredentialsJsonResponse = """[
-                                       |    {
-                                       |        "_id":  "9999002003",
-                                       |        "forNumber":  "9999000001",
-                                       |        "billingAuthorityCode":  "VO",
-                                       |        "forType":  "FOR6003",
-                                       |        "address":  {
-                                       |                        "buildingNameNumber":  "1 Building",
-                                       |                        "street1":  "123 Netfield street",
-                                       |                        "town":  "London",
-                                       |                        "postcode":  "EC1 4GW"
-                                       |                    },
-                                       |        "CreatedAt":  "2023-02-16T12:42:45.418Z"
-                                       |    }
+      val forCredentialsJsonResponse = """[
+                                         |    {
+                                         |        "_id":  "9999002003",
+                                         |        "forNumber":  "9999000001",
+                                         |        "billingAuthorityCode":  "VO",
+                                         |        "forType":  "FOR6003",
+                                         |        "address":  {
+                                         |                        "buildingNameNumber":  "1 Building",
+                                         |                        "street1":  "123 Netfield street",
+                                         |                        "town":  "London",
+                                         |                        "postcode":  "EC1 4GW"
+                                         |                    },
+                                         |        "CreatedAt":  "2023-02-16T12:42:45.418Z"
+                                         |    }
                                        ]""".stripMargin
 
-    when(mockUpscanConnector.download(any)(using any)).thenReturn(Future.successful(Right(forCredentialsJsonResponse)))
-    when(mockCredentialsRepo.bulkUpsert(any[Seq[FORCredentials]])(using any[OFormat[FORCredentials]]))
-      .thenReturn(Future.successful(mockBulkWriteResult))
+      when(mockUpscanConnector.download(any)(using any)).thenReturn(Future.successful(Right(forCredentialsJsonResponse)))
+      when(mockCredentialsRepo.bulkUpsert(any[Seq[FORCredentials]])(using any[OFormat[FORCredentials]]))
+        .thenReturn(Future.successful(mockBulkWriteResult))
 
-    val request = FakeRequest().withBody(validUploadConfirmation)
-    val result  = controller.callback()(request)
+      val request = FakeRequest().withBody(validUploadConfirmation)
+      val result  = controller.callback()(request)
 
-    status(result) shouldBe OK
+      status(result) shouldBe OK
 
-    scala.concurrent.blocking {
-      Thread.sleep(5000)
+      TimeUnit.SECONDS.sleep(5)
+
+      verify(mockUpscanConnector).download(any)(using any)
+
+      verify(mockCredentialsRepo).bulkUpsert(any[Seq[FORCredentials]])(using any[OFormat[FORCredentials]])
     }
-
-    verify(mockUpscanConnector).download(any)(using any)
-
-    verify(mockCredentialsRepo).bulkUpsert(any[Seq[FORCredentials]])(using any[OFormat[FORCredentials]])
-
-    Future.successful(Succeeded)
   }

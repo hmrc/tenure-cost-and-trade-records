@@ -18,13 +18,13 @@ package uk.gov.hmrc.vo.tctr.backend.utils
 
 import play.api.i18n.{Messages, MessagesApi}
 import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.*
-import uk.gov.hmrc.vo.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.vo.tctr.backend.util.{DateUtil, DateUtilLocalised}
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class DateUtilLocalisedSpec extends AnyWordAppSpec:
+class DateUtilLocalisedSpec extends BaseAppSpec:
 
   private val testDate: Date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2025-04-17 12:34:56")
   private val dateEN         = "17 April 2025"
@@ -35,7 +35,7 @@ class DateUtilLocalisedSpec extends AnyWordAppSpec:
 
   given messagesEN: Messages = messagesApi.preferred(Seq(DateUtil.en))
 
-  "DateUtilLocalised" must {
+  "DateUtilLocalised" should {
     "format Date" in {
       dateUtilLocalised.formatDate(testDate)              shouldBe dateEN
       dateUtilLocalised.formatDate(testDate, DateUtil.en) shouldBe dateEN
@@ -55,5 +55,4 @@ class DateUtilLocalisedSpec extends AnyWordAppSpec:
       dateUtilLocalised.formatDate(zonedDateTime, DateUtil.en) shouldBe dateEN
       dateUtilLocalised.formatDate(zonedDateTime, DateUtil.cy) shouldBe dateCY
     }
-
   }

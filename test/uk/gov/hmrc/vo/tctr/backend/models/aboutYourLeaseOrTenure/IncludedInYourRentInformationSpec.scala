@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutYourLeaseOrTenure
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.*
 import IncludedInYourRentInformation.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class IncludedInYourRentInformationSpec extends PlaySpec:
+class IncludedInYourRentInformationSpec extends BaseSpec:
+
   "IncludedInYourRentInformation" should {
     "serialize and deserialize correctly" in {
       val values = List(
@@ -32,7 +33,7 @@ class IncludedInYourRentInformationSpec extends PlaySpec:
 
       values.foreach { value =>
         val json = Json.toJson(value)
-        json.as[IncludedInYourRentInformation] mustBe value
+        json.as[IncludedInYourRentInformation] shouldBe value
       }
     }
   }

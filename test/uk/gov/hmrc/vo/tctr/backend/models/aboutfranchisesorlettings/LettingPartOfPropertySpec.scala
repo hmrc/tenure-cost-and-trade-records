@@ -16,30 +16,29 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutfranchisesorlettings
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
 import java.time.LocalDate
 
-class LettingPartOfPropertySpec extends PlaySpec:
+class LettingPartOfPropertySpec extends BaseSpec:
 
   "LettingPartOfProperty" should {
-
     "serialize and deserialize ATMLetting correctly" in {
       val atmLetting =
         ATMLetting(Some("HSBC"), None, Some(RentDetails(1000, LocalDate.of(2021, 1, 1))))
       val json       = Json.toJson(atmLetting: LettingPartOfProperty)
 
-      (json \ "type").as[String] mustBe "ATMLetting"
-      json.as[LettingPartOfProperty] mustBe atmLetting
+      (json \ "type").as[String] shouldBe "ATMLetting"
+      json.as[LettingPartOfProperty] shouldBe atmLetting
     }
 
     "serialize and deserialize TelecomMastLetting correctly" in {
       val telecomLetting = TelecomMastLetting(Some("Vodafone"), Some("Top of the Hill"), None, None)
       val json           = Json.toJson(telecomLetting: LettingPartOfProperty)
 
-      (json \ "type").as[String] mustBe "TelecomMastLetting"
-      json.as[LettingPartOfProperty] mustBe telecomLetting
+      (json \ "type").as[String] shouldBe "TelecomMastLetting"
+      json.as[LettingPartOfProperty] shouldBe telecomLetting
     }
 
     "handle incorrect type field in JSON" in {
@@ -48,7 +47,7 @@ class LettingPartOfPropertySpec extends PlaySpec:
         "bankOrCompany" -> "HSBC"
       )
 
-      json.validate[LettingPartOfProperty] mustBe a[JsError]
+      json.validate[LettingPartOfProperty] shouldBe a[JsError]
     }
 
     "serialize and deserialize AdvertisingRightLetting correctly" in {
@@ -60,8 +59,8 @@ class LettingPartOfPropertySpec extends PlaySpec:
       )
       val json                    = Json.toJson(advertisingRightLetting: LettingPartOfProperty)
 
-      (json \ "type").as[String] mustBe "AdvertisingRightLetting"
-      json.as[LettingPartOfProperty] mustBe advertisingRightLetting
+      (json \ "type").as[String] shouldBe "AdvertisingRightLetting"
+      json.as[LettingPartOfProperty] shouldBe advertisingRightLetting
     }
 
     "serialize and deserialize OtherLetting correctly" in {
@@ -73,14 +72,15 @@ class LettingPartOfPropertySpec extends PlaySpec:
       )
       val json         = Json.toJson[LettingPartOfProperty](otherLetting)
 
-      (json \ "type").as[String] mustBe "OtherLetting"
-      json.as[LettingPartOfProperty] mustBe otherLetting
+      (json \ "type").as[String] shouldBe "OtherLetting"
+      json.as[LettingPartOfProperty] shouldBe otherLetting
     }
     "handle errors when an invalid type is provided" in {
       val json = Json.obj(
         "type"               -> "InvalidLetting",
         "descriptionOfSpace" -> "Invalid data"
       )
-      json.validate[LettingPartOfProperty] mustBe a[JsError]
+
+      json.validate[LettingPartOfProperty] shouldBe a[JsError]
     }
   }

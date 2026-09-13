@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.common
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import ResponsibilityParty.InsideRepairs.*
 import ResponsibilityParty.OutsideRepairs.*
 import ResponsibilityParty.BuildingInsurance.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class ResponsiblePartySpec extends AnyWordSpecLike with Matchers:
+class ResponsiblePartySpec extends BaseSpec:
 
   "OutsideRepairs" should {
     "Return values" in {

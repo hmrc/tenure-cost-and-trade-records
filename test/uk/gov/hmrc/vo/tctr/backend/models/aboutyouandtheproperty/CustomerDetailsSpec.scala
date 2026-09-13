@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.vo.tctr.backend.models.common.ContactDetails
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class CustomerDetailsSpec extends PlaySpec:
+class CustomerDetailsSpec extends BaseSpec:
 
   "CustomerDetails" should {
     "serialize and deserialize correctly" in {
@@ -28,8 +28,8 @@ class CustomerDetailsSpec extends PlaySpec:
         fullName = "Michal The Chef",
         contactDetails = ContactDetails(phone = "1234567890", email = "michal@example.com")
       )
-
       val json = Json.toJson(customerDetails)
-      json.as[CustomerDetails] mustBe customerDetails
+
+      json.as[CustomerDetails] shouldBe customerDetails
     }
   }

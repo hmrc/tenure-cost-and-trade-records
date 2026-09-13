@@ -17,39 +17,42 @@
 package uk.gov.hmrc.vo.tctr.backend.repository
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.vo.tctr.backend.models.SubmissionDraftWrapper
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.db.MongoDBAppSpec
 
 /**
   * @author Yuriy Tumakha
   */
-class MongoSubmissionDraftRepoSpec extends MongoSpecBase:
+class MongoSubmissionDraftRepoSpec extends MongoDBAppSpec[SubmissionDraftWrapper, MongoSubmissionDraftRepo] with TestObjects:
 
   private val submissionDraftFindId   = "SaveAsDraftITestFind"
   private val submissionDraftSaveId   = "SaveAsDraftITestSave"
   private val submissionDraftDeleteId = "SaveAsDraftITestDelete"
   private val testSubmissionDraft     = Json.obj()
 
-  private val repo = inject[MongoSubmissionDraftRepo]
+  "MongoSubmissionDraftRepo" should {
+    "find SubmissionDraft by correct id" in {
+      mongoRepository.save(submissionDraftFindId, testSubmissionDraft).futureValue
 
-  "MongoSubmissionDraftRepo" should "find SubmissionDraft by correct id" in {
-    repo.save(submissionDraftFindId, testSubmissionDraft).futureValue
+      mongoRepository.find(submissionDraftFindId).futureValue shouldBe Some(testSubmissionDraft)
+    }
 
-    repo.find(submissionDraftFindId).futureValue shouldBe Some(testSubmissionDraft)
-  }
-
-  it should "return None by unknown id" in {
-    repo.find("UNKNOWN_ID").futureValue shouldBe None
-  }
-
-  it should "save SubmissionDraft" in {
-    repo.save(submissionDraftSaveId, testSubmissionDraft).futureValue shouldBe testSubmissionDraft
-  }
-
-  it should "return deletedCount = 1 on delete SubmissionDraft" in {
-    repo.save(submissionDraftDeleteId, testSubmissionDraft).futureValue
-
-    repo.delete(submissionDraftDeleteId).futureValue.getDeletedCount shouldBe 1
-  }
-
-  it should "return deletedCount = 0 on delete by unknown id" in {
-    repo.delete("UNKNOWN_ID").futureValue.getDeletedCount shouldBe 0
+    "return None by unknown id" in {
+      mongoRepository.find("UNKNOWN_ID").futureValue shouldBe None
+    }
+  
+    "save SubmissionDraft" in {
+      mongoRepository.save(submissionDraftSaveId, testSubmissionDraft).futureValue shouldBe testSubmissionDraft
+    }
+  
+    "return deletedCount = 1 on delete SubmissionDraft" in {
+      mongoRepository.save(submissionDraftDeleteId, testSubmissionDraft).futureValue
+  
+      mongoRepository.delete(submissionDraftDeleteId).futureValue.getDeletedCount shouldBe 1
+    }
+  
+    "return deletedCount = 0 on delete by unknown id" in {
+      mongoRepository.delete("UNKNOWN_ID").futureValue.getDeletedCount shouldBe 0
+    }
   }

@@ -16,15 +16,16 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.lettingHistory
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
-import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class LettingHistorySpec extends PlaySpec with FakeObjects:
+class LettingHistorySpec extends BaseSpec with TestObjects:
 
   "LettingHistory" should {
     "serialize and deserialize correctly" in {
       val json = Json.toJson(prefilledLettingHistory)
-      json.as[LettingHistory] mustBe prefilledLettingHistory
+
+      json.as[LettingHistory] shouldBe prefilledLettingHistory
     }
   }
