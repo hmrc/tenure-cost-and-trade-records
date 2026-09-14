@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.vo.tctr.backend.repository
 
-import org.mongodb.scala.SingleObservableFuture
-import org.mongodb.scala.model.{Filters, ReplaceOptions}
 import uk.gov.hmrc.vo.tctr.backend.models.SensitiveRequestReferenceNumberSubmission
 import uk.gov.hmrc.vo.tctr.backend.testUtils.{CustomMatchers, TestObjects}
 import uk.gov.hmrc.vo.unit.test.db.MongoDBAppSpec
@@ -26,13 +24,8 @@ class RequestReferenceNumberMongoRepositorySpec extends MongoDBAppSpec[Sensitive
   with TestObjects with CustomMatchers:
 
   override def beforeEach(): Unit =
-    mongoRepository.collection
-      .replaceOne(
-        Filters.equal("_id", requestRefNumSubmission.id),
-        SensitiveRequestReferenceNumberSubmission(requestRefNumSubmission),
-        ReplaceOptions().upsert(true)
-      )
-      .toFuture().futureValue
+    super.beforeEach()
+    insert(SensitiveRequestReferenceNumberSubmission(requestRefNumSubmission))
 
   "RequestReferenceNumberMongoRepository" should {
     "find RequestReferenceNumberSubmission by correct id" in {
