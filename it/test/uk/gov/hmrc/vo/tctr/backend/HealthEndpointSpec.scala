@@ -16,15 +16,13 @@
 
 package uk.gov.hmrc.vo.tctr.backend
 
-class HealthEndpointIntegrationSpec extends IntegrationSpecBase:
+class HealthEndpointSpec extends TCTRServerSpec:
 
-  "service health endpoint" should {
+  "Service health endpoint" should {
     "respond with 200 status" in {
-      val response =
-        wsClient
-          .url(s"$baseUrl/ping/ping")
-          .get()
-          .futureValue
+      val response = wsUrl("/ping/ping")
+        .get()
+        .futureValue
 
       response.status shouldBe 200
     }

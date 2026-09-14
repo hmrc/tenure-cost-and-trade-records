@@ -16,37 +16,41 @@
 
 package uk.gov.hmrc.vo.tctr.backend.utils
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 import uk.gov.hmrc.vo.tctr.backend.util.NumberUtil.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class NumberUtilSpec extends AnyFlatSpec with Matchers:
+class NumberUtilSpec extends BaseSpec:
 
-  "removeTrailingZeros" should
+  "removeTrailingZeros" should {
     "remove zeros from a string" in {
-      "1.00".removedTrailingZeros   should be("1")
-      "12.345".removedTrailingZeros should be("12.345")
+      "1.00".removedTrailingZeros   shouldBe "1"
+      "12.345".removedTrailingZeros shouldBe "12.345"
     }
+  }
 
-  "asMoney" should
+  "asMoney" should {
     "format corectly  string" in {
-      BigDecimal("1").asMoney          should be("£1")
-      BigDecimal("1234567.89").asMoney should be("£1,234,567.89")
+      BigDecimal("1").asMoney          shouldBe "£1"
+      BigDecimal("1234567.89").asMoney shouldBe "£1,234,567.89"
     }
+  }
 
-  "asMoneyFull" should
+  "asMoneyFull" should {
     "format correctly string without removing  zeros" in {
-      BigDecimal("1.00").asMoneyFull should be("£1.00")
+      BigDecimal("1.00").asMoneyFull shouldBe "£1.00"
     }
+  }
 
-  "withScale" should
+  "withScale" should {
     "set scale correctly" in {
-      BigDecimal("1.00").withScale(2)    should be("1")
-      BigDecimal("123.456").withScale(2) should be("123.46")
+      BigDecimal("1.00").withScale(2)    shouldBe "1"
+      BigDecimal("123.456").withScale(2) shouldBe "123.46"
     }
+  }
 
-  "withScaleFull" should
+  "withScaleFull" should {
     "set scale correctly without removing zeros" in {
-      zeroBigDecimal.withScaleFull(2)       should be("0.00")
-      BigDecimal("123.45").withScaleFull(2) should be("123.45")
+      zeroBigDecimal.withScaleFull(2)       shouldBe "0.00"
+      BigDecimal("123.45").withScaleFull(2) shouldBe "123.45"
     }
+  }

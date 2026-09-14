@@ -16,15 +16,14 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models
 
-import org.scalatest.flatspec.*
-import org.scalatest.matchers.should.*
 import play.api.libs.json.Json
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.vo.tctr.backend.testUtils.SensitiveTestHelper
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class ForCredentialsSpec extends AnyFlatSpec with Matchers with SensitiveTestHelper:
+class ForCredentialsSpec extends BaseSpec with SensitiveTestHelper:
 
-  val credentials: FORCredentials = FORCredentials(
+  private val credentials: FORCredentials = FORCredentials(
     "9999601001",
     "BA3615",
     "FOR6010",
@@ -38,12 +37,14 @@ class ForCredentialsSpec extends AnyFlatSpec with Matchers with SensitiveTestHel
     "9999601001"
   )
 
-  "FORCredentials" should "return encoded string" in {
-    val result = credentials.basicAuthString
-    result shouldBe "Basic OTk5OTYwMTAwMTpTZW5zaXRpdmUoLi4uKQ=="
-  }
+  "FORCredentials" should {
+    "return encoded string" in {
+      val result = credentials.basicAuthString
+      result shouldBe "Basic OTk5OTYwMTAwMTpTZW5zaXRpdmUoLi4uKQ=="
+    }
 
-  it should "be serialized/deserialized from JSON" in {
-    val json = Json.toJson(credentials)
-    json.as[FORCredentials] shouldBe credentials
+    "be serialized/deserialized from JSON" in {
+      val json = Json.toJson(credentials)
+      json.as[FORCredentials] shouldBe credentials
+    }
   }

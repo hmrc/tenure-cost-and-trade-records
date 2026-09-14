@@ -17,48 +17,50 @@
 package uk.gov.hmrc.vo.tctr.backend.crypto
 
 import play.api.libs.json.*
-import uk.gov.hmrc.vo.tctr.backend.base.AnyFlatAppSpec
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 
 import scala.io.Source
 
 /**
   * @author Yuriy Tumakha
   */
-class EncryptionJsonTransformerSpec extends AnyFlatAppSpec with BeEncryptedMatchers:
+class EncryptionJsonTransformerSpec extends BaseAppSpec with BeEncryptedMatchers:
 
   private val encryptionJsonTransformer = inject[EncryptionJsonTransformer]
   private val submissionDraftJson       = Json.parse(Source.fromResource("json/submissionDraft.json").mkString)
 
-  "EncryptionJsonTransformer" should "return original submissionDraftJson after encrypt then decrypt" in {
-    val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
-    val decryptedJson = encryptionJsonTransformer.decrypt(encryptedJson)
-    decryptedJson shouldBe submissionDraftJson
-  }
+  "EncryptionJsonTransformer" should {
+    "return original submissionDraftJson after encrypt then decrypt" in {
+      val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
+      val decryptedJson = encryptionJsonTransformer.decrypt(encryptedJson)
+      decryptedJson shouldBe submissionDraftJson
+    }
 
-  it should "encrypt sensitive PII fields" in {
-    val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
-
-    (encryptedJson \ "session" \ "userLoginDetails" \ "token")                                   shouldBe encrypted
-    (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "buildingNameNumber")          shouldBe encrypted
-    (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "street1")                     shouldBe encrypted
-    (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "town")                        shouldBe encrypted
-    (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "postcode")                    shouldBe encrypted
-    (encryptedJson \ "session" \ "aboutYou" \ "customerDetails" \ "fullName")                    shouldBe encrypted
-    (encryptedJson \ "session" \ "aboutYou" \ "customerDetails" \ "contactDetails" \ "phone")    shouldBe encrypted
-    (encryptedJson \ "session" \ "aboutYou" \ "customerDetails" \ "contactDetails" \ "email")    shouldBe encrypted
-    (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "previousAddress")                   shouldBe encrypted
-    (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "buildingNameNumber") shouldBe encrypted
-    (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "street1")            shouldBe encrypted
-    (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "town")               shouldBe encrypted
-    (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "postcode")           shouldBe encrypted
-  }
-
-  it should "not encrypt not PII fields" in {
-    val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
-    println("Encrypted JSON: " + Json.prettyPrint(encryptedJson))
-
-    (encryptedJson \ "exitPath") shouldBe (submissionDraftJson \ "exitPath")
-
-    (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "county") shouldBe
-      (submissionDraftJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "county")
+    "encrypt sensitive PII fields" in {
+      val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
+  
+      (encryptedJson \ "session" \ "userLoginDetails" \ "token")                                   shouldBe encrypted
+      (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "buildingNameNumber")          shouldBe encrypted
+      (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "street1")                     shouldBe encrypted
+      (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "town")                        shouldBe encrypted
+      (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "postcode")                    shouldBe encrypted
+      (encryptedJson \ "session" \ "aboutYou" \ "customerDetails" \ "fullName")                    shouldBe encrypted
+      (encryptedJson \ "session" \ "aboutYou" \ "customerDetails" \ "contactDetails" \ "phone")    shouldBe encrypted
+      (encryptedJson \ "session" \ "aboutYou" \ "customerDetails" \ "contactDetails" \ "email")    shouldBe encrypted
+      (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "previousAddress")                   shouldBe encrypted
+      (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "buildingNameNumber") shouldBe encrypted
+      (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "street1")            shouldBe encrypted
+      (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "town")               shouldBe encrypted
+      (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "postcode")           shouldBe encrypted
+    }
+  
+    "not encrypt not PII fields" in {
+      val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
+      println("Encrypted JSON: " + Json.prettyPrint(encryptedJson))
+  
+      (encryptedJson \ "exitPath") shouldBe (submissionDraftJson \ "exitPath")
+  
+      (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "county") shouldBe
+        (submissionDraftJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "county")
+    }
   }

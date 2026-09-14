@@ -60,6 +60,10 @@ class ConnectedMongoRepository @Inject() (
     domainFormat = SensitiveConnectedSubmission.format,
     indexes = Seq(
       IndexModel(
+        Indexes.hashed("referenceNumber"),
+        IndexOptions().name("referenceNumberIdx")
+      ),
+      IndexModel(
         Indexes.ascending("createdAt"),
         IndexOptions().name("connectedSubmissionTTL").expireAfter(appConfig.connectedSubmissionTTL, TimeUnit.DAYS)
       )

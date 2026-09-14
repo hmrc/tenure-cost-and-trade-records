@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should
 import play.api.libs.json.{Format, JsError, Json}
+import uk.gov.hmrc.vo.service.model.Scala3EnumJsonFormat
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
 /**
   * @author Yuriy Tumakha
   */
-class Scala3EnumJsonFormatSpec extends AnyFlatSpec with should.Matchers:
+class Scala3EnumJsonFormatSpec extends BaseSpec:
 
   enum Color:
     case Red, Green, Blue
@@ -32,24 +32,26 @@ class Scala3EnumJsonFormatSpec extends AnyFlatSpec with should.Matchers:
 
   import Color.*
 
-  "Scala3EnumFormat.format" should "serialize Scala 3 enum to json" in {
-    val obj  = Seq(Green, Blue)
-    val json = Json.toJson(obj)
-    json.as[Seq[Color]]  shouldBe obj
-    Json.stringify(json) shouldBe """["Green","Blue"]"""
-  }
+  "Scala3EnumFormat.format" should {
+    "serialize Scala 3 enum to json" in {
+      val obj  = Seq(Green, Blue)
+      val json = Json.toJson(obj)
+      json.as[Seq[Color]]  shouldBe obj
+      Json.stringify(json) shouldBe """["Green","Blue"]"""
+    }
 
-  it should "deserialize Scala 3 enum from json" in {
-    val obj = Json.parse("\"Red\"").as[Color]
-    obj shouldBe Red
-  }
-
-  it should "return JsError for wrong enum value" in {
-    Json.parse("\"Cyan\"").validate[Color] shouldBe JsError(
-      "Enum value 'Cyan' is not in allowed list - Red, Green, Blue"
-    )
-  }
-
-  it should "return JsError for number" in {
-    Json.parse("123").validate[Color] shouldBe JsError("Invalid Json: expected string, got: 123")
+    "deserialize Scala 3 enum from json" in {
+      val obj = Json.parse("\"Red\"").as[Color]
+      obj shouldBe Red
+    }
+  
+    "return JsError for wrong enum value" in {
+      Json.parse("\"Cyan\"").validate[Color] shouldBe JsError(
+        "Enum value 'Cyan' is not in allowed list - Red, Green, Blue"
+      )
+    }
+  
+    "return JsError for number" in {
+      Json.parse("123").validate[Color] shouldBe JsError("Invalid Json: expected string, got: 123")
+    }
   }

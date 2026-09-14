@@ -16,15 +16,15 @@
 
 package uk.gov.hmrc.vo.tctr.backend.utils
 
-import org.scalatestplus.play.PlaySpec
-import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.*
 import uk.gov.hmrc.vo.tctr.backend.util.DateUtil
+import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
 import java.text.SimpleDateFormat
 import java.time.{LocalDate, ZoneId, ZoneOffset, ZonedDateTime}
 import java.util.Date
 
-class DateUtilSpec extends PlaySpec:
+class DateUtilSpec extends BaseSpec:
 
   private val ukTimezone: ZoneId = ZoneId.of("Europe/London")
   private val testDate: Date     = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-02-12 12:34:56")
@@ -35,7 +35,7 @@ class DateUtilSpec extends PlaySpec:
 
       val expected: ZonedDateTime = testDate.toInstant.atZone(ukTimezone)
 
-      result mustBe expected
+      result shouldBe expected
     }
   }
 
@@ -47,14 +47,14 @@ class DateUtilSpec extends PlaySpec:
 
       val expected: LocalDate = testInstant.atZone(ZoneOffset.UTC).toLocalDate
 
-      result mustBe expected
+      result shouldBe expected
     }
   }
 
   "DateUtil.langByCode" should {
     "parse lang code string and return corresponding Lang" in {
-      DateUtil.langByCode("cy") mustBe DateUtil.cy
-      DateUtil.langByCode("en") mustBe DateUtil.en
-      DateUtil.langByCode("xx") mustBe DateUtil.en
+      DateUtil.langByCode("cy") shouldBe DateUtil.cy
+      DateUtil.langByCode("en") shouldBe DateUtil.en
+      DateUtil.langByCode("xx") shouldBe DateUtil.en
     }
   }

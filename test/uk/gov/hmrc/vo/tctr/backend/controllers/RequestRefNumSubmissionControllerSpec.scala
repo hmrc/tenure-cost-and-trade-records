@@ -18,47 +18,33 @@ package uk.gov.hmrc.vo.tctr.backend.controllers
 
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult.acknowledged
-import org.apache.pekko.util.Timeout
 import org.bson.BsonBoolean.TRUE
-import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, CREATED}
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import play.api.test.Helpers.{POST, status}
 import play.api.test.*
-import uk.gov.hmrc.internalauth.client.*
+import play.api.test.Helpers.*
 import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
-import uk.gov.hmrc.vo.tctr.backend.base.AnyWordAppSpec
 import uk.gov.hmrc.vo.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.vo.tctr.backend.models.RequestReferenceNumberSubmission
 import uk.gov.hmrc.vo.tctr.backend.repository.RequestReferenceNumberRepository
-import uk.gov.hmrc.vo.tctr.backend.testUtils.AuthStubBehaviour
+import uk.gov.hmrc.vo.tctr.backend.testUtils.{AuthStubBehaviour, TestObjects}
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration.DurationInt
+import scala.concurrent.Future
 
-class RequestRefNumSubmissionControllerSpec extends AnyWordAppSpec:
+class RequestRefNumSubmissionControllerSpec extends BaseAppSpec with TestObjects:
 
-  given Timeout = 5.seconds
+  private val mockRepository: RequestReferenceNumberRepository = mock[RequestReferenceNumberRepository]
+  private val mockMetricsHandler: MetricsHandler               = mock[MetricsHandler]
+  private val meter: Meter                                     = mock[Meter]
 
-  protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ExecutionContext.Implicits.global)
-
-  val mockRepository: RequestReferenceNumberRepository = mock[RequestReferenceNumberRepository]
-  val mockMetricsHandler: MetricsHandler               = mock[MetricsHandler]
-  val meter: Meter                                     = mock[Meter]
-
-  override def fakeApplication(): Application = GuiceApplicationBuilder()
-    .overrides(
-      bind[RequestReferenceNumberRepository].toInstance(mockRepository),
-      bind[MetricsHandler].toInstance(mockMetricsHandler),
-      bind[BackendAuthComponents].toInstance(backendAuthComponentsStub)
-    )
-    .build()
-
-  def controller: RequestRefNumSubmissionController = inject[RequestRefNumSubmissionController]
+  private val controller: RequestRefNumSubmissionController = RequestRefNumSubmissionController(
+    mockRepository,
+    BackendAuthComponentsStub(AuthStubBehaviour)(using stubControllerComponents(), ec),
+    mockMetricsHandler,
+    stubControllerComponents()
+  )
 
   "RequestRefNumSubmissionController" should {
     "handle valid submission" in {
@@ -66,9 +52,8 @@ class RequestRefNumSubmissionControllerSpec extends AnyWordAppSpec:
       when(mockRepository.insert(any[RequestReferenceNumberSubmission]))
         .thenReturn(Future.successful(acknowledged(TRUE)))
 
-      val jsonBody: JsValue      = Json.toJson(requestRefNumSubmission)
-      val fakeRequest            =
-        FakeRequest(POST, "/submit/2222").withBody(jsonBody).withHeaders("Authorization" -> "fake-token")
+      val jsonBody               = Json.toJson(requestRefNumSubmission)
+      val fakeRequest            = FakeRequest(POST, "/submit/2222").withBody(jsonBody).withHeaders("Authorization" -> "fake-token")
       val result: Future[Result] = controller.submit.apply(fakeRequest)
 
       status(result) shouldBe CREATED

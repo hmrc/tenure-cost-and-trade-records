@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsObject, JsSuccess, Json, Writes}
 import TiedForGoodsInformation.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class TiedForGoodsInformationSpec extends PlaySpec:
+class TiedForGoodsInformationSpec extends BaseSpec:
 
-  // Writes for TiedForGoodsInformation to handle the string serialization
   implicit val tiedForGoodsInformationWrites: Writes[TiedForGoodsInformation] = Writes {
     case TiedForGoodsInformationDetailsFullTie    => Json.toJson("fullTie")
     case TiedForGoodsInformationDetailsBeerOnly   => Json.toJson("beerOnly")
@@ -32,63 +31,63 @@ class TiedForGoodsInformationSpec extends PlaySpec:
   "TiedForGoodsInformation" should {
     "serialize and deserialize correctly for TiedForGoodsInformationDetailsFullTie" in {
       val tiedForGoods = TiedForGoodsInformationDetails(tiedGoodsDetails = TiedForGoodsInformationDetailsFullTie)
-
       val json = Json.toJson(tiedForGoods)
-      json.as[TiedForGoodsInformationDetails] mustBe tiedForGoods
+
+      json.as[TiedForGoodsInformationDetails] shouldBe tiedForGoods
     }
 
     "serialize and deserialize correctly for TiedForGoodsInformationDetailsBeerOnly" in {
       val tiedForGoods = TiedForGoodsInformationDetails(tiedGoodsDetails = TiedForGoodsInformationDetailsBeerOnly)
-
       val json = Json.toJson(tiedForGoods)
-      json.as[TiedForGoodsInformationDetails] mustBe tiedForGoods
+
+      json.as[TiedForGoodsInformationDetails] shouldBe tiedForGoods
     }
 
     "serialize and deserialize correctly for TiedForGoodsInformationDetailsPartialTie" in {
       val tiedForGoods = TiedForGoodsInformationDetails(tiedGoodsDetails = TiedForGoodsInformationDetailsPartialTie)
-
       val json = Json.toJson(tiedForGoods)
-      json.as[TiedForGoodsInformationDetails] mustBe tiedForGoods
+
+      json.as[TiedForGoodsInformationDetails] shouldBe tiedForGoods
     }
   }
 
   "TiedForGoodsInformationDetails" should {
     "deserialize from string 'fullTie' to TiedForGoodsInformationDetailsFullTie" in {
       val json = Json.obj("tiedGoodsDetails" -> "fullTie")
-      json.validate[TiedForGoodsInformationDetails] mustBe JsSuccess(
+
+      json.validate[TiedForGoodsInformationDetails] shouldBe JsSuccess(
         TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie)
       )
     }
 
     "deserialize from string 'beerOnly' to TiedForGoodsInformationDetailsBeerOnly" in {
       val json = Json.obj("tiedGoodsDetails" -> "beerOnly")
-      json.validate[TiedForGoodsInformationDetails] mustBe JsSuccess(
+
+      json.validate[TiedForGoodsInformationDetails] shouldBe JsSuccess(
         TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsBeerOnly)
       )
     }
 
     "deserialize from string 'partialTie' to TiedForGoodsInformationDetailsPartialTie" in {
       val json = Json.obj("tiedGoodsDetails" -> "partialTie")
-      json.validate[TiedForGoodsInformationDetails] mustBe JsSuccess(
+
+      json.validate[TiedForGoodsInformationDetails] shouldBe JsSuccess(
         TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsPartialTie)
       )
     }
 
     "serialize TiedForGoodsInformationDetailsFullTie to string 'fullTie'" in {
-      Json
-        .toJson(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie))
-        .as[JsObject] mustBe Json.obj("tiedGoodsDetails" -> "fullTie")
+      Json.toJson(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsFullTie))
+        .as[JsObject] shouldBe Json.obj("tiedGoodsDetails" -> "fullTie")
     }
 
     "serialize TiedForGoodsInformationDetailsBeerOnly to string 'beerOnly'" in {
-      Json
-        .toJson(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsBeerOnly))
-        .as[JsObject] mustBe Json.obj("tiedGoodsDetails" -> "beerOnly")
+      Json.toJson(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsBeerOnly))
+        .as[JsObject] shouldBe Json.obj("tiedGoodsDetails" -> "beerOnly")
     }
 
     "serialize TiedForGoodsInformationDetailsPartialTie to string 'partialTie'" in {
-      Json
-        .toJson(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsPartialTie))
-        .as[JsObject] mustBe Json.obj("tiedGoodsDetails" -> "partialTie")
+      Json.toJson(TiedForGoodsInformationDetails(TiedForGoodsInformationDetailsPartialTie))
+        .as[JsObject] shouldBe Json.obj("tiedGoodsDetails" -> "partialTie")
     }
   }

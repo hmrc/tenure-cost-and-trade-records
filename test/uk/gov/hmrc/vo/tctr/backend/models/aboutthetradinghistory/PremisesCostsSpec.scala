@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class PremisesCostsSpec extends PlaySpec:
+class PremisesCostsSpec extends BaseSpec:
 
   "PremisesCosts" should {
     "serialize and deserialize correctly" in {
@@ -27,13 +27,15 @@ class PremisesCostsSpec extends PlaySpec:
         1, 2, 3, 4, 5, 6
       )
       val json          = Json.toJson(premisesCosts: PremisesCosts)
-      json.as[PremisesCosts] mustBe premisesCosts
+
+      json.as[PremisesCosts] shouldBe premisesCosts
     }
 
     "have correct total value" in {
       val premisesCosts = PremisesCosts(
         1, 2, 3, 4, 5, 6
       )
-      premisesCosts.total mustBe 21
+
+      premisesCosts.total shouldBe 21
     }
   }

@@ -16,86 +16,64 @@
 
 package uk.gov.hmrc.vo.tctr.backend.submissionExport
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.testkit.{ImplicitSender, TestKit}
 import com.mongodb.client.result.DeleteResult
-import com.typesafe.config.ConfigFactory
-import org.scalatest.BeforeAndAfterAll
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.testkit.{ImplicitSender, TestKitBase}
 import org.scalatest.compatible.Assertion
-import org.scalatest.matchers.should
-import org.scalatest.wordspec.AnyWordSpecLike
-import play.api.Configuration
-import uk.gov.hmrc.vo.tctr.backend.testUtils.{ScheduleThatSchedulesImmediately5Times, SubmissionBuilder}
-import uk.gov.hmrc.vo.tctr.backend.base.MockitoExtendedSugar
 import uk.gov.hmrc.vo.tctr.backend.config.{AppConfig, ForTCTRAudit}
 import uk.gov.hmrc.vo.tctr.backend.connectors.{DeskproConnector, DeskproTicket}
 import uk.gov.hmrc.vo.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.vo.tctr.backend.repository.NotConnectedMongoRepository
+import uk.gov.hmrc.vo.tctr.backend.testUtils.{ScheduleThatSchedulesImmediately5Times, SubmissionBuilder}
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 
 import java.time.Clock
-import scala.concurrent.duration.*
-import scala.concurrent.{Await, ExecutionContext, Future}
+import java.util.concurrent.TimeUnit
+import scala.concurrent.Future
 import scala.language.postfixOps
 
-class ExportNotConnectedSubmissionsSpec
-  extends TestKit(ActorSystem.create("submissionExportTest"))
-  with ImplicitSender
-  with AnyWordSpecLike
-  with should.Matchers
-  with BeforeAndAfterAll
-  with MockitoExtendedSugar:
+class ExportNotConnectedSubmissionsSpec extends BaseAppSpec with TestKitBase with ImplicitSender:
 
-  given ExecutionContext = system.dispatcher
+  implicit val system: ActorSystem = inject[ActorSystem]
+
+  private val appConfig = inject[AppConfig]
 
   import TestData.*
 
-  def config(): AppConfig =
-    val config        = ConfigFactory.load("application.conf")
-    val configuration = Configuration(config)
-    AppConfig(configuration)
-
   "Given there are submissions to be exported" when {
-    val submissions = (1 to 200).map(SubmissionBuilder.createNotConnectedSubmission).toList
+    "The exporter is told to export the latest submission it does the following before publishing a completed event" should {
+      val submissions = (1 to 200).map(SubmissionBuilder.createNotConnectedSubmission).toList
 
-    when(repo.getSubmissions(eqTo(batchSize)))
-      .thenReturn(Future.successful(submissions.take(batchSize)), Future.successful(Seq.empty[NotConnectedSubmission]))
-    when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.unacknowledged()))
+      val repo = mock[NotConnectedMongoRepository]
+      when(repo.getSubmissions(eqTo(batchSize)))
+        .thenReturn(Future.successful(submissions.take(batchSize)), Future.successful(Seq.empty[NotConnectedSubmission]))
+      when(repo.removeById(any[String])).thenReturn(Future.successful(DeleteResult.unacknowledged()))
 
-    "the exporter is told to export the latest submission it does the following before publishing a completed event" should {
       system.eventStream.subscribe(self, classOf[SubmissionExportComplete])
-      Await.result(
-        ExportNotConnectedSubmissionsDeskpro(repo, deskproConnector, audit, Clock.systemDefaultZone(), config())
-          .exportNow(batchSize),
-        5 second
-      )
 
-      "It deletes each submission so that it is not submitted again" in
-        submissions.take(batchSize).foreach { s =>
-          val id = s.id
-          println(s"$id $batchSize")
-          verify(repo).removeById(same(id))
-        }
+      ExportNotConnectedSubmissionsDeskpro(repo, deskproConnector, audit, Clock.systemDefaultZone(), appConfig)
+          .exportNow(batchSize).futureValue
+
+      TimeUnit.SECONDS.sleep(3) // Wait for all submissions to be removed
+
+      "delete each submission so that it is not submitted again" in
+        submissions.take(batchSize).foreach(s => verify(repo).removeById(eqTo(s.id)))
     }
   }
 
-  override def afterAll(): Unit =
-    Await.ready(system.terminate(), 2 seconds)
-
   object TestData:
-    val repo: NotConnectedMongoRepository = mock[NotConnectedMongoRepository]
     val deskproConnector                  = StubDeskproConnector()
     val batchSize                         = 1
     val scheduler                         = ScheduleThatSchedulesImmediately5Times()
     val audit: ForTCTRAudit               = mock[ForTCTRAudit]
 
-class StubDeskproConnector extends DeskproConnector with should.Matchers:
+  class StubDeskproConnector extends DeskproConnector:
 
-  private var receivedTickets = Seq.empty[DeskproTicket]
+    private var receivedTickets = Seq.empty[DeskproTicket]
 
-  override def createTicket(ticket: DeskproTicket): Future[Long] = {
-    receivedTickets = receivedTickets :+ ticket
-    Future.successful(10)
-  }
+    override def createTicket(ticket: DeskproTicket): Future[Long] =
+      receivedTickets = receivedTickets :+ ticket
+      Future.successful(10)
 
-  def verifyReceived(s: Seq[DeskproTicket]): Assertion =
-    assert(receivedTickets === s)
+    def verifyReceived(s: Seq[DeskproTicket]): Assertion =
+      receivedTickets shouldBe s

@@ -18,37 +18,26 @@ package uk.gov.hmrc.vo.tctr.backend.controllers
 
 import com.codahale.metrics.Meter
 import com.mongodb.client.result.InsertOneResult.acknowledged
-import org.apache.pekko.util.Timeout
 import org.bson.BsonBoolean.TRUE
-import play.api.Application
 import play.api.http.Status.{CONFLICT, CREATED}
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.*
-import play.api.test.Helpers.{POST, status}
 import play.api.test.*
-import uk.gov.hmrc.internalauth.client.*
+import play.api.test.Helpers.*
 import uk.gov.hmrc.internalauth.client.test.BackendAuthComponentsStub
-import uk.gov.hmrc.vo.tctr.backend.base.AnyWordAppSpec
+import uk.gov.hmrc.vo.tctr.backend.config.AppConfig
 import uk.gov.hmrc.vo.tctr.backend.connectors.EmailConnector
 import uk.gov.hmrc.vo.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.vo.tctr.backend.models.{NotConnectedSubmission, NotConnectedSubmissionForm}
-import uk.gov.hmrc.vo.tctr.backend.repository.{NotConnectedRepository, SubmittedMongoRepo}
+import uk.gov.hmrc.vo.tctr.backend.repository.{NotConnectedRepository, SubmissionDraftRepo, SubmittedMongoRepo}
 import uk.gov.hmrc.vo.tctr.backend.schema.Address
 import uk.gov.hmrc.vo.tctr.backend.testUtils.AuthStubBehaviour
+import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 
 import java.time.Instant
-import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
-import scala.concurrent.duration.DurationInt
 
-class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec:
-
-  given Timeout = 5.seconds
-
-  protected val backendAuthComponentsStub: BackendAuthComponents =
-    BackendAuthComponentsStub(AuthStubBehaviour)(using Helpers.stubControllerComponents(), ExecutionContext.Implicits.global)
+class NotConnectedSubmissionControllerSpec extends BaseAppSpec:
 
   private val mockRepository         = mock[NotConnectedRepository]
   private val mockSubmittedMongoRepo = mock[SubmittedMongoRepo]
@@ -69,17 +58,16 @@ class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec:
     false
   )
 
-  override def fakeApplication(): Application = GuiceApplicationBuilder()
-    .overrides(
-      bind[NotConnectedRepository].toInstance(mockRepository),
-      bind[SubmittedMongoRepo].toInstance(mockSubmittedMongoRepo),
-      bind[EmailConnector].toInstance(mockEmailConnector),
-      bind[MetricsHandler].toInstance(mockMetricsHandler),
-      bind[BackendAuthComponents].toInstance(backendAuthComponentsStub)
-    )
-    .build()
-
-  private val controller = inject[NotConnectedSubmissionController]
+  private val controller = NotConnectedSubmissionController(
+    inject[AppConfig],
+    mockRepository,
+    mockSubmittedMongoRepo,
+    inject[SubmissionDraftRepo],
+    mockEmailConnector,
+    BackendAuthComponentsStub(AuthStubBehaviour)(using stubControllerComponents(), ec),
+    mockMetricsHandler,
+    stubControllerComponents()
+  )
 
   "NotConnectedSubmissionController" should {
     "handle valid submission" in {
@@ -97,11 +85,9 @@ class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec:
       val result: Future[Result] = controller.submit("2222").apply(fakeRequest)
 
       status(result) shouldBe CREATED
-
     }
 
     "return Conflict for a duplicate submission" in {
-
       when(mockSubmittedMongoRepo.hasBeenSubmitted("2222")).thenReturn(Future.successful(true))
 
       val jsonBody: JsValue      = Json.toJson(submission)
@@ -111,5 +97,4 @@ class NotConnectedSubmissionControllerSpec extends AnyWordAppSpec:
 
       status(result) shouldBe CONFLICT
     }
-
   }

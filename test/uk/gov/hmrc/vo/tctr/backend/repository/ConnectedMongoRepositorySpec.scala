@@ -16,30 +16,44 @@
 
 package uk.gov.hmrc.vo.tctr.backend.repository
 
+import org.mongodb.scala.SingleObservableFuture
+import org.mongodb.scala.bson.collection.immutable.Document
+import uk.gov.hmrc.vo.tctr.backend.models.SensitiveConnectedSubmission
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.db.MongoDBAppSpec
+
 /**
   * @author Yuriy Tumakha
   */
-class ConnectedMongoRepositorySpec extends MongoSpecBase:
+class ConnectedMongoRepositorySpec extends MongoDBAppSpec[SensitiveConnectedSubmission, ConnectedMongoRepository] with TestObjects:
 
-  private val submissionDraftFindId = "99996010004"
+  mongoRepository.collection.deleteMany(Document()).toFuture().futureValue
 
-  private val repo = inject[ConnectedMongoRepository]
+  private def createConnectedSubmission(): Unit =
+    mongoRepository.insert(prefilledConnectedSubmission).futureValue
 
-  repo.insert(prefilledConnectedSubmission).futureValue
+  "ConnectedMongoRepository" should {
+    "find ConnectedSubmission by correct id" in {
+      createConnectedSubmission()
 
-  "ConnectedMongoRepository" should "find ConnectedSubmission by correct id" in {
+      mongoRepository.findByReference(referenceNumber).futureValue shouldBe Some(prefilledConnectedSubmission)
+    }
 
-    repo.findByReference(submissionDraftFindId).futureValue shouldBe Some(prefilledConnectedSubmission)
-  }
+    "return None by unknown id" in {
+      createConnectedSubmission()
 
-  it should "return None by unknown id" in {
-    repo.findByReference("UNKNOWN_ID").futureValue shouldBe None
-  }
+      mongoRepository.findByReference("UNKNOWN_ID").futureValue shouldBe None
+    }
+  
+    "return a sequence of ConnectedSubmissions" in {
+      createConnectedSubmission()
 
-  it should "return a sequence of ConnectedSubmissions" in {
-    repo.getSubmissions(1).futureValue shouldBe Seq(prefilledConnectedSubmission)
-  }
+      mongoRepository.getSubmissions(1).futureValue shouldBe Seq(prefilledConnectedSubmission)
+    }
+  
+    "return number of ConnectedSubmissions" in {
+      createConnectedSubmission()
 
-  it should "return number of ConnectedSubmissions" in {
-    repo.count.futureValue shouldBe 1
+      mongoRepository.count.futureValue shouldBe 1
+    }
   }

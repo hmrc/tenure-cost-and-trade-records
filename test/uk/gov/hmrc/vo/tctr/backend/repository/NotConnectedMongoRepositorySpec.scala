@@ -17,47 +17,40 @@
 package uk.gov.hmrc.vo.tctr.backend.repository
 
 import org.mongodb.scala.SingleObservableFuture
-import org.mongodb.scala.model.{Filters, FindOneAndReplaceOptions}
+import org.mongodb.scala.model.{Filters, ReplaceOptions}
 import uk.gov.hmrc.vo.tctr.backend.models.SensitiveNotConnectedSubmission
-import uk.gov.hmrc.vo.tctr.backend.testUtils.CustomMatchers
-
-import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
+import uk.gov.hmrc.vo.tctr.backend.testUtils.{CustomMatchers, TestObjects}
+import uk.gov.hmrc.vo.unit.test.db.MongoDBAppSpec
 
 /**
   * @author Yuriy Tumakha
   */
-class NotConnectedMongoRepositorySpec extends MongoSpecBase with CustomMatchers:
+class NotConnectedMongoRepositorySpec extends MongoDBAppSpec[SensitiveNotConnectedSubmission, NotConnectedMongoRepository] 
+  with TestObjects with CustomMatchers:
 
-  private val submissionDraftFindId = referenceNumberNotConnected
+  override def beforeEach(): Unit =
+    mongoRepository.collection
+      .replaceOne(
+        Filters.equal("_id", referenceNumberNotConnected),
+        SensitiveNotConnectedSubmission(notConnectedSubmission),
+        ReplaceOptions().upsert(true)
+      )
+      .toFuture().futureValue
 
-  private val repo = inject[NotConnectedMongoRepository]
+  "NotConnectedMongoRepository" should {
+    "find NotConnectedSubmission by correct id" in {
+      mongoRepository.findById(referenceNumberNotConnected).futureValue should beEqualToIgnoringMillis(Some(notConnectedSubmission))
+    }
 
-  override def beforeAll(): Unit =
-    super.beforeAll()
-    Await.result(
-      repo.collection
-        .findOneAndReplace(
-          Filters.equal("_id", submissionDraftFindId),
-          SensitiveNotConnectedSubmission(notConnectedSubmission),
-          FindOneAndReplaceOptions().upsert(true)
-        )
-        .toFuture(),
-      2.seconds
-    )
+    "return None by unknown id" in {
+      mongoRepository.findById("UNKNOWN_ID").futureValue shouldBe None
+    }
 
-  "NotConnectedMongoRepository" should "find NotConnectedSubmission by correct id" in {
-    repo.findById(submissionDraftFindId).futureValue should beEqualToIgnoringMillis(Some(notConnectedSubmission))
-  }
+    "return a sequence of NotConnectedSubmissions" in {
+      mongoRepository.getSubmissions(1).futureValue should beSeqEqualToIgnoringMillisSeq(notConnectedSubmission)
+    }
 
-  it should "return None by unknown id" in {
-    repo.findById("UNKNOWN_ID").futureValue shouldBe None
-  }
-
-  it should "return a sequence of NotConnectedSubmissions" in {
-    repo.getSubmissions(1).futureValue should beSeqEqualToIgnoringMillisSeq(notConnectedSubmission)
-  }
-
-  it should "return number of NotConnectedSubmissions" in {
-    repo.count.futureValue shouldBe 1
+    "return number of NotConnectedSubmissions" in {
+      mongoRepository.count.futureValue shouldBe 1
+    }
   }

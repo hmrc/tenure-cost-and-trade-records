@@ -16,17 +16,19 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.connectiontoproperty
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json
-import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
 /**
   * @author Yuriy Tumakha
   */
-class StillConnectedDetailsSpec extends AnyFlatSpec with Matchers with FakeObjects:
+class StillConnectedDetailsSpec extends BaseSpec with TestObjects:
 
-  "StillConnectedDetails" should "be serialized/deserialized from JSON" in {
-    val json = Json.toJson(prefilledStillConnectedDetailsYesToAll)
-    json.as[StillConnectedDetails] shouldBe prefilledStillConnectedDetailsYesToAll
+  "StillConnectedDetails" should {
+    "be serialized/deserialized from JSON" in {
+      val json = Json.toJson(prefilledStillConnectedDetailsYesToAll)
+
+      json.as[StillConnectedDetails] shouldBe prefilledStillConnectedDetailsYesToAll
+    }
   }

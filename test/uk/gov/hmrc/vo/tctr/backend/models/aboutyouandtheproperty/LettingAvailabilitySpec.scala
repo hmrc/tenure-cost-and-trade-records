@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
 import java.time.LocalDate
 
-class LettingAvailabilitySpec extends PlaySpec:
+class LettingAvailabilitySpec extends BaseSpec:
 
   "LettingAvailability" should {
     "serialize and deserialize correctly" in {
@@ -29,8 +29,8 @@ class LettingAvailabilitySpec extends PlaySpec:
         financialYearEnd = LocalDate.of(2024, 3, 31),
         numberOfNights = 120
       )
-
       val json = Json.toJson(lettingAvailability)
-      json.as[LettingAvailability] mustBe lettingAvailability
+
+      json.as[LettingAvailability] shouldBe lettingAvailability
     }
   }

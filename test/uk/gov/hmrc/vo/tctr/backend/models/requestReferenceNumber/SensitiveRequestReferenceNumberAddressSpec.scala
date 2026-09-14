@@ -16,15 +16,13 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.requestReferenceNumber
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import uk.gov.hmrc.crypto.Sensitive.SensitiveString
 import uk.gov.hmrc.vo.tctr.backend.testUtils.SensitiveTestHelper
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class SensitiveRequestReferenceNumberAddressSpec extends AnyWordSpecLike with Matchers with SensitiveTestHelper:
+class SensitiveRequestReferenceNumberAddressSpec extends BaseSpec with SensitiveTestHelper:
 
   "SensitiveReferenceNumber" should {
-
     "encrypt and decrypt address fields correctly" in {
       val originalDetails = RequestReferenceNumber(
         requestReferenceNumberBusinessTradingName = "Business name",
@@ -47,5 +45,4 @@ class SensitiveRequestReferenceNumberAddressSpec extends AnyWordSpecLike with Ma
       // Ensure the sensitive fields are decrypted correctly
       sensitiveAddress.decryptedValue shouldBe originalDetails
     }
-
   }

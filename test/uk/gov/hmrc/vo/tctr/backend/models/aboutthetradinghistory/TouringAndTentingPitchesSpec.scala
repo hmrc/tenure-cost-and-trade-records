@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.vo.tctr.backend.models.common.AnswersYesNo.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class TouringAndTentingPitchesSpec extends PlaySpec:
+class TouringAndTentingPitchesSpec extends BaseSpec:
 
   "TouringAndTentingPitches" should {
     "serialize and deserialize correctly with all fields" in {
@@ -31,6 +31,6 @@ class TouringAndTentingPitchesSpec extends PlaySpec:
       )
       val json                     = Json.toJson(touringAndTentingPitches: TouringAndTentingPitches)
 
-      json.as[TouringAndTentingPitches] mustBe touringAndTentingPitches
+      json.as[TouringAndTentingPitches] shouldBe touringAndTentingPitches
     }
   }

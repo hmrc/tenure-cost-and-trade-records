@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsSuccess, Json, Writes}
 import RenewablesPlantType.*
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class RenewablesPlantSpec extends PlaySpec:
+class RenewablesPlantSpec extends BaseSpec:
 
   implicit val renewablesPlantDetailsWrites: Writes[RenewablesPlantType] = Writes {
     case Intermittent => Json.toJson("intermittent")
@@ -30,19 +30,21 @@ class RenewablesPlantSpec extends PlaySpec:
   "RenewablesPlantDetails" should {
     "deserialize from string 'intermittent' to Intermittent" in {
       val json = Json.toJson("intermittent")
-      json.validate[RenewablesPlantType] mustBe JsSuccess(Intermittent)
+
+      json.validate[RenewablesPlantType] shouldBe JsSuccess(Intermittent)
     }
 
     "deserialize from string 'baseload' to BaseLoad" in {
       val json = Json.toJson("baseload")
-      json.validate[RenewablesPlantType] mustBe JsSuccess(Baseload)
+
+      json.validate[RenewablesPlantType] shouldBe JsSuccess(Baseload)
     }
 
     "serialize Intermittent to string 'intermittent'" in {
-      Json.toJson(Intermittent)(using renewablesPlantDetailsWrites).as[String] mustBe "intermittent"
+      Json.toJson(Intermittent)(using renewablesPlantDetailsWrites).as[String] shouldBe "intermittent"
     }
 
     "serialize BaseLoad to string 'baseload'" in {
-      Json.toJson(Baseload)(using renewablesPlantDetailsWrites).as[String] mustBe "baseload"
+      Json.toJson(Baseload)(using renewablesPlantDetailsWrites).as[String] shouldBe "baseload"
     }
   }

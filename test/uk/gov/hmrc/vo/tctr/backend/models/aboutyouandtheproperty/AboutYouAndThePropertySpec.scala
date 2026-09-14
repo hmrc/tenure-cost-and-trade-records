@@ -16,15 +16,16 @@
 
 package uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty
 
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.Json
-import uk.gov.hmrc.vo.tctr.backend.testUtils.FakeObjects
+import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
+import uk.gov.hmrc.vo.unit.test.BaseSpec
 
-class AboutYouAndThePropertySpec extends PlaySpec with FakeObjects:
+class AboutYouAndThePropertySpec extends BaseSpec with TestObjects:
 
   "AboutYouAndTheProperty" should {
     "serialize and deserialize correctly" in {
       val json = Json.toJson(prefilledAboutYouAndTheProperty)
-      json.as[AboutYouAndTheProperty] mustBe prefilledAboutYouAndTheProperty
+
+      json.as[AboutYouAndTheProperty] shouldBe prefilledAboutYouAndTheProperty
     }
   }
