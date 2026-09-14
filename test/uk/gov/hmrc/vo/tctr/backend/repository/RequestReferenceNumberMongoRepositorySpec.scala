@@ -25,7 +25,7 @@ class RequestReferenceNumberMongoRepositorySpec extends MongoDBAppSpec[Sensitive
 
   override def beforeEach(): Unit =
     super.beforeEach()
-    insert(SensitiveRequestReferenceNumberSubmission(requestRefNumSubmission))
+    mongoRepository.insert(requestRefNumSubmission).futureValue
 
   "RequestReferenceNumberMongoRepository" should {
     "find RequestReferenceNumberSubmission by correct id" in {

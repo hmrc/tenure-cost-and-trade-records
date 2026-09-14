@@ -28,7 +28,7 @@ class NotConnectedMongoRepositorySpec extends MongoDBAppSpec[SensitiveNotConnect
 
   override def beforeEach(): Unit =
     super.beforeEach()
-    insert(SensitiveNotConnectedSubmission(notConnectedSubmission))
+    mongoRepository.insert(notConnectedSubmission).futureValue
 
   "NotConnectedMongoRepository" should {
     "find NotConnectedSubmission by correct id" in {
