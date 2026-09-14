@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.vo.tctr.backend.repository
 
-import org.mongodb.scala.SingleObservableFuture
-import org.mongodb.scala.model.{Filters, ReplaceOptions}
 import uk.gov.hmrc.vo.tctr.backend.models.SensitiveNotConnectedSubmission
 import uk.gov.hmrc.vo.tctr.backend.testUtils.{CustomMatchers, TestObjects}
 import uk.gov.hmrc.vo.unit.test.db.MongoDBAppSpec
@@ -29,13 +27,8 @@ class NotConnectedMongoRepositorySpec extends MongoDBAppSpec[SensitiveNotConnect
   with TestObjects with CustomMatchers:
 
   override def beforeEach(): Unit =
-    mongoRepository.collection
-      .replaceOne(
-        Filters.equal("_id", referenceNumberNotConnected),
-        SensitiveNotConnectedSubmission(notConnectedSubmission),
-        ReplaceOptions().upsert(true)
-      )
-      .toFuture().futureValue
+    super.beforeEach()
+    mongoRepository.insert(notConnectedSubmission).futureValue
 
   "NotConnectedMongoRepository" should {
     "find NotConnectedSubmission by correct id" in {

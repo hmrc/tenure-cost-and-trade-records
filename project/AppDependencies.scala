@@ -10,7 +10,7 @@ private object AppDependencies {
   private val ibmICUVersion             = "78.3"
 
   // Test dependencies
-  private val voTestVersion = "0.6.0"
+  private val voTestVersion = "0.7.0"
 
   private val compile = Seq(
     "uk.gov.hmrc"       %% "bootstrap-backend-play-30"    % bootstrapVersion,
