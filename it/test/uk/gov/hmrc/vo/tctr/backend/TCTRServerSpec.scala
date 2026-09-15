@@ -22,16 +22,22 @@ import play.api.libs.ws.writeableOf_JsValue
 import play.api.test.Helpers.*
 import uk.gov.hmrc.vo.integration.test.BaseServerSpec
 
+import java.util.UUID
+
 /**
   * @author Yuriy Tumakha
   */
 abstract class TCTRServerSpec extends BaseServerSpec:
 
+  private val internalAuthPort: Int = 8470
+
+  private val internalAuthBaseUrl: String = s"http://localhost:$internalAuthPort"
+
+  val clientAuthToken: String = UUID.randomUUID.toString
+
   val backendRoot: String = s"/${configuration.get[String]("appName")}"
 
-  private val internalAuthBaseUrl = "http://localhost:8470"
-
-  protected def authTokenIsValid(token: String): Boolean =
+  private def authTokenIsValid(token: String): Boolean =
     val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
       .withHttpHeaders("Authorization" -> token)
       .get()
@@ -39,7 +45,7 @@ abstract class TCTRServerSpec extends BaseServerSpec:
 
     response.status == OK
 
-  protected def createClientAuthToken(token: String): Assertion =
+  private def createClientAuthToken(token: String): Assertion =
     val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
       .post(
         Json.obj(
@@ -57,3 +63,17 @@ abstract class TCTRServerSpec extends BaseServerSpec:
       .futureValue
 
     response.status shouldBe CREATED
+
+  def refreshAuthToken(): Unit =
+    if !authTokenIsValid(clientAuthToken) then createClientAuthToken(clientAuthToken)
+
+  def checkInternalAuthServiceRefreshToken(): Unit =
+    "INTERNAL_AUTH service" should {
+      s"run on port $internalAuthPort and refresh auth token" in {
+        val response = wsClient.url(s"$internalAuthBaseUrl/ping/ping").get().futureValue
+
+        response.status shouldBe OK
+
+        refreshAuthToken()
+      }
+    }

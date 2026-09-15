@@ -16,34 +16,38 @@
 
 package uk.gov.hmrc.vo.tctr.backend.testUtils
 
-import uk.gov.hmrc.vo.tctr.backend.models.lettingHistory
 import uk.gov.hmrc.vo.tctr.backend.models.Form6010.{DayMonthsDuration, MonthsYearDuration}
+import uk.gov.hmrc.vo.tctr.backend.models.aboutYourLeaseOrTenure.*
 import uk.gov.hmrc.vo.tctr.backend.models.aboutYourLeaseOrTenure.CurrentRentBasedOn.*
 import uk.gov.hmrc.vo.tctr.backend.models.aboutYourLeaseOrTenure.CurrentRentFixed.*
 import uk.gov.hmrc.vo.tctr.backend.models.aboutYourLeaseOrTenure.IncludedInYourRentInformation.*
 import uk.gov.hmrc.vo.tctr.backend.models.aboutYourLeaseOrTenure.MethodToFixCurrentRent.*
-import uk.gov.hmrc.vo.tctr.backend.models.aboutYourLeaseOrTenure.*
-import uk.gov.hmrc.vo.tctr.backend.models.aboutfranchisesorlettings.TypeOfIncome.*
 import uk.gov.hmrc.vo.tctr.backend.models.aboutfranchisesorlettings.*
-import uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory.Caravans.CaravansPitchFeeServices.{Electricity, Other, WaterAndDrainage}
+import uk.gov.hmrc.vo.tctr.backend.models.aboutfranchisesorlettings.TypeOfIncome.*
 import uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory.*
+import uk.gov.hmrc.vo.tctr.backend.models.aboutthetradinghistory.Caravans.CaravansPitchFeeServices.{Electricity, Other, WaterAndDrainage}
+import uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty.*
 import uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty.CurrentPropertyUsed.*
 import uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty.RenewablesPlantType.*
 import uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty.TiedForGoodsInformation.*
-import uk.gov.hmrc.vo.tctr.backend.models.aboutyouandtheproperty.*
 import uk.gov.hmrc.vo.tctr.backend.models.accommodation.*
 import uk.gov.hmrc.vo.tctr.backend.models.additionalinformation.AdditionalInformation
 import uk.gov.hmrc.vo.tctr.backend.models.common.AnswersYesNo.*
 import uk.gov.hmrc.vo.tctr.backend.models.common.{ContactDetails, ContactDetailsAddress}
+import uk.gov.hmrc.vo.tctr.backend.models.connectiontoproperty.*
 import uk.gov.hmrc.vo.tctr.backend.models.connectiontoproperty.AddressConnectionType.*
 import uk.gov.hmrc.vo.tctr.backend.models.connectiontoproperty.ConnectionToProperty.*
-import uk.gov.hmrc.vo.tctr.backend.models.connectiontoproperty.*
-import uk.gov.hmrc.vo.tctr.backend.models.lettingHistory.{AdvertisingDetail, IntendedDetail, LettingHistory, LocalPeriod, OccupierDetail, ResidentDetail}
+import uk.gov.hmrc.vo.tctr.backend.models.lettingHistory.*
 import uk.gov.hmrc.vo.tctr.backend.models.requestReferenceNumber.{RequestReferenceNumberAddress, RequestReferenceNumberContactDetails}
-import uk.gov.hmrc.vo.tctr.backend.models.{ConnectedSubmission, NotConnectedSubmission, RequestReferenceNumberSubmission}
+import uk.gov.hmrc.vo.tctr.backend.models.{ConnectedSubmission, NotConnectedSubmission, RequestReferenceNumberSubmission, lettingHistory}
 import uk.gov.hmrc.vo.tctr.backend.schema.Address
 
 import java.time.{Instant, LocalDate}
+import scala.language.implicitConversions
+
+given toOpt[A]: Conversion[A, Option[A]]                      = Some(_)
+given intToBigDecimal: Conversion[Int, BigDecimal]            = BigDecimal(_)
+given intToBigDecimalOpt: Conversion[Int, Option[BigDecimal]] = intToBigDecimal(_)
 
 trait TestObjects:
 
@@ -54,8 +58,7 @@ trait TestObjects:
   val forType6015: String                 = "FOR6015"
   val forType6016: String                 = "FOR6016"
 
-  val prefilledAddress: Address =
-    Address("001", Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
+  val prefilledAddress: Address = Address("001", Some("GORING ROAD"), "GORING-BY-SEA, WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
   val token: String             = "Basic OTk5OTYwMTAwMDQ6U2Vuc2l0aXZlKC4uLik="
 
   val prefilledContactDetails: ContactDetails = ContactDetails("1234567890", "TestEmail@gmail.com")

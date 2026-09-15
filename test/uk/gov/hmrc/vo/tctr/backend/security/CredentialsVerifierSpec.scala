@@ -37,7 +37,7 @@ class CredentialsVerifierSpec extends MongoDBAppSpec[RefNum, SubmittedMongoRepo]
   "Credentials Verifier" should {
     "lockout an IP address after the maximum number of failed login attempts is exceeded" in
       forAll(loginAttemptLengths) { (attempts: Int) =>
-        val config = VerifierConfig(attempts, 1 hour, 1 hour, true, voIP)
+        val config = VerifierConfig(attempts, 1 hour, 1 hour, true, voIP.get)
         val verifier = verifierWith(config, new SystemClock)
         Range.Int.inclusive(1, attempts, 1).foreach { n =>
           verifier.verify(refNum, postcode, ip).futureValue shouldBe InvalidCredentials(attempts - n)
@@ -46,7 +46,7 @@ class CredentialsVerifierSpec extends MongoDBAppSpec[RefNum, SubmittedMongoRepo]
       }
 
     "allow further login attempts after the lockout timeframe has elapsed" in {
-      val config = VerifierConfig(maxFailedLoginAttempts = 1, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
+      val config = VerifierConfig(maxFailedLoginAttempts = 1, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP.get)
       val clock = StubClock()
       val verifier = verifierWith(config, clock)
 
@@ -61,7 +61,7 @@ class CredentialsVerifierSpec extends MongoDBAppSpec[RefNum, SubmittedMongoRepo]
     }
 
     "not lockout an IP address if the login attempts do not occur within a single session" in {
-      val config = VerifierConfig(maxFailedLoginAttempts = 3, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
+      val config = VerifierConfig(maxFailedLoginAttempts = 3, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP.get)
       val clock = StubClock()
       val verifier = verifierWith(config, clock)
 
@@ -74,7 +74,7 @@ class CredentialsVerifierSpec extends MongoDBAppSpec[RefNum, SubmittedMongoRepo]
     }
 
     "fail when the IP address is missing" in {
-      val config = VerifierConfig(maxFailedLoginAttempts = 3, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
+      val config = VerifierConfig(maxFailedLoginAttempts = 3, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP.get)
       val clock = StubClock()
       val verifier = verifierWith(config, clock)
 
@@ -82,7 +82,7 @@ class CredentialsVerifierSpec extends MongoDBAppSpec[RefNum, SubmittedMongoRepo]
     }
 
     "not verify IP addresses when account lockout is disabled" in {
-      val config = VerifierConfig(maxFailedLoginAttempts = 2, lockoutWindow = 24 hours, sessionWindow = 1 hour, false, voIP)
+      val config = VerifierConfig(maxFailedLoginAttempts = 2, lockoutWindow = 24 hours, sessionWindow = 1 hour, false, voIP.get)
       val clock = StubClock()
       val verifier = verifierWith(config, clock)
 
@@ -92,7 +92,7 @@ class CredentialsVerifierSpec extends MongoDBAppSpec[RefNum, SubmittedMongoRepo]
     }
 
     "not apply account lockout to the VO IP address" in {
-      val config = VerifierConfig(maxFailedLoginAttempts = 2, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP)
+      val config = VerifierConfig(maxFailedLoginAttempts = 2, lockoutWindow = 24 hours, sessionWindow = 1 hour, true, voIP.get)
       val clock = StubClock()
       val verifier = verifierWith(config, clock)
 
@@ -105,9 +105,9 @@ class CredentialsVerifierSpec extends MongoDBAppSpec[RefNum, SubmittedMongoRepo]
   object TestData:
     val loginAttemptLengths: TableFor1[Int] = Table("attempts", 1, 2, 5, 10, 20, 100)
     val refNum                              = "1234567358"
-    val ip                                  = "192.168.44.66"
+    val ip                                  = Some("192.168.44.66")
     val postcode                            = "CF32 4RT"
-    val voIP                                = "192.168.44.67"
+    val voIP                                = Some("192.168.44.67")
 
     def verifierWith(config: VerifierConfig, clock: Clock): IPBlockingCredentialsVerifier =
       val emptyCredentials = StubCredentialsRepository()
