@@ -22,8 +22,6 @@ import play.api.libs.json.{JsNumber, Json}
 import play.api.libs.ws.{writeableOf_JsValue, writeableOf_String}
 import uk.gov.hmrc.vo.tctr.backend.repository.MongoSubmissionDraftRepo
 
-import java.util.UUID
-
 class SaveAsDraftSpec extends TCTRServerSpec:
 
   private val submissionDraftFindId       = "SaveAsDraftITestFind"
@@ -31,15 +29,11 @@ class SaveAsDraftSpec extends TCTRServerSpec:
   private val submissionDraftDeleteId     = "SaveAsDraftITestDelete"
   private val submissionDraftBadRequestId = "SaveAsDraftITestBadRequest"
   private val submissionDraftRepo         = inject[MongoSubmissionDraftRepo]
-  private val clientAuthToken             = UUID.randomUUID.toString
 
-  override def beforeAll(): Unit =
-    submissionDraftRepo.save(submissionDraftFindId, Json.obj())
-    submissionDraftRepo.save(submissionDraftDeleteId, Json.obj("a" -> "b"))
+  submissionDraftRepo.save(submissionDraftFindId, Json.obj())
+  submissionDraftRepo.save(submissionDraftDeleteId, Json.obj("a" -> "b"))
 
-  override def beforeEach(): Unit =
-    super.beforeEach()
-    if !authTokenIsValid(clientAuthToken) then createClientAuthToken(clientAuthToken)
+  checkInternalAuthServiceRefreshToken()
 
   "SaveAsDraft GET endpoint" should {
     "return 200 for correct SubmissionDraft.id" in {
