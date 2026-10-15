@@ -27,14 +27,18 @@ import java.time.temporal.ChronoUnit.{DAYS, SECONDS}
   */
 case class Submitted(
   reference: String,
-  submittedOn: Instant
+  submittedOn: Instant,
+  expireOn: Instant
 )
 
 object Submitted:
   implicit val format: OFormat[Submitted] = Json.format
 
-  def apply(ref: RefNum): Submitted =
+  def apply(ref: RefNum): Submitted = {
+    val createdAt = ref.createdAt.truncatedTo(SECONDS)
     Submitted(
       ref.referenceNumber,
-      ref.createdAt.truncatedTo(SECONDS).plus(100, DAYS)
+      createdAt,
+      createdAt.plus(100, DAYS)
     )
+  }
