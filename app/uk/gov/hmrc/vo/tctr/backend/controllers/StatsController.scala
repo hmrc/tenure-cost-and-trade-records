@@ -21,16 +21,19 @@ import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.*
 import play.api.mvc.*
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.vo.tctr.backend.repository.{CredentialsMongoRepo, MongoSubmissionDraftRepo}
+import uk.gov.hmrc.vo.tctr.backend.repository.{CredentialsMongoRepo, MongoSubmissionDraftRepo, SubmittedMongoRepo}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 /**
   * Read-only stats controller.
+  *
+  * @author Yuriy Tumakha
   */
 class StatsController @Inject() (
   credentialsRepo: CredentialsMongoRepo,
+  submittedRepo: SubmittedMongoRepo,
   submissionDraftRepo: MongoSubmissionDraftRepo,
   cc: ControllerComponents
 )(using ec: ExecutionContext
@@ -54,3 +57,10 @@ class StatsController @Inject() (
       Ok(Json.toJson(draftsExpirationQueue))
     }
   }
+
+  def submittedReferences(page: Int): Action[AnyContent] = Action.async {
+    submittedRepo.getSubmittedReferences(page).map { submittedResult =>
+      Ok(Json.toJson(submittedResult))
+    }
+  }
+
