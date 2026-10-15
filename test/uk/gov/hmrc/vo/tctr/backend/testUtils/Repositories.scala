@@ -44,8 +44,6 @@ class InMemoryFailedLoginsRepo extends FailedLoginsRepo:
 class StubCredentialsRepository extends CredentialsRepo:
   override def validate(refNum: String, postcode: String): Future[Option[FORCredentials]] = Future.successful(None)
 
-  override def bulkInsert(fs: Seq[FORCredentials]): Future[InsertManyResult] = ???
-
   override def findById(refNum: String): Future[Option[FORCredentials]] = ???
 
   def count: Future[Long] = Future.successful(3)

@@ -12,6 +12,7 @@ PUT           /submissions/connected/:refNum                    uk.gov.hmrc.vo.t
 
 PUT           /submissions/requestRefNum                        uk.gov.hmrc.vo.tctr.backend.controllers.RequestRefNumSubmissionController.submit
 
+GET           /stats/credentials                                uk.gov.hmrc.vo.tctr.backend.controllers.StatsController.credentials(page: Int ?= 1)
 GET           /stats/drafts-per-version                         uk.gov.hmrc.vo.tctr.backend.controllers.StatsController.draftsPerVersion
 GET           /stats/drafts-expiration-queue                    uk.gov.hmrc.vo.tctr.backend.controllers.StatsController.draftsExpirationQueue
 

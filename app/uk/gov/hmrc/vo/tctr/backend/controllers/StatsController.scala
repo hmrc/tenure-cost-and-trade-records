@@ -21,7 +21,7 @@ import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.*
 import play.api.mvc.*
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.vo.tctr.backend.repository.MongoSubmissionDraftRepo
+import uk.gov.hmrc.vo.tctr.backend.repository.{CredentialsMongoRepo, MongoSubmissionDraftRepo}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -30,11 +30,18 @@ import scala.concurrent.ExecutionContext
   * Read-only stats controller.
   */
 class StatsController @Inject() (
+  credentialsRepo: CredentialsMongoRepo,
   submissionDraftRepo: MongoSubmissionDraftRepo,
   cc: ControllerComponents
 )(using ec: ExecutionContext
 ) extends BackendController(cc)
   with Logging:
+
+  def credentials(page: Int): Action[AnyContent] = Action.async {
+    credentialsRepo.getCredentials(page).map { credentialsResult =>
+      Ok(Json.toJson(credentialsResult))
+    }
+  }
 
   def draftsPerVersion: Action[AnyContent] = Action.async {
     submissionDraftRepo.getDraftsPerVersion.map { draftsPerVersion =>
