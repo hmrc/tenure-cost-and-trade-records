@@ -150,13 +150,25 @@ class CredentialsMongoRepo @Inject() (
   def getCredentials(page: Int): Future[CredentialsResult] =
     val p = Math.min(Math.max(page, 1), CredentialsResult.maxPage)
     val pageSize = CredentialsResult.pageSize
+
+    val projectedCollection = collection.withDocumentClass[BsonDocument]()
+
     for
       total <- collection.countDocuments().toFuture()
-      forCredentials <- collection.find()
+      docs <- projectedCollection.find()
+        .projection(Projections.include("forNumber", "forType", "createdAt"))
         .sort(Sorts.ascending("createdAt", "_id"))
         .skip((p - 1) * pageSize)
         .limit(pageSize)
         .toFuture()
     yield
-      val credentials = forCredentials.map(Credential(_))
+      val credentials = docs.map { doc =>
+        val createdAt = Option(doc.get("createdAt"))
+          .filterNot(_.isNull)
+          .collect {
+            case date: BsonDateTime => Instant.ofEpochMilli(date.getValue)
+          }
+
+        Credential(doc.getString("forNumber").getValue, doc.getString("forType").getValue, createdAt)
+      }
       CredentialsResult(credentials, total, p, pageSize)

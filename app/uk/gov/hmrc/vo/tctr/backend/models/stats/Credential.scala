@@ -17,7 +17,6 @@
 package uk.gov.hmrc.vo.tctr.backend.models.stats
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.vo.tctr.backend.models.FORCredentials
 import uk.gov.hmrc.vo.tctr.backend.repository.CredentialsMongoRepo.defaultExpireAfterDays
 
 import java.time.Instant
@@ -35,9 +34,9 @@ case class Credential(
 object Credential:
   implicit val format: OFormat[Credential] = Json.format
 
-  def apply(c: FORCredentials): Credential =
+  def apply(reference: String, forType: String, createdAt: Option[Instant]): Credential =
     Credential(
-      c.forNumber,
-      c.forType,
-      c.createdAt.truncatedTo(SECONDS).plus(defaultExpireAfterDays, DAYS)
+      reference,
+      forType,
+      createdAt.map(_.plus(defaultExpireAfterDays, DAYS)).getOrElse(Instant.EPOCH).truncatedTo(SECONDS)
     )
