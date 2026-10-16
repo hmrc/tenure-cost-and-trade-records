@@ -25,6 +25,7 @@ import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.vo.tctr.backend.config.AppConfig
 import uk.gov.hmrc.vo.tctr.backend.models.RefNum
+import uk.gov.hmrc.vo.tctr.backend.models.stats.{Submitted, SubmittedResult}
 
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -66,3 +67,17 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)
       .find(equal("referenceNumber", refNum))
       .toFuture()
       .map(_.nonEmpty)
+
+  def getSubmittedReferences(page: Int): Future[SubmittedResult] =
+    val p = Math.min(Math.max(page, 1), SubmittedResult.maxPage)
+    val pageSize = SubmittedResult.pageSize
+    for
+      total <- collection.countDocuments().toFuture()
+      refNums <- collection.find()
+        .sort(Sorts.ascending("createdAt", "_id"))
+        .skip((p - 1) * pageSize)
+        .limit(pageSize)
+        .toFuture()
+    yield
+      val credentials = refNums.map(Submitted(_))
+      SubmittedResult(credentials, total, p, pageSize)

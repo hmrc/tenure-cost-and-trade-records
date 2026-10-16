@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy
 import org.mongodb.scala.bson.{BsonDateTime, BsonDocument, Document}
 import org.mongodb.scala.model.Filters.equal
 import org.mongodb.scala.model.*
-import org.mongodb.scala.result.{DeleteResult, InsertManyResult}
+import org.mongodb.scala.result.DeleteResult
 import org.mongodb.scala.{BulkWriteResult, MongoBulkWriteException, ToSingleObservablePublisher}
 import play.api.libs.json.*
 import play.api.{Configuration, Logging}
@@ -29,6 +29,7 @@ import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.vo.tctr.backend.models.FORCredentials
+import uk.gov.hmrc.vo.tctr.backend.models.stats.{Credential, CredentialsResult}
 
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -40,8 +41,6 @@ trait CredentialsRepo:
 
   def validate(refNum: String, postcode: String): Future[Option[FORCredentials]]
 
-  def bulkInsert(fs: Seq[FORCredentials]): Future[InsertManyResult]
-
   def findById(refNum: String): Future[Option[FORCredentials]]
 
   def count: Future[Long]
@@ -52,7 +51,7 @@ trait CredentialsRepo:
 
 object CredentialsMongoRepo:
 
-  private val defaultExpireAfterDays = 100
+  val defaultExpireAfterDays = 100
 
   private def credentialsTtlIndex(configuration: Configuration): Seq[IndexModel] = Seq(
     IndexModel(
@@ -99,9 +98,6 @@ class CredentialsMongoRepo @Inject() (
             .toFuture()
             .map(_ => None)
       }
-
-  def bulkInsert(credentialsSeq: Seq[FORCredentials]): Future[InsertManyResult] =
-    collection.insertMany(credentialsSeq).toFuture()
 
   def findById(refNum: String): Future[Option[FORCredentials]] =
     collection
@@ -150,3 +146,17 @@ class CredentialsMongoRepo @Inject() (
     }
 
   private def normalizePostcode(postcode: String) = postcode.toLowerCase.replace(" ", "").replace("+", "")
+
+  def getCredentials(page: Int): Future[CredentialsResult] =
+    val p = Math.min(Math.max(page, 1), CredentialsResult.maxPage)
+    val pageSize = CredentialsResult.pageSize
+    for
+      total <- collection.countDocuments().toFuture()
+      forCredentials <- collection.find()
+        .sort(Sorts.ascending("createdAt", "_id"))
+        .skip((p - 1) * pageSize)
+        .limit(pageSize)
+        .toFuture()
+    yield
+      val credentials = forCredentials.map(Credential(_))
+      CredentialsResult(credentials, total, p, pageSize)

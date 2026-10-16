@@ -17,9 +17,11 @@
 package uk.gov.hmrc.vo.tctr.backend.models
 
 import java.util.Base64
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsObject, Json, OFormat}
 import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 
+import java.time.Instant
+import java.time.temporal.ChronoUnit.MILLIS
 import scala.language.implicitConversions
 
 case class FORCredentials(
@@ -27,11 +29,14 @@ case class FORCredentials(
   billingAuthorityCode: String,
   forType: String,
   address: SensitiveAddress,
-  _id: String
+  _id: String,
+  createdAt: Instant = Instant.now.truncatedTo(MILLIS)
 ):
   def basicAuthString: String = "Basic " + encodedAuth
 
   private def encodedAuth: String = Base64.getEncoder.encodeToString(s"$forNumber:${address.postcode}".getBytes)
 
 object FORCredentials:
+  import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits.*
+
   implicit def format(using crypto: MongoCrypto): OFormat[FORCredentials] = Json.format
