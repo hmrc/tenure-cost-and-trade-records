@@ -33,4 +33,4 @@ object CredentialsResult:
   implicit val format: OFormat[CredentialsResult] = Json.format
 
   val pageSize = 100
-  val maxPage  = 100
+  val maxPage  = 110
