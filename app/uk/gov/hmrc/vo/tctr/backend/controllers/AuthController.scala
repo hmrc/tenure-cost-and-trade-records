@@ -28,7 +28,7 @@ import uk.gov.hmrc.vo.tctr.backend.repository.{CredentialsMongoRepo, SubmittedMo
 import uk.gov.hmrc.vo.tctr.backend.schema.Address
 import uk.gov.hmrc.vo.tctr.backend.security.{AlreadySubmitted, Credentials, FailedLoginsMongoRepo, IPBlockingCredentialsVerifier, IPLockout, InvalidCredentials, MissingIPAddress, ValidCredentials, VerifierConfig}
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.*
 import scala.language.postfixOps

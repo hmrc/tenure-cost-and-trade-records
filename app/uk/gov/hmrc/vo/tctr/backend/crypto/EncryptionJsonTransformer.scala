@@ -20,7 +20,7 @@ import play.api.libs.json.*
 import play.api.libs.json.Reads.*
 import uk.gov.hmrc.crypto.{Crypted, PlainText}
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 /**
   * @author Yuriy Tumakha

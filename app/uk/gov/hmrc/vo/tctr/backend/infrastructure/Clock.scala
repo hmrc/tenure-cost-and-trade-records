@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy
 import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 
 import java.time.ZonedDateTime
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @ImplementedBy(classOf[SystemClock])
 trait Clock:

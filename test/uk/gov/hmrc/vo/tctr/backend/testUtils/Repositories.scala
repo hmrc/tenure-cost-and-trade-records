@@ -26,7 +26,7 @@ import uk.gov.hmrc.vo.tctr.backend.models.FORCredentials
 import uk.gov.hmrc.vo.tctr.backend.repository.{CredentialsRepo, SubmittedMongoRepo}
 import uk.gov.hmrc.vo.tctr.backend.security.{FailedLogin, FailedLoginsRepo}
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class InMemoryFailedLoginsRepo extends FailedLoginsRepo:

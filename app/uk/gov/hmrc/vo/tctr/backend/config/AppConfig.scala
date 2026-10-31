@@ -18,7 +18,7 @@ package uk.gov.hmrc.vo.tctr.backend.config
 
 import play.api.Configuration
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 @Singleton
 class AppConfig @Inject() (configuration: Configuration):

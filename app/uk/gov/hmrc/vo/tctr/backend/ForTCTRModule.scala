@@ -24,11 +24,11 @@ import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.vo.tctr.backend.infrastructure.{DefaultRegularSchedule, RegularSchedule}
 import uk.gov.hmrc.vo.tctr.backend.submissionExport.{ExportNotConnectedSubmissions, NotConnectedSubmissionExporter}
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.concurrent.ExecutionContext
 
 import java.time.Clock
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class ForTCTRModule extends Module with Logging:

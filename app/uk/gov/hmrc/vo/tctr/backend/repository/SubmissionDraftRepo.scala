@@ -31,7 +31,7 @@ import uk.gov.hmrc.vo.tctr.backend.models.SubmissionDraftWrapper
 import uk.gov.hmrc.vo.tctr.backend.models.stats.{Draft, DraftsAggregate, DraftsExpirationQueue, DraftsPerVersion}
 
 import java.util.concurrent.TimeUnit
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 /**

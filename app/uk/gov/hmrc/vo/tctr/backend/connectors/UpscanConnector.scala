@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
 import uk.gov.hmrc.vo.tctr.backend.models.UnknownError
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class UpscanConnector @Inject() (httpClientV2: HttpClientV2)(using ec: ExecutionContext) extends Logging:

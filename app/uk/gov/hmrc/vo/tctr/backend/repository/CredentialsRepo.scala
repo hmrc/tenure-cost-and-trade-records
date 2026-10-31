@@ -33,7 +33,7 @@ import uk.gov.hmrc.vo.tctr.backend.models.stats.{Credential, CredentialsResult}
 
 import java.time.Instant
 import java.util.concurrent.TimeUnit
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[CredentialsMongoRepo])

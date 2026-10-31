@@ -28,7 +28,7 @@ import uk.gov.hmrc.vo.tctr.backend.repository.NotConnectedRepository
 import java.time.temporal.ChronoUnit
 import java.time.{Clock, Instant}
 import java.util.UUID
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[ExportNotConnectedSubmissionsDeskpro])

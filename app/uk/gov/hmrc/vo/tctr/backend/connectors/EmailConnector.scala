@@ -30,7 +30,7 @@ import uk.gov.hmrc.vo.tctr.backend.models.{ConnectedSubmission, NotConnectedSubm
 
 import java.time.ZonedDateTime
 import java.util.Locale
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.implicitConversions
 
