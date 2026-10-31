@@ -18,7 +18,7 @@ package uk.gov.hmrc.vo.tctr.backend.testUtils
 
 import java.time.Instant
 import org.mongodb.scala.BulkWriteResult
-import org.mongodb.scala.result.{DeleteResult, InsertManyResult, InsertOneResult}
+import org.mongodb.scala.result.InsertOneResult
 import play.api.libs.json.OWrites
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.vo.tctr.backend.config.AppConfig
@@ -47,8 +47,6 @@ class StubCredentialsRepository extends CredentialsRepo:
   override def findById(refNum: String): Future[Option[FORCredentials]] = ???
 
   def count: Future[Long] = Future.successful(3)
-
-  def removeAll(): Future[DeleteResult] = ???
 
   override def bulkUpsert(
     credentialsSeq: Seq[FORCredentials]

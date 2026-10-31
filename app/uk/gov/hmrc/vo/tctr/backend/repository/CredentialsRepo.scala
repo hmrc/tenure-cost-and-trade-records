@@ -17,10 +17,10 @@
 package uk.gov.hmrc.vo.tctr.backend.repository
 
 import com.google.inject.ImplementedBy
-import org.mongodb.scala.bson.{BsonDateTime, BsonDocument, Document}
-import org.mongodb.scala.model.Filters.equal
+import org.mongodb.scala.bson.{BsonDateTime, BsonDocument}
 import org.mongodb.scala.model.*
-import org.mongodb.scala.result.DeleteResult
+import org.mongodb.scala.model.Filters.equal
+import org.mongodb.scala.model.Updates.set
 import org.mongodb.scala.{BulkWriteResult, MongoBulkWriteException, ToSingleObservablePublisher}
 import play.api.libs.json.*
 import play.api.{Configuration, Logging}
@@ -44,8 +44,6 @@ trait CredentialsRepo:
   def findById(refNum: String): Future[Option[FORCredentials]]
 
   def count: Future[Long]
-
-  def removeAll(): Future[DeleteResult]
 
   def bulkUpsert(credentialsSeq: Seq[FORCredentials])(using writes: OWrites[FORCredentials]): Future[BulkWriteResult]
 
@@ -108,9 +106,6 @@ class CredentialsMongoRepo @Inject() (
   def count: Future[Long] =
     collection.countDocuments().toFuture()
 
-  def removeAll(): Future[DeleteResult] =
-    collection.deleteMany(Document()).toFuture()
-
   def bulkUpsert(
     credentialsSeq: Seq[FORCredentials]
   )(using writes: OWrites[FORCredentials]
@@ -148,27 +143,38 @@ class CredentialsMongoRepo @Inject() (
   private def normalizePostcode(postcode: String) = postcode.toLowerCase.replace(" ", "").replace("+", "")
 
   def getCredentials(page: Int): Future[CredentialsResult] =
-    val p = Math.min(Math.max(page, 1), CredentialsResult.maxPage)
+    val p        = Math.min(Math.max(page, 1), CredentialsResult.maxPage)
     val pageSize = CredentialsResult.pageSize
 
     val projectedCollection = collection.withDocumentClass[BsonDocument]()
 
     for
-      total <- collection.countDocuments().toFuture()
-      docs <- projectedCollection.find()
-        .projection(Projections.include("forNumber", "forType", "createdAt"))
-        .sort(Sorts.ascending("createdAt", "_id"))
-        .skip((p - 1) * pageSize)
-        .limit(pageSize)
-        .toFuture()
+      total <- count
+      docs  <- projectedCollection.find()
+                 .projection(Projections.include("forNumber", "forType", "createdAt"))
+                 .sort(Sorts.ascending("createdAt", "_id"))
+                 .skip((p - 1) * pageSize)
+                 .limit(pageSize)
+                 .toFuture()
     yield
       val credentials = docs.map { doc =>
+        val forNumber = doc.getString("forNumber").getValue
+        val forType   = doc.getString("forType").getValue
         val createdAt = Option(doc.get("createdAt"))
           .filterNot(_.isNull)
           .collect {
-            case date: BsonDateTime => Instant.ofEpochMilli(date.getValue)
+            case date: BsonDateTime => Some(Instant.ofEpochMilli(date.getValue))
+          }.getOrElse {
+            collection
+              .updateOne(
+                equal("_id", forNumber),
+                set("createdAt", Instant.now)
+              )
+              .toFuture()
+              .map(_ => ())
+            None
           }
 
-        Credential(doc.getString("forNumber").getValue, doc.getString("forType").getValue, createdAt)
+        Credential(forNumber, forType, createdAt)
       }
       CredentialsResult(credentials, total, p, pageSize)
