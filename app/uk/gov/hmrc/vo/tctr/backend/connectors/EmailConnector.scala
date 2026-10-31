@@ -25,13 +25,14 @@ import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.tctr.backend.models.{ConnectedSubmission, NotConnectedSubmission}
-import uk.gov.hmrc.vo.tctr.backend.util.{DateUtil, DateUtilLocalised}
 
 import java.time.ZonedDateTime
 import java.util.Locale
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.language.implicitConversions
 
 /**
   * @author Yuriy Tumakha
@@ -39,8 +40,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class EmailConnector @Inject() (
   servicesConfig: ServicesConfig,
-  httpClientV2: HttpClientV2,
-  dateUtilLocalised: DateUtilLocalised
+  httpClientV2: HttpClientV2
 )(using ec: ExecutionContext
 ) extends Logging:
 
@@ -95,18 +95,11 @@ class EmailConnector @Inject() (
       Future.successful(HttpResponse(404, "Email not found"))
     }(email => sendEmail(email, templateId, parameters))
 
-  private def customerSubmissionParams(
-    fullName: String,
-    submissionDate: ZonedDateTime = DateUtil.nowInUK
-  )(using
-    lang: Lang
-  ): JsObject =
-    Json.obj("recipientName_FullName" -> fullName) ++ submissionDateParams(submissionDate)
-
-  private def submissionDateParams(submissionDate: ZonedDateTime)(using lang: Lang): JsObject =
+  private def customerSubmissionParams(fullName: String, submissionDateTime: ZonedDateTime = nowInUK)(using lang: Lang): JsObject =
     Json.obj(
-      "submissionDate" -> dateUtilLocalised.formatDate(submissionDate, lang),
-      "submissionTime" -> submissionDate.format(DateUtil.timeFormatter)
+      "recipientName_FullName" -> fullName,
+      "submissionDate"         -> submissionDateTime.formatLongDateByLang,
+      "submissionTime"         -> submissionDateTime.formatTime
     )
 
   private def getTemplatePerLang(enTemplateId: String, cyTemplateId: String)(using lang: Lang): String =

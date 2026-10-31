@@ -17,8 +17,8 @@
 package uk.gov.hmrc.vo.tctr.backend.models.stats
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.tctr.backend.repository.MongoSubmissionDraftRepo.saveForDays
-import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.*
 import uk.gov.hmrc.vo.tctr.backend.models.SubmissionDraftWrapper
 
 import java.time.LocalDate
@@ -37,5 +37,5 @@ object Draft:
       sd._id,
       Try((sd.submissionDraft \ "forType").as[String]).map(_.filter(_.isDigit)).getOrElse(""),
       sd.appVersion.getOrElse(""),
-      sd.createdAt.toLocalDate.plusDays(saveForDays)
+      sd.createdAt.atZone(ukTimezone).toLocalDate.plusDays(saveForDays)
     )

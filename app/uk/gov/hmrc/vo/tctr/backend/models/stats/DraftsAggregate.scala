@@ -17,8 +17,8 @@
 package uk.gov.hmrc.vo.tctr.backend.models.stats
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.tctr.backend.repository.MongoSubmissionDraftRepo.saveForDays
-import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.*
 
 import java.time.Instant
 
@@ -28,7 +28,7 @@ import java.time.Instant
 case class DraftsAggregate(_id: Option[String], count: Long, maxCreatedAt: Instant):
 
   def toDraftsPerVersion: DraftsPerVersion =
-    DraftsPerVersion(_id.getOrElse(""), count, maxCreatedAt.toLocalDate.plusDays(saveForDays))
+    DraftsPerVersion(_id.getOrElse(""), count, maxCreatedAt.atZone(ukTimezone).toLocalDate.plusDays(saveForDays))
 
 object DraftsAggregate:
   import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats.Implicits.*
