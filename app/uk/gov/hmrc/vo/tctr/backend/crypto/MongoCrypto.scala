@@ -17,7 +17,7 @@
 package uk.gov.hmrc.vo.tctr.backend.crypto
 
 import play.api.Configuration
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import uk.gov.hmrc.crypto.{Crypted, Decrypter, Encrypter, PlainBytes, PlainContent, PlainText, SymmetricCryptoFactory}
 
 @Singleton

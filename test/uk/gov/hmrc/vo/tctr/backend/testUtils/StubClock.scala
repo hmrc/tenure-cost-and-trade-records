@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.vo.tctr.backend.testUtils
 
+import uk.gov.hmrc.vo.service.conversion.DateConversion.*
 import uk.gov.hmrc.vo.tctr.backend.infrastructure.Clock
-import uk.gov.hmrc.vo.tctr.backend.util.DateUtil.nowInUK
 
 import java.time.ZonedDateTime
 

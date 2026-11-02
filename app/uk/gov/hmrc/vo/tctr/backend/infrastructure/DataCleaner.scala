@@ -24,7 +24,7 @@ import org.mongodb.scala.SingleObservableFuture
 import play.api.Logging
 import uk.gov.hmrc.vo.tctr.backend.repository.SubmittedMongoRepo
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.*
 

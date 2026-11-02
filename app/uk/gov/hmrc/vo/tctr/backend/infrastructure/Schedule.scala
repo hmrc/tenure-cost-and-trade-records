@@ -17,7 +17,7 @@
 package uk.gov.hmrc.vo.tctr.backend.infrastructure
 
 import uk.gov.hmrc.vo.tctr.backend.config.AppConfig
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 
 import scala.concurrent.duration.*
 

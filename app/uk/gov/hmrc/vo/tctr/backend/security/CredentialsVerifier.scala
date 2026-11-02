@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.vo.tctr.backend.security
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.*
 import uk.gov.hmrc.vo.tctr.backend.controllers.toFuture

@@ -28,7 +28,7 @@ import uk.gov.hmrc.vo.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.vo.tctr.backend.models.ConnectedSubmission
 import uk.gov.hmrc.vo.tctr.backend.repository.{ConnectedRepository, SubmissionDraftRepo, SubmittedMongoRepo}
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConnectedSubmissionController @Inject() (

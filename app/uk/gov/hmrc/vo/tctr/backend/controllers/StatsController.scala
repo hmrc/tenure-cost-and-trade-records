@@ -23,7 +23,7 @@ import play.api.mvc.*
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.vo.tctr.backend.repository.{CredentialsMongoRepo, MongoSubmissionDraftRepo, SubmittedMongoRepo}
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.concurrent.ExecutionContext
 
 /**

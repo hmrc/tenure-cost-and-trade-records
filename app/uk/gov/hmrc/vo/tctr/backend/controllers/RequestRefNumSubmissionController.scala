@@ -25,7 +25,7 @@ import uk.gov.hmrc.vo.tctr.backend.metrics.MetricsHandler
 import uk.gov.hmrc.vo.tctr.backend.models.RequestReferenceNumberSubmission
 import uk.gov.hmrc.vo.tctr.backend.repository.RequestReferenceNumberRepository
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class RequestRefNumSubmissionController @Inject() (
   repository: RequestReferenceNumberRepository,

@@ -27,7 +27,7 @@ import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.vo.tctr.backend.models.FORCredentialsPlainText
 import uk.gov.hmrc.vo.tctr.backend.repository.CredentialsRepo
 import scala.util.{Failure, Success}
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class UpscanCallbackController @Inject() (

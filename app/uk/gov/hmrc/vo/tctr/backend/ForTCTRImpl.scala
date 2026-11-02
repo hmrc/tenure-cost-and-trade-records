@@ -24,7 +24,7 @@ import uk.gov.hmrc.vo.tctr.backend.repository.{ConnectedMongoRepository, Credent
 import uk.gov.hmrc.vo.tctr.backend.submissionExport.{ConnectedSubmissionExporter, ExportConnectedSubmissionsVO, ExportRequestReferenceNumberSubmissionsVO, RequestReferenceNumberSubmissionExporter}
 
 import java.time.Clock
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton

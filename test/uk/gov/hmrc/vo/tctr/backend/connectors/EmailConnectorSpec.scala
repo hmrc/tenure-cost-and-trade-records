@@ -24,7 +24,6 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.vo.tctr.backend.models.NotConnectedSubmission
 import uk.gov.hmrc.vo.tctr.backend.schema.Address
 import uk.gov.hmrc.vo.tctr.backend.testUtils.TestObjects
-import uk.gov.hmrc.vo.tctr.backend.util.DateUtilLocalised
 import uk.gov.hmrc.vo.unit.test.BaseAppSpec
 
 import java.net.URL
@@ -32,9 +31,8 @@ import java.time.Instant
 
 class EmailConnectorSpec extends BaseAppSpec with TestObjects:
 
-  private val dateUtilLocalised  = inject[DateUtilLocalised]
-  private val email              = "customer@email.com"
-  private val testAddress        = Address("001", Some("GORING ROAD"), "WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
+  private val email       = "customer@email.com"
+  private val testAddress = Address("001", Some("GORING ROAD"), "WORTHING", Some("WEST SUSSEX"), "BN12 4AX")
 
   private val testNotConnectedSubmission = NotConnectedSubmission(
     "1213",
@@ -72,7 +70,7 @@ class EmailConnectorSpec extends BaseAppSpec with TestObjects:
       )
 
       val httpMock  = httpPostMock(OK, bodyJson)
-      val connector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val connector = EmailConnector(servicesConfig, httpMock)
 
       val response = connector.sendSubmissionConfirmation(prefilledConnectedSubmission).futureValue
       response.status shouldBe OK
@@ -84,7 +82,7 @@ class EmailConnectorSpec extends BaseAppSpec with TestObjects:
 
     "send tctr_vacant_submission_confirmation" in {
       val httpMock       = httpPostMock(ACCEPTED)
-      val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val emailConnector = EmailConnector(servicesConfig, httpMock)
 
       val response = emailConnector.sendVacantSubmissionConfirmation(email, "David Jones").futureValue
       response.status shouldBe ACCEPTED
@@ -96,7 +94,7 @@ class EmailConnectorSpec extends BaseAppSpec with TestObjects:
 
     "send tctr_connection_removed" in {
       val httpMock       = httpPostMock(ACCEPTED)
-      val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val emailConnector = EmailConnector(servicesConfig, httpMock)
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmission).futureValue
       response.status shouldBe ACCEPTED
@@ -108,7 +106,7 @@ class EmailConnectorSpec extends BaseAppSpec with TestObjects:
 
     "send tctr_connection_removed_cy" in {
       val httpMock       = httpPostMock(ACCEPTED)
-      val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val emailConnector = EmailConnector(servicesConfig, httpMock)
 
       val response = emailConnector.sendConnectionRemoved(testNotConnectedSubmissionCy).futureValue
       response.status shouldBe ACCEPTED
@@ -119,12 +117,12 @@ class EmailConnectorSpec extends BaseAppSpec with TestObjects:
     }
 
     "handle error response on send tctr_submission_confirmation" in {
-      val body           = Json.parse(
+      val body = Json.parse(
         """{"to":["test@email.com"],"templateId":"tctr_submission_confirmation","parameters":{"customerName":"Full Name"}}"""
       )
 
       val httpMock       = httpPostMock(BAD_REQUEST, body)
-      val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val emailConnector = EmailConnector(servicesConfig, httpMock)
 
       val response = emailConnector.sendSubmissionConfirmation(prefilledConnectedSubmission).futureValue
       response.status shouldBe BAD_REQUEST
@@ -137,7 +135,7 @@ class EmailConnectorSpec extends BaseAppSpec with TestObjects:
     "don't send tctr_connection_removed if submission doesn't contain email address" in {
       val httpMock       = mock[HttpClientV2]
       val submission     = testNotConnectedSubmission.copy(emailAddress = None)
-      val emailConnector = EmailConnector(servicesConfig, httpMock, dateUtilLocalised)
+      val emailConnector = EmailConnector(servicesConfig, httpMock)
 
       val response = emailConnector.sendConnectionRemoved(submission).futureValue
       response.status shouldBe NOT_FOUND

@@ -24,7 +24,7 @@ import uk.gov.hmrc.vo.tctr.backend.models.{FORCredentials, SensitiveAddress}
 import uk.gov.hmrc.vo.tctr.backend.repository.CredentialsRepo
 import uk.gov.hmrc.vo.tctr.backend.schema.Address
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.duration.*
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps

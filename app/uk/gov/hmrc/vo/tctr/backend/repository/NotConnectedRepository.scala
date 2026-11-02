@@ -29,7 +29,7 @@ import uk.gov.hmrc.vo.tctr.backend.crypto.MongoCrypto
 import uk.gov.hmrc.vo.tctr.backend.models.{NotConnectedSubmission, SensitiveNotConnectedSubmission}
 
 import java.util.concurrent.TimeUnit
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[NotConnectedMongoRepository])

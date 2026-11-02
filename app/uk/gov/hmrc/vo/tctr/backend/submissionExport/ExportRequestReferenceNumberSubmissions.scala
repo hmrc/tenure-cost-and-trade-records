@@ -25,7 +25,7 @@ import uk.gov.hmrc.vo.tctr.backend.repository.RequestReferenceNumberMongoReposit
 
 import java.time.temporal.ChronoUnit
 import java.time.{Clock, Instant}
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[ExportRequestReferenceNumberSubmissionsVO])

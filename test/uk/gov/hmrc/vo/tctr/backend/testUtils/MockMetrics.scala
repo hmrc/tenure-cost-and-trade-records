@@ -19,7 +19,7 @@ package uk.gov.hmrc.vo.tctr.backend.testUtils
 import com.codahale.metrics.{Meter, MetricRegistry}
 
 import uk.gov.hmrc.vo.tctr.backend.metrics.MetricsHandler
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 class MockMetrics @Inject() (metric: MetricRegistry) extends MetricsHandler(metric):
   val meter = Meter()

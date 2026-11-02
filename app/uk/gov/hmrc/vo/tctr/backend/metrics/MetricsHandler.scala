@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.vo.tctr.backend.metrics
 
-import javax.inject.{Inject, Singleton}
+import jakarta.inject.{Inject, Singleton}
 import com.codahale.metrics.{Meter, MetricRegistry}
 
 @Singleton
