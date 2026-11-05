@@ -86,7 +86,7 @@ class MongoSubmissionDraftRepo @Inject() (
 
   def getDraftsExpirationQueue(limit: Int): Future[DraftsExpirationQueue] =
     for
-      total            <- collection.countDocuments().toFuture()
+      total            <- collection.estimatedDocumentCount().toFuture()
       submissionDrafts <- collection.find().sort(Sorts.descending("createdAt")).limit(limit).toFuture()
     yield
       val drafts = submissionDrafts.map(Draft(_))

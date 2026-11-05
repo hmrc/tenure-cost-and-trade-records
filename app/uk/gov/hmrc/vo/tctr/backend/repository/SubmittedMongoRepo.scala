@@ -72,7 +72,7 @@ class SubmittedMongoRepo @Inject() (mongo: MongoComponent, appConfig: AppConfig)
     val p        = Math.min(Math.max(page, 1), SubmittedResult.maxPage)
     val pageSize = SubmittedResult.pageSize
     for
-      total   <- collection.countDocuments().toFuture()
+      total   <- collection.estimatedDocumentCount().toFuture()
       refNums <- collection.find()
                    .sort(Sorts.ascending("createdAt", "_id"))
                    .skip((p - 1) * pageSize)
