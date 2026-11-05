@@ -37,11 +37,11 @@ class ConnectedMongoRepositorySpec extends MongoDBAppSpec[SensitiveConnectedSubm
     "return None by unknown id" in {
       mongoRepository.findByReference("UNKNOWN_ID").futureValue shouldBe None
     }
-  
+
     "return a sequence of ConnectedSubmissions" in {
       mongoRepository.getSubmissions(1).futureValue shouldBe Seq(prefilledConnectedSubmission)
     }
-  
+
     "return number of ConnectedSubmissions" in {
       mongoRepository.count.futureValue shouldBe 1
     }

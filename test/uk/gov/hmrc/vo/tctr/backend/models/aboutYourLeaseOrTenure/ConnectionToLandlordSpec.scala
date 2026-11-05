@@ -25,7 +25,7 @@ class ConnectionToLandlordSpec extends BaseSpec:
   "Connection To Landlord" should {
     "serialize and deserialize correctly" in {
       val connectionToLandlord = ConnectedToLandlord(Some(AnswerYes))
-      val json = Json.toJson(connectionToLandlord)
+      val json                 = Json.toJson(connectionToLandlord)
 
       json.as[ConnectedToLandlord] shouldBe connectionToLandlord
     }

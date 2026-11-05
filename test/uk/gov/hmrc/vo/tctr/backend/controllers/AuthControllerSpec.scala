@@ -53,9 +53,9 @@ class AuthControllerSpec extends BaseAppSpec:
     "return 401 for invalid credentials" in {
       when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(None))
       val result = controller.authenticate(fakeRequest)
-      status(result)            shouldBe Status.UNAUTHORIZED
+      status(result)          shouldBe Status.UNAUTHORIZED
       contentType(result).get shouldBe "application/json"
-      contentAsString(result)   shouldBe """{"numberOfRemainingTriesUntilIPLockout":4}"""
+      contentAsString(result) shouldBe """{"numberOfRemainingTriesUntilIPLockout":4}"""
     }
 
     "return 200 for valid credentials and it" should {
@@ -63,18 +63,18 @@ class AuthControllerSpec extends BaseAppSpec:
         when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(Some(forCredentials)))
         val result: Future[Result] = controller.authenticate(fakeRequest)
 
-        status(result)            shouldBe Status.OK
+        status(result)          shouldBe Status.OK
         contentType(result).get shouldBe "application/json"
-        contentAsString(result)   shouldBe expectedContent(isWelsh = true)
+        contentAsString(result) shouldBe expectedContent(isWelsh = true)
       }
 
       "unset the isWelsh flag" in new ValidCredentialsFixture(billingAuthorityCode = "SM14BX") {
         when(mockCredentialsRepo.validate("refNum", "postcode")).thenReturn(Future.successful(Some(forCredentials)))
         val result: Future[Result] = controller.authenticate(fakeRequest)
 
-        status(result)            shouldBe Status.OK
+        status(result)          shouldBe Status.OK
         contentType(result).get shouldBe "application/json"
-        contentAsString(result)   shouldBe expectedContent(isWelsh = false)
+        contentAsString(result) shouldBe expectedContent(isWelsh = false)
       }
     }
   }
@@ -89,7 +89,7 @@ class AuthControllerSpec extends BaseAppSpec:
 
       given Materializer = app.materializer
 
-      val result     = controller.retrieveFORType(referenceNum)(fakeRequest)
+      val result = controller.retrieveFORType(referenceNum)(fakeRequest)
       status(result) shouldBe Status.NOT_FOUND
     }
   }

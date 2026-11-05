@@ -44,13 +44,13 @@ class Scala3EnumJsonFormatSpec extends BaseSpec:
       val obj = Json.parse("\"Red\"").as[Color]
       obj shouldBe Red
     }
-  
+
     "return JsError for wrong enum value" in {
       Json.parse("\"Cyan\"").validate[Color] shouldBe JsError(
         "Enum value 'Cyan' is not in allowed list - Red, Green, Blue"
       )
     }
-  
+
     "return JsError for number" in {
       Json.parse("123").validate[Color] shouldBe JsError("Invalid Json: expected string, got: 123")
     }

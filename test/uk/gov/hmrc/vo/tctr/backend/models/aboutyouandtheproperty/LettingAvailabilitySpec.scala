@@ -29,7 +29,7 @@ class LettingAvailabilitySpec extends BaseSpec:
         financialYearEnd = LocalDate.of(2024, 3, 31),
         numberOfNights = 120
       )
-      val json = Json.toJson(lettingAvailability)
+      val json                = Json.toJson(lettingAvailability)
 
       json.as[LettingAvailability] shouldBe lettingAvailability
     }

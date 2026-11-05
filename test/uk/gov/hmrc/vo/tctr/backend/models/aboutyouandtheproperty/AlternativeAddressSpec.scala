@@ -30,7 +30,7 @@ class AlternativeAddressSpec extends BaseSpec:
         county = Some("Avon"),
         postcode = "BS1 1AA"
       )
-      val json = Json.toJson(alternativeAddress)
+      val json               = Json.toJson(alternativeAddress)
 
       json.as[AlternativeAddress] shouldBe alternativeAddress
     }
@@ -43,7 +43,7 @@ class AlternativeAddressSpec extends BaseSpec:
         county = None,
         postcode = "BS2 2BB"
       )
-      val json = Json.toJson(alternativeAddress)
+      val json               = Json.toJson(alternativeAddress)
 
       json.as[AlternativeAddress] shouldBe alternativeAddress
     }

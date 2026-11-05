@@ -41,17 +41,17 @@ class MongoSubmissionDraftRepoSpec extends MongoDBAppSpec[SubmissionDraftWrapper
     "return None by unknown id" in {
       mongoRepository.find("UNKNOWN_ID").futureValue shouldBe None
     }
-  
+
     "save SubmissionDraft" in {
       mongoRepository.save(submissionDraftSaveId, testSubmissionDraft).futureValue shouldBe testSubmissionDraft
     }
-  
+
     "return deletedCount = 1 on delete SubmissionDraft" in {
       mongoRepository.save(submissionDraftDeleteId, testSubmissionDraft).futureValue
-  
+
       mongoRepository.delete(submissionDraftDeleteId).futureValue.getDeletedCount shouldBe 1
     }
-  
+
     "return deletedCount = 0 on delete by unknown id" in {
       mongoRepository.delete("UNKNOWN_ID").futureValue.getDeletedCount shouldBe 0
     }

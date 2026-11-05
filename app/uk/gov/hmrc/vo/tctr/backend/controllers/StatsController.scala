@@ -63,4 +63,3 @@ class StatsController @Inject() (
       Ok(Json.toJson(submittedResult))
     }
   }
-

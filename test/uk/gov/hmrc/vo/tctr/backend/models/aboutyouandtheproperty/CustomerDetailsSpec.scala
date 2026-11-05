@@ -28,7 +28,7 @@ class CustomerDetailsSpec extends BaseSpec:
         fullName = "Michal The Chef",
         contactDetails = ContactDetails(phone = "1234567890", email = "michal@example.com")
       )
-      val json = Json.toJson(customerDetails)
+      val json            = Json.toJson(customerDetails)
 
       json.as[CustomerDetails] shouldBe customerDetails
     }
