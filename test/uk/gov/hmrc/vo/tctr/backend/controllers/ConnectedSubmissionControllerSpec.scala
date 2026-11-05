@@ -33,12 +33,12 @@ import scala.concurrent.Future
 
 class ConnectedSubmissionControllerSpec extends BaseAppSpec with TestObjects:
 
-  private val mockRepository: ConnectedRepository            = mock[ConnectedRepository]
-  private val mockSubmittedRepo: SubmittedMongoRepo          = mock[SubmittedMongoRepo]
-  private val mockEmailConnector: EmailConnector             = mock[EmailConnector]
-  private val mockMetrics: MetricsHandler                    = mock[MetricsHandler]
-  private val meter: Meter                                   = mock[Meter]
-  
+  private val mockRepository: ConnectedRepository   = mock[ConnectedRepository]
+  private val mockSubmittedRepo: SubmittedMongoRepo = mock[SubmittedMongoRepo]
+  private val mockEmailConnector: EmailConnector    = mock[EmailConnector]
+  private val mockMetrics: MetricsHandler           = mock[MetricsHandler]
+  private val meter: Meter                          = mock[Meter]
+
   private val controller: ConnectedSubmissionController = ConnectedSubmissionController(
     inject[AppConfig],
     mockRepository,

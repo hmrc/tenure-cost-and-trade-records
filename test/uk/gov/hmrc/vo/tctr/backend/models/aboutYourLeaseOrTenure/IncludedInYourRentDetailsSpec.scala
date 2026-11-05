@@ -25,7 +25,7 @@ class IncludedInYourRentDetailsSpec extends BaseSpec:
   "IncludedInYourRent" should {
     "serialize and deserialize correctly" in {
       val includedInYourRentDetails = IncludedInYourRentDetails(List(IncludedInYourRentInformationVat), Some(BigDecimal(100.00)))
-      val json = Json.toJson(includedInYourRentDetails)
+      val json                      = Json.toJson(includedInYourRentDetails)
 
       json.as[IncludedInYourRentDetails] shouldBe includedInYourRentDetails
     }

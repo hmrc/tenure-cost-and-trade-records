@@ -49,13 +49,13 @@ abstract class TCTRServerSpec extends BaseServerSpec:
     val response = wsClient.url(s"$internalAuthBaseUrl/test-only/token")
       .post(
         Json.obj(
-          "token" -> token,
-          "principal" -> "test",
+          "token"       -> token,
+          "principal"   -> "test",
           "permissions" -> Seq(
             Json.obj(
-              "resourceType" -> "tenure-cost-and-trade-records",
+              "resourceType"     -> "tenure-cost-and-trade-records",
               "resourceLocation" -> "*",
-              "actions" -> List("*")
+              "actions"          -> List("*")
             )
           )
         )

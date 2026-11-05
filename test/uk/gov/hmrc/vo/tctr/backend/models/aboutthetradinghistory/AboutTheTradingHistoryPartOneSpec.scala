@@ -41,10 +41,10 @@ class AboutTheTradingHistoryPartOneSpec extends BaseSpec with TestObjects:
     "handle model turnoverSections6076" in {
       val turnoverSections6076 = prefilledAboutTheTradingHistoryPartOne.turnoverSections6076.getOrElse(Seq.empty)
 
-      turnoverSections6076.flatMap(_.costOfSales6076Sum.map(_.total)).sum shouldBe 10500
+      turnoverSections6076.flatMap(_.costOfSales6076Sum.map(_.total)).sum                         shouldBe 10500
       turnoverSections6076.flatMap(_.costOfSales6076IntermittentSum.map(_.totalIntermittent)).sum shouldBe 6200
-      turnoverSections6076.flatMap(_.operationalExpenses.map(_.total)).sum shouldBe 42
-      turnoverSections6076.flatMap(_.staffCosts.map(_.total)).sum shouldBe 2000
+      turnoverSections6076.flatMap(_.operationalExpenses.map(_.total)).sum                        shouldBe 42
+      turnoverSections6076.flatMap(_.staffCosts.map(_.total)).sum                                 shouldBe 2000
     }
 
     "handle model turnoverSections6045" in {
@@ -54,20 +54,20 @@ class AboutTheTradingHistoryPartOneSpec extends BaseSpec with TestObjects:
 
       val caravans = prefilledAboutTheTradingHistoryPartOne.caravans
 
-      caravans.flatMap(_.singleCaravansAge).fold(0)(_.fleetHire.total) shouldBe 100
-      caravans.flatMap(_.singleCaravansAge).fold(0)(_.privateSublet.total) shouldBe 26
-      caravans.flatMap(_.twinUnitCaravansAge).fold(0)(_.fleetHire.total) shouldBe 1000
+      caravans.flatMap(_.singleCaravansAge).fold(0)(_.fleetHire.total)       shouldBe 100
+      caravans.flatMap(_.singleCaravansAge).fold(0)(_.privateSublet.total)   shouldBe 26
+      caravans.flatMap(_.twinUnitCaravansAge).fold(0)(_.fleetHire.total)     shouldBe 1000
       caravans.flatMap(_.twinUnitCaravansAge).fold(0)(_.privateSublet.total) shouldBe 10
-      caravans.flatMap(_.totalSiteCapacity).fold(0)(_.total) shouldBe 0
+      caravans.flatMap(_.totalSiteCapacity).fold(0)(_.total)                 shouldBe 0
     }
 
     "handle model turnoverSections6048" in {
       val turnoverSections6048 = prefilledAboutTheTradingHistoryPartOne6048.turnoverSections6048.getOrElse(Seq.empty)
 
-      turnoverSections6048.flatMap(_.income.map(_.total)).sum shouldBe 666
-      turnoverSections6048.flatMap(_.fixedCosts.map(_.total)).sum shouldBe 777
-      turnoverSections6048.flatMap(_.accountingCosts.map(_.total)).sum shouldBe 888
+      turnoverSections6048.flatMap(_.income.map(_.total)).sum              shouldBe 666
+      turnoverSections6048.flatMap(_.fixedCosts.map(_.total)).sum          shouldBe 777
+      turnoverSections6048.flatMap(_.accountingCosts.map(_.total)).sum     shouldBe 888
       turnoverSections6048.flatMap(_.administrativeCosts.map(_.total)).sum shouldBe 999
-      turnoverSections6048.flatMap(_.operationalCosts.map(_.total)).sum shouldBe 666
+      turnoverSections6048.flatMap(_.operationalCosts.map(_.total)).sum    shouldBe 666
     }
   }

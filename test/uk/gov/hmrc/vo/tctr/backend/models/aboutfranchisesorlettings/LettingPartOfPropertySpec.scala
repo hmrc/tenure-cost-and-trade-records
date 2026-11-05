@@ -29,7 +29,7 @@ class LettingPartOfPropertySpec extends BaseSpec:
         ATMLetting(Some("HSBC"), None, Some(RentDetails(1000, LocalDate.of(2021, 1, 1))))
       val json       = Json.toJson(atmLetting: LettingPartOfProperty)
 
-      (json \ "type").as[String] shouldBe "ATMLetting"
+      (json \ "type").as[String]     shouldBe "ATMLetting"
       json.as[LettingPartOfProperty] shouldBe atmLetting
     }
 
@@ -37,7 +37,7 @@ class LettingPartOfPropertySpec extends BaseSpec:
       val telecomLetting = TelecomMastLetting(Some("Vodafone"), Some("Top of the Hill"), None, None)
       val json           = Json.toJson(telecomLetting: LettingPartOfProperty)
 
-      (json \ "type").as[String] shouldBe "TelecomMastLetting"
+      (json \ "type").as[String]     shouldBe "TelecomMastLetting"
       json.as[LettingPartOfProperty] shouldBe telecomLetting
     }
 
@@ -59,7 +59,7 @@ class LettingPartOfPropertySpec extends BaseSpec:
       )
       val json                    = Json.toJson(advertisingRightLetting: LettingPartOfProperty)
 
-      (json \ "type").as[String] shouldBe "AdvertisingRightLetting"
+      (json \ "type").as[String]     shouldBe "AdvertisingRightLetting"
       json.as[LettingPartOfProperty] shouldBe advertisingRightLetting
     }
 
@@ -72,7 +72,7 @@ class LettingPartOfPropertySpec extends BaseSpec:
       )
       val json         = Json.toJson[LettingPartOfProperty](otherLetting)
 
-      (json \ "type").as[String] shouldBe "OtherLetting"
+      (json \ "type").as[String]     shouldBe "OtherLetting"
       json.as[LettingPartOfProperty] shouldBe otherLetting
     }
     "handle errors when an invalid type is provided" in {

@@ -24,7 +24,7 @@ class PropertyCurrentlyUsedSpec extends BaseSpec:
   "PropertyCurrentlyUsed" should {
     "serialize and deserialize correctly" in {
       val propertyCurrentlyUsed = PropertyCurrentlyUsed(List("chaletPark", "touringSite", "other"), Some("anotherUsedDetails"))
-      val json = Json.toJson(propertyCurrentlyUsed)
+      val json                  = Json.toJson(propertyCurrentlyUsed)
 
       json.as[PropertyCurrentlyUsed] shouldBe propertyCurrentlyUsed
     }

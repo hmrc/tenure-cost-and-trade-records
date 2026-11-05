@@ -23,8 +23,7 @@ import uk.gov.hmrc.vo.unit.test.db.MongoDBAppSpec
 /**
   * @author Yuriy Tumakha
   */
-class NotConnectedMongoRepositorySpec extends MongoDBAppSpec[SensitiveNotConnectedSubmission, NotConnectedMongoRepository] 
-  with TestObjects with CustomMatchers:
+class NotConnectedMongoRepositorySpec extends MongoDBAppSpec[SensitiveNotConnectedSubmission, NotConnectedMongoRepository] with TestObjects with CustomMatchers:
 
   override def beforeEach(): Unit =
     super.beforeEach()

@@ -20,8 +20,10 @@ import uk.gov.hmrc.vo.tctr.backend.models.SensitiveRequestReferenceNumberSubmiss
 import uk.gov.hmrc.vo.tctr.backend.testUtils.{CustomMatchers, TestObjects}
 import uk.gov.hmrc.vo.unit.test.db.MongoDBAppSpec
 
-class RequestReferenceNumberMongoRepositorySpec extends MongoDBAppSpec[SensitiveRequestReferenceNumberSubmission, RequestReferenceNumberMongoRepository]
-  with TestObjects with CustomMatchers:
+class RequestReferenceNumberMongoRepositorySpec
+  extends MongoDBAppSpec[SensitiveRequestReferenceNumberSubmission, RequestReferenceNumberMongoRepository]
+  with TestObjects
+  with CustomMatchers:
 
   override def beforeEach(): Unit =
     super.beforeEach()
@@ -35,11 +37,11 @@ class RequestReferenceNumberMongoRepositorySpec extends MongoDBAppSpec[Sensitive
     "return None by unknown id" in {
       mongoRepository.findById("UNKNOWN_ID").futureValue shouldBe None
     }
-  
+
     "return a sequence of RequestReferenceNumberSubmission" in {
       mongoRepository.getSubmissions(1).futureValue should beSeqEqualToIgnoringMillisSeq(requestRefNumSubmission)
     }
-  
+
     "return number of RequestReferenceNumberSubmission" in {
       mongoRepository.count.futureValue shouldBe 1
     }

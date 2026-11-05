@@ -39,5 +39,5 @@ class AboutTheTradingHistorySpec extends BaseSpec with TestObjects:
       val json = Json.toJson(prefilledAboutYourTradingHistory)
 
       json.as[AboutTheTradingHistory] shouldBe prefilledAboutYourTradingHistory
-  }
+    }
   }

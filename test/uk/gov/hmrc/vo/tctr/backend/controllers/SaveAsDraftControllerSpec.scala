@@ -51,7 +51,7 @@ class SaveAsDraftControllerSpec extends BaseAppSpec:
 
       status(result) shouldBe NOT_FOUND
     }
-  
+
     "save SubmissionDraft" in {
       val result = controller
         .put(StubSubmissionDraftRepo.correctDbId)(
@@ -60,28 +60,28 @@ class SaveAsDraftControllerSpec extends BaseAppSpec:
 
       status(result) shouldBe CREATED
     }
-  
+
     "return 400 for empty body" in {
       val result = controller.put("WRONG_ID")(
         FakeRequest().withHeaders("Content-Type" -> "application/json").withHeaders("Authorization" -> "fake-token")
       )
-      
-      status(result) shouldBe BAD_REQUEST
+
+      status(result)        shouldBe BAD_REQUEST
       contentAsJson(result) shouldBe Json.obj("statusCode" -> BAD_REQUEST, "message" -> "JSON body is expected in request")
     }
-  
+
     "delete SubmissionDraft and return deletedCount = 1" in {
       val result = controller
         .delete(StubSubmissionDraftRepo.correctDbId)(FakeRequest().withHeaders("Authorization" -> "fake-token"))
 
-      status(result) shouldBe OK
+      status(result)        shouldBe OK
       contentAsJson(result) shouldBe Json.obj("deletedCount" -> 1)
     }
-  
+
     "on delete return deletedCount = 0 for unknown id" in {
       val result = controller.delete("UNKNOWN_ID")(FakeRequest().withHeaders("Authorization" -> "fake-token"))
 
-      status(result) shouldBe OK
+      status(result)        shouldBe OK
       contentAsJson(result) shouldBe Json.obj("deletedCount" -> 0)
     }
   }

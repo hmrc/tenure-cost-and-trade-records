@@ -29,7 +29,7 @@ class CompletedLettingsSpec extends BaseSpec:
         financialYearEnd = LocalDate.of(2024, 3, 31),
         numberOfNights = 120
       )
-      val json = Json.toJson(completedLettings)
+      val json              = Json.toJson(completedLettings)
 
       json.as[CompletedLettings] shouldBe completedLettings
     }

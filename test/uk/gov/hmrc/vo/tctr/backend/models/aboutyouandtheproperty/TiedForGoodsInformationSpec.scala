@@ -31,21 +31,21 @@ class TiedForGoodsInformationSpec extends BaseSpec:
   "TiedForGoodsInformation" should {
     "serialize and deserialize correctly for TiedForGoodsInformationDetailsFullTie" in {
       val tiedForGoods = TiedForGoodsInformationDetails(tiedGoodsDetails = TiedForGoodsInformationDetailsFullTie)
-      val json = Json.toJson(tiedForGoods)
+      val json         = Json.toJson(tiedForGoods)
 
       json.as[TiedForGoodsInformationDetails] shouldBe tiedForGoods
     }
 
     "serialize and deserialize correctly for TiedForGoodsInformationDetailsBeerOnly" in {
       val tiedForGoods = TiedForGoodsInformationDetails(tiedGoodsDetails = TiedForGoodsInformationDetailsBeerOnly)
-      val json = Json.toJson(tiedForGoods)
+      val json         = Json.toJson(tiedForGoods)
 
       json.as[TiedForGoodsInformationDetails] shouldBe tiedForGoods
     }
 
     "serialize and deserialize correctly for TiedForGoodsInformationDetailsPartialTie" in {
       val tiedForGoods = TiedForGoodsInformationDetails(tiedGoodsDetails = TiedForGoodsInformationDetailsPartialTie)
-      val json = Json.toJson(tiedForGoods)
+      val json         = Json.toJson(tiedForGoods)
 
       json.as[TiedForGoodsInformationDetails] shouldBe tiedForGoods
     }

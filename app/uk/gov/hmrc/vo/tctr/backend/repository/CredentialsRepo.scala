@@ -43,8 +43,6 @@ trait CredentialsRepo:
 
   def findById(refNum: String): Future[Option[FORCredentials]]
 
-  def count: Future[Long]
-
   def bulkUpsert(credentialsSeq: Seq[FORCredentials])(using writes: OWrites[FORCredentials]): Future[BulkWriteResult]
 
 object CredentialsMongoRepo:
@@ -103,9 +101,6 @@ class CredentialsMongoRepo @Inject() (
       .toSingle()
       .toFutureOption()
 
-  def count: Future[Long] =
-    collection.countDocuments().toFuture()
-
   def bulkUpsert(
     credentialsSeq: Seq[FORCredentials]
   )(using writes: OWrites[FORCredentials]
@@ -149,7 +144,7 @@ class CredentialsMongoRepo @Inject() (
     val projectedCollection = collection.withDocumentClass[BsonDocument]()
 
     for
-      total <- count
+      total <- collection.estimatedDocumentCount().toFuture()
       docs  <- projectedCollection.find()
                  .projection(Projections.include("forNumber", "forType", "createdAt"))
                  .sort(Sorts.ascending("createdAt", "_id"))

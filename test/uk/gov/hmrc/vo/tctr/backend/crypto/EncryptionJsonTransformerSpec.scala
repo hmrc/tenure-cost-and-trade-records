@@ -38,7 +38,7 @@ class EncryptionJsonTransformerSpec extends BaseAppSpec with BeEncryptedMatchers
 
     "encrypt sensitive PII fields" in {
       val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
-  
+
       (encryptedJson \ "session" \ "userLoginDetails" \ "token")                                   shouldBe encrypted
       (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "buildingNameNumber")          shouldBe encrypted
       (encryptedJson \ "session" \ "userLoginDetails" \ "address" \ "street1")                     shouldBe encrypted
@@ -53,13 +53,13 @@ class EncryptionJsonTransformerSpec extends BaseAppSpec with BeEncryptedMatchers
       (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "town")               shouldBe encrypted
       (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "postcode")           shouldBe encrypted
     }
-  
+
     "not encrypt not PII fields" in {
       val encryptedJson = encryptionJsonTransformer.encrypt(submissionDraftJson)
       println("Encrypted JSON: " + Json.prettyPrint(encryptedJson))
-  
+
       (encryptedJson \ "exitPath") shouldBe (submissionDraftJson \ "exitPath")
-  
+
       (encryptedJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "county") shouldBe
         (submissionDraftJson \ "session" \ "other" \ "sensitivePII" \ "newAddress" \ "county")
     }

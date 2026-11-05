@@ -52,7 +52,7 @@ class ExportNotConnectedSubmissionsSpec extends BaseAppSpec with TestKitBase wit
       system.eventStream.subscribe(self, classOf[SubmissionExportComplete])
 
       ExportNotConnectedSubmissionsDeskpro(repo, deskproConnector, audit, Clock.systemDefaultZone(), appConfig)
-          .exportNow(batchSize).futureValue
+        .exportNow(batchSize).futureValue
 
       TimeUnit.SECONDS.sleep(3) // Wait for all submissions to be removed
 
@@ -62,10 +62,10 @@ class ExportNotConnectedSubmissionsSpec extends BaseAppSpec with TestKitBase wit
   }
 
   object TestData:
-    val deskproConnector                  = StubDeskproConnector()
-    val batchSize                         = 1
-    val scheduler                         = ScheduleThatSchedulesImmediately5Times()
-    val audit: ForTCTRAudit               = mock[ForTCTRAudit]
+    val deskproConnector    = StubDeskproConnector()
+    val batchSize           = 1
+    val scheduler           = ScheduleThatSchedulesImmediately5Times()
+    val audit: ForTCTRAudit = mock[ForTCTRAudit]
 
   class StubDeskproConnector extends DeskproConnector:
 
