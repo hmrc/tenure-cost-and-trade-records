@@ -2,10 +2,10 @@ import sbt.*
 
 private object AppDependencies {
 
-  private val bootstrapVersion          = "10.8.0"
-  private val voServiceVersion          = "0.19.0"
+  private val bootstrapVersion          = "10.9.0"
+  private val voServiceVersion          = "0.20.0"
   private val hmrcMongoVersion          = "2.14.0"
-  private val cryptoJsonVersion         = "8.4.0"
+  private val cryptoJsonVersion         = "9.0.0"
   private val internalAuthClientVersion = "3.1.0"
 
   // Test dependencies
