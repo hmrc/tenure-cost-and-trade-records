@@ -49,7 +49,7 @@ object CredentialsMongoRepo:
 
   val defaultExpireAfterDays = 100
 
-  private def credentialsTtlIndex(configuration: Configuration): Seq[IndexModel] = Seq(
+  private def credentialsIndexes(configuration: Configuration): Seq[IndexModel] = Seq(
     IndexModel(
       Indexes.ascending("createdAt"),
       IndexOptions()
@@ -58,6 +58,10 @@ object CredentialsMongoRepo:
           configuration.getOptional[Int]("validationImport.expireAfterDays").getOrElse(defaultExpireAfterDays).toLong,
           TimeUnit.DAYS
         )
+    ),
+    IndexModel(
+      Indexes.ascending("createdAt", "_id"),
+      IndexOptions().name("createdAt_id_asc")
     )
   )
 
@@ -72,7 +76,7 @@ class CredentialsMongoRepo @Inject() (
     collectionName = "credentials",
     mongoComponent = mongo,
     domainFormat = FORCredentials.format,
-    indexes = CredentialsMongoRepo.credentialsTtlIndex(configuration),
+    indexes = CredentialsMongoRepo.credentialsIndexes(configuration),
     extraCodecs = Seq(
       Codecs.playFormatCodec(MongoJavatimeFormats.instantFormat)
     )
